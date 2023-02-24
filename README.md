@@ -14,6 +14,8 @@ Add your own name (do not add the names for others!) to the section below.
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6155/avatar.png?width=400) | Pedro Gomes Moreira | P.GomesMoreira@student.tudelft.nl |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Veselin Mitev | V.Mitev@student.tudelft.nl |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Dimana Stoyanova | D.Stoyanova@student.tudelft.nl |
+| ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Matei Bordea | M.Bordea@student.tudelft.nl |
+
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
