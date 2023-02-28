@@ -9,13 +9,12 @@ Location: DW PC2 front left
 Date: Tuesday, 28 February 2023
 
 Time: 14:45 
-> [14:48]
+> Meeting started at 14:48
 
 Attendees:
 - Team 69: Agnese Ēlerte, Georgi Dimitrov, Dimana Stoyanova, Matei Bordea, Pedro Gomes Moreira, Veselin Mitev
 - TA: Alexandra Ioana Neagu
-
-> [Everyone attended the meeting] 
+> Everyone attended the meeting
 
 ## Agenda Items
 1. Opening by chair
@@ -23,56 +22,57 @@ Attendees:
     1. Make sure everyone has a copy of the agenda open
 3. Approval of the agenda
     1. Does anyone have any additions/changes to propose for this agenda? 
-    > [Do any necessary changes to the agenda if needed] 
+    > No changes were done to the agenda.
 4. Backlog
     1. Review of our backlog and the grading of the backlog. What do the different feedbacks (pass/fail, sufficient, good, excellent, etc.) mean? 
-    > [One epic for basic requirements, other for each of the advanced: ok, but we can make it more clear which apics. Prioritise epics, even between those which are should, must; which ones should be done first? Just ordering them is enough, but it needs to be a bit more clear. Within each epic, should must is good. For the user stories, see themf rormated the way there are in the lecture, for example I want as (my role) to do this so that something. Also give a reasoning. Most of them don't have a reason. Why a user would want to have that. The correct model. The epics are fine. The prioritisation was understood, but adding numbers could be more clear.] 
+    > Backlog review: having one epic for all the basic requirements and then one epic for each of the advanced requirements is ok, but you should make the epics more clear. You should prioritise epics, even among those in the same category (e.g. should, must), so that you know exactly which ones to do first. Just ordering them is enough, but it needs to be a bit more clear. Within each epic, having "should", etc. for the acceptance criteria is good. For the user stories, see how they are formated in the lecture, for example "I want as <role> to do ..., so that...". Also give a reasoning, which most of them do not have yet. Describe why a user would want to have that. The epics are fine as they are. The prioritisation was understood, but adding numbers could be more clear, instead of simply bulletpoints.
+    > Grading: if it is excellent, no improvement is needed. Some parts are pass or fail, e.g. meeting organisation, while most parts are are graded. The grades are: insufficient, sufficient (bare mininum), good (certain degree of understanding), very good (still missing something), and excellent (everything that was expected). These grades do not yet correspond to any numbers, i.e. real grades. 
     2. What other stakeholders should we have? (The lecturer said that the user and admin are acceptable) 
-    > [In theory, an app has multiple stakeholders besides the user and the admin. What other people have a stake. People hosting databases, the university, the people who might contribute, also the developers. More indirect stakeholders. No user stories for indirect stakeholders. Two more of them but no user stories.] 
+    > In theory, an app has multiple stakeholders besides the user and the admin. Consider what other people have a stake, e.g. people hosting databases, the university, the people who might contribute to the project, and also the developers. These are indirect stakeholders. No user stories are required for them. You should add [around] two more of them but no user stories.
     3. What would be an example for an epic? (The lecturer said that we should have one epic called basic requirements and one epic per advanced requirement) 
-    > [Record response from TA] 
+    > As noted before, the epics are good as they are now.
     4. How specific should the description of the UI be? 
-    > [No, too specific. Too much detail for backlog, otherwise becomes too big. The app will have an UI, main page, but don't goo to in depth: button, pop-up. If it is an important feature, can include it. No problem if specify. As I user I wanto to edit the card in the popup so that I can change the task if I mistype] 
+    > It should not be specific, which is how it seems at the moment. If there is much detail in the backlog it becomes too big. Mention that the app will have an UI, main page, etc., but do not go too in depth, such as button or pop-up. If it is an important feature, you can include it. It is not a problem if you specify. For example, "as I user I want to edit the card in the pop-up so that I can change the task if I mistyped it". 
     5. Should the non-functional requirements be formatted with stories or is the format we use acceptable? 
-    > [Defininetely ok, quite in depth. They are ok, because they are not a big part of the backlog. A few and also categorised] 
-    6. Grading
-    > [If it is excellent, no improvement. Some parts are pass or fail, others are graded. Meeting organisation is pass/fail, most of the others are graded. Insufficien, suff (bare min), good (degree of understaiding), very good (still missing something), excellent (everything that was expected). Don't correspond to any numbers yet. ]
+    > The format is definitely ok and quite in depth. They are ok, because they are not a big part of the backlog. You have a few and they are also categorised.
 5. GitLab
     1. Will we get access to the settings of our GitLab repository? (To change the number of approvals needed for a merge request) 
-    > [Not really. We are just developers, TAs etc have higher priority. 2 is the minimum number. Some would need one. They will leave main branch unprotected, so that directly push to them. Two people should do code review, to approve the MR. See code review there, little discussion, commenting before approving, check something. Give meaningful feedback. Don't approve it to block. Only 2 people approved, why? Discussions say it should not be approved. Revert back always possible. You should not be the ones approving the MR if you worked on that branch. Other 4 people if 2 people worked together. For documents, no. Backlog, coc is ok, but for code going forward, don't approve your own. They are not too harsh. Increase number of approvers, TA will look into that. You cannot modify on a case by case, GitLab does not distinguish that. She will ask and let us know.]
+    > Not really. You are just developers, and only TA's, lecturers, etc. have higher authority. Two people is the minimum number of approvers, though some MRs would need one approver. The TA's have decided that they will leave the main branch unprotected, so that we can directly push to them. Two people should do code review to approve the MR. The code review should be visible there, along with a little discussion and comments before the approval, e.g. check this or that. Give meaningful feedback. There is no way to block a MR, but it is possible not to approve it. If only two people approved it, you should discuss that and say why it should (not) be approved. Reverting back is always possible. Moreover, you should not be the ones approving the MR if you worked on that branch. For instance, the other four members should approve it if two members worked on a feature together. For documents (e.g. CoC, Backlog), that is not necessary, but for code going forward, do not approve your own. You cannot modify the number of approvers on a case by case, since GitLab does not distinguish that. I will ask if it is possible and will let you know.
     2. Should GitLab be used as much as possible for communication? (using issues, merge requests, and comments on those) 
-    > [Yes, use it as much as possible. Outside of MRs, issues, milestones, tags. Commented issues are helpful for her to see everything.]
+    > Yes, use it as much as possible. Make good use of MRs, issues, milestones, tags, etc. Commented issues are helpful for the TA to see everything.
     3. Should MRs be used for everything? (uploading the agenda and minutes, etc.) 
-    > [No, the documents can be pushed directly]
+    > No, the documents can be pushed directly on the main branch.
     4. Is doing MRs only when merging into the main branch a good idea? 
-    > [Record response from TA]
+    > Not asked during meeting. 
     5. Can we add a CONTRIBUTING.md with instructions, code and configuration standards and other technical aspects of the project? 
-    > [Yes, more technical. We can add that. In the README.md, at the end of the qruater we will put instructions on how to run the serve.r I few already start, it is good. Add it to the root directory.]
+    > Yes, with technical information. You can add that. At the end of the quarter you will put instructions on how to run the server in the README.md file. But if you already start it now, it is good. You can add the file to the root directory.
     6. Should we convert the CoC and the agenda of Week 2 to Markdown and upload them to GitLab? 
-    > [All the documents should be pushed to GitLab too. The format does not matter that much. Pdf and docx also, but she prefers not using docx; while pdf and md she can directly see them. Those already uploaded, no need to convert.]
+    > All the documents should be pushed to GitLab. The format does not matter that much. File formats .pdf and .docx are also accepted, but I prefer not using .docx, since with .pdf and .md I can directly see them, and do not need to download. However there is no need to conver those documents already uploaded.
     7. Should GitLab issues be created for tasks far in advance (such as agendas)? 
-    > [Yes, everything. One issue recurrent every week for agendas. Don't create 8, having one about agenda and notes. Keep open as a reminder. Also need issues for organisation. If we want, we can create one ervery single week]
+    > Yes, issues for everything. You can have one recurrent issue every week for agendas. You do not need to create eight, but can just have one about agenda and notes, which you keep open as a reminder. You also need issues for organisation. If you want, you can create one every single week.
 6. Questions about the app
     1. Should the (client) app be resizable and responsive? 
-    > [No, they don't care about that. Doesn't need to be resizable, fixed size is ok]
+    > No, they do not care about that. Does not need to be resizable; a fixed size is ok.
     2. Should it be possible to drag & drop list to reorder them? If not, how should they be ordered? 
-    > [she can't answer; requirements TAs can't ask. She cannot help, these features which are unclear is completely up to us how to implement them. ]
+    > I cannot answer about requirements. TA's cannot help with requirements. These features which are unclear are completely up to you how to implement them.
     3. Admin questions
         1. Does the admin have a GUI? 
-        > [Answer to that: we don't know. Since client did not specify, it is up to us to do it as we see fit. Would this be specified in the Backlog? Definitely. Example would be worse than ours. It is not very extensive, more like and example to take inspiritaion. Lots of students asking this on Mattermost. We could make an UI on the client side with a password that gives authorisation OR on the server size with all priviledges. For the spring app, CLI with access to all boards? Would be fine]
+        > Answer to that: we do not know. Since the client did not specify, it is up to you to do it as you see fit. Would this be specified in the Backlog? Definitely.But the example Backlog would be probably worse than yours. It is not very extensive, but rather an example to take inspiration. There are lots of students asking about the admin on Mattermost. For the spring app, a CLI with access to all boards would be fine.
         2. Does the admin use the client app or the server app? 
-        > [Any of them] 
+        > You could make an UI on the client side with a password that gives authorisation or have something on the server side with all priviledges. 
         3. Should anyone be able to be an admin or only if they have access to the server app/are on the computer running the server app? 
-        > [Record response from TA] 
+        > Up to you.
 7. Code of Conduct (Low Priority)
     1. What is the issue with the point “Decision Making”? Is a majority vote not a good way to to solve the problem of one person disagreeing? 
-    > [Ok, but she wants more detail on it. If it doesn't work, get the TA's opinion. A bit vague. What if someone disagree? What does it mean the TA's opinion first? Her opinion can change the person's opinion. Formulate more clearly. Last sentence, consensus would work in majority of cases, but we don't say that in the CoC, but put rules for when it doesn't work out. ] 
+    > I want more detail on it. It is a bit vague: "If the process does not work, get the TA's opinion. What if someone disagrees? What does it mean to ask the TA's opinion first? Formulate more clearly: her opinion can change the person's opinion. Moreover, at your last sentence you say consensus would work in majority of cases. But you do not say that in the CoC, but put rules for when it does not work out.
     2. Should we try to improve the CoC or is it acceptable the way it is right now? 
-    > [Overall very good. Few sections without excellent. We will change. ] 
+    > Overall very good. A few sections without excellent. Some changes.
 8. Question round
     1. Does anyone have any other questions for the TA before the meeting closes? 
-    > [Upload in your file. Keep the draft ,put it in the title. Leave the draft that was there, add another one which is the final version. Rename draft in the main branch, merge. Feedback in the agenda? Yes wil be there. We can move it if we want. Just formative feedback. Potentially shippable product: state of the app, what we have on main branch. Rubric added this week, which N/A (insufficient for all). ]
+    > How to upload the Backlog? Keep the draft, and write "draft" in the title. Leave the draft that was there, and add another file which is the final version. You can rename the draft in the main branch, merge the other branch. Feedback in the agenda? You can move it if you want. They are just formative feedback. The feedback this week will include a potentially shippable product, which is the state of the app that you have on the main branch. This rubric was added this week, and will be insufficient for all, since it is non-applicatble.
     2. TA things to us
-    > [Deadlines: final Backlog and Git assignment due on Friday. Git later release, deadline for Friday is not a hard one. Extension until Monday if we text her first. Mattermost. TA's will look at main branch, so always merge into main. Features on other branches are not graded. Final version always on main branch. Last thing: start coding once done with Git assignment. Setup is hard at the beginning. Spring: don't get discouraged; she can recommend some tutorials]
+    > Deadlines: final Backlog and Git Assignment due on Friday. The git instructions were released later, thus the deadline for Friday is not a hard one. You can have an extension until Monday if you text me first on mattermost.
+    > The TA's will look at the main branch only, so always merge into main. Features on other branches are not graded. Keep the final version always on main branch. 
+    > Last thing: start coding once done with Git assignment. The setup is hard at the beginning; do not get discourage with Spring: I can recommend some tutorials. 
 1. Closure 
-> [15:29]
+> Meeting ended at 15:29
