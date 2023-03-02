@@ -61,11 +61,11 @@
         - when a user enters that board code into their client app, the board must be added to their local list of boards and they must be able to edit any part of the board, or even delete it
 
 - ### Protected Boards
-    - As a user, I should be able to determine what kind of access to give to other users when I share a board with them
-        - there should also be a second kind of code which provides only "read" permissions for the board, which allows a user to see any part of the board, but does not allow them to edit anything on there
-        - if a user has only entered a read code for a board they should be able to view that read code, so they can share it with others, but they should not have access to a read/write code
-        - if a user has read persmissions to a board and they enter a read/write code for that same board, they should automatically be "upgraded" to have read/write privilages to that board (the board should not show up twice in their list of boards)
-        - if a user has read/write persission for a board they should be able to view (and thus be able to share) both the read code and the read/write code for that board
+    - As a user, I should be able to determine what kind of access to give to other users when I share a board with them to ensure the safety of the data in each board
+        - there should also be a code which provides "read-only" permission for the board, which allows a user to see any part of the board, but does not allow them to edit anything on there
+        - if a user has entered a "read-only" code for a board they should be able to share it with others, but they should not have access to a read/write code
+        - if a user has "read-only" permissions to a board and they enter a read/write code for that same board, they should automatically be "upgraded" to have read/write privileges to that board (the board should only show once in the board list)
+        - if a user has read/write permission for a board they should be able to view (and thus be able to share) both the read code and the read/write code for that board
 
 - ### Additional Card Details
     - As a user I want to add details to cards through a pop-up
