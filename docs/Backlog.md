@@ -99,15 +99,32 @@
         - it should be possible to customize the board's visual appearance (background colors, visible key shortcuts) through a board settings page/pop-up
 
 - ### Keyboard shortcuts
-    - As a user I want to be able to manage the board using shortcuts
+    - As a user I want to be able to manage the board using shortcuts, so that my workflow becomes more efficient, by doing tasks more quickly.
         - it should be possible to add cards and lists using shortcuts
         - it could be possible to add tags using shortcuts
         - it could be possible to move cards using shortcuts
+        - it could be possible to move or reorder the lists of the board using shortcuts
         - it could be possible to create and join boards using shortcuts
+        - it could be possible to open a board's settings using shortcuts
+        - other shortcuts could be included, potentially matching to all functionalities
     
 - ### Manage Server
-    - As an administrator, I want to be able to restart the server
-        - there should be some sort of GUI or CLI that allows you to restart the server and see the codes of all boards, which also means that the admin will be able to modify any boards on the server
+    - As an administrator, I want to have an application which I can access from anywhere in order to manage the server when I need to, without being physically there.
+        - it should be possible to manage the server remotely, i.e., from the client side
+        - admin authentication should be enforced, so that normal users cannot manage the server
+        - a GUI should be used rather than a CLI, so that it is more accessible and intuitive
+    - As an administrator, I want to be able to restart the server if I want to alter configurations or if some error happened
+        - it should be possible to start the server
+        - it should be possible to stop the server
+        - it should be possible to restart the server
+    - As an administrator, I want to be able to manage any board from the server remotely, so that I can apply changes requested by normal users
+        - it should be possible to visualise all boards and their codes
+        - it should be possible to restrict a board, making it write-protected
+        - it should be possible to open a board, removing its protection
+        - it should be possible to change the password of a protected board
+        - it could be possible to change the board's name, assuming it is not an auto-generated hash
+        - it could be possible to add new boards
+        - it could be possible to delete boards
 
 ## Non-functional Requirements
 
