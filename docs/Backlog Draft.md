@@ -60,13 +60,6 @@
         - for every board that I have access to there must be a code that I can view, so I can send it to others, in order for them to have access to that board as well
         - when a user enters that board code into their client app, the board must be added to their local list of boards and they must be able to edit any part of the board, or even delete it
 
-- ### Protected Boards
-    - As a user, I should be able to determine what kind of access to give to other users when I share a board with them to ensure the safety of the data in each board
-        - there should also be a code which provides "read-only" permission for the board, which allows a user to see any part of the board, but does not allow them to edit anything on there
-        - if a user has entered a "read-only" code for a board they should be able to share it with others, but they should not have access to a read/write code
-        - if a user has "read-only" permissions to a board and they enter a read/write code for that same board, they should automatically be "upgraded" to have read/write privileges to that board (the board should only show once in the board list)
-        - if a user has read/write permission for a board they should be able to view (and thus be able to share) both the read code and the read/write code for that board
-
 - ### Additional Card Details
     - As a user I want to add details to cards through a pop-up so I can my cards contain more information 
         - the pop-up should ask for the card description
@@ -107,7 +100,13 @@
         - it could be possible to create and join boards using shortcuts
         - it could be possible to open a board's settings using shortcuts
         - other shortcuts could be included, potentially matching to all functionalities
-    
+- ### Protected Boards
+    - As a user, I should be able to determine what kind of access to give to other users when I share a board with them to ensure the safety of the data in each board
+        - there should be a code(or a password) that gives "read-only" access to the board, which enables users to view any area of the board but prevents them from making changes.
+        - if a user has entered a "read-only" code for a board they should be able to share it with others, but they should not be able to access the read/write code for that board
+        - if a user has read/write permission for a board they should be able to access (and thus be able to share) both the read code and the read/write code for that particular board
+    - As a user, I should be able to upgrade my privileges for a board by entering another code in order to keep my boards ordered and in good condition
+        - if a user has "read-only" privileges to a board and they enter the read/write code for that board, they should automatically be "upgraded" to have read/write privileges to that board (with the board showing only once in the board list)
 - ### Manage Server
     - As an administrator, I want to have an application which I can access from anywhere in order to manage the server when I need to, without being physically there.
         - it should be possible to manage the server remotely, i.e., from the client side
