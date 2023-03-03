@@ -88,7 +88,7 @@
 
 - ### Customization (Background, Tag colors)
     - As a user I want to be able to customize boards so I can make them more personalized for my needs
-        - it should be possible to customize the board's visual appearance (background color, making the usable keyboard shortcuts visible) through a board settings page or a pop-up
+        - it should be possible to customize the board's visual appearance (background color, tag color, making the usable keyboard shortcuts visible) through a board settings page or a pop-up
 	    - it could be possible to change the board's name through a board settings page or a pop-up
 
 - ### Keyboard shortcuts
