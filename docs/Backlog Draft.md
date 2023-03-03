@@ -16,29 +16,30 @@
 ## Functional Requirements
 
 - ### Basic Features
-    - As a user I want to be able to create cards
+    - As a user I want to be able to create cards so that I can keep track of new tasks
         - must have an add card button for each list
         - after pressing the button the user must be asked about the card's title
-        - should have a delete card button in the pop-up
+        - must have a delete card button in the pop-up
         - must have an edit button in the pop-up
-    - As a user I want to be able to edit cards
-        - it should be possible to edit the title of the card from the overview
-    - As a user, I want to be able to delete cards
+    - As a user I want to be able to edit cards so that I can update the task description, add/change tags or rename the task
+        - it must be possible to edit the title of the card from the overview
+    - As a user, I want to be able to delete cards so that I can remove a task if it is no longer needed
         - it must be possible to delete cards from the overview
-    - As a user, I want to move cards
-        - it must be possible to move cards between lists 
+    - As a user, I want to move cards so that I can organize them in groups (lists) or keep track of their progress and also prioritize them within a list
+        - it must be possible to move cards between lists
         - it must be possible to move cards within a list
-    - As a user I want to be able to create lists
+    - As a user I want to be able to create lists so that I have separate groups of tasks or so that I can have a different list for different progress levels for a task
         - there must be button through which a new list can be created
         - it must be possible to fill out the list name when creating it
-    - As a user I want to be able to edit lists
+    - As a user I want to be able to edit lists so that I can change the list's name without losing the tasks within that list
         - it must be possible to rename a list from the overview
-    - As a user I want to be able to delete lists
+    - As a user I want to be able to delete lists so that I can remove unneeded lists
         - it must be possible to delete a list from the overview
-    - As a user I want to be able to move lists
+    - As a user I want to be able to move lists so that I can adapt my table to my needs
         - it must be possible to move lists around the board (before/after another list(s))
-    - As a user I want to work on a board with other users
+    - As a user I want to work on a board with other users so that we can share common tasks or work on a common goal/project
         - it must be possible to work on the same board with other users at the same time
+        - the board must auto-synchronize for all users that have access to it when a change is made
         
 - ### Multi-Board
     - As a user I want to be able to create more boards
