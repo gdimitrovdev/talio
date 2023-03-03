@@ -3,6 +3,9 @@
 ## Stakeholders
 - Application user: Any person that is able to use the client application.
 - Application administrator: The person who has access to the server application, which the clients connect to.
+- Developers: members of the OOPP team who contribute to the project and are assessed for this.
+- Head TA's and lecturers: they are responsible for setting up the GitLab repository, giving instructions and grading the developers.
+- The university: it hosts the GitLab repositories.
 
 ## Terminology:
 - Board: it is the interface that a user can read and possibly edit
@@ -11,7 +14,10 @@
 - Nested task list: tasks that can be checked and unchecked located in a card
 - Tag: a category that can be added to a card
 - Overview (of a board): the positions and attributes of the cards, lists and tags visible to the user
-- Client - the client application which connects to the server application and to which the users have access to 
+- Client (App) - the client application which connects to the server application and to which the users have access to
+- Active Board (related to the Multi-Board Epic): the board that is currently shown in the Overview and thus the only board which the user can edit right now
+- Switch to a board (related to the Multi-Board Epic): change the Active Board to another board
+- List of Boards/Board List (related to the Multi-Board Epic): a list of all of the boards that a user has access to. 
 
 ## Functional Requirements
 
@@ -42,24 +48,37 @@
         - the board must auto-synchronize for all users that have access to it when a change is made
         
 - ### Multi-Board
-    - As a user I want to be able to create more boards
-        - there should be a "Welcome" page with a button to create a board and a button to join a board if the user has no boards saved
-        - when a user clicks the "Create a Board" button, a pop-up window requesting the board name must be shown
-    - As a user I want to have convenient access to all of my boards
-      - any boards that a user creates or joins must be added to their local list of boards
-      - a user must then at any point be able to chose a board from that list and switch to it
-      - that local list of boards should be persistent for a user even if they restart their client application
-    - As an admin I want to be able to delete boards
-        - it must not be possible to join that board
-        - the code of the board must be invalidated thereafter
-   - As a user, I want to be able to collaborate with other users on the same board
+    - As a user, I want to create more boards, so I can better better organize my tasks and so that not everyone works on the same board
+        - creating a board should require the user to enter a name for that board
+        - created boards should appear in the user's List of Boards
+        - creating a board should automatically switch to that board
+        - there could be a "Welcome" page that shows up if a user doesn't have any boards in their Boards List which provides the user with an option to create a new board
+    - As a user, I want to have convenient access to all of my boards, so I can efficiently use the app with many boards
+        - the List of Boards should be avaliable to be accessed from the Overview, no matter which board is currently active
+        - once opened, the List of Boards should provide a way for the user to switch to any of the boards on the List
+        - the List of Boards should be stored locally, so that each client app installation, and thus each user, has their own List of Boards (this will be the mai)
+        - that local list of boards should be persistent for a user even if they restart their Client
+    - As a user, I want to share my boards with other users, so I can collaborate with them on specific boards
+        - for any board on a user's List of Boards there should be a code that I can send to other users, that they can then use to edit that board
+    - As a user, I want to join other users' boards, so I can have access to them, and thus be able to edit them
+        - when a user enters a code for a board sent to them by another user, the board corresponding to that code should be added to their List of Boards and thus they should have access to it, just like the user who sent them the code
+        - if an invalid board code is entered, as verified by the server, the user should be notified and nothing should be added to their List of Boards
+    - !!! (also add sth about editing title of a board and customizations) As a user, I want to be able to collaborate with other users on the same board
         - the overview of the board that I am working on with others must synchronize when someone makes a change
         - the app should not break/crash when two users make a change to the same part of a board at the same time
         - any changes made to a board by any user must be saved to the server so they can be retreived when a user opens that board on their client app
-        - those changes must not be lost when the server restarts
-    - As a user, I want to share my board with other users and join other users' boards
-        - for every board that I have access to there must be a code that I can view, so I can send it to others, in order for them to have access to that board as well
-        - when a user enters that board code into their client app, the board must be added to their local list of boards and they must be able to edit any part of the board, or even delete it
+        - those changes should not be lost when the server restart
+    - As a user, I want to remove boards from my List of Boards, so it doesn't become cluttered
+        - a user should be able to chose to remove any of the boards in their List of Boards
+        - removed boards should disappear from the user's List of Boards
+        - removed boards should not be deleted on the server and they should not be removed from any other user's List of Boards
+    - As a user, I want to delete boards, if they are no longer needed and I don't want anyone else to have access to them
+        - a user should be able to chose to delete any board that they can edit
+        - deleting a board should delete all information about it from the server
+        - deleting a board should remove that board from every user's List of Boards (when they connect to the server)
+        - the code of the board should be invalidated thereafter
+    - As an admin, I want to be manage everyone's boards, so I can do any changes to them that I deem necessary or remove them if I find them inappropriate
+        - it should be possible to view all of the codes of every board, so that the admin can join them, edit them, and even delete them from the client app
 
 - ### Additional Card Details
     - As a user I want to add details to cards through a pop-up so I can my cards contain more information 
@@ -101,6 +120,7 @@
         - it could be possible to create and join boards using shortcuts
         - it could be possible to open a board's settings using shortcuts
         - other shortcuts could be included, potentially matching to all functionalities
+
 - ### Protected Boards
     - As a user, I should be able to determine what kind of access to give to other users when I share a board with them to ensure the safety of the data in each board
         - there should be a code(or a password) that gives "read-only" access to the board, which enables users to view any area of the board but prevents them from making changes.
@@ -108,6 +128,7 @@
         - if a user has read/write permission for a board they should be able to access (and thus be able to share) both the read code and the read/write code for that particular board
     - As a user, I should be able to upgrade my privileges for a board by entering another code in order to keep my boards ordered and in good condition
         - if a user has "read-only" privileges to a board and they enter the read/write code for that board, they should automatically be "upgraded" to have read/write privileges to that board (with the board showing only once in the board list)
+
 - ### Manage Server
     - As an administrator, I want to have an application which I can access from anywhere in order to manage the server when I need to, without being physically there.
         - it should be possible to manage the server remotely, i.e., from the client side
