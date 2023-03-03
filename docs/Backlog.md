@@ -131,7 +131,7 @@
         - it could be possible to open a board's settings using shortcuts
         - other shortcuts could be included, potentially matching to all functionalities
     - As a user, I want to view all of the shortcuts that I can use at the current moment, so I do not have to remember them
-        - there could be a keyboard button (for e.g. `Alt`) that you can press which shows appropriate shortcut annotations for every action that you can do using a keyboard shortcut
+        - there could be a keyboard button (e.g. `Alt`) that you can press which shows appropriate shortcut annotations for every action that you can do using a keyboard shortcut
 
 7. ### Protected Boards
     - As a user, I want to determine what kind of access to give to other users when I share a board with them to ensure the safety of the data in each board and to have granularity in what kind of access I want to give to which users
