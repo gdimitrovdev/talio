@@ -85,18 +85,18 @@
         - it should be possible to delete cards from the view card window
         
 - ### Tag Support
-    - As a user I want to be able to create tags
-        - it should be possible to create a new tag, which is automatically added to the card 
-    - As a user I want to be able to add and remove tags from cards
+    - As a user I want to be able to create tags so I can organise the cards better regardless of the list they are in
+        - it should be possible to create a new tag, which is automatically added to a card 
+    - As a user I want to be able to add and remove tags from cards so I can improve the organisation of the cards in my board
        - it should be possible to add an existing tag to a card 
        - it should be possible to remove a tag from a card
-    - As a user I want to be able to manage tags for the whole board
-        - it could be possible to add and delete a tag in the board settings
+    - As a user I want to be able to manage tags for the whole board so I can work more efficiently by managing all the tags rather than the singular tags added to cards
+       - it could be possible to create and delete a tag in the board settings
 
 - ### Customization (Background, Tag colors)
-    - As a user I want to be able to edit boards
-        - it could be possible to change the board's name
-        - it should be possible to customize the board's visual appearance (background colors, visible key shortcuts) through a board settings page/pop-up
+    - As a user I want to be able to customize boards so I can make them more personalized for my needs
+        - it should be possible to customize the board's visual appearance (background color, making the usable keyboard shortcuts visible) through a board settings page or a pop-up
+	- it could be possible to change the board's name through a board settings page or a pop-up
 
 - ### Keyboard shortcuts
     - As a user I want to be able to manage the board using shortcuts, so that my workflow becomes more efficient, by doing tasks more quickly.
