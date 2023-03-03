@@ -68,20 +68,20 @@
         - if a user has read/write persission for a board they should be able to view (and thus be able to share) both the read code and the read/write code for that board
 
 - ### Additional Card Details
-    - As a user I want to add details to cards through a pop-up
+    - As a user I want to add details to cards through a pop-up so I can my cards contain more information 
         - the pop-up should ask for the card description
         - the pop-up should ask for tags that the card should have
-    - As a user I want to be able to view additional card components
+    - As a user I want to be able to view additional card components so I can see the details of the tasks
         - should have a pop-up that displays information about the card
-        - the information must contain the card title
+        - the information should contain the card title
         - the information should contain the card description
         - the information should contain the card's tags
         - the information should contain the nested task list
-    - As a user I want to edit the cards' details through a pop-up
-        - through the edit button in the view card window a new pop-up must appear for editing
-        - it must be possible to edit the title of the card
+    - As a user I want to edit the cards' details through a pop-up so I can update tasks' details
+        - through the edit button in the view card window a new pop-up should appear for editing
+        - it should be possible to edit the title of the card
         - it should be possible to edit card details - description, nested lists, tags
-    - As a user I want to delete a card through the pop-up
+    - As a user I want to delete a card through the pop-up so the card does no longer exist on the board
         - it should be possible to delete cards from the view card window
         
 - ### Tag Support
