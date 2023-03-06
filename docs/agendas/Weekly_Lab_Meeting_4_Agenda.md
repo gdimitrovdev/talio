@@ -26,7 +26,7 @@ Attendees:
     1. Does anyone have any additions/changes to propose for this agenda?
    > [Do any necessary changes to the agenda if needed]
 4. GitLab
-    1. Regarding GitLab issues, what is the difference between milestones and epics?
+    1. Regarding GitLab issues, what is the difference between milestones and epics? Does one milestone have multiple epics, or the other way around?
    > [Record response from TA]
     2. Should an issue on GitLab always correspond to one branch?
    > [Record response from TA]
@@ -36,6 +36,8 @@ Attendees:
    > [Record response from TA]
     5. Is it a good practice to use "git rebase" or "git merge" before creating a merge request? If so which one should we use?
    > [Record response from TA]
+    6. For the meaningful MR, it two members worked on a branch and merge it, do the two of them pass for this criterion, or only one of them? 
+    > [Record response from TA]
 5. Application
     1. Is the way that we split the tasks between the team members good enough?
    > [Record response from TA]
