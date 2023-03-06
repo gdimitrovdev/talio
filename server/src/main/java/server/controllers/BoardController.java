@@ -2,7 +2,6 @@ package server.controllers;
 
 
 import commons.Board;
-import commons.CardList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.BoardService;
@@ -30,13 +29,13 @@ public class BoardController
     }
     @GetMapping(path = {""})
     @ResponseBody
-    public List<CardList> getMany() {
+    public List<Board> getMany() {
         return BoardService.getMany();
     }
     @PostMapping(path= {""})
     @ResponseBody
-    public ResponseEntity<CardList> create(@RequestBody CardList cardList)
+    public ResponseEntity<Board> create(@RequestBody Board board)
     {
-        return BoardService.create(cardList);
+        return BoardService.create(board);
     }
 }
