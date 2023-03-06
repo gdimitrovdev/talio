@@ -9,12 +9,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tags")
-public class TagController
-{
+public class TagController {
+
     private TagService tagService;
 
     public TagController(TagService tagService) {
         this.tagService = tagService;
+    }
+
+    @GetMapping(path = { "", "/" })
+    @ResponseBody
+    public List<Tag> getMany() {
+        return tagService.getMany();
     }
 
     @GetMapping("/{id}")
@@ -23,24 +29,15 @@ public class TagController
         return tagService.getOne(id);
     }
 
+    @PostMapping(path = { "", "/" })
+    @ResponseBody
+    public ResponseEntity<Tag> createOne(@RequestBody Tag tag) {
+        return tagService.createOne(tag);
+    }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id)
-    {
-            tagService.delete(id);
-    }
-
-    @GetMapping("")
-    @ResponseBody
-    public List<Tag> getAll()
-    {
-        return tagService.getAll();
-    }
-
-    @PostMapping("")
-    @ResponseBody
-    public ResponseEntity<Tag> create(@RequestBody Tag tag)
-    {
-        return tagService.create(tag);
+    public void deleteOne(@PathVariable("id") Long id) {
+            tagService.deleteOne(id);
     }
 
 }

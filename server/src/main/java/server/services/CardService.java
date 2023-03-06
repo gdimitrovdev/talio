@@ -3,7 +3,6 @@ package server.services;
 import commons.Card;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import server.database.CardRepository;
 
 import java.util.List;
