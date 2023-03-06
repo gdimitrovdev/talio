@@ -6,28 +6,34 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 public class CardList {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     public String title;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "BOARD_ID", nullable = false)
     public Board board;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "list")
-    public Set<Card> cards;
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "list", fetch = FetchType.EAGER)
+    public List<Card> cards;
 
     public CardList(){}
 
-    public CardList(long id, String title, Board board, Set<Card> cards) {
+    public CardList(long id, String title, Board board, List<Card> cards) {
         this.id = id;
+        this.title = title;
+        this.board = board;
+        this.cards = cards;
+    }
+
+    public CardList(String title, Board board, List<Card> cards) {
         this.title = title;
         this.board = board;
         this.cards = cards;

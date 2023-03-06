@@ -11,11 +11,11 @@ import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 @Entity
 public class Subtask {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     public String title;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "CARD_ID", nullable = false)
     public Card card;
 
@@ -23,6 +23,11 @@ public class Subtask {
 
     public Subtask(long id, String title, Card card) {
         this.id = id;
+        this.title = title;
+        this.card = card;
+    }
+
+    public Subtask(String title, Card card) {
         this.title = title;
         this.card = card;
     }
