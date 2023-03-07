@@ -1,5 +1,5 @@
 
-# Weekly Lab Meeting 3 - Agenda
+# Weekly Lab Meeting 4 - Agenda
 *Notes on formatting:
 Proposed places for the minute-taker to record the minutes during the meeting are noted in italics, between square brackets [].
 The actual minutes don’t have to be in square brackets, but they should keep the italic styling, so that they are easy to distinguish.
