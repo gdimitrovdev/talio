@@ -3,7 +3,6 @@ package commons;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,12 +13,12 @@ public class BoardTest {
     public void checkConstructorWithoutId() {
         var tags = new ArrayList<Tag>();
         tags.add(new Tag("tagTitle", "red", null, null));
-        var cardList = new CardList("cardListTitle", new Board(), new ArrayList<Card>());
+        var cardList = new CardList("cardListTitle", new Board(), new ArrayList<>());
         cardList.cards.add(new Card("cardTitle", "desc", "green", null, null, null));
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
         var b = new Board(true, "boardName", "boardPassword", "asdfgh", "red", cardlists, tags);
-        assertEquals(true, b.readOnly);
+        assertTrue(b.readOnly);
         assertEquals("boardName", b.name);
         assertEquals("boardPassword", b.password);
         assertEquals("asdfgh", b.hash);
@@ -32,13 +31,13 @@ public class BoardTest {
     public void checkConstructorWithId() {
         var tags = new ArrayList<Tag>();
         tags.add(new Tag("tagTitle", "red", null, null));
-        var cardList = new CardList("cardListTitle", new Board(), new ArrayList<Card>());
+        var cardList = new CardList("cardListTitle", new Board(), new ArrayList<>());
         cardList.cards.add(new Card("cardTitle", "desc", "green", null, null, null));
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
         var b = new Board(15,true, "boardName", "boardPassword", "asdfgh", "red", cardlists, tags);
         assertEquals(15, b.id);
-        assertEquals(true, b.readOnly);
+        assertTrue(b.readOnly);
         assertEquals("boardName", b.name);
         assertEquals("boardPassword", b.password);
         assertEquals("asdfgh", b.hash);
