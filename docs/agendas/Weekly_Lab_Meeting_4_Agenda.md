@@ -52,7 +52,7 @@ Attendees:
     5. How good is our progress on the application currently compared to other teams? Is our pace of work sufficient?
     > *We are quite ahead of other teams. We should only show stuff from the main branch, not the side branches.*
 6. Heuristic usability report
-    1. Who is going to reveal our application's usability?
+   1. Who is going to review our application's usability?
     > *We should find a team to evaluate. Talk to friends and have a mutual review. One team is enough.*
 7. Question round
     1. Does anyone have any other questions for the TA before the meeting closes?
