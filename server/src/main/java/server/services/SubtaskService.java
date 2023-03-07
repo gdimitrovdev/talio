@@ -25,7 +25,7 @@ public class SubtaskService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(subtaskRepository.getById(id));
+        return ResponseEntity.ok(subtaskRepository.findById(id).get());
     }
 
     public ResponseEntity<Subtask> createOne(Subtask subtask) {

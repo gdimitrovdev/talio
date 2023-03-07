@@ -25,7 +25,7 @@ public class BoardService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(boardRepository.getById(id));
+        return ResponseEntity.ok(boardRepository.findById(id).get());
     }
 
     public ResponseEntity<Board> createOne(Board board) {

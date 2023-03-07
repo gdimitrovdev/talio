@@ -25,7 +25,7 @@ public class CardService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(cardRepository.getById(id));
+        return ResponseEntity.ok(cardRepository.findById(id).get());
     }
 
     public ResponseEntity<Card> createOne(Card card) {

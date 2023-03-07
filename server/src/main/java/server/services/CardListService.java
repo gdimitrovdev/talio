@@ -25,7 +25,7 @@ public class CardListService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(cardListRepository.getById(id));
+        return ResponseEntity.ok(cardListRepository.findById(id).get());
     }
 
     public ResponseEntity<CardList> createOne(CardList cardList) {

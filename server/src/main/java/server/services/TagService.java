@@ -25,7 +25,7 @@ public class TagService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(tagRepository.getById(id));
+        return ResponseEntity.ok(tagRepository.findById(id).get());
     }
 
     public ResponseEntity<Tag> createOne(Tag tag) {
