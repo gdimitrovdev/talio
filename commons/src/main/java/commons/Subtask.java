@@ -12,23 +12,41 @@ import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 public class Subtask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
-    public String title;
+    private Long id;
+    private String title;
 
     @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "CARD_ID", nullable = false)
-    public Card card;
+    private Card card;
 
-    public Subtask(){}
-
-    public Subtask(long id, String title, Card card) {
-        this.id = id;
-        this.title = title;
-        this.card = card;
-    }
+    private Subtask(){}
 
     public Subtask(String title, Card card) {
+        setTitle(title);
+        setCard(card);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
         this.card = card;
     }
 
