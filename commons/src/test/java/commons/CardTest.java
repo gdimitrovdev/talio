@@ -20,6 +20,8 @@ public class CardTest {
         var subtasks = new ArrayList<Subtask>();
         subtasks.add(subtask);
         var c = new Card("cardTitle", "desc", "red", list);
+        c.setTags(tags);
+        c.setSubtasks(subtasks);
         assertEquals("cardTitle", c.getTitle());
         assertEquals("desc", c.getDescription());
         assertEquals("red", c.getColor());

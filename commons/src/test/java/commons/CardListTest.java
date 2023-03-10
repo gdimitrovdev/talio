@@ -16,6 +16,7 @@ public class CardListTest {
         var cards = new ArrayList<Card>();
         cards.add(c);
         var cl = new CardList("listTitle", b);
+        cl.setCards(cards);
         assertEquals("listTitle", cl.getTitle());
         assertEquals(b, cl.getBoard());
         assertEquals(cards, cl.getCards());

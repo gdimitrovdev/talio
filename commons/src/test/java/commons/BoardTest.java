@@ -18,6 +18,8 @@ public class BoardTest {
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
         var b = new Board(true, "boardName", "boardPassword", "asdfgh", "red");
+        b.setLists(cardlists);
+        b.setTags(tags);
         assertTrue(b.getReadOnly());
         assertEquals("boardName", b.getName());
         assertEquals("boardPassword", b.getPassword());

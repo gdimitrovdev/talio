@@ -17,6 +17,7 @@ public class TagTest {
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t = new Tag("tagTitle", "red", b);
+        t.setCards(cards);
         assertEquals("tagTitle", t.getTitle());
         assertEquals("red", t.getColor());
         assertEquals(b, t.getBoard());
