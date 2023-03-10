@@ -38,6 +38,12 @@ public class CardList {
         cards = new ArrayList<>();
     }
 
+    public CardList(String title, Board board, List<Card> cards) {
+        this.title = title;
+        this.board = board;
+        this.cards = cards;
+    }
+
     public void addCard(Card card) {
         cards.add(card);
         card.setList(this);
@@ -93,37 +99,5 @@ public class CardList {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
     }
 }

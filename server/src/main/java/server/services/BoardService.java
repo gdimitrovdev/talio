@@ -42,7 +42,7 @@ public class BoardService {
     {
         Board existingboard = boardRepository.findById(board.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
-        existingboard.setReadOnly(board.isReadOnly());
+        existingboard.setReadOnly(board.getReadOnly());
         existingboard.setColor(board.getColor());
         existingboard.setName(board.getName());
         existingboard.setPassword(board.getPassword());

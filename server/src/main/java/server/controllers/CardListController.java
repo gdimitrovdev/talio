@@ -1,7 +1,6 @@
 package server.controllers;
 
 import commons.CardList;
-import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardListService;

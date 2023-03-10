@@ -106,19 +106,19 @@ public class CardOverviewCtrl implements Initializable {
 
     public void setCardData(commons.Card newCardData) {
         cardData = newCardData;
-        title.setText(cardData.title);
+        title.setText(cardData.getTitle());
         // TODO this calculation will have to change once the Subtask Model changes in #40, #41
-        int numSubtasksDone = (int) cardData.subtasks.stream().filter(x -> x.title.equals("Done")).count();
-        subtaskLabel.setText(numSubtasksDone + "/" + cardData.subtasks.size() + "Subtasks");
-        subtaskProgress.setProgress((float)numSubtasksDone / cardData.subtasks.size());
+        int numSubtasksDone = (int) cardData.getSubtasks().stream().filter(x -> x.getTitle().equals("Done")).count();
+        subtaskLabel.setText(numSubtasksDone + "/" + cardData.getSubtasks().size() + "Subtasks");
+        subtaskProgress.setProgress((float)numSubtasksDone / cardData.getSubtasks().size());
 
         tagsContainer.getChildren().clear();
-        for(var tag : cardData.tags) {
+        for(var tag : cardData.getTags()) {
             var rect = new Rectangle();
             // TODO remove magic numbers from here
             rect.setHeight(10);
             rect.setWidth(70);
-            rect.setFill(Color.web("0x" + tag.color.substring(1)));
+            rect.setFill(Color.web("0x" + tag.getColor().substring(1)));
             // TODO perhaps move those to a CSS file
             rect.setArcHeight(5);
             rect.setArcWidth(5);
@@ -150,7 +150,7 @@ public class CardOverviewCtrl implements Initializable {
             );
         }
         else {
-            cardData.title = title.getText();
+            cardData.setTitle(title.getText());
             setCardData(cardData);
         }
 
