@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CardListService {
 
-  private CardListRepository cardListRepository;
+  private final CardListRepository cardListRepository;
 
     public CardListService(CardListRepository cardListRepository) {
         this.cardListRepository = cardListRepository;

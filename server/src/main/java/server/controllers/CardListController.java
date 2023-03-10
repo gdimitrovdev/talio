@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/card-lists")
 public class CardListController {
 
-    private CardListService cardListService;
+    private final CardListService cardListService;
 
     public CardListController(CardListService cardListService) {
         this.cardListService = cardListService;

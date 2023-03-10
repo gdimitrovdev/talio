@@ -20,10 +20,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,8 +167,8 @@ public class CardOverviewCtrl implements Initializable {
     long delayMs = 250;
     private ClickRunner latestClickRunner = null;
 
-    private ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty = new SimpleObjectProperty<>();
-    private ObjectProperty<EventHandler<MouseEvent>> onMouseDoubleClickedProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<EventHandler<MouseEvent>> onMouseDoubleClickedProperty = new SimpleObjectProperty<>();
 
     private class ClickRunner implements Runnable {
 

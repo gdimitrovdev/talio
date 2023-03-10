@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/subtasks")
 public class SubtaskController {
 
-    private SubtaskService subtaskService;
+    private final SubtaskService subtaskService;
 
     public SubtaskController(SubtaskService subtaskService) {
         this.subtaskService = subtaskService;

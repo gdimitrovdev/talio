@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class SubtaskService {
 
-    private SubtaskRepository subtaskRepository;
+    private final SubtaskRepository subtaskRepository;
 
     public SubtaskService(SubtaskRepository subtaskRepository) {
         this.subtaskRepository = subtaskRepository;
