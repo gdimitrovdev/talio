@@ -43,6 +43,10 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    public void initialize(Parent component) {
+
+    }
+
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
