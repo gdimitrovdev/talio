@@ -7,10 +7,9 @@ import commons.Card;
 import commons.CardList;
 import elements.BoardElement;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+
 
 import java.util.ArrayList;
 
@@ -47,6 +46,7 @@ public class BoardCtrl {
         cardLists.add(list1);
         cardLists.add(list2);
         current.setLists(cardLists);
+
 
         //"Long boardID = Long.parseLong(boardField.getText());
         //Board current = serverUtils.getBoardById(boardID)" can be used
