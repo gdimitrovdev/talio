@@ -1,6 +1,7 @@
 package server.controllers;
 
 import commons.CardList;
+import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardListService;
@@ -38,6 +39,12 @@ public class CardListController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long id) {
         cardListService.deleteOne(id);
+    }
+
+    @PutMapping("/{id}")
+    public CardList update(@PathVariable Long id, @RequestBody CardList cardList) {
+        cardList.setId(id);
+        return cardListService.update(cardList);
     }
 
 }

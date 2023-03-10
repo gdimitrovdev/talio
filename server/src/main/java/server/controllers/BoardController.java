@@ -40,4 +40,10 @@ public class BoardController {
         boardService.deleteOne(id);
     }
 
+    @PutMapping("/{id}")
+    public Board update(@PathVariable Long id, @RequestBody Board board) {
+        board.setId(id);
+        return boardService.update(board);
+    }
+
 }

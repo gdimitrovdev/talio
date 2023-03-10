@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.CardListRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -35,6 +36,17 @@ public class CardListService {
 
     public void deleteOne(Long id) {
         cardListRepository.deleteById(id);
+    }
+
+    public CardList update(CardList cardList)
+    {
+        CardList existinglist = cardListRepository.findById(cardList.getId())
+                .orElseThrow(() -> new EntityNotFoundException("List not found"));
+        existinglist.setTitle(cardList.getTitle());
+        existinglist.setCards(cardList.getCards());
+        existinglist.setBoard(cardList.getBoard());
+
+        return cardListRepository.save(existinglist);
     }
 
 }

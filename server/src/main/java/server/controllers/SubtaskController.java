@@ -40,4 +40,10 @@ public class SubtaskController {
         subtaskService.deleteOne(id);
     }
 
+    @PutMapping("/{id}")
+    public Subtask update(@PathVariable Long id, @RequestBody Subtask subtask) {
+        subtask.setId(id);
+        return subtaskService.update(subtask);
+    }
+
 }

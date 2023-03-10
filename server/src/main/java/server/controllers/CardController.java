@@ -40,4 +40,10 @@ public class CardController {
         cardService.deleteOne(id);
     }
 
+    @PutMapping("/{id}")
+    public Card update(@PathVariable Long id, @RequestBody Card card) {
+        card.setId(id);
+        return cardService.update(card);
+    }
+
 }
