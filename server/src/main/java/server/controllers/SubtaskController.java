@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/subtasks")
 public class SubtaskController {
 
-    private SubtaskService subtaskService;
+    private final SubtaskService subtaskService;
 
     public SubtaskController(SubtaskService subtaskService) {
         this.subtaskService = subtaskService;
@@ -38,6 +38,12 @@ public class SubtaskController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long id) {
         subtaskService.deleteOne(id);
+    }
+
+    @PutMapping("/{id}")
+    public Subtask update(@PathVariable Long id, @RequestBody Subtask subtask) {
+        subtask.setId(id);
+        return subtaskService.update(subtask);
     }
 
 }

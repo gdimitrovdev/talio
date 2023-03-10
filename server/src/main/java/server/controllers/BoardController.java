@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/boards")
 public class BoardController {
 
-    private BoardService boardService;
+    private final BoardService boardService;
 
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
@@ -38,6 +38,12 @@ public class BoardController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long id) {
         boardService.deleteOne(id);
+    }
+
+    @PutMapping("/{id}")
+    public Board update(@PathVariable Long id, @RequestBody Board board) {
+        board.setId(id);
+        return boardService.update(board);
     }
 
 }

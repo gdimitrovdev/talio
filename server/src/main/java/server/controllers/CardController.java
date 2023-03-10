@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/cards")
 public class CardController {
 
-    private CardService cardService;
+    private final CardService cardService;
 
     public CardController(CardService cardService) {
         this.cardService = cardService;
@@ -38,6 +38,12 @@ public class CardController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long id) {
         cardService.deleteOne(id);
+    }
+
+    @PutMapping("/{id}")
+    public Card update(@PathVariable Long id, @RequestBody Card card) {
+        card.setId(id);
+        return cardService.update(card);
     }
 
 }

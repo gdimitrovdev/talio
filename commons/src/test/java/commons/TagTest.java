@@ -12,62 +12,49 @@ public class TagTest {
 
     @Test
     public void checkConstructorWithoutId() {
-        var b = new Board(true, "boardName", "password", "asdfgh", "green", null, null);
-        var c = new Card("cardTitle", "desc", "green", null, null, null);
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
-        var t = new Tag("tagTitle", "red", b, cards);
-        assertEquals("tagTitle", t.title);
-        assertEquals("red", t.color);
-        assertEquals(b, t.board);
-        assertEquals(cards, t.cards);
-    }
-
-    @Test
-    public void checkConstructorWithId() {
-        var b = new Board(true, "boardName", "password", "asdfgh", "green", null, null);
-        var c = new Card("cardTitle", "desc", "green", null, null, null);
-        var cards = new ArrayList<Card>();
-        cards.add(c);
-        var t = new Tag(15, "tagTitle", "red", b, cards);
-        assertEquals(15, t.id);
-        assertEquals("tagTitle", t.title);
-        assertEquals("red", t.color);
-        assertEquals(b, t.board);
-        assertEquals(cards, t.cards);
+        var t = new Tag("tagTitle", "red", b);
+        t.setCards(cards);
+        assertEquals("tagTitle", t.getTitle());
+        assertEquals("red", t.getColor());
+        assertEquals(b, t.getBoard());
+        assertEquals(cards, t.getCards());
     }
 
     @Test
     public void equalsHashCode() {
-        var b = new Board(true, "boardName", "password", "asdfgh", "green", null, null);
-        var c = new Card("cardTitle", "desc", "green", null, null, null);
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
-        var t1 = new Tag("tagTitle", "red", b, cards);
-        var t2 = new Tag("tagTitle", "red", b, cards);
+        var t1 = new Tag("tagTitle", "red", b);
+        var t2 = new Tag("tagTitle", "red", b);
         assertEquals(t1, t2);
         assertEquals(t1.hashCode(), t2.hashCode());
     }
 
     @Test
     public void notEqualsHashCode() {
-        var b = new Board(true, "boardName", "password", "asdfgh", "green", null, null);
-        var c = new Card("cardTitle", "desc", "green", null, null, null);
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
-        var t1 = new Tag("tagTitle", "red", b, cards);
-        var t2 = new Tag("differentTagTitle", "red", b, cards);
+        var t1 = new Tag("tagTitle", "red", b);
+        var t2 = new Tag("differentTagTitle", "red", b);
         assertNotEquals(t1, t2);
         assertNotEquals(t1.hashCode(), t2.hashCode());
     }
 
     @Test
     public void hasToString() {
-        var b = new Board(true, "boardName", "password", "asdfgh", "green", null, null);
-        var c = new Card("cardTitle", "desc", "green", null, null, null);
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
-        var actual = new Tag("tagTitle", "red", b, cards).toString();
+        var actual = new Tag("tagTitle", "red", b).toString();
         assertTrue(actual.contains(Tag.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
         assertTrue(actual.contains("title"));

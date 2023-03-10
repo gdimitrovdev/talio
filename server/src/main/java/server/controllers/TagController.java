@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/tags")
 public class TagController {
 
-    private TagService tagService;
+    private final TagService tagService;
 
     public TagController(TagService tagService) {
         this.tagService = tagService;
@@ -38,6 +38,12 @@ public class TagController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long id) {
             tagService.deleteOne(id);
+    }
+
+    @PutMapping("/{id}")
+    public Tag update(@PathVariable Long id, @RequestBody Tag tag) {
+        tag.setId(id);
+        return tagService.update(tag);
     }
 
 }

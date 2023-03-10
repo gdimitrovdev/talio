@@ -5,12 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.SubtaskRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class SubtaskService {
 
-    private SubtaskRepository subtaskRepository;
+    private final SubtaskRepository subtaskRepository;
 
     public SubtaskService(SubtaskRepository subtaskRepository) {
         this.subtaskRepository = subtaskRepository;
@@ -35,6 +36,16 @@ public class SubtaskService {
 
     public void deleteOne(Long id) {
         subtaskRepository.deleteById(id);
+    }
+
+    public Subtask update(Subtask subtask)
+    {
+        Subtask existingSubtask = subtaskRepository.findById(subtask.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Subtask not found"));
+        existingSubtask.setTitle(subtask.getTitle());
+        existingSubtask.setCard(subtask.getCard());
+
+        return subtaskRepository.save(existingSubtask);
     }
 
 }

@@ -135,7 +135,7 @@ public class TestQuoteRepository implements QuoteRepository {
     @Override
     public <S extends Quote> S save(S entity) {
         call("save");
-        entity.id = (long) quotes.size();
+        entity.id = quotes.size();
         quotes.add(entity);
         return entity;
     }
