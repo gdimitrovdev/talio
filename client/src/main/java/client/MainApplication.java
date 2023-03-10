@@ -5,9 +5,6 @@ import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static com.google.inject.Guice.createInjector;
 
 public class MainApplication extends Application {
