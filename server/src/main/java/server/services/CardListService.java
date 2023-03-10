@@ -1,12 +1,12 @@
 package server.services;
 
 import commons.CardList;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.CardListRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardListService {
@@ -21,32 +21,30 @@ public class CardListService {
         return cardListRepository.findAll();
     }
 
-    public ResponseEntity<CardList> getOne(Long id) {
-        if(id < 0 || !cardListRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(cardListRepository.findById(id).get());
+    public Optional<CardList> getOne(Long id) {
+        return cardListRepository.findById(id);
     }
 
-    public ResponseEntity<CardList> createOne(CardList cardList) {
+    public CardList createOne(CardList cardList) {
         CardList newCardList = cardListRepository.save(cardList);
-        return ResponseEntity.ok(newCardList);
+        return newCardList;
     }
 
     public void deleteOne(Long id) {
-        cardListRepository.deleteById(id);
+        if (cardListRepository.existsById(id)) {
+            cardListRepository.deleteById(id);
+        }
     }
 
-    public CardList update(CardList cardList)
-    {
-        CardList existinglist = cardListRepository.findById(cardList.getId())
+    public CardList updateOne(Long id, CardList cardList) throws EntityNotFoundException {
+        CardList existingList = cardListRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("List not found"));
-        existinglist.setTitle(cardList.getTitle());
-        existinglist.setCards(cardList.getCards());
-        existinglist.setBoard(cardList.getBoard());
 
-        return cardListRepository.save(existinglist);
+        existingList.setTitle(cardList.getTitle());
+        existingList.setCards(cardList.getCards());
+        existingList.setBoard(cardList.getBoard());
+
+        return cardListRepository.save(existingList);
     }
 
 }
