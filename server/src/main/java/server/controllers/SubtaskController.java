@@ -1,6 +1,5 @@
 package server.controllers;
 
-import commons.CardList;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
