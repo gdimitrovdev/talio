@@ -3,7 +3,6 @@ package server.services;
 import commons.Card;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import server.database.CardRepository;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class CardService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(cardRepository.getById(id));
+        return ResponseEntity.ok(cardRepository.findById(id).get());
     }
 
     public ResponseEntity<Card> createOne(Card card) {
