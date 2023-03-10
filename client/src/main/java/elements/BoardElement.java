@@ -39,7 +39,7 @@ public class BoardElement  extends ScrollPane {
         newListButton.setTooltip(newListToolTip);
 
         //add the CardListElement instances to the innerHBox
-        for(CardList cardList : board.lists){
+        for(CardList cardList : board.getLists()){
             CardListElement cardListEl = new CardListElement(cardList, mainCtrlTalio);
             innerHBox.getChildren().add(cardListEl);
             innerHBox.setMargin(cardListEl, new Insets(0, 10, 0, 0));
@@ -67,7 +67,7 @@ public class BoardElement  extends ScrollPane {
     public void addCardList(){
 
         CardList current = new CardList();
-        current.title="Enter list title";
+        current.setTitle("Enter list title");
         innerHBox.getChildren().add(new CardListElement(current, mainCtrlTalio));
         //TO DO: the id of the list and the id of the board
         //attributes of the cardList should be set here

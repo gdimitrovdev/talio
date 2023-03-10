@@ -20,11 +20,8 @@ public class CardListElement extends VBox {
 
         //create a HBox that will be the header of the list
         HBox titleHolder = new HBox();
-<<<<<<< HEAD
         TextField titleField = new TextField(cardList.getTitle());
-=======
-        TextField titleField = new TextField(cardList.title);
->>>>>>> 5d28dc82fc3f35955cc0013994ac47a7cec855cf
+
         Button deleteListBtn = new Button("x");
         Tooltip deleteListToolTip = new Tooltip("delete the this list");
         deleteListBtn.setTooltip(deleteListToolTip);
@@ -46,15 +43,9 @@ public class CardListElement extends VBox {
         super.getChildren().add(titleHolder);
 
         //inserting the cards in the list
-<<<<<<< HEAD
         for(Card card : cardList.getCards()){
                 //instead of buttons, CardElement-s should be instantiated
                 Button cardButton = new Button(card.getTitle());
-=======
-        for(Card card : cardList.cards){
-                //instead of buttons, CardElement-s should be instantiated
-                Button cardButton = new Button(card.title);
->>>>>>> 5d28dc82fc3f35955cc0013994ac47a7cec855cf
                 cardButton.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;" +
                         " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
                 super.getChildren().add(cardButton);
