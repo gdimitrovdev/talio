@@ -1,17 +1,27 @@
 package commons;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class CardTest {
 
     @Test
-    public void checkConstructorWithoutId() {
+    public void checkConstructorWithoutLists() {
+        var list = new CardList();
+        var c = new Card("cardTitle", "desc", "red", list);
+        assertEquals("cardTitle", c.getTitle());
+        assertEquals("desc", c.getDescription());
+        assertEquals("red", c.getColor());
+        assertEquals(list, c.getList());
+        c.setId(1L);
+        assertEquals(1, c.getId());
+    }
+
+    @Test
+    public void checkConstructor() {
         var list = new CardList();
         var tag = new Tag("tagTitle", "green", null);
         var tags = new ArrayList<Tag>();
@@ -19,7 +29,7 @@ public class CardTest {
         var subtask = new Subtask("subtaskTitle", null);
         var subtasks = new ArrayList<Subtask>();
         subtasks.add(subtask);
-        var c = new Card("cardTitle", "desc", "red", list);
+        var c = new Card("cardTitle", "desc", "red", list, tags, subtasks);
         c.setTags(tags);
         c.setSubtasks(subtasks);
         assertEquals("cardTitle", c.getTitle());
@@ -28,6 +38,32 @@ public class CardTest {
         assertEquals(list, c.getList());
         assertEquals(tags, c.getTags());
         assertEquals(subtasks, c.getSubtasks());
+    }
+
+    @Test
+    public void testSubtaskOperations() {
+        var subtask = new Subtask("subtaskTitle", null);
+        var subtasks = new ArrayList<Subtask>();
+        var c = new Card("cardTitle", "desc", "red", null, null, subtasks);
+        c.addSubtask(subtask);
+        assertTrue(c.getSubtasks().contains(subtask));
+        assertEquals(c, subtask.getCard());
+        c.removeSubtask(subtask);
+        assertFalse(c.getSubtasks().contains(subtask));
+        assertNull(subtask.getCard());
+    }
+
+    @Test
+    public void testTagOperations() {
+        var tag = new Tag("tagTitle", "green", null);
+        var tags = new ArrayList<Tag>();
+        var c = new Card("cardTitle", "desc", "red", null, tags, null);
+        c.addTag(tag);
+        assertTrue(c.getTags().contains(tag));
+        assertTrue(tag.getCards().contains(c));
+        c.removeTag(tag);
+        assertFalse(c.getTags().contains(tag));
+        assertFalse(tag.getCards().contains(c));
     }
 
     @Test

@@ -1,25 +1,33 @@
 package commons;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class CardListTest {
     @Test
-    public void checkConstructorWithoutId() {
+    public void checkConstructor() {
         var b = new Board(true, "boardName", "password", "asdfgh", "green");
         var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
-        var cl = new CardList("listTitle", b);
+        var cl = new CardList("listTitle", b, cards);
         cl.setCards(cards);
         assertEquals("listTitle", cl.getTitle());
         assertEquals(b, cl.getBoard());
         assertEquals(cards, cl.getCards());
+    }
+
+    @Test
+    public void checkConstructorWithoutLists() {
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var cl = new CardList("listTitle", b);
+        assertEquals("listTitle", cl.getTitle());
+        assertEquals(b, cl.getBoard());
+        cl.setId(1L);
+        assertEquals(1, cl.getId());
     }
 
     @Test
@@ -32,6 +40,20 @@ public class CardListTest {
         var cl2 = new CardList("listTitle", b);
         assertEquals(cl2, cl1);
         assertEquals(cl2.hashCode(), cl1.hashCode());
+    }
+
+    @Test
+    public void testCardOperations() {
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var c = new Card("cardTitle", "desc", "green", null);
+        var cards = new ArrayList<Card>();
+        var cl = new CardList("listTitle", b, cards);
+        cl.addCard(c);
+        assertTrue(cl.getCards().contains(c));
+        assertEquals(c.getList(), cl);
+        cl.removeCard(c);
+        assertFalse(cl.getCards().contains(c));
+        assertNull(c.getList());
     }
 
     @Test

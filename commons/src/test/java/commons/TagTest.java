@@ -11,12 +11,23 @@ import java.util.ArrayList;
 public class TagTest {
 
     @Test
-    public void checkConstructorWithoutId() {
+    public void checkConstructorWithoutList() {
+        var b = new Board(true, "boardName", "password", "asdfgh", "green");
+        var t = new Tag("tagTitle", "red", b);
+        assertEquals("tagTitle", t.getTitle());
+        assertEquals("red", t.getColor());
+        assertEquals(b, t.getBoard());
+        t.setId(1L);
+        assertEquals(1, t.getId());
+    }
+
+    @Test
+    public void checkConstructor() {
         var b = new Board(true, "boardName", "password", "asdfgh", "green");
         var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
-        var t = new Tag("tagTitle", "red", b);
+        var t = new Tag("tagTitle", "red", b, cards);
         t.setCards(cards);
         assertEquals("tagTitle", t.getTitle());
         assertEquals("red", t.getColor());

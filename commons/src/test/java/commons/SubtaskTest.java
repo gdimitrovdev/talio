@@ -14,6 +14,8 @@ public class SubtaskTest {
         var s = new Subtask("subtaskTitle", c);
         assertEquals("subtaskTitle", s.getTitle());
         assertEquals(c, s.getCard());
+        s.setId(1L);
+        assertEquals(1, s.getId());
     }
 
     @Test
