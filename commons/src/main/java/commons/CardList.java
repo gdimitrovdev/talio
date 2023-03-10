@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,11 +22,12 @@ public class CardList {
     @Basic(optional = false)
     private String title;
 
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "BOARD_ID", nullable = false)
+    @ManyToOne
+    @JsonBackReference
     private Board board;
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "list", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Card> cards;
 
     public CardList(){}
@@ -33,6 +36,16 @@ public class CardList {
         setTitle(title);
         setBoard(board);
         cards = new ArrayList<>();
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
+        card.setList(this);
+    }
+
+    public void removeCard(Card card) {
+        cards.remove(card);
+        card.setList(null);
     }
 
     public long getId() {

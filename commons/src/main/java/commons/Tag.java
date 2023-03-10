@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,11 +23,12 @@ public class Tag {
     private String title;
     private String color;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "BOARD_ID", nullable = false)
+    @ManyToOne
+    @JsonBackReference
     private Board board;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags")
+    @JsonManagedReference
     private List<Card> cards;
 
     public Tag(){}

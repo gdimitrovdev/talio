@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,8 +16,8 @@ public class Subtask {
     private Long id;
     private String title;
 
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "CARD_ID", nullable = false)
+    @ManyToOne
+    @JsonBackReference
     private Card card;
 
     private Subtask(){}

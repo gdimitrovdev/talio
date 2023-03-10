@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -29,10 +30,12 @@ public class Board {
 
     private String color;
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CardList> lists;
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Tag> tags;
 
     public Board(){}
@@ -44,6 +47,26 @@ public class Board {
         setColor(color);
         lists = new ArrayList<>();
         tags = new ArrayList<>();
+    }
+
+    public void addCardList(CardList list) {
+        lists.add(list);
+        list.setBoard(this);
+    }
+
+    public void removeCardList(CardList list) {
+        lists.remove(list);
+        list.setBoard(null);
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.setBoard(this);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+        tag.setBoard(null);
     }
 
     public Long getId() {

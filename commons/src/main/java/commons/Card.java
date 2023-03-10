@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,15 +24,16 @@ public class Card {
     private String description;
     private String color;
 
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "LIST_ID", nullable = false)
+    @ManyToOne
+    @JsonBackReference
     private CardList list;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "CARD_TAG")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonManagedReference
     private List<Tag> tags;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "card", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Subtask> subtasks;
 
     public Card(){}
@@ -42,6 +45,26 @@ public class Card {
         setList(list);
         tags = new ArrayList<>();
         subtasks = new ArrayList<>();
+    }
+
+    public void addSubtask(Subtask subtask) {
+        subtasks.add(subtask);
+        subtask.setCard(this);
+    }
+
+    public void removeSubtask(Subtask subtask) {
+        subtasks.remove(subtask);
+        subtask.setCard(null);
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.getCards().add(this);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+        tag.getCards().remove(this);
     }
 
     public Long getId() {
