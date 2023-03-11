@@ -1,7 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,6 +14,7 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CardList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,19 +24,16 @@ public class CardList {
     private String title;
 
     @ManyToOne
-    @JsonBackReference
     private Board board;
 
     @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Card> cards;
+    private List<Card> cards = new ArrayList<>();
 
     public CardList(){}
 
     public CardList(String title, Board board) {
         setTitle(title);
         setBoard(board);
-        cards = new ArrayList<>();
     }
 
     public CardList(String title, Board board, List<Card> cards) {
@@ -54,7 +52,7 @@ public class CardList {
         card.setList(null);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

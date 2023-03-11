@@ -1,6 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Subtask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +19,6 @@ public class Subtask {
     private String title;
 
     @ManyToOne
-    @JsonBackReference
     private Card card;
 
     private Subtask(){}
@@ -26,7 +27,7 @@ public class Subtask {
         setTitle(title);
         setCard(card);
     }
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

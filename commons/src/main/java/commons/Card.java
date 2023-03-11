@@ -1,7 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,6 +14,7 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,16 +26,13 @@ public class Card {
     private String color;
 
     @ManyToOne
-    @JsonBackReference
     private CardList list;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonManagedReference
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Subtask> subtasks;
+    private List<Subtask> subtasks = new ArrayList<>();
 
     public Card(){}
 
@@ -43,8 +41,6 @@ public class Card {
         setDescription(description);
         setColor(color);
         setList(list);
-        tags = new ArrayList<>();
-        subtasks = new ArrayList<>();
     }
 
     public Card(String title, String description, String color, CardList list, List<Tag> tags, List<Subtask> subtasks)

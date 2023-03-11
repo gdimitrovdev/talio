@@ -1,6 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,6 +14,7 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,12 +33,10 @@ public class Board {
     private String color;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<CardList> lists;
+    private List<CardList> lists = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     public Board(){}
     public Board(boolean readOnly, String name, String password, String hash, String color) {
@@ -45,8 +45,6 @@ public class Board {
         setPassword(password);
         setHash(hash);
         setColor(color);
-        lists = new ArrayList<>();
-        tags = new ArrayList<>();
     }
 
     public Board(Boolean readOnly, String name, String password, String hash, String color, List<CardList> lists, List<Tag> tags) {
