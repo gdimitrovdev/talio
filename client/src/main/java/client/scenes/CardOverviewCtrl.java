@@ -164,7 +164,7 @@ public class CardOverviewCtrl implements Initializable {
 
     // TODO extract the single/double click event handler so that it can be used with any UI
     //  component using composition
-    long delayMs = 250;
+    private long delayMs = 250;
     private ClickRunner latestClickRunner = null;
 
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty = new SimpleObjectProperty<>();

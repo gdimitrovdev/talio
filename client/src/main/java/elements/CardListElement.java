@@ -44,11 +44,11 @@ public class CardListElement extends VBox {
 
         //inserting the cards in the list
         for(Card card : cardList.getCards()){
-                //instead of buttons, CardElement-s should be instantiated
-                Button cardButton = new Button(card.getTitle());
-                cardButton.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;" +
-                        " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
-                super.getChildren().add(cardButton);
+            //instead of buttons, CardElement-s should be instantiated
+            Button cardButton = new Button(card.getTitle());
+            cardButton.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;" +
+                    " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
+            super.getChildren().add(cardButton);
         }
 
 

@@ -37,7 +37,7 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long id) {
-            tagService.deleteOne(id);
+        tagService.deleteOne(id);
     }
 
     @PutMapping("/{id}")
