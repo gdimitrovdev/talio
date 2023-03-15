@@ -16,6 +16,9 @@
 package client;
 
 import client.scenes.*;
+import client.scenes.template.AddQuoteCtrl;
+import client.scenes.template.MainCtrl;
+import client.scenes.template.QuoteOverviewCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.template;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,8 +30,6 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
-
-
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add) {
 
@@ -44,10 +42,6 @@ public class MainCtrl {
 
         showOverview();
         primaryStage.show();
-    }
-
-    public void initialize(Parent component) {
-
     }
 
     public void showOverview() {

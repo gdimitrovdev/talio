@@ -40,6 +40,7 @@ public class BoardElement  extends ScrollPane {
 
         //add the CardListElement instances to the innerHBox
         for(CardList cardList : board.getLists()){
+            // TODO: Change this to FXML
             CardListElement cardListEl = new CardListElement(cardList, mainCtrlTalio);
             innerHBox.getChildren().add(cardListEl);
             innerHBox.setMargin(cardListEl, new Insets(0, 10, 0, 0));

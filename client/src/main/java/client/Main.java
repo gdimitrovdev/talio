@@ -20,11 +20,11 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.CardOverviewCtrl;
+import client.scenes.BoardCtrl;
+import client.scenes.MainCtrlTalio;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -37,10 +37,14 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        // This is just here to test the card component
-        primaryStage.setScene(new Scene(FXML.load(CardOverviewCtrl.class, "client", "scenes", "CardOverview.fxml").getValue()));
-        primaryStage.show();
+    public void start(Stage primaryStageTalio){
+
+        var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
+
+        var boardPair = FXML.load(BoardCtrl.class, "client", "scenes", "Board.fxml");
+
+        mainControl.initialize(primaryStageTalio, boardPair);
+
         /*
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");

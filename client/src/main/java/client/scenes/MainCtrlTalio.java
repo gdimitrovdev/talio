@@ -13,8 +13,10 @@ public class MainCtrlTalio {
     private Scene board;
     private BoardCtrl boardCtrl;
 
-    public void initialize(Stage primaryStageTalio,
-                           Pair<BoardCtrl, Parent> boardPair){
+    public void initialize(
+        Stage primaryStageTalio,
+        Pair<BoardCtrl, Parent> boardPair)
+    {
         this.primaryStageTalio=primaryStageTalio;
         this.boardCtrl=boardPair.getKey();
         this.board=new Scene(boardPair.getValue());
