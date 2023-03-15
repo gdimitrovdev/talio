@@ -6,19 +6,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="javafx.scene.layout.VBox"  xmlns:fx="http://javafx.com/fxml" VBox.vgrow ="ALWAYS">
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" VBox.vgrow ="ALWAYS" stylesheets="@./css/ListComponent.css" >
     <HBox fx:id="titleHolder">
         <TextField fx:id="titleField">
 
         </TextField>
-        <Button fx:id="deleteListBtn" text="x">
+        <Button fx:id="deleteListBtn" text="x" onAction="#deleteList">
             <tooltip><Tooltip text="Delete this list" /></tooltip>
         </Button>
     </HBox>
     <VBox fx:id="cards">
 
     </VBox>
-    <Button fx:id="addCardBtn">
+    <Button fx:id="addCardBtn" text="+" onAction="#addCard">
         <tooltip><Tooltip text="Add a new card" /></tooltip>
     </Button>
 </fx:root>

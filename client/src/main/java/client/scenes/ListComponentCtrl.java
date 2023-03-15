@@ -49,4 +49,14 @@ public class ListComponentCtrl extends VBox {
 
         }
     }
+
+    @FXML
+    protected void deleteList() {
+
+    }
+
+    @FXML
+    protected void addCard() {
+
+    }
 }
