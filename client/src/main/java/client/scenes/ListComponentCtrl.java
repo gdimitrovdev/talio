@@ -44,9 +44,9 @@ public class ListComponentCtrl extends VBox {
         updateOverview();
     }
 
-    public void updateOverview() {
+    public void updateOverview() throws IOException {
         for (Card card : list.getCards()) {
-
+            cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, card));
         }
     }
 
@@ -56,7 +56,8 @@ public class ListComponentCtrl extends VBox {
     }
 
     @FXML
-    protected void addCard() {
-
+    protected void addCard() throws IOException {
+        Card card = new Card("Enter title", "", "", list);
+        cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, card));
     }
 }

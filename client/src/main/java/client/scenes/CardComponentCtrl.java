@@ -9,7 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -22,16 +22,15 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.net.URL;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 
-public class CardComponentCtrl implements Initializable {
-    @FXML
-    private AnchorPane cardOverview;
+public class CardComponentCtrl extends AnchorPane {
 
+    private MainCtrlTalio mainCtrlTalio;
+
+    private Card card;
     @FXML
     private TextField title;
 
@@ -47,32 +46,22 @@ public class CardComponentCtrl implements Initializable {
     @FXML
     private FlowPane tagsContainer;
 
-    private commons.Card cardData;
-
     private boolean cardHasBeenCreated = false;
 
     // TODO figure out exactly how this dependency injection stuff works,
     //  I don't think we need it for now though
-    /*@Inject
-    public CardOverviewCtrl() {
 
-    }*/
+    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, Card card) throws IOException {
+        this.mainCtrlTalio = mainCtrlTalio;
 
-    // TODO hide the progressbar, the progresslabel and the delete button
-    //  if the card has not been created yet
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CardComponent.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
 
-    // TODO figure out a better way to initialize these UI components,
-    //  but for now it should be fine
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+        loader.load();
+
         addClickedEventHandler();
-
-        setCardData(new Card("Enter title",
-                "",
-                null,
-                null,
-                new ArrayList<>(),
-                new ArrayList<>()));
+        setCard(card);
 
         title.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if(!newVal) {
@@ -86,7 +75,7 @@ public class CardComponentCtrl implements Initializable {
             }
         });
 
-        cardOverview.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+        this.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             if (KeyCode.ESCAPE == event.getCode() && !title.isDisabled()) {
                 title.setDisable(true);
             }
@@ -104,16 +93,22 @@ public class CardComponentCtrl implements Initializable {
         title.requestFocus();
     }
 
-    public void setCardData(commons.Card newCardData) {
-        cardData = newCardData;
-        title.setText(cardData.getTitle());
+    // TODO hide the progressbar, the progresslabel and the delete button
+    //  if the card has not been created yet
+
+    // TODO figure out a better way to initialize these UI components,
+    //  but for now it should be fine
+
+    private void setCard(Card newCardData) {
+        card = newCardData;
+        title.setText(card.getTitle());
         // TODO this calculation will have to change once the Subtask Model changes in #40, #41
-        int numSubtasksDone = (int) cardData.getSubtasks().stream().filter(x -> x.getTitle().equals("Done")).count();
-        subtaskLabel.setText(numSubtasksDone + "/" + cardData.getSubtasks().size() + "Subtasks");
-        subtaskProgress.setProgress((float)numSubtasksDone / cardData.getSubtasks().size());
+        int numSubtasksDone = (int) card.getSubtasks().stream().filter(x -> x.getTitle().equals("Done")).count();
+        subtaskLabel.setText(numSubtasksDone + "/" + card.getSubtasks().size() + "Subtasks");
+        subtaskProgress.setProgress((float)numSubtasksDone / card.getSubtasks().size());
 
         tagsContainer.getChildren().clear();
-        for(var tag : cardData.getTags()) {
+        for(var tag : card.getTags()) {
             var rect = new Rectangle();
             // TODO remove magic numbers from here
             rect.setHeight(10);
@@ -127,14 +122,10 @@ public class CardComponentCtrl implements Initializable {
 
     }
 
-    public commons.Card getCardData() {
-        return cardData;
-    }
-
     public void saveTitle() {
         // TODO remove the details, they are just here for testing
         if(!cardHasBeenCreated) {
-            setCardData(new Card(title.getText(),
+            setCard(new Card(title.getText(),
                     "Do certain things",
                     null,
                     null,
@@ -150,8 +141,8 @@ public class CardComponentCtrl implements Initializable {
             );
         }
         else {
-            cardData.setTitle(title.getText());
-            setCardData(cardData);
+            card.setTitle(title.getText());
+            setCard(card);
         }
 
         cardHasBeenCreated = true;
@@ -224,7 +215,7 @@ public class CardComponentCtrl implements Initializable {
             }
         };
         //Adding the event handler
-        cardOverview.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 
     public void setOnMouseSingleClicked(EventHandler<MouseEvent> eventHandler) {

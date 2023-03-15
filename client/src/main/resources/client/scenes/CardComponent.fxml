@@ -5,10 +5,10 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns="http://javafx.com/javafx"
+<fx:root type="javafx.scene.layout.AnchorPane"
+            xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.CardComponentCtrl"
-            stylesheets="@css/CardComponent.css"
+            stylesheets="@./css/CardComponent.css"
             fx:id="cardOverview"
             prefWidth="300"
             prefHeight="100">
@@ -31,4 +31,4 @@
         </HBox>
         <FlowPane fx:id="tagsContainer" styleClass="flow-pane"/>
     </VBox>
-</AnchorPane>
+</fx:root>
