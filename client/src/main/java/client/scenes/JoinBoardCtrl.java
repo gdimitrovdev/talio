@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class JoinBoardCtrl {
     private  MainCtrlTalio mainCtrlTalio;
