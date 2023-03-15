@@ -1,12 +1,12 @@
 package server.services;
 
 import commons.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.TagRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TagService {
@@ -21,27 +21,25 @@ public class TagService {
         return tagRepository.findAll();
     }
 
-    public ResponseEntity<Tag> getOne(Long id) {
-        if(id < 0 || !tagRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(tagRepository.findById(id).get());
+    public Optional<Tag> getOne(Long id) {
+        return tagRepository.findById(id);
     }
 
-    public ResponseEntity<Tag> createOne(Tag tag) {
+    public Tag createOne(Tag tag) {
         Tag newTag = tagRepository.save(tag);
-        return ResponseEntity.ok(newTag);
+        return newTag;
     }
 
     public void deleteOne(Long id) {
-        tagRepository.deleteById(id);
+        if (tagRepository.existsById(id)) {
+            tagRepository.deleteById(id);
+        }
     }
 
-    public Tag update(Tag tag)
-    {
-        Tag existingTag = tagRepository.findById(tag.getId())
+    public Tag updateOne(Long id, Tag tag) throws EntityNotFoundException {
+        Tag existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tag not found"));
+
         existingTag.setTitle(tag.getTitle());
         existingTag.setColor(tag.getColor());
         existingTag.setBoard(tag.getBoard());

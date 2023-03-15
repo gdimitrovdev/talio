@@ -1,3 +1,0 @@
-2023-03-07 14:02:26 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CARDCARD_TAG" not found; SQL statement:
-SELECT * FROM CARDCARD_TAG [42102-200]

@@ -1,12 +1,12 @@
 package server.services;
 
 import commons.Board;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
@@ -21,36 +21,34 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public ResponseEntity<Board> getOne(Long id) {
-        if(id < 0 || !boardRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(boardRepository.findById(id).get());
+    public Optional<Board> getOne(Long id) {
+        return boardRepository.findById(id);
     }
 
-    public ResponseEntity<Board> createOne(Board board) {
+    public Board createOne(Board board) {
         Board newBoard = boardRepository.save(board);
-        return ResponseEntity.ok(newBoard);
+        return newBoard;
     }
 
     public void deleteOne(Long id) {
-        boardRepository.deleteById(id);
+        if (boardRepository.existsById(id)) {
+            boardRepository.deleteById(id);
+        }
     }
 
-    public Board update(Board board)
-    {
-        Board existingboard = boardRepository.findById(board.getId())
+    public Board updateOne(Long id, Board board) throws EntityNotFoundException {
+        Board existingBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
-        existingboard.setReadOnly(board.getReadOnly());
-        existingboard.setColor(board.getColor());
-        existingboard.setName(board.getName());
-        existingboard.setPassword(board.getPassword());
-        existingboard.setHash(board.getHash());
-        existingboard.setLists(board.getLists());
-        existingboard.setTags(board.getTags());
 
-        return boardRepository.save(existingboard);
+        existingBoard.setReadOnly(board.getReadOnly());
+        existingBoard.setColor(board.getColor());
+        existingBoard.setName(board.getName());
+        existingBoard.setPassword(board.getPassword());
+        existingBoard.setHash(board.getHash());
+        existingBoard.setLists(board.getLists());
+        existingBoard.setTags(board.getTags());
+
+        return boardRepository.save(existingBoard);
     }
 
 }

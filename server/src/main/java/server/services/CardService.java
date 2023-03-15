@@ -1,12 +1,12 @@
 package server.services;
 
 import commons.Card;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.CardRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -21,27 +21,25 @@ public class CardService {
         return cardRepository.findAll();
     }
 
-    public ResponseEntity<Card> getOne(Long id) {
-        if (id < 0 || !cardRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(cardRepository.findById(id).get());
+    public Optional<Card> getOne(Long id) {
+        return cardRepository.findById(id);
     }
 
-    public ResponseEntity<Card> createOne(Card card) {
+    public Card createOne(Card card) {
         Card newCard = cardRepository.save(card);
-        return ResponseEntity.ok(newCard);
+        return newCard;
     }
 
     public void deleteOne(Long id) {
-        cardRepository.deleteById(id);
+        if (cardRepository.existsById(id)) {
+            cardRepository.deleteById(id);
+        }
     }
 
-    public Card update(Card card)
-    {
-        Card existingCard = cardRepository.findById(card.getId())
+    public Card updateOne(Long id, Card card) throws EntityNotFoundException {
+        Card existingCard = cardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));
+
         existingCard.setTitle(card.getTitle());
         existingCard.setColor(card.getColor());
         existingCard.setDescription(card.getDescription());

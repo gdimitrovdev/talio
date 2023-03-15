@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.SubtaskService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/subtasks")
@@ -26,13 +28,18 @@ public class SubtaskController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Subtask> getOne(@PathVariable("id") Long id) {
-        return subtaskService.getOne(id);
+        Optional<Subtask> optionalSubtask = subtaskService.getOne(id);
+        if (!optionalSubtask.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(optionalSubtask.get());
     }
 
     @PostMapping(path = { "", "/" })
     @ResponseBody
     public ResponseEntity<Subtask> createOne(@RequestBody Subtask subtask) {
-        return subtaskService.createOne(subtask);
+        return ResponseEntity.ok(subtaskService.createOne(subtask));
     }
 
     @DeleteMapping("/{id}")
@@ -41,9 +48,13 @@ public class SubtaskController {
     }
 
     @PutMapping("/{id}")
-    public Subtask update(@PathVariable Long id, @RequestBody Subtask subtask) {
-        subtask.setId(id);
-        return subtaskService.update(subtask);
+    public ResponseEntity<Subtask> updateOne(@PathVariable Long id, @RequestBody Subtask subtask) {
+        try {
+            Subtask updatedSubtask = subtaskService.updateOne(id, subtask);
+            return ResponseEntity.ok(updatedSubtask);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

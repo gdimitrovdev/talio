@@ -5,10 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardListService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/card-lists")
+@RequestMapping("/api/lists")
 public class CardListController {
 
     private final CardListService cardListService;
@@ -26,13 +28,18 @@ public class CardListController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<CardList> getOne(@PathVariable("id") Long id) {
-        return cardListService.getOne(id);
+        Optional<CardList> optionalCardList = cardListService.getOne(id);
+        if (!optionalCardList.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(optionalCardList.get());
     }
 
     @PostMapping(path= { "", "/" })
     @ResponseBody
     public ResponseEntity<CardList> createOne(@RequestBody CardList cardList) {
-        return cardListService.createOne(cardList);
+        return ResponseEntity.ok(cardListService.createOne(cardList));
     }
 
     @DeleteMapping("/{id}")
@@ -41,9 +48,13 @@ public class CardListController {
     }
 
     @PutMapping("/{id}")
-    public CardList update(@PathVariable Long id, @RequestBody CardList cardList) {
-        cardList.setId(id);
-        return cardListService.update(cardList);
+    public ResponseEntity<CardList> updateOne(@PathVariable Long id, @RequestBody CardList cardList) {
+        try {
+            CardList updatedCardList = cardListService.updateOne(id, cardList);
+            return ResponseEntity.ok(updatedCardList);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

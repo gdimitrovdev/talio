@@ -1,12 +1,12 @@
 package server.services;
 
 import commons.Subtask;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.SubtaskRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubtaskService {
@@ -21,27 +21,25 @@ public class SubtaskService {
         return subtaskRepository.findAll();
     }
 
-    public ResponseEntity<Subtask> getOne(Long id) {
-        if (id < 0 || !subtaskRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(subtaskRepository.findById(id).get());
+    public Optional<Subtask> getOne(Long id) {
+        return subtaskRepository.findById(id);
     }
 
-    public ResponseEntity<Subtask> createOne(Subtask subtask) {
+    public Subtask createOne(Subtask subtask) {
         Subtask newSubtask = subtaskRepository.save(subtask);
-        return ResponseEntity.ok(newSubtask);
+        return newSubtask;
     }
 
     public void deleteOne(Long id) {
-        subtaskRepository.deleteById(id);
+        if (subtaskRepository.existsById(id)) {
+            subtaskRepository.deleteById(id);
+        }
     }
 
-    public Subtask update(Subtask subtask)
-    {
-        Subtask existingSubtask = subtaskRepository.findById(subtask.getId())
+    public Subtask updateOne(Long id, Subtask subtask) throws EntityNotFoundException {
+        Subtask existingSubtask = subtaskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Subtask not found"));
+
         existingSubtask.setTitle(subtask.getTitle());
         existingSubtask.setCard(subtask.getCard());
 

@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cards")
@@ -26,13 +28,18 @@ public class CardController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Card> getOne(@PathVariable("id") Long id) {
-        return cardService.getOne(id);
+        Optional<Card> optionalCard = cardService.getOne(id);
+        if (!optionalCard.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(optionalCard.get());
     }
 
     @PostMapping(path = { "", "/" })
     @ResponseBody
     public ResponseEntity<Card> createOne(@RequestBody Card card) {
-        return cardService.createOne(card);
+        return ResponseEntity.ok(cardService.createOne(card));
     }
 
     @DeleteMapping("/{id}")
@@ -41,9 +48,13 @@ public class CardController {
     }
 
     @PutMapping("/{id}")
-    public Card update(@PathVariable Long id, @RequestBody Card card) {
-        card.setId(id);
-        return cardService.update(card);
+    public ResponseEntity<Card> updateOne(@PathVariable Long id, @RequestBody Card card) {
+        try {
+            Card updatedCard = cardService.updateOne(id, card);
+            return ResponseEntity.ok(updatedCard);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

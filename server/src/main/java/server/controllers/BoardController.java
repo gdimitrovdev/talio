@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.BoardService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -26,13 +28,18 @@ public class BoardController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Board> getOne(@PathVariable("id") Long id) {
-        return boardService.getOne(id);
+        Optional<Board> optionalBoard = boardService.getOne(id);
+        if (!optionalBoard.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(optionalBoard.get());
     }
 
     @PostMapping(path = { "", "/" })
     @ResponseBody
     public ResponseEntity<Board> createOne(@RequestBody Board board) {
-        return boardService.createOne(board);
+        return ResponseEntity.ok(boardService.createOne(board));
     }
 
     @DeleteMapping("/{id}")
@@ -41,9 +48,13 @@ public class BoardController {
     }
 
     @PutMapping("/{id}")
-    public Board update(@PathVariable Long id, @RequestBody Board board) {
-        board.setId(id);
-        return boardService.update(board);
+    public ResponseEntity<Board> updateOne(@PathVariable Long id, @RequestBody Board board) {
+        try {
+            Board updatedBoard = boardService.updateOne(id, board);
+            return ResponseEntity.ok(updatedBoard);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
