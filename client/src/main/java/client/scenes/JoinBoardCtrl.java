@@ -6,7 +6,6 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
@@ -54,10 +53,9 @@ public class JoinBoardCtrl {
     /**
      * displays the board in the overview
      */
-    public void displayBoard() throws IOException{
+    public void displayBoard() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("BoardOverview.fxml"));
-        root.getChildren().add(loader.load());
+        root.getChildren().add(new BoardComponentCtrl(mainCtrlTalio, board));
 
     }
 }
