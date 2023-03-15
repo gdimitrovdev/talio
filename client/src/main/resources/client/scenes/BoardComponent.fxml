@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type = "javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
-    <ScrollPane hbarPolicy="ALWAYS" layoutX="10.0" layoutY="40.0" stylesheets="@./css/BoardOverview.css" vbarPolicy="NEVER" >
+<fx:root type = "javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >
+    <ScrollPane hbarPolicy="ALWAYS" layoutX="10.0" layoutY="40.0" stylesheets="@css/BoardComponent.css" vbarPolicy="NEVER" VBox.vgrow ="ALWAYS">
 
         <StackPane>
             <HBox fx:id="outerHBox">

@@ -40,16 +40,16 @@ public class BoardComponentCtrl extends AnchorPane {
         updateOverview();
     }
 
-    private void updateOverview() {
+    public  void updateOverview() throws IOException {
         for(CardList cardList : board.getLists()) {
-            //innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, cardList));
+            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, cardList));
         }
     }
 
     @FXML
-    protected void addCardList() {
+    protected void addCardList() throws IOException {
         CardList newList = new CardList("Empty title",board);
 
-        //innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, newList));
+        innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, newList));
     }
 }

@@ -6,9 +6,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.ListComponentCtrl"
-            prefHeight="400.0" prefWidth="600.0">
+<fx:root type="javafx.scene.layout.VBox"  xmlns:fx="http://javafx.com/fxml" VBox.vgrow ="ALWAYS">
+    <HBox fx:id="titleHolder">
+        <TextField fx:id="titleField">
 
-</AnchorPane>
+        </TextField>
+        <Button fx:id="deleteListBtn" text="x">
+            <tooltip><Tooltip text="Delete this list" /></tooltip>
+        </Button>
+    </HBox>
+    <VBox fx:id="cards">
+
+    </VBox>
+    <Button fx:id="addCardBtn">
+        <tooltip><Tooltip text="Add a new card" /></tooltip>
+    </Button>
+</fx:root>

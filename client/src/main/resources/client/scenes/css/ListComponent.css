@@ -1,0 +1,30 @@
+#titleHolder {
+    -fx-pref-height: 30.0;
+    -fx-pref-width: 180.0;
+}
+
+#titleField {
+    -fx-pref-height: 25.0;
+    -fx-pref-width: 130.0;
+}
+
+#deleteListBtn {
+    -fx-pref-height: 25.0;
+    -fx-pref-width: 25.0
+}
+
+VBox {
+    -fx-min-height: 450.0;
+    -fx-pref-width: 180.0;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-background-color: #e6e6e6;
+    -fx-padding: 5px;
+    -fx-spacing: 20.0;
+}
+
+#addCardBtn {
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-spacing: 10px;
+}
