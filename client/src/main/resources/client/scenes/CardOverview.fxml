@@ -8,7 +8,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="client.scenes.CardOverviewCtrl"
-            stylesheets="@./client/scenes/CardOverview.css"
+            stylesheets="@./css/CardOverview.css"
             fx:id="cardOverview"
             prefWidth="300"
             prefHeight="100">

@@ -30,6 +30,6 @@ public class MyModule implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(JoinBoardCtrl.class).in(Scopes.SINGLETON);
     }
 }

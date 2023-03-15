@@ -1,0 +1,12 @@
+#outerHBox {
+    -fx-min-width: 780.0;
+    -fx-min-height: 510.0;
+    -fx-background-color: #d3dbe8;
+    -fx-padding: 40 0 0 40;
+    -fx-spacing: 80;
+}
+
+#newListButton {
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+}
