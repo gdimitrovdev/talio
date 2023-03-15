@@ -51,6 +51,9 @@ public class CardComponentCtrl extends AnchorPane {
     // TODO figure out exactly how this dependency injection stuff works,
     //  I don't think we need it for now though
 
+    // TODO figure out a better way to initialize these UI components,
+    //  but for now it should be fine
+
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, Card card) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
 
@@ -95,9 +98,6 @@ public class CardComponentCtrl extends AnchorPane {
 
     // TODO hide the progressbar, the progresslabel and the delete button
     //  if the card has not been created yet
-
-    // TODO figure out a better way to initialize these UI components,
-    //  but for now it should be fine
 
     private void setCard(Card newCardData) {
         card = newCardData;

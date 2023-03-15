@@ -13,7 +13,7 @@
     -fx-pref-width: 25.0
 }
 
-VBox {
+#listVBox {
     -fx-min-height: 450.0;
     -fx-pref-width: 180.0;
     -fx-border-color: black;

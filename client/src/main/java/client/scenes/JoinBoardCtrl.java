@@ -36,18 +36,19 @@ public class JoinBoardCtrl {
         //Board current = serverUtils.getBoardById(boardID)" can be used
         // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
 
-        this.board = new Board(false,"Example board",null,null, null );
-        Card c1 = new Card ("Title1", "Card1", "0xFF0000", null);
-        Card c2 = new Card("Title2", "Card2", "0xFF0000", null);
-        ArrayList<Card> cards1 = new ArrayList<>();
-        cards1.add(c1);
-        cards1.add(c2);
-        CardList list1 = new CardList("example list 1", this.board, cards1);
-        CardList list2 = new CardList("example list 2", this.board,cards1);
-        ArrayList<CardList>cardLists = new ArrayList<>();
-        cardLists.add(list1);
-        cardLists.add(list2);
-        this.board.setLists(cardLists);
+        this.board = new Board(false,"Example board","pwd","hash_893290840923904", "#333333" );
+
+        CardList list1 = new CardList("example list 1", null);
+        CardList list2 = new CardList("example list 2", null);
+
+        Card c1 = new Card ("Title1", "Card1", "#FF0000", null);
+        Card c2 = new Card("Title2", "Card2", "#FF0000", null);
+
+        list1.addCard(c1);
+        list1.addCard(c2);
+
+        this.board.addCardList(list1);
+        this.board.addCardList(list2);
     }
 
     /**
