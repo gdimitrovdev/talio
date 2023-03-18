@@ -49,7 +49,6 @@ public class BoardComponentCtrl extends AnchorPane {
     @FXML
     protected void addCardList() throws IOException {
         CardList newList = new CardList("Empty title",board);
-
         innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, newList));
     }
 }

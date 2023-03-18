@@ -19,7 +19,7 @@
         <HBox maxWidth="Infinity" styleClass="hbox">
             <TextField fx:id="title" HBox.hgrow="ALWAYS" onAction="#saveTitle"/>
             <!-- TODO replace the "X" with a proper image -->
-            <Button fx:id="deleteButton" onAction="#delete">X</Button>
+            <Button fx:id="deleteButton" text="X" onAction="#delete"></Button>
         </HBox>
         <!-- TODO perhaps add a description indicator somewhere around here -->
         <HBox maxWidth="Infinity" styleClass="hbox">

@@ -31,10 +31,6 @@ public class BoardElement  extends ScrollPane {
         this.innerHBox=innerHBox;
 
         // set the style for the UI components
-        outerHBox.setStyle(" -fx-min-width: 780.0; -fx-min-height: 510.0; -fx-background-color: #d3dbe8;");
-        outerHBox.setPadding(new Insets(40, 0, 0, 40));
-        outerHBox.setSpacing(80);
-        newListButton.setStyle("-fx-pref-width: 30px; -fx-pref-height: 30px;");
         Tooltip newListToolTip = new Tooltip("add a new list");
         newListButton.setTooltip(newListToolTip);
 
