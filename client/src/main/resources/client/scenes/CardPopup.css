@@ -1,0 +1,44 @@
+@import url(Common.css);
+
+#cardPopup {
+    -fx-background-color: -fx-color-background-light;
+    -fx-padding: 30;
+}
+
+#title {
+    -fx-background-color: red;
+}
+
+#addSubtask {
+    -fx-background-color: -fx-color-background-light;
+    -fx-border-style: none;
+}
+
+/*.button {*/
+/*    -fx-background-color: red;*/
+/*}*/
+
+.remove-subtask-button {
+    /*-fx-translate-y: -5;*/
+    -fx-border-color: transparent;
+    -fx-background-color: -fx-color-background-light;
+}
+
+.vbox {
+    -fx-spacing: 5;
+    -webkit-flex-wrap: wrap;
+}
+
+.hbox {
+    -fx-spacing: 500;
+}
+
+.invalid-textField-input {
+    -fx-text-fill: red;
+}
+
+.button:hover {
+    -fx-cursor: hand;
+}
+
+
