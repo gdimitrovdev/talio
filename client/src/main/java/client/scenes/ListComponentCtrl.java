@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -64,7 +63,7 @@ public class ListComponentCtrl extends VBox {
     private void deleteList() {
         // Get the parent of the list component, which is the board
         Parent parent = this.getParent();
-
+        
         // Remove the list component from the parent
         if (parent instanceof Pane) {
             Pane parentPane = (Pane) parent;
