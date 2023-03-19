@@ -1,17 +1,20 @@
 @import url(Common.css);
 
 #cardOverview {
-    -fx-background-color: -fx-color-background-light;
+    -fx-background: #808080;
     -fx-padding: 10;
+    //this is only to see the cards a bit better
+    -fx-border-color: black;
+    -fx-border-width: 1px;
 }
 
 /* TODO fix the styling for when the title is disabled */
 #title {
-    -fx-background-color: -fx-color-background-light;
+    -fx-background-color: #e6e6e6;
 }
 
 #deleteButton {
-    -fx-background-color: -fx-color-background-light;
+    -fx-background-color: #d3d3d3;
     -fx-border-style: none;
 }
 
@@ -29,12 +32,13 @@
 }
 
 .progress-bar .bar {
-    -fx-background-color: -fx-color-foreground-accent;
+/*TODO this does not work i think */
+    -fx-background-color: rgba(216, 216, 216, 0.8);
     -fx-background-insets: 0, 1, 2;
     -fx-padding: 0.416667em;
 }
 
 #subtaskProgress > .track {
-    -fx-background-color: -fx-color-background-dark;
+    -fx-background-color: #d8d8d8;
     -fx-background-insets: 0;
 }

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -33,6 +34,11 @@ public class ListComponentCtrl extends VBox {
     @FXML
     private Button addCardBtn;
 
+    //not sure about this yet
+    //@FXML
+   // ScrollPane scrollPane = new ScrollPane();
+
+
     public ListComponentCtrl(MainCtrlTalio mainCtrlTalio, CardList list) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
         this.list = list;
@@ -44,6 +50,8 @@ public class ListComponentCtrl extends VBox {
         loader.load();
 
         updateOverview();
+        //scrollPane.setContent(this);
+
     }
 
     public void updateOverview() throws IOException {
