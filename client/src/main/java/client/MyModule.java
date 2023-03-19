@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package client;
 
-import client.scenes.*;
+import client.scenes.JoinBoardCtrl;
 import client.scenes.template.AddQuoteCtrl;
 import client.scenes.template.MainCtrl;
 import client.scenes.template.QuoteOverviewCtrl;

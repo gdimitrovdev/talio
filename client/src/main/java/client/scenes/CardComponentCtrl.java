@@ -3,7 +3,9 @@ package client.scenes;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
-
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -26,12 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 public class CardComponentCtrl extends AnchorPane {
-
     private final MainCtrlTalio mainCtrlTalio;
 
     private Card card;
@@ -74,13 +71,12 @@ public class CardComponentCtrl extends AnchorPane {
         setCard(card);
 
         title.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if(!newVal) {
-                if(!cardHasBeenCreated) {
+            if (!newVal) {
+                if (!cardHasBeenCreated) {
                     System.out.println("Should cancel the creation of the card now");
                 }
                 title.setDisable(true);
-            }
-            else {
+            } else {
                 title.selectAll();
             }
         });
@@ -113,7 +109,7 @@ public class CardComponentCtrl extends AnchorPane {
             });
         });
         setOnMouseDoubleClicked((me) -> {
-            if(title.isDisabled()) {
+            if (title.isDisabled()) {
                 title.setDisable(false);
                 title.requestFocus();
             }
@@ -141,12 +137,13 @@ public class CardComponentCtrl extends AnchorPane {
         card = newCardData;
         title.setText(card.getTitle());
         // TODO this calculation will have to change once the Subtask Model changes in #40, #41
-        int numSubtasksDone = (int) card.getSubtasks().stream().filter(x -> x.getTitle().equals("Done")).count();
+        int numSubtasksDone =
+                (int) card.getSubtasks().stream().filter(x -> x.getTitle().equals("Done")).count();
         subtaskLabel.setText(numSubtasksDone + "/" + card.getSubtasks().size() + "Subtasks");
-        subtaskProgress.setProgress((float)numSubtasksDone / card.getSubtasks().size());
+        subtaskProgress.setProgress((float) numSubtasksDone / card.getSubtasks().size());
 
         tagsContainer.getChildren().clear();
-        for(var tag : card.getTags()) {
+        for (var tag : card.getTags()) {
             var rect = new Rectangle();
             // TODO remove magic numbers from here
             rect.setHeight(10);
@@ -162,7 +159,7 @@ public class CardComponentCtrl extends AnchorPane {
 
     public void saveTitle() {
         // TODO remove the details, they are just here for testing
-        if(!cardHasBeenCreated) {
+        if (!cardHasBeenCreated) {
             setCard(new Card(title.getText(),
                     "Do certain things",
                     null,
@@ -175,10 +172,9 @@ public class CardComponentCtrl extends AnchorPane {
                             new Subtask("Done", null),
                             new Subtask("Done", null),
                             new Subtask("TODO 3", null)
-                    ))
+                            ))
             );
-        }
-        else {
+        } else {
             card.setTitle(title.getText());
             setCard(card);
         }
@@ -204,12 +200,14 @@ public class CardComponentCtrl extends AnchorPane {
     private long delayMs = 250;
     private ClickRunner latestClickRunner = null;
 
-    private final ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty = new SimpleObjectProperty<>();
-    private final ObjectProperty<EventHandler<MouseEvent>> onMouseDoubleClickedProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty =
+            new SimpleObjectProperty<>();
+    private final ObjectProperty<EventHandler<MouseEvent>> onMouseDoubleClickedProperty =
+            new SimpleObjectProperty<>();
 
     private class ClickRunner implements Runnable {
 
-        private final Runnable  onClick;
+        private final Runnable onClick;
         private boolean aborted = false;
 
         public ClickRunner(Runnable onClick) {
@@ -271,6 +269,7 @@ public class CardComponentCtrl extends AnchorPane {
     public void setOnMouseDoubleClicked(EventHandler<MouseEvent> eventHandler) {
         this.onMouseDoubleClickedProperty.set(eventHandler);
     }
+
     public long getSingleClickDelayMillis() {
         return delayMs;
     }

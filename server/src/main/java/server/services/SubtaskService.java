@@ -1,12 +1,11 @@
 package server.services;
 
 import commons.Subtask;
-import org.springframework.stereotype.Service;
-import server.database.SubtaskRepository;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
+import server.database.SubtaskRepository;
 
 @Service
 public class SubtaskService {

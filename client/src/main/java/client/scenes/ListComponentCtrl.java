@@ -13,8 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
-
 public class ListComponentCtrl extends VBox {
 
     private MainCtrlTalio mainCtrlTalio;

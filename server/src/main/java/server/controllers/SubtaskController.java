@@ -1,13 +1,20 @@
 package server.controllers;
 
 import commons.Subtask;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import server.services.SubtaskService;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import server.services.SubtaskService;
 
 @RestController
 @RequestMapping("/api/subtasks")
@@ -19,7 +26,7 @@ public class SubtaskController {
         this.subtaskService = subtaskService;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     @ResponseBody
     public List<Subtask> getMany() {
         return subtaskService.getMany();
@@ -36,7 +43,7 @@ public class SubtaskController {
         return ResponseEntity.ok(optionalSubtask.get());
     }
 
-    @PostMapping(path = { "", "/" })
+    @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Subtask> createOne(@RequestBody Subtask subtask) {
         return ResponseEntity.ok(subtaskService.createOne(subtask));

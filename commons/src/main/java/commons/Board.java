@@ -1,18 +1,22 @@
 package commons;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -40,7 +44,9 @@ public class Board implements Serializable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 
-    public Board(){}
+    public Board() {
+    }
+
     public Board(boolean readOnly, String name, String password, String hash, String color) {
         setReadOnly(readOnly);
         setName(name);
@@ -49,7 +55,8 @@ public class Board implements Serializable {
         setColor(color);
     }
 
-    public Board(Boolean readOnly, String name, String password, String hash, String color, List<CardList> lists, List<Tag> tags) {
+    public Board(Boolean readOnly, String name, String password, String hash, String color,
+            List<CardList> lists, List<Tag> tags) {
         this.readOnly = readOnly;
         this.name = name;
         this.password = password;

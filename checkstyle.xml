@@ -24,6 +24,11 @@
         
 
         <module name="OuterTypeFilename" />
+
+        <module name="TodoComment">
+            <property name="severity" value="warning" />
+            <property name="format" value="TODO" />
+        </module>
         
         <module name="EmptyLineSeparator">
             <property name="tokens"
@@ -83,7 +88,7 @@
         </module>
 
         <module name="Indentation">
-            <property name="forceStrictCondition" value="true" />
+            <property name="lineWrappingIndentation" value="8" />
         </module>
 
         <module name="OneStatementPerLine" />
@@ -179,6 +184,7 @@
 
         <module name="VariableDeclarationUsageDistance">
             <property name="severity" value="warning" />
+            <property name="allowedDistance" value="8" />
         </module>
 
         <module name="ArrayTypeStyle" />
@@ -210,43 +216,43 @@
         </module>
 
         <module name="MethodName">
-            <property name="format" value="^[a-z][a-z0-9]\w*$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Method name ''{0}'' must match pattern ''{1}''." />
         </module>
 
         <module name="MemberName">
-            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Member name ''{0}'' must match pattern ''{1}''." />
         </module>
 
         <module name="ParameterName">
-            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Parameter name ''{0}'' must match pattern ''{1}''." />
         </module>
 
         <module name="LambdaParameterName">
-            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Lambda parameter name ''{0}'' must match pattern ''{1}''." />
         </module>
 
         <module name="CatchParameterName">
-            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Catch parameter name ''{0}'' must match pattern ''{1}''." />
         </module>
 
         <module name="LocalVariableName">
-            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Local variable name ''{0}'' must match pattern ''{1}''." />
         </module>
 
         <module name="PatternVariableName">
-            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$" />
+            <property name="format" value="^[a-z][A-Za-z0-9]*$" />
             <message key="name.invalidPattern"
                 value="Pattern variable name ''{0}'' must match pattern ''{1}''." />
         </module>

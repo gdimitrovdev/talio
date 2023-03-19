@@ -1,13 +1,20 @@
 package server.controllers;
 
 import commons.Card;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import server.services.CardService;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import server.services.CardService;
 
 @RestController
 @RequestMapping("/api/cards")
@@ -19,7 +26,7 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     @ResponseBody
     public List<Card> getMany() {
         return cardService.getMany();
@@ -36,7 +43,7 @@ public class CardController {
         return ResponseEntity.ok(optionalCard.get());
     }
 
-    @PostMapping(path = { "", "/" })
+    @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Card> createOne(@RequestBody Card card) {
         return ResponseEntity.ok(cardService.createOne(card));

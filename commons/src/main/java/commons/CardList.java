@@ -1,18 +1,23 @@
 package commons;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -30,7 +35,8 @@ public class CardList implements Serializable {
     @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards = new ArrayList<>();
 
-    public CardList(){}
+    public CardList() {
+    }
 
     public CardList(String title, Board board) {
         setTitle(title);

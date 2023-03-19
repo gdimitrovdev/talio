@@ -1,12 +1,11 @@
 package server.services;
 
 import commons.CardList;
-import org.springframework.stereotype.Service;
-import server.database.CardListRepository;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
+import server.database.CardListRepository;
 
 @Service
 public class CardListService {

@@ -1,18 +1,22 @@
 package commons;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -31,8 +35,8 @@ public class Tag implements Serializable {
     @ManyToMany(mappedBy = "tags")
     private List<Card> cards = new ArrayList<>();
 
-    public Tag(){}
-
+    public Tag() {
+    }
 
     public Tag(String title, String color, Board board) {
         setTitle(title);

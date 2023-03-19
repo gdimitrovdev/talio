@@ -1,12 +1,11 @@
 package server.services;
 
 import commons.Board;
-import org.springframework.stereotype.Service;
-import server.database.BoardRepository;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
+import server.database.BoardRepository;
 
 @Service
 public class BoardService {

@@ -1,16 +1,18 @@
 package commons;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import javax.persistence.*;
-
-import java.io.Serializable;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -23,12 +25,14 @@ public class Subtask implements Serializable {
     @ManyToOne
     private Card card;
 
-    private Subtask(){}
+    private Subtask() {
+    }
 
     public Subtask(String title, Card card) {
         setTitle(title);
         setCard(card);
     }
+
     public Long getId() {
         return id;
     }

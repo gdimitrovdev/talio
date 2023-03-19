@@ -1,12 +1,11 @@
 package server.services;
 
 import commons.Tag;
-import org.springframework.stereotype.Service;
-import server.database.TagRepository;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
+import server.database.TagRepository;
 
 @Service
 public class TagService {

@@ -10,9 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-
 public class CardListElement extends VBox {
     private final MainCtrlTalio mainCtrlTalio;
+
     //constructor
     public CardListElement(CardList cardList, MainCtrlTalio mainCtrlTalio) {
         super();
@@ -25,7 +25,7 @@ public class CardListElement extends VBox {
         Button deleteListBtn = new Button("x");
         Tooltip deleteListToolTip = new Tooltip("delete the this list");
         deleteListBtn.setTooltip(deleteListToolTip);
-        titleHolder.getChildren().addAll(titleField,deleteListBtn);
+        titleHolder.getChildren().addAll(titleField, deleteListBtn);
 
         //set the style for the header of the list
         titleHolder.setStyle("-fx-pref-height: 30.0; -fx-pref-width: 180.0;");
@@ -34,20 +34,21 @@ public class CardListElement extends VBox {
 
 
         //set VBox style properties
-        super.setStyle("-fx-min-height: 450.0; -fx-pref-width: 180.0; " +
-                "-fx-border-color: black; -fx-border-width: 1px; " +
-                "-fx-background-color: #e6e6e6; -fx-padding: 5px;");
+        super.setStyle("-fx-min-height: 450.0; -fx-pref-width: 180.0; "
+                + "-fx-border-color: black; -fx-border-width: 1px; "
+                + "-fx-background-color: #e6e6e6; -fx-padding: 5px;"
+        );
         this.setSpacing(20.0);
 
         //inserting the header HBox
         super.getChildren().add(titleHolder);
 
         //inserting the cards in the list
-        for(Card card : cardList.getCards()){
+        for (Card card : cardList.getCards()) {
             //instead of buttons, CardElement-s should be instantiated
             Button cardButton = new Button(card.getTitle());
-            cardButton.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;" +
-                    " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
+            cardButton.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;"
+                    + " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
             super.getChildren().add(cardButton);
         }
 
@@ -56,11 +57,11 @@ public class CardListElement extends VBox {
         Button addCardBtn = new Button("+");
 
         //setting the action for the button
-        addCardBtn.setOnAction( event -> addCard());
+        addCardBtn.setOnAction(event -> addCard());
 
         //setting the style for the button
-        addCardBtn.setStyle("-fx-pref-width: 30px; -fx-pref-height: " +
-                "30px; -fx-spacing: 10px;");
+        addCardBtn.setStyle("-fx-pref-width: 30px; -fx-pref-height: "
+                + "30px; -fx-spacing: 10px;");
 
         //setting the ToolTip message for the 'add a card' button
         Tooltip addCardToolTip = new Tooltip("add a new card");
@@ -74,26 +75,21 @@ public class CardListElement extends VBox {
         VBox.setVgrow(this, Priority.ALWAYS);
     }
 
-
-
-
-
     /**
      * this method should open the pop-up for adding cards,
      * but currently it just creates an empty card
      */
-    public void addCard(){
+    public void addCard() {
         Button newCard = new Button("new card");
-        newCard.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;" +
-                " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
+        newCard.setStyle("-fx-pref-width: 160px; -fx-pref-height: 40px;"
+                + " -fx-padding: 10 10 10 10; -fx-spacing: 10px");
 
         //placing the new card to be last but still abve the button
         int size = super.getChildren().size();
-        if(size <= 1){
+        if (size <= 1) {
             super.getChildren().add(newCard);
         }
         super.getChildren().add(super.getChildren().size() - 1, newCard);
-
 
 
     }

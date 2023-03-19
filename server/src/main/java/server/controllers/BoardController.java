@@ -1,13 +1,20 @@
 package server.controllers;
 
 import commons.Board;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import server.services.BoardService;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import server.services.BoardService;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -19,7 +26,7 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     @ResponseBody
     public List<Board> getMany() {
         return boardService.getMany();
@@ -48,7 +55,7 @@ public class BoardController {
     }
 
 
-    @PostMapping(path = { "", "/" })
+    @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Board> createOne(@RequestBody Board board) {
         return ResponseEntity.ok(boardService.createOne(board));

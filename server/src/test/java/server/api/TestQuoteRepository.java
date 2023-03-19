@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package server.api;
 
+import commons.Quote;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
-
-import commons.Quote;
 import server.database.QuoteRepository;
 
 public class TestQuoteRepository implements QuoteRepository {
@@ -46,6 +45,30 @@ public class TestQuoteRepository implements QuoteRepository {
 
     @Override
     public List<Quote> findAll(Sort sort) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <S extends Quote> List<S> findAll(Example<S> example) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <S extends Quote> List<S> findAll(Example<S> example, Sort sort) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Page<Quote> findAll(Pageable pageable) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <S extends Quote> Page<S> findAll(Example<S> example, Pageable pageable) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -87,13 +110,13 @@ public class TestQuoteRepository implements QuoteRepository {
     }
 
     @Override
-    public void deleteAllByIdInBatch(Iterable<Long> ids) {
+    public void deleteAllInBatch() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void deleteAllInBatch() {
+    public void deleteAllByIdInBatch(Iterable<Long> ids) {
         // TODO Auto-generated method stub
 
     }
@@ -103,7 +126,7 @@ public class TestQuoteRepository implements QuoteRepository {
     // since it doesn't have a default implementation, unlike DeleteInBatch,
     // which is deprecated, but does have a proper default implementation.
     // come on guys, it can't be that hard to properly deprecate your interfaces...
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "checkstyle:ParameterName"})
     @Override
     public Quote getOne(Long aLong) {
         return null;
@@ -122,24 +145,6 @@ public class TestQuoteRepository implements QuoteRepository {
 
     private Optional<Quote> find(Long id) {
         return quotes.stream().filter(q -> q.id == id).findFirst();
-    }
-
-    @Override
-    public <S extends Quote> List<S> findAll(Example<S> example) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public <S extends Quote> List<S> findAll(Example<S> example, Sort sort) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Page<Quote> findAll(Pageable pageable) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -165,6 +170,12 @@ public class TestQuoteRepository implements QuoteRepository {
     @Override
     public long count() {
         return quotes.size();
+    }
+
+    @Override
+    public <S extends Quote> long count(Example<S> example) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     @Override
@@ -204,25 +215,14 @@ public class TestQuoteRepository implements QuoteRepository {
     }
 
     @Override
-    public <S extends Quote> Page<S> findAll(Example<S> example, Pageable pageable) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public <S extends Quote> long count(Example<S> example) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public <S extends Quote> boolean exists(Example<S> example) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public <S extends Quote, R> R findBy(Example<S> example, Function<FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Quote, R> R findBy(Example<S> example,
+            Function<FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
     }

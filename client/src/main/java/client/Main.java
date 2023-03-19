@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package client;
 
 import static com.google.inject.Guice.createInjector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-
 import client.scenes.*;
+import client.scenes.JoinBoardCtrl;
+import client.scenes.MainCtrlTalio;
 import com.google.inject.Injector;
-
+import java.io.IOException;
+import java.net.URISyntaxException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -36,7 +39,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStageTalio){
+    public void start(Stage primaryStageTalio) {
 
         var homePair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
         var joinBoardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
