@@ -1,3 +1,5 @@
+# We are using the wrapper of a higher Gradle version (8.0.2),
+# but it should be fine, since the wrapper will install the necessary Gradle version
 image: gradle:7.6.0-jdk19-alpine
 
 variables:
@@ -15,4 +17,6 @@ build:
   artifacts:
     paths:
       - ./coverage
+  # As far as I understand, this specifies a Regex that will be used to find the test coverage
+  # report by Jacoco, which has been printed to sout
   coverage: /TestCoverage:(\d+)%/

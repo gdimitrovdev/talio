@@ -1,5 +1,8 @@
-
+// The dependencies here are just for the Commons classes,
+// they don't propagate to the server and the client 
 dependencies {
-	implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '2.2.3'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.7'
+	// Jackson is already included in the server, throught the Spring dependencies,
+	// but we have to include it here to use the Commons classes in the Server and
+	// be able to save them to the database
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
 }

@@ -13,7 +13,7 @@ import javafx.scene.layout.*;
 public class BoardElement  extends ScrollPane {
     private final MainCtrlTalio mainCtrlTalio;
 
-    private HBox innerHBox;
+    private final HBox innerHBox;
 
 
     public BoardElement(Board board, MainCtrlTalio mainCtrlTalio)  {
@@ -39,7 +39,7 @@ public class BoardElement  extends ScrollPane {
             // TODO: Change this to FXML
             CardListElement cardListEl = new CardListElement(cardList, mainCtrlTalio);
             innerHBox.getChildren().add(cardListEl);
-            innerHBox.setMargin(cardListEl, new Insets(0, 10, 0, 0));
+            HBox.setMargin(cardListEl, new Insets(0, 10, 0, 0));
         }
         //add the innerHBox and newListButton to the outerHBox
         outerHBox.getChildren().add(innerHBox);

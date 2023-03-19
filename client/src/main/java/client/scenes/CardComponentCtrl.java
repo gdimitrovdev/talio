@@ -32,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class CardComponentCtrl extends AnchorPane {
 
-    private MainCtrlTalio mainCtrlTalio;
+    private final MainCtrlTalio mainCtrlTalio;
 
     private Card card;
     @FXML

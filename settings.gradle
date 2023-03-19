@@ -1,5 +1,5 @@
-rootProject.name = 'quizzzz'
+rootProject.name = 'talio'
 
-include 'client'
-include 'server'
-include 'commons'
+include('client')
+include('server')
+include('commons')

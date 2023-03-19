@@ -21,7 +21,7 @@ public class ListComponentCtrl extends VBox {
     private ServerUtils server;
     private BoardCtrl board;
 
-    private CardList list;
+    private final CardList list;
 
     @FXML
     private HBox titleHolder;

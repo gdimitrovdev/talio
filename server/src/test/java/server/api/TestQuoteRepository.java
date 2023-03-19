@@ -98,16 +98,26 @@ public class TestQuoteRepository implements QuoteRepository {
 
     }
 
+    // For some reason, you have to do this, otherwise you get a deprecation warning
+    // even though the method is never used, and you cannot not implement it,
+    // since it doesn't have a default implementation, unlike DeleteInBatch,
+    // which is deprecated, but does have a proper default implementation.
+    // come on guys, it can't be that hard to properly deprecate your interfaces...
+    @SuppressWarnings("deprecation")
     @Override
-    public Quote getOne(Long id) {
-        // TODO Auto-generated method stub
+    public Quote getOne(Long aLong) {
+        return null;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public Quote getById(Long aLong) {
         return null;
     }
 
     @Override
-    public Quote getById(Long id) {
-        call("getById");
-        return find(id).get();
+    public Quote getReferenceById(Long aLong) {
+        return null;
     }
 
     private Optional<Quote> find(Long id) {
