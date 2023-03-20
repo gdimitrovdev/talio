@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
-
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -15,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -147,31 +145,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         tagHBox.setVgap(5);
         tagHBox.setStyle(".hbox");
 
-        for (Tag tag : cardData.getTags()) {
-            // TODO the colors for the tags
-            tagElement = new HBox();
-            tagElement.getStyleClass().add("tag");
-
-            Text tagText = new Text(tag.getTitle());
-            tagText.setTranslateY(4);
-            tagText.translateYProperty();
-            tagText.setTranslateX(3);
-            tagText.translateXProperty();
-
-            Button deleteTagButton = new Button("x");
-            deleteTagButton.setOnAction(a -> {
-                card.getTags().remove(tag);
-                setCardData(card);
-            });
-            deleteTagButton.setTranslateY(-1);
-            deleteTagButton.translateYProperty();
-            deleteTagButton.getStyleClass().add("remove-tag-button");
-
-            tagElement.getChildren().add(tagText);
-            tagElement.getChildren().add(deleteTagButton);
-
-            tagHBox.getChildren().add(tagElement);
-        }
+        initializeTags(cardData);
 
         tagMenu.getItems().clear();
         List<Tag> tagsOfBoard = cardData.getList().getBoard().getTags();
@@ -197,22 +171,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         newTagTextfield.setPromptText("New Tag");
 
         newTagTextfield.setOnKeyTyped(a -> {
-            boolean duplicate = false;
-
-            for (Tag tag : card.getList().getBoard().getTags()) {
-                if (newTagTextfield.getText().equals(tag.getTitle())) {
-                    duplicate = true;
-                }
-            }
-
-            if (duplicate) {
-                newTagTextfield.getStyleClass().remove("valid-textField-input");
-                newTagTextfield.getStyleClass().add("invalid-textField-input");
-            } else {
-                newTagTextfield.getStyleClass().remove("invalid-textField-input");
-                newTagTextfield.getStyleClass().add("valid-textField-input");
-            }
-            
+            addAndMakeNewTag(newTagTextfield.getText());
         });
 
         newTagTextfield.setOnKeyPressed(a -> {
@@ -240,6 +199,34 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         this.setCardData(card);
     }
 
+    public void initializeTags(Card cardData) {
+        for (Tag tag : cardData.getTags()) {
+            // TODO the colors for the tags
+            tagElement = new HBox();
+            tagElement.getStyleClass().add("tag");
+
+            Text tagText = new Text(tag.getTitle());
+            tagText.setTranslateY(4);
+            tagText.translateYProperty();
+            tagText.setTranslateX(3);
+            tagText.translateXProperty();
+
+            Button deleteTagButton = new Button("x");
+            deleteTagButton.setOnAction(a -> {
+                card.getTags().remove(tag);
+                setCardData(card);
+            });
+            deleteTagButton.setTranslateY(-1);
+            deleteTagButton.translateYProperty();
+            deleteTagButton.getStyleClass().add("remove-tag-button");
+
+            tagElement.getChildren().add(tagText);
+            tagElement.getChildren().add(deleteTagButton);
+
+            tagHBox.getChildren().add(tagElement);
+        }
+    }
+
     public void addNewSubtask(String entry) {
         if (!entry.isEmpty()) {
             card.getSubtasks().add(new Subtask(entry, card));
@@ -250,11 +237,19 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     public void addAndMakeNewTag(String entry) {
         if (!entry.isEmpty()) {
             boolean tagExists = false;
+
             for (Tag tag : card.getList().getBoard().getTags()) {
-                if (entry.equals(tag.getTitle())) {
-                    // TODO add a warning message that a tag with the same name already exists
+                if (newTagTextfield.getText().equals(tag.getTitle())) {
                     tagExists = true;
                 }
+            }
+
+            if (tagExists) {
+                newTagTextfield.getStyleClass().remove("valid-textField-input");
+                newTagTextfield.getStyleClass().add("invalid-textField-input");
+            } else {
+                newTagTextfield.getStyleClass().remove("invalid-textField-input");
+                newTagTextfield.getStyleClass().add("valid-textField-input");
             }
             if (!tagExists) {
                 Tag tag = new Tag(entry,
