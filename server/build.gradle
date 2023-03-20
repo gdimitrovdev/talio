@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '3.0.4'
+	id 'org.springframework.boot' version '2.7.9'
 	// This way we don't have to provide the version for all of the spring dependencies in here
 	id 'io.spring.dependency-management' version '1.1.0'
 }
@@ -10,6 +10,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-jersey'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
@@ -17,5 +18,5 @@ dependencies {
 
 	// Pretty sure we don't need this, which is why I removed it, but I'll leave it as a comment
 	// here for now, in case it is needed later
-	//implementation 'org.springframework.boot:spring-boot-starter-web'
+	//
 }

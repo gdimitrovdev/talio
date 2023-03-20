@@ -34,7 +34,9 @@ subprojects {
 	}
 	
 	dependencies {
-		implementation 'javax.persistence:javax.persistence-api:2.2'
+		// Upgrading to v3.1.0 causes problems, particularly in the template project,
+		// so does using 'javax.persistence:javax.persistence-api:2.2'
+		implementation 'jakarta.persistence:jakarta.persistence-api:2.2.3'
 
 		// This is used for some extensions to the core Java classes, mostly in the example code
 		implementation 'org.apache.commons:commons-lang3:3.12.0'

@@ -172,7 +172,7 @@ public class CardComponentCtrl extends AnchorPane {
                             new Subtask("Done", null),
                             new Subtask("Done", null),
                             new Subtask("TODO 3", null)
-                            ))
+                    ))
             );
         } else {
             card.setTitle(title.getText());
