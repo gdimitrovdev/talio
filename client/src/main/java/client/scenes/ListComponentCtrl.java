@@ -63,7 +63,6 @@ public class ListComponentCtrl extends VBox {
     private void deleteList() {
         // Get the parent of the list component, which is the board
         Parent parent = this.getParent();
-        
         // Remove the list component from the parent
         if (parent instanceof Pane) {
             Pane parentPane = (Pane) parent;
