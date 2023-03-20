@@ -212,6 +212,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
                 newTagTextfield.getStyleClass().remove("invalid-textField-input");
                 newTagTextfield.getStyleClass().add("valid-textField-input");
             }
+            
         });
 
         newTagTextfield.setOnKeyPressed(a -> {

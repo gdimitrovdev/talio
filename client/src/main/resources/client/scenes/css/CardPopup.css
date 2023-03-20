@@ -5,10 +5,6 @@
     -fx-padding: 30;
 }
 
-#title {
-    -fx-background-color: red;
-}
-
 #addSubtask {
     -fx-background-color: -fx-color-background-light;
     -fx-border-style: none;
