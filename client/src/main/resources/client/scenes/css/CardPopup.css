@@ -5,18 +5,18 @@
     -fx-padding: 30;
 }
 
-#addSubtask {
-    -fx-background-color: -fx-color-background-light;
-    -fx-border-style: none;
-}
-
 .remove-subtask-button {
+    -fx-translate-y: -2;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
 }
 
+.subtask-checkbox {
+    -fx-translate-y: 3;
+    -fx-translate-x: 3;
+}
+
 .remove-tag-button {
-    /*-fx-translate-y: -5;*/
     -fx-border-color: transparent;
     -fx-background-color: transparent;
 }
@@ -25,6 +25,15 @@
     -fx-border-radius: 3;
     -fx-background-radius: 3;
     -fx-border-color: black;
+}
+
+.tag-text {
+    -fx-translate-y: 4;
+    -fx-translate-x: 6;
+}
+
+.tag-HBox {
+    -fx-spacing: 5;
 }
 
 .vbox {

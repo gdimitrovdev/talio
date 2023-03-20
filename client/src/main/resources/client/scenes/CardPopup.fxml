@@ -17,6 +17,7 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.ScrollPane?>
 
+<?import javafx.scene.paint.Color?>
 <AnchorPane
         fx:id="anchorPane"
          xmlns="http://javafx.com/javafx"
@@ -36,7 +37,7 @@
         <VBox fx:id="subtaskVBox" styleClass="vbox" />
     </ScrollPane>
     <HBox fx:id="subtaskHBox"/>
-    <FlowPane fx:id="tagHBox" layoutX="10" layoutY="330" maxWidth="480" styleClass="hbox" prefWrapLength="480" alignment="BOTTOM_LEFT">
-        <MenuButton fx:id="tagMenu" >Add tag</MenuButton>
-    </FlowPane>
+    <ScrollPane layoutX="10" layoutY="320" prefHeight="45" prefWidth="480">
+        <HBox fx:id="tagHBox"/>
+    </ScrollPane>
 </AnchorPane>
