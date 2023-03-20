@@ -21,7 +21,7 @@
          xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="client.scenes.CardPopupCtrl"
-         stylesheets="@/client/scenes/CardPopup.css"
+         stylesheets="@/client/scenes/css/CardPopup.css"
          prefWidth="500"
          minHeight="400"
          maxWidth="500"

@@ -14,14 +14,21 @@
     -fx-border-style: none;
 }
 
-/*.button {*/
-/*    -fx-background-color: red;*/
-/*}*/
-
 .remove-subtask-button {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.remove-tag-button {
     /*-fx-translate-y: -5;*/
     -fx-border-color: transparent;
-    -fx-background-color: -fx-color-background-light;
+    -fx-background-color: transparent;
+}
+
+.tag {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-border-color: black;
 }
 
 .vbox {
@@ -29,16 +36,21 @@
     -webkit-flex-wrap: wrap;
 }
 
-.hbox {
-    -fx-spacing: 500;
-}
-
 .invalid-textField-input {
     -fx-text-fill: red;
+}
+
+.valid-textField-input {
+    -fx-text-fill: black;
 }
 
 .button:hover {
     -fx-cursor: hand;
 }
+
+.check-box:hover {
+    -fx-cursor: hand;
+}
+
 
 

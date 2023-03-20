@@ -3,17 +3,19 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
-import javafx.fxml.FXMLLoader;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
-import javax.swing.*;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -36,6 +38,8 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     private HBox subtaskHBox = new HBox();
     @FXML
     private FlowPane tagHBox = new FlowPane();
+    @FXML
+    private HBox tagElement = new HBox();
     @FXML
     private MenuButton tagMenu = new MenuButton();
     @FXML
@@ -68,21 +72,28 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         Tag tag2 = new Tag("tag2", "red", null);
         Tag tag3 = new Tag("tag3", "red", null);
         Tag tag4 = new Tag("tag4", "red", null);
+
         List<Tag> tagsOfBoard = new ArrayList<>();
         tagsOfBoard.add(tag1);
         tagsOfBoard.add(tag2);
         tagsOfBoard.add(tag3);
         tagsOfBoard.add(tag4);
+
         Board board = new Board(true, "board", "pass", "aaa", "red", null, tagsOfBoard);
+
         CardList cardList = new CardList("name", board);
+
         List<Subtask> subtasks = new ArrayList<>();
         subtasks.add(new Subtask("subtask1", null));
         subtasks.add(new Subtask("subtask2", null));
+
         List<Tag> tags = new ArrayList<>();
         tags.add(tag1);
         tags.add(tag2);
         tags.add(tag3);
-        card = new Card("lol", "desc", "red", cardList, tags, subtasks);
+
+        card = new Card("cardTitle", "cardDesc", "red", cardList, tags, subtasks);
+
         setCardData(card);
     }
 
@@ -93,20 +104,27 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
         subtaskVBox.getChildren().clear();
         tagHBox.getChildren().clear();
+
         for (Subtask subtask : cardData.getSubtasks()) {
             HBox subtaskElement = new HBox();
+
             CheckBox checkBox = new CheckBox(subtask.getTitle());
+            checkBox.setTranslateY(3);
+            checkBox.translateYProperty();
+            subtaskElement.getChildren().add(checkBox);
+
             deleteSubtask = new Button("x");
             deleteSubtask.getStyleClass().add("remove-subtask-button");
             deleteSubtask.setOnAction(a -> {
                 deleteSubtask(subtask);
             });
-            subtaskElement.getChildren().add(checkBox);
             subtaskElement.getChildren().add(deleteSubtask);
+
             subtaskVBox.getChildren().add(subtaskElement);
         }
         
         subtaskHBox = new HBox();
+
         newSubtaskEntry = new TextField();
         newSubtaskEntry.setPromptText("Add new subtask");
         newSubtaskEntry.setOnAction(a -> {
@@ -117,48 +135,89 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         addNewSubtask.setOnAction(a -> {
             addNewSubtask(newSubtaskEntry.getText());
         });
+
         subtaskHBox.getChildren().add(newSubtaskEntry);
         subtaskHBox.getChildren().add(addNewSubtask);
         subtaskHBox.setLayoutX(10);
         subtaskHBox.setLayoutY(300);
+
         anchorPane.getChildren().add(subtaskHBox);
 
         tagHBox.setHgap(5);
         tagHBox.setVgap(5);
         tagHBox.setStyle(".hbox");
+
         for (Tag tag : cardData.getTags()) {
             // TODO the colors for the tags
-            // TODO add the x so the tag can be deleted, because right now the whole tag is just a button
-            Button tagButton = new Button(tag.getTitle());
-            tagButton.setOnAction(a -> {
+            tagElement = new HBox();
+            tagElement.getStyleClass().add("tag");
+
+            Text tagText = new Text(tag.getTitle());
+            tagText.setTranslateY(4);
+            tagText.translateYProperty();
+            tagText.setTranslateX(3);
+            tagText.translateXProperty();
+
+            Button deleteTagButton = new Button("x");
+            deleteTagButton.setOnAction(a -> {
                 card.getTags().remove(tag);
                 setCardData(card);
             });
-            tagHBox.getChildren().add(tagButton);
+            deleteTagButton.setTranslateY(-1);
+            deleteTagButton.translateYProperty();
+            deleteTagButton.getStyleClass().add("remove-tag-button");
+
+            tagElement.getChildren().add(tagText);
+            tagElement.getChildren().add(deleteTagButton);
+
+            tagHBox.getChildren().add(tagElement);
         }
 
         tagMenu.getItems().clear();
         List<Tag> tagsOfBoard = cardData.getList().getBoard().getTags();
+
         for (Tag tag : tagsOfBoard) {
             if (!cardData.getTags().contains(tag)) {
                 MenuItem menuItem = new MenuItem(tag.getTitle());
                 menuItem.setOnAction(event -> {
                     card.getTags().add(tag);
-                    card.getList().getBoard().getTags().add(tag);
                     setCardData(card);
                 });
+
                 tagMenu.getItems().add(menuItem);
             }
         }
 
         tagColorPicker.setValue(Color.ORANGE);
+
         tagHBox.getChildren().add(tagMenu);
         tagHBox.getChildren().add(newTagTextfield);
         tagHBox.getChildren().add(tagColorPicker);
 
         newTagTextfield.setPromptText("New Tag");
-        newTagTextfield.setOnAction(a -> {
-            addAndMakeNewTag(newTagTextfield.getText());
+
+        newTagTextfield.setOnKeyTyped(a -> {
+            boolean duplicate = false;
+
+            for (Tag tag : card.getList().getBoard().getTags()) {
+                if (newTagTextfield.getText().equals(tag.getTitle())) {
+                    duplicate = true;
+                }
+            }
+
+            if (duplicate) {
+                newTagTextfield.getStyleClass().remove("valid-textField-input");
+                newTagTextfield.getStyleClass().add("invalid-textField-input");
+            } else {
+                newTagTextfield.getStyleClass().remove("invalid-textField-input");
+                newTagTextfield.getStyleClass().add("valid-textField-input");
+            }
+        });
+
+        newTagTextfield.setOnKeyPressed(a -> {
+            if (a.getCode() == KeyCode.ENTER) {
+                addAndMakeNewTag(newTagTextfield.getText());
+            }
         });
 
 
@@ -167,6 +226,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             save(card);
             // TODO display the board overview again
         });
+
         close = new Button("Close");
         close.setOnAction(a -> {
             close();
@@ -189,7 +249,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     public void addAndMakeNewTag(String entry) {
         if (!entry.isEmpty()) {
             boolean tagExists = false;
-            for (Tag tag : card.getTags()) {
+            for (Tag tag : card.getList().getBoard().getTags()) {
                 if (entry.equals(tag.getTitle())) {
                     // TODO add a warning message that a tag with the same name already exists
                     tagExists = true;
@@ -198,9 +258,11 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             if (!tagExists) {
                 Tag tag = new Tag(entry,
                         tagColorPicker.getValue().toString(), null);
+
                 card.getList().getBoard().getTags().add(tag);
                 card.getTags().add(tag);
                 newTagTextfield.clear();
+
                 setCardData(card);
             }
         }
@@ -208,6 +270,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
     public void close() {
         // this would reset to the state of the card regardless of any changes that have been made
+        // could remove this and just use the window "X" button
         card.setTitle(cardTitle.getText());
         card.setTitle(cardDescription.getText());
     }
@@ -216,4 +279,5 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         // TODO get the results from the checkboxes
         // this would save any card information that has been changed
     }
+
 }
