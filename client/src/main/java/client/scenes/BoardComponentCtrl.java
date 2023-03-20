@@ -2,6 +2,7 @@ package client.scenes;
 
 import commons.Board;
 import commons.CardList;
+import elements.CardListElement;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -51,5 +52,10 @@ public class BoardComponentCtrl extends AnchorPane {
         CardList newList = new CardList("Empty title",board);
 
         innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, newList));
+    }
+    public void refreshBoard(Board board) throws IOException {
+        innerHBox.getChildren().clear();
+        this.board = board;
+        this.updateOverview();
     }
 }
