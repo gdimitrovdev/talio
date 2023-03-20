@@ -51,4 +51,9 @@ public class BoardComponentCtrl extends AnchorPane {
         CardList newList = new CardList("Empty title",board);
         innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, newList));
     }
+    public void refreshBoard(Board board) throws IOException {
+        innerHBox.getChildren().clear();
+        this.board = board;
+        this.updateOverview();
+    }
 }
