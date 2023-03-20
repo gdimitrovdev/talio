@@ -1,4 +1,9 @@
 plugins {
+	// Unfortunately we cannot upgrade to Spring 3 easily,
+	// so we are using the latest Spring 2.x version,
+	// which doesn't seem to have compatibility issues.
+	// Spring 3 just gives some crytpic runtime errors that don't make any sence,
+	// perhaps it's a problem with the dependencies
 	id 'org.springframework.boot' version '2.7.9'
 	// This way we don't have to provide the version for all of the spring dependencies in here
 	id 'io.spring.dependency-management' version '1.1.0'
@@ -10,13 +15,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-jersey'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 	runtimeOnly 'com.h2database:h2'
 
-	// Pretty sure we don't need this, which is why I removed it, but I'll leave it as a comment
-	// here for now, in case it is needed later
-	//
+	// Unused dependencies, don't need them for now, might need them later
+	// implementation 'org.springframework.boot:spring-boot-starter-web'
 }

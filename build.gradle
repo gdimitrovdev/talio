@@ -16,7 +16,6 @@ subprojects {
 		toolVersion "10.9.2"
 		ignoreFailures = false
 		maxErrors = 0
-		//showViolations = true
 		configFile = '../checkstyle.xml' as File
 	}
 

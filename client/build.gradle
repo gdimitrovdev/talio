@@ -19,6 +19,9 @@ dependencies {
 	implementation 'org.openjfx:javafx-fxml:19.0.2.1'
 
 	implementation 'com.google.inject:guice:5.1.0'
+	
+	// Since we aren't using the spring dependency manager, we need to specify the dependency manually
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.9'
 
 	// This dependency corresponds to the Spring Starter Dependencies in the Sever
 	implementation 'org.glassfish.jersey.core:jersey-client:3.1.1'
