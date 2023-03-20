@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -19,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -149,8 +151,16 @@ public class CardComponentCtrl extends AnchorPane {
         title.setDisable(true);
     }
 
-    public void delete() {
-        System.out.println("Card " + this + " should be deleted");
+    @FXML
+    private void delete() {
+        // Get the parent of the card
+        Parent parent = this.getParent();
+
+        // Remove the card from the parent if it is an instance of Pane
+        if (parent instanceof Pane) {
+            Pane parentPane = (Pane) parent;
+            parentPane.getChildren().remove(this);
+        }
     }
 
     // TODO extract the single/double click event handler so that it can be used with any UI

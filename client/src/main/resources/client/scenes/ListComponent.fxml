@@ -4,17 +4,20 @@
 <?import javafx.scene.layout.*?>
 
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" fx:id="listVBox" VBox.vgrow ="ALWAYS" stylesheets="@./css/ListComponent.css" >
-    <HBox fx:id="titleHolder">
-        <TextField fx:id="titleField">
 
-        </TextField>
-        <Button fx:id="deleteListBtn" text="x" onAction="#deleteList">
+
+    <HBox fx:id="titleHolder">
+        <TextField fx:id="titleField" HBox.hgrow="ALWAYS" text="Empty title"></TextField>
+        <Button fx:id="deleteListBtn" text="X" onAction="#deleteList">
             <tooltip><Tooltip text="Delete this list" /></tooltip>
         </Button>
     </HBox>
+    <ScrollPane vbarPolicy="ALWAYS" fx:id="scrollpane" hbarPolicy="NEVER">
     <VBox fx:id="cards">
-
     </VBox>
+    </ScrollPane>
+    <!--<VBox fx:id="cards">
+    </VBox> -->
     <Button fx:id="addCardBtn" text="+" onAction="#addCard">
         <tooltip><Tooltip text="Add a new card" /></tooltip>
     </Button>
