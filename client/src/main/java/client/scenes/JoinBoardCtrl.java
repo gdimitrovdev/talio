@@ -15,6 +15,8 @@ import java.io.IOException;
 public class JoinBoardCtrl {
     private  MainCtrlTalio mainCtrlTalio;
 
+    private final ServerUtils server;
+
     private Board board;
 
     @FXML
@@ -25,6 +27,7 @@ public class JoinBoardCtrl {
 
     @Inject
     public JoinBoardCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+        this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         this.generateExampleBoard();
     }
@@ -55,7 +58,7 @@ public class JoinBoardCtrl {
      */
     public void displayBoard() throws IOException {
 
-        root.getChildren().add(new BoardComponentCtrl(mainCtrlTalio, board));
+        root.getChildren().add(new BoardComponentCtrl(server, mainCtrlTalio, board));
 
     }
 }
