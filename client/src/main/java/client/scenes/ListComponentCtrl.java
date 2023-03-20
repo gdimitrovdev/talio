@@ -1,5 +1,4 @@
 package client.scenes;
-
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
@@ -60,4 +59,12 @@ public class ListComponentCtrl extends VBox {
         Card card = new Card("Enter title", "", "", list);
         cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, card));
     }
+
+    public void refreshList(CardList list) throws IOException {
+        cards.getChildren().clear();
+        this.list = list;
+        this.updateOverview();
+    }
+
+
 }
