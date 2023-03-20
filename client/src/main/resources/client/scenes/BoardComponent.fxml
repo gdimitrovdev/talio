@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <fx:root type = "javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" >
-    <ScrollPane hbarPolicy="ALWAYS" layoutX="10.0" layoutY="40.0" vbarPolicy="ALWAYS" VBox.vgrow ="ALWAYS">
+    <ScrollPane hbarPolicy="ALWAYS" layoutX="10.0" layoutY="40.0" vbarPolicy="NEVER" VBox.vgrow ="ALWAYS">
 
         <StackPane>
             <HBox fx:id="outerHBox">
