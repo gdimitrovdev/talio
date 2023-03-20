@@ -12,7 +12,7 @@
             <tooltip><Tooltip text="Delete this list" /></tooltip>
         </Button>
     </HBox>
-    <ScrollPane vbarPolicy="ALWAYS" fx:id="scrollpane">
+    <ScrollPane vbarPolicy="ALWAYS" fx:id="scrollpane" hbarPolicy="NEVER">
     <VBox fx:id="cards">
     </VBox>
     </ScrollPane>
