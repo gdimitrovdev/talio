@@ -1,9 +1,29 @@
-// This will be applied to all subprojects, so :client, :server and :commons
-subprojects {
+plugins {
+	// For some reason the jacoco aggregation doesn't work if we don't include the plugins here as well
+	id 'org.springframework.boot' version '2.7.9'
+	id 'io.spring.dependency-management' version '1.1.0'
+	// This is needed to aggregate the jacoco report for the pipeline
+	id 'base'
+	id 'jacoco-report-aggregation'
+}
+
+// This will be applied to all projects, including :
+allprojects {
 	repositories {
 		mavenCentral()
 	}
+}
 
+reporting {
+	reports {
+		testCodeCoverageReport(JacocoCoverageReport) { 
+			testType = TestSuiteType.UNIT_TEST
+		}
+	}
+}
+
+// This will be applied to all subprojects, so :client, :server and :commons
+subprojects {
 	// We don't seem to be able to use the plugins {...} syntax within subprojects {...}
 	apply plugin: 'java'
 	apply plugin: 'checkstyle'
@@ -49,4 +69,14 @@ subprojects {
 	tasks.withType(JavaCompile) {
 		options.compilerArgs += ['-Xlint:deprecation']
 	}
+}
+
+dependencies {
+	jacocoAggregation project(':client') 
+	jacocoAggregation project(':commons') 
+	jacocoAggregation project(':server') 
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('testCodeCoverageReport', JacocoReport) 
 }
