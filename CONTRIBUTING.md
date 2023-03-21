@@ -68,7 +68,7 @@ Make sure to have to following settings set up:
 - Don't directly push into main, unless it is to for something like uploading a minutes of a meeting
 - If there are any open MRs, perhaps review them, before opening yours
 - Don't rebase off of or merge with other topic branches, only the main, even if that means that if the topic branches are merged before yours you will have to rebase/merge again
-- Checkout your topic branch (after fetching and pulling main) with `git checkout topic` and either merge main into the topic branch `git merge main` or rebase the topic branch on top of main with `git rebase main`. Resolve any conflicts as needed. Run `./gradlew build`. If successful then push your topic branch onto the remote and open the MR for merging the topic into main on GitLab. This should then be a Fast Forward merge
+- Checkout your topic branch (after fetching and pulling main) with `git checkout topic` and either merge main into the topic branch `git merge main` or rebase the topic branch on top of main with `git rebase main`. Resolve any conflicts as needed. Run `./gradlew build`. If successful then push your topic branch onto the remote (`git push -u origin topic`) and open the MR for merging the topic into main on GitLab. This should then be a Fast Forward merge
 - Move relevant issues to `in-review` on the board
 - In the description of the MR use the format `Fixes #5, #6, #14`, so that the issues will be automatically closed once the MR is merged. Alternatively use `Ref #5, #6, #14` in commit messages.
 - Assign yourself to the MR and find a reviewer to review your MR (assign them as reviewer on GitLab as well)
