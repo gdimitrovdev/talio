@@ -34,6 +34,10 @@ Attendees:
 5. Heuristic usability report
    1. what is the difference between the draft and the final product?
    >*Record responses from TA*
+   2. When should we let the team that we are working with do an evaluation for us, since our UI is not functional, can we wait for example a week,   before giving our project over to them?
+   >*Record responses from TA*
+   3. How do we distribute our application to them? Do we work with them in person?
+   >*Record responses from TA*
 6. Application - show what functionalities we have merged into main 
     >*Record feedback from the TA*
 7. Work distribution
