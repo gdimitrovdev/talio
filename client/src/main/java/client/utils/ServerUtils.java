@@ -30,16 +30,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-
 import commons.Board;
 import commons.Card;
 import commons.CardList;
 import org.glassfish.jersey.client.ClientConfig;
-
-import commons.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -47,8 +41,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-
-import org.glassfish.jersey.client.ClientConfig;
 
 public class ServerUtils {
 
@@ -88,7 +80,8 @@ public class ServerUtils {
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try {
-            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+            return stomp.connect(url, new StompSessionHandlerAdapter() {
+            }).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {

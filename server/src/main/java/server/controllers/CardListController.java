@@ -1,16 +1,12 @@
 package server.controllers;
 
 import commons.CardList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.*;
-import server.services.CardListService;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +45,6 @@ public class CardListController {
         return ResponseEntity.ok(optionalCardList.get());
     }
 
-<<<<<<< HEAD
     @MessageMapping("/lists")
     @SendTo("/topic/lists")
     public CardList addMessage(CardList cardList) {
@@ -57,10 +52,7 @@ public class CardListController {
         return cardList;
     }
 
-    @PostMapping(path= { "", "/" })
-=======
     @PostMapping(path = {"", "/"})
->>>>>>> ee7a499 (Fixed all of the Checkstyle errors and some of the Checkstyle rules)
     @ResponseBody
     public ResponseEntity<CardList> createOne(@RequestBody CardList cardList) {
         return ResponseEntity.ok(cardListService.createOne(cardList));

@@ -19,7 +19,7 @@ public class ListComponentCtrl extends VBox {
     private ServerUtils server;
     private BoardCtrl board;
 
-    private final CardList list;
+    private CardList list;
 
     @FXML
     private HBox titleHolder;
@@ -41,8 +41,7 @@ public class ListComponentCtrl extends VBox {
 
     //not sure about this yet
     //@FXML
-   // ScrollPane scrollPane = new ScrollPane();
-
+    // ScrollPane scrollPane = new ScrollPane();
 
     public ListComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, BoardCtrl board, CardList list) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
@@ -188,6 +187,7 @@ public class ListComponentCtrl extends VBox {
             parentPane.getChildren().remove(this);
         }
     }
+
     @FXML
     protected void addCard() throws IOException {
         Card card = new Card("Enter title", "", "", list);
@@ -199,6 +199,4 @@ public class ListComponentCtrl extends VBox {
         this.list = list;
         this.updateOverview();
     }
-
-
 }
