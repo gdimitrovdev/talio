@@ -1,3 +1,5 @@
+TODO
+
 # Starting template
 
 This README will need to contain a description of your project, how to run it, how to set up the development environment, and who worked on it.
@@ -18,12 +20,8 @@ Add your own name (do not add the names for others!) to the section below.
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Georgi Dimitrov | G.Dimitrov@student.tudelft.nl |
 | ![](https://secure.gravatar.com/avatar/72f64c34534750ba391f843eebfde9e7?s=192&d=identicon) | Agnese Elerte | a.elerte-1@student.tudelft.nl |
 
-<!-- Instructions (remove once assignment has been completed -->
-<!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
-<!-- - Mention your *student* email address -->
 <!-- - Preferably add a recognizable photo, otherwise add your GitLab photo -->
 <!-- - (please make sure the photos have the same size) --> 
->>>>>>> README.md
 
 ## How to run it
 
