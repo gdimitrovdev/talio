@@ -2,11 +2,15 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.JoinBoardCodeCtrl">
    <children>
-      <TextField id="fieldBoardCode" layoutX="226.0" layoutY="169.0" />
-      <Label layoutX="90.0" layoutY="173.0" text="Board Code" />
-      <Button id="buttonJoin" layoutX="435.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickJoinBoard" text="Join" />
+      <TextField id="fieldBoardCode" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter the boad invitation given to you." />
+      <Label layoutX="153.0" layoutY="83.0" text="Join an Existing Board">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Button id="buttonJoin" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickJoinBoard" prefHeight="26.0" prefWidth="90.0" text="Join" />
    </children>
 </AnchorPane>

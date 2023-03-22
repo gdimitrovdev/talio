@@ -12,10 +12,12 @@ public class MainCtrlTalio {
 
     //initialize the stage
     private Stage primaryStageTalio;
-    private Scene board, joinBoard, createBoard;
+    private Scene board, joinBoard, createBoard, serverConnection;
     private JoinBoardCtrl joinBoardCtrl;
     private JoinBoardCodeCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
+
+    private ServerConnectionCtrl serverConnectionCtrl;
 
     private final ServerUtils server ;
 
@@ -28,7 +30,8 @@ public class MainCtrlTalio {
         Stage primaryStageTalio,
         Pair<JoinBoardCtrl, Parent> boardPair,
         Pair<JoinBoardCodeCtrl, Parent> joinBoardPair,
-        Pair<CreateBoardCtrl, Parent> createBoardPair)
+        Pair<CreateBoardCtrl, Parent> createBoardPair,
+        Pair<ServerConnectionCtrl, Parent> serverConnectionPair)
     {
         this.primaryStageTalio=primaryStageTalio;
 
@@ -38,6 +41,8 @@ public class MainCtrlTalio {
         this.joinBoard = new Scene(joinBoardPair.getValue());
         this.createBoardCtrl = createBoardPair.getKey();
         this.createBoard = new Scene(createBoardPair.getValue());
+        this.serverConnectionCtrl = serverConnectionPair.getKey();
+        this.serverConnection = new Scene(serverConnectionPair.getValue());
 
         showOverview();
         primaryStageTalio.show();
