@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 public class CreateBoardCtrl {
-    private MainCtrlTalio mainCtrlTalio;
+    private final MainCtrlTalio mainCtrlTalio;
     @FXML
     private TextField fieldBoardName;
 
