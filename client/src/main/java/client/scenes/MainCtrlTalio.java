@@ -63,4 +63,21 @@ public class MainCtrlTalio {
 
     //initialize other scenes and their controllers
 
+
+    //DON'T CALL THESE 3 METHODS FROM OUTSIDE
+    public void showJoinBoardCode() {
+        primaryStageTalio.setTitle("Talio: Join an Existing Board");
+        primaryStageTalio.setScene(joinBoard);
+    }
+
+    public void showCreateBoard() {
+        primaryStageTalio.setTitle("Talio: Create a New Board");
+        primaryStageTalio.setScene(createBoard);
+    }
+
+    public void showServerConnection() {
+        primaryStageTalio.setTitle("Talio: Connect to a Server");
+        primaryStageTalio.setScene(serverConnection);
+    }
+
 }
