@@ -104,4 +104,12 @@ public class ServerUtils {
         session.send(destination, o);
     }
 
+    public void deleteBoardById(Long id){
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("/api/boards/"+id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
 }

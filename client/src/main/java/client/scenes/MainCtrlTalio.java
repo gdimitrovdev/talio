@@ -13,12 +13,10 @@ public class MainCtrlTalio {
     //initialize the stage
     private Stage primaryStageTalio;
     private Scene board, joinBoard, createBoard, serverConnection;
-    private JoinBoardCtrl joinBoardCtrl;
+    private HomeCtrl homeCtrl;
     private JoinBoardCodeCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
-
     private ServerConnectionCtrl serverConnectionCtrl;
-
     private final ServerUtils server ;
 
     @Inject
@@ -28,15 +26,15 @@ public class MainCtrlTalio {
 
     public void initialize(
         Stage primaryStageTalio,
-        Pair<JoinBoardCtrl, Parent> boardPair,
+        Pair<HomeCtrl, Parent> homePair,
         Pair<JoinBoardCodeCtrl, Parent> joinBoardPair,
         Pair<CreateBoardCtrl, Parent> createBoardPair,
         Pair<ServerConnectionCtrl, Parent> serverConnectionPair)
     {
         this.primaryStageTalio=primaryStageTalio;
 
-        this.joinBoardCtrl =boardPair.getKey();
-        this.board=new Scene(boardPair.getValue());
+        this.homeCtrl = homePair.getKey();
+        this.board=new Scene(homePair.getValue());
         this.joinBoardCodeCtrl = joinBoardPair.getKey();
         this.joinBoard = new Scene(joinBoardPair.getValue());
         this.createBoardCtrl = createBoardPair.getKey();
@@ -51,11 +49,8 @@ public class MainCtrlTalio {
     public void showOverview(){
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(board);
+        homeCtrl.displayBoardLabels();
     }
-
-
-
-
 
     //initialize the controller for the main board scene
 
@@ -64,7 +59,7 @@ public class MainCtrlTalio {
     //initialize other scenes and their controllers
 
 
-    //DON'T CALL THESE 3 METHODS FROM OUTSIDE
+    //TODO: FIX THESE THREE METHODS. DON'T CALL THEM FROM OUTSIDE
     public void showJoinBoardCode() {
         primaryStageTalio.setTitle("Talio: Join an Existing Board");
         primaryStageTalio.setScene(joinBoard);

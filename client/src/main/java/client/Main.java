@@ -40,12 +40,12 @@ public class Main extends Application {
 
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
-        var boardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
+        var homePair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
         var joinBoardPair = FXML.load(JoinBoardCodeCtrl.class, "client", "scenes", "JoinBoardCode.fxml");
         var createBoardPair = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
         var serverConnectionPair = FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
 
-        mainControl.initialize(primaryStageTalio, boardPair, joinBoardPair, createBoardPair, serverConnectionPair);
+        mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair, serverConnectionPair);
 
         /*
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
