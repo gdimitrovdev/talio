@@ -13,7 +13,8 @@ public class MainCtrlTalio {
     //initialize the stage
     private Stage primaryStageTalio;
     private Scene board;
-    private JoinBoardCtrl joinBoardCtrl;
+
+    private HomeCtrl homeCtrl;
     private final ServerUtils server ;
 
     @Inject
@@ -23,11 +24,10 @@ public class MainCtrlTalio {
 
     public void initialize(
         Stage primaryStageTalio,
-        Pair<JoinBoardCtrl, Parent> boardPair)
-    {
-        this.primaryStageTalio=primaryStageTalio;
-        this.joinBoardCtrl =boardPair.getKey();
-        this.board=new Scene(boardPair.getValue());
+        Pair<HomeCtrl, Parent> boardPair) {
+        this.primaryStageTalio = primaryStageTalio;
+        this.homeCtrl = boardPair.getKey();
+        this.board = new Scene(boardPair.getValue());
         showOverview();
         primaryStageTalio.show();
 
@@ -35,6 +35,12 @@ public class MainCtrlTalio {
     public void showOverview(){
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(board);
+        homeCtrl.displayBoardLabels();
+    }
+
+    //TODO : to implement the method that changes from the Home Scene to the Server Scene
+    public void displayServerScene(){
+
     }
 
 

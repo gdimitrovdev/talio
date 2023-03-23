@@ -20,7 +20,7 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.JoinBoardCtrl;
+import client.scenes.HomeCtrl;
 import client.scenes.MainCtrlTalio;
 import com.google.inject.Injector;
 
@@ -41,7 +41,7 @@ public class Main extends Application {
 
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
-        var boardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
+        var boardPair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
 
         mainControl.initialize(primaryStageTalio, boardPair);
 
