@@ -31,5 +31,8 @@ public class MyModule implements Module {
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(JoinBoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(JoinBoardCodeCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CreateBoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
     }
 }
