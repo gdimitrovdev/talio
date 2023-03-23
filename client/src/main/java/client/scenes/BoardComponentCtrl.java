@@ -71,4 +71,23 @@ public class BoardComponentCtrl extends AnchorPane implements Initializable {
         this.board = board;
         this.updateOverview();
     }
+
+    //return to home method
+    @FXML
+    protected void backToJoinBoard() throws IOException {
+        mainCtrlTalio.showOverview();
+        // mainCtrlTalio.getPrimaryStage().setScene(scene);
+    }
+    //open share board method
+    @FXML
+    protected void share() throws IOException {
+        mainCtrlTalio.showShareBoard();
+    }
+
+    //open the settings method
+    @FXML
+    protected void settings() throws IOException {
+        mainCtrlTalio.showBoardSettings();
+    }
+
 }

@@ -75,4 +75,15 @@ public class MainCtrlTalio {
         primaryStageTalio.setScene(serverConnection);
     }
 
+    //TODO: this method needs to be finished after someone does the settings
+    public void showBoardSettings(){
+        primaryStageTalio.setTitle("Talio: Board Settings");
+        //primaryStageTalio.setScene(type here);
+    }
+    //TODO: this method needs to be finished after someone does the shareboard popup
+    public void showShareBoard(){
+        primaryStageTalio.setTitle("Talio: Board Settings");
+        //primaryStageTalio.setScene(type here);
+    }
+    
 }
