@@ -52,7 +52,6 @@ public class HomeCtrl {
     private void generateExampleBoard(Long id) {
         //"Long boardID = Long.parseLong(boardField.getText());
         //Board current = serverUtils.getBoardById(boardID)" can be used
-        // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
 
         this.board = new Board(false,"Example board","pwd","hash_893290840923904", "#333333" );
 
@@ -136,8 +135,6 @@ public class HomeCtrl {
      * method that is called by the changeServerBtn
      * it uses a method from the Main Controller
      */
-
-    // TODO: FIX THESE THREE METHODS.
     public void openServerScene(){
         mainCtrlTalio.showServerConnection();
     }
@@ -155,7 +152,6 @@ public class HomeCtrl {
     public void displayJoinPopUp(){
         mainCtrlTalio.showJoinBoardCode();
     }
-
 
     /**
      * @param board - the board that should be removed

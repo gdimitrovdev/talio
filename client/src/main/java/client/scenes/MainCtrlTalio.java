@@ -7,8 +7,6 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrlTalio {
-
-    //initialize the stage
     private Stage primaryStageTalio;
     private Scene home, joinBoard, createBoard, serverConnection;
     private HomeCtrl homeCtrl;
@@ -23,7 +21,7 @@ public class MainCtrlTalio {
         Pair<CreateBoardCtrl, Parent> createBoardPair,
         Pair<ServerConnectionCtrl, Parent> serverConnectionPair)
     {
-        this.primaryStageTalio=primaryStageTalio;
+        this.primaryStageTalio = primaryStageTalio;
 
         this.homeCtrl = homePair.getKey();
         this.home = new Scene(homePair.getValue());
@@ -47,14 +45,6 @@ public class MainCtrlTalio {
         homeCtrl.displayBoardLabels();
     }
 
-    //initialize the controller for the main board scene
-
-    //initialize the 'main board' scene
-
-    //initialize other scenes and their controllers
-
-
-    //TODO: FIX THESE THREE METHODS. DON'T CALL THEM FROM OUTSIDE
     public void showJoinBoardCode() {
         primaryStageTalio.setTitle("Talio: Join an Existing Board");
         primaryStageTalio.setScene(joinBoard);
