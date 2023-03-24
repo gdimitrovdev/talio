@@ -27,4 +27,8 @@ public class CreateBoardCtrl {
         String name = fieldBoardName.getText();
         System.out.printf("Name: %s", name);
     }
+
+    public void clickBackHome() {
+        mainCtrlTalio.showHome();
+    }
 }

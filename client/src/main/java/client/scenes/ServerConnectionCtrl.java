@@ -27,4 +27,8 @@ public class ServerConnectionCtrl {
         String addr = fieldServerAddress.getText();
         System.out.printf("Address: %s", addr);
     }
+
+    public void clickBackHome() {
+        mainCtrlTalio.showHome();
+    }
 }

@@ -27,4 +27,8 @@ public class JoinBoardCodeCtrl {
         String code = fieldBoardCode.getText();
         System.out.printf("Code: %s", code);
     }
+
+    public void clickBackHome() {
+        mainCtrlTalio.showHome();
+    }
 }
