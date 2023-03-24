@@ -17,19 +17,14 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 public class HomeCtrl {
-
-    private  MainCtrlTalio mainCtrlTalio;
+    private final ServerUtils server;
+    private final MainCtrlTalio mainCtrlTalio;
 
     //this set will contain all the boards that have been opened by the 'join a board' and
     //'create a board' method
     //in the 2 methods the created/joined board should be added to the hashset
     public Set<Board> recentBoards;
-
-    private final ServerUtils server;
-
     private Board board;
-
-
     @FXML
     private Button changeServerBtn;
     @FXML
@@ -44,15 +39,15 @@ public class HomeCtrl {
     @FXML Button createBoardBtn;
 
     @Inject
-    public HomeCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+    public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
+
         this.recentBoards = new HashSet<>();
         for (int i = 0; i <15; i++) {
             this.generateExampleBoard((long)i);
         }
     }
-
 
     private void generateExampleBoard(Long id) {
         //"Long boardID = Long.parseLong(boardField.getText());
@@ -144,21 +139,21 @@ public class HomeCtrl {
 
     // TODO: FIX THESE THREE METHODS.
     public void openServerScene(){
-        // mainCtrlTalio.showServerConnection();
+        mainCtrlTalio.showServerConnection();
     }
 
     /**
      * used by the createBoardBtn and displays the pop-up for creating a board
      */
     public void displayCreatePopUp(){
-        // mainCtrlTalio.showCreateBoard();
+        mainCtrlTalio.showCreateBoard();
     }
 
     /**
      * used by the joinBoardBtn and displays the pop-up for joining a board
      */
     public void displayJoinPopUp(){
-        // mainCtrlTalio.showJoinBoardCode();
+        mainCtrlTalio.showJoinBoardCode();
     }
 
 
@@ -169,7 +164,7 @@ public class HomeCtrl {
     public void removeRecentBoard(Board board){
         //removes all children from the FlowPane and then
         //remove board from hashset and call displayBoardLabels method again
-        server.deleteBoardById(board.getId());
+
         recentBoards.remove(board);
         recentBoardsPane.getChildren().clear();
         displayBoardLabels();

@@ -1,11 +1,13 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 public class JoinBoardCodeCtrl {
+    private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
     @FXML
     private TextField fieldBoardCode;
@@ -14,7 +16,8 @@ public class JoinBoardCodeCtrl {
     private Button buttonJoin;
 
     @Inject
-    public JoinBoardCodeCtrl(MainCtrlTalio mainCtrlTalio) {
+    public JoinBoardCodeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
+        this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
     }
 
