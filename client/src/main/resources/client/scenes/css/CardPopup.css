@@ -17,6 +17,8 @@
 }
 
 .remove-tag-button {
+    -fx-translate-y: -2;
+    -fx-translate-x: 3;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
 }

@@ -22,7 +22,6 @@
         fx:id="anchorPane"
          xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         fx:controller="client.scenes.CardPopupCtrl"
          stylesheets="@/client/scenes/css/CardPopup.css"
          prefWidth="500"
          minHeight="400"
@@ -30,7 +29,6 @@
          maxHeight="Infinity">
     <TextField fx:id="cardTitle" layoutX="10" layoutY="10"/>
     <Button fx:id="close" layoutX="460" layoutY="10" text="X"/>
-    <Button fx:id="save" layoutX="350" layoutY="10" text="Save Changes"/>
     <TextField fx:id="cardDescription" layoutX="10" layoutY="40" prefHeight="80" prefWidth="480" alignment="TOP_LEFT"/>
     <Text layoutX="10" layoutY="140">Tasks:</Text>
     <ScrollPane layoutX="10" layoutY="151" prefHeight="130" prefWidth="480">

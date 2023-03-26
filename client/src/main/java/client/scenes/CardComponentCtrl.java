@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -23,6 +24,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -87,7 +90,26 @@ public class CardComponentCtrl extends AnchorPane {
         });
         // TODO not exactly like the backlog says, but I think this is more intuitive
         //  determine whether it should be this way
-        setOnMouseSingleClicked((me) -> System.out.println("Should open pop-up now"));
+        setOnMouseSingleClicked((me) -> {
+            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
+            try {
+                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio, card));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Parent root1 = null;
+            try {
+                root1 = cardPopupLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.show();
+            stage.setOnCloseRequest(event -> {
+                setCard(card);
+            });
+        });
         setOnMouseDoubleClicked((me) -> {
             if(title.isDisabled()) {
                 title.setDisable(false);
@@ -101,7 +123,7 @@ public class CardComponentCtrl extends AnchorPane {
     // TODO hide the progressbar, the progresslabel and the delete button
     //  if the card has not been created yet
 
-    private void setCard(Card newCardData) {
+    public void setCard(Card newCardData) {
         card = newCardData;
         title.setText(card.getTitle());
         // TODO this calculation will have to change once the Subtask Model changes in #40, #41
@@ -115,7 +137,7 @@ public class CardComponentCtrl extends AnchorPane {
             // TODO remove magic numbers from here
             rect.setHeight(10);
             rect.setWidth(70);
-            rect.setFill(Color.web("0x" + tag.getColor().substring(1)));
+            rect.setFill(Color.web("0x" + tag.getColor().substring(2)));
             // TODO perhaps move those to a CSS file
             rect.setArcHeight(5);
             rect.setArcWidth(5);

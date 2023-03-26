@@ -35,5 +35,6 @@ public class MyModule implements Module {
         binder.bind(JoinBoardCodeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateBoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
     }
 }

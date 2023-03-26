@@ -3,7 +3,10 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
@@ -13,7 +16,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -21,22 +27,23 @@ import java.util.List;
 public class CardPopupCtrl extends AnchorPane implements Initializable {
 
     private final MainCtrlTalio mainCtrlTalio;
+    private CardComponentCtrl cardComponentCtrl;
 
     private ServerUtils server;
 
     private Card card;
 
     @FXML
-    private AnchorPane anchorPane;
+    private AnchorPane anchorPane = new AnchorPane();
 
     @FXML
-    private TextField cardTitle;
+    private TextField cardTitle = new TextField();
 
     @FXML
-    private TextField cardDescription;
+    private TextField cardDescription = new TextField();
 
     @FXML
-    private VBox subtaskVBox;
+    private VBox subtaskVBox = new VBox();
 
     @FXML
     private HBox subtaskHBox;
@@ -72,46 +79,23 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     private Button close;
 
     @Inject
-    public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+    public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, Card card) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
-        this.server = server;
+        this.card = card;
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
     }
 
 
     public void initialize(URL location, ResourceBundle resources) {
-        // this is purely for testing the functionality
-        Tag tag1 = new Tag("tag1", "red", null);
-        Tag tag2 = new Tag("tag2", "red", null);
-        Tag tag3 = new Tag("tag3", "red", null);
-        Tag tag4 = new Tag("tag4", "red", null);
-
-        List<Tag> tagsOfBoard = new ArrayList<>();
-        tagsOfBoard.add(tag1);
-        tagsOfBoard.add(tag2);
-        tagsOfBoard.add(tag3);
-        tagsOfBoard.add(tag4);
-
-        Board board = new Board(true, "board", "pass", "aaa", "red", null, tagsOfBoard);
-
-        CardList cardList = new CardList("name", board);
-
-        List<Subtask> subtasks = new ArrayList<>();
-        subtasks.add(new Subtask("subtask1", null));
-        subtasks.add(new Subtask("subtask2", null));
-
-        List<Tag> tags = new ArrayList<>();
-        tags.add(tag1);
-        tags.add(tag2);
-        tags.add(tag3);
-
-        card = new Card("cardTitle", "cardDesc", "red", cardList, tags, subtasks);
-
-        setCardData(card);
+        this.setCardData(card);
     }
 
 
-    private void setCardData(Card cardData) {
-        cardTitle.setText(cardData.getTitle());
+    public void setCardData(Card cardData) {
+        cardTitle.setText(card.getTitle());
         cardDescription.setText(cardData.getDescription());
 
         subtaskVBox.getChildren().clear();
@@ -171,8 +155,11 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         });
 
         save = new Button("Save");
+        anchorPane.getChildren().add(save);
+        save.setLayoutX(360);
+        save.setLayoutY(10);
         save.setOnAction(a -> {
-            save(card);
+            save();
             // TODO display the board overview again
         });
 
@@ -212,6 +199,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             // TODO the colors for the tags
             tagElement = new HBox();
             tagElement.getStyleClass().add("tag");
+            tagElement.setStyle("-fx-background-color: #" + tag.getColor().substring(2));
 
             Text tagText = new Text(tag.getTitle());
             tagText.getStyleClass().add("tag-text");
@@ -300,9 +288,14 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         card.setTitle(cardDescription.getText());
     }
 
-    public void save(Card card) {
+    public void save() {
         // TODO get the results from the checkboxes
-        // this would save any card information that has been changed
+        card.setTitle(cardTitle.getText());
+        card.setDescription(cardDescription.getText());
+    }
+
+    public Card getCard() {
+        return card;
     }
 
 }
