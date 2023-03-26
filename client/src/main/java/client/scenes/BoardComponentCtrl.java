@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
@@ -33,6 +34,18 @@ public class BoardComponentCtrl extends AnchorPane implements Initializable {
     @FXML
     private Button newListButton;
 
+    @FXML
+    private Button shareBTN;
+
+    @FXML
+    private Button settingsBTN;
+
+    @FXML
+    private Button BackHomeBTN;
+
+    @FXML
+    private TextField boardName;
+
     public BoardComponentCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio, Board board) throws IOException {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
@@ -45,6 +58,8 @@ public class BoardComponentCtrl extends AnchorPane implements Initializable {
         loader.load();
 
         updateOverview();
+
+        boardName.setText(board.getName());
     }
 
     @Override

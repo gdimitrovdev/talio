@@ -4,18 +4,30 @@
 <?import javafx.scene.layout.*?>
 
 <fx:root type = "javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" >
-    <ScrollPane hbarPolicy="ALWAYS" layoutX="10.0" layoutY="40.0" vbarPolicy="NEVER" VBox.vgrow ="ALWAYS">
 
-        <StackPane>
-            <HBox fx:id="outerHBox">
-                <HBox fx:id="innerHBox">
+    <ToolBar prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
+        <items>
+            <Button fx:id="BackHomeBTN" text=" Back to HomePage" onAction="#backToJoinBoard"/>
+            <HBox fx:id="spacer" prefWidth="150.0" />
+            <TextField fx:id="boardName" editable="false"/>
+            <HBox fx:id="spacer1" prefWidth="200.0" />
+            <Button fx:id="shareBTN" text="Share" onAction="#share">
+                <tooltip><Tooltip text="Share this board" /></tooltip>
+            </Button>
+            <Button fx:id="settingsBTN" text="⋮" onAction="#settings" >
+                <tooltip><Tooltip text="Board Settings" /></tooltip>
+            </Button>
+        </items>
+    </ToolBar>
 
-                </HBox>
-                <Button fx:id="newListButton" text="+" onAction="#addCardList">
-                    <tooltip><Tooltip text="Add a new list" /></tooltip>
-                </Button>
+    <HBox fx:id="outerHBox" AnchorPane.topAnchor="120.0">
+        <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" maxWidth="625">
+            <HBox fx:id="innerHBox"  >
+
             </HBox>
-        </StackPane>
-
-    </ScrollPane>
+        </ScrollPane>
+        <Button fx:id="newListButton" text="+" onAction="#addCardList">
+            <tooltip><Tooltip text="Add a new list" /></tooltip>
+        </Button>
+    </HBox>
 </fx:root>
