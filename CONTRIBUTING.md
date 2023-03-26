@@ -26,7 +26,7 @@ If you have already imported the project before and are experiencing issues, a c
 IntelliJ should automatically have a working Spring config called Main, which should run the server without issues out of the box. If that is not the case, do a clean import, as mentioned above.
 
 However, by default IntelliJ uses a different working directory to gradle, which means that `.gitignore` is not always working quite correctly and leaves some files that it shouldn't and also it means that running the server through IntelliJ and through Gradle will use different database files. To mitigate this, do the following steps:
-- **Settings of the server run config > Build and Run > Modify Optoions > Opertaing System > Working Directory (check this)**
+- **Settings of the server run config > Build and Run > Modify Options > Operating System > Working Directory (check this)**
 - **Settings of the server run config > Build and Run > Working Directory: `$ProjectFileDir$/server`**
 
 #### Client
