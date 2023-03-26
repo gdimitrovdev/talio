@@ -1,18 +1,24 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class BoardComponentCtrl extends AnchorPane {
+public class BoardComponentCtrl extends AnchorPane implements Initializable {
     private MainCtrlTalio mainCtrlTalio;
+
+    private ServerUtils server;
 
     private Board board;
     @FXML
@@ -27,7 +33,8 @@ public class BoardComponentCtrl extends AnchorPane {
     @FXML
     private Button newListButton;
 
-    public BoardComponentCtrl(MainCtrlTalio mainCtrlTalio, Board board) throws IOException {
+    public BoardComponentCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio, Board board) throws IOException {
+        this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         this.board = board;
 
@@ -38,6 +45,14 @@ public class BoardComponentCtrl extends AnchorPane {
         loader.load();
 
         updateOverview();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/lists", CardList.class, cardList -> {
+            // TODO add the new cardlist and do a board refresh
+            return;
+        });
     }
 
     public  void updateOverview() throws IOException {

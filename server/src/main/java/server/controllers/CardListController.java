@@ -2,6 +2,8 @@ package server.controllers;
 
 import commons.CardList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardListService;
 
@@ -34,6 +36,13 @@ public class CardListController {
         }
 
         return ResponseEntity.ok(optionalCardList.get());
+    }
+
+    @MessageMapping("/lists")
+    @SendTo("/topic/lists")
+    public CardList addMessage(CardList cardList) {
+        createOne(cardList);
+        return cardList;
     }
 
     @PostMapping(path= { "", "/" })

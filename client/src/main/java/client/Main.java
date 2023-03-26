@@ -20,8 +20,7 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.JoinBoardCtrl;
-import client.scenes.MainCtrlTalio;
+import client.scenes.*;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -39,19 +38,22 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStageTalio){
 
+        var homePair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
+        var joinBoardPair = FXML.load(JoinBoardCodeCtrl.class, "client", "scenes", "JoinBoardCode.fxml");
+        var createBoardPair = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
+        var serverConnectionPair = FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
+
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
-        var boardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
+        mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair, serverConnectionPair);
 
-        mainControl.initialize(primaryStageTalio, boardPair);
 
-        /*
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+        /*var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "template", "QuoteOverview.fxml");
+        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "template", "AddQuote.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, add);
-        */
+        mainCtrl.initialize(primaryStageTalio, overview, add);*/
+
     }
 }
