@@ -67,7 +67,7 @@ public class MainCtrlTalio {
     }
     //TODO: this method needs to be finished after someone does the shareboard popup
     public void showShareBoard(){
-        primaryStageTalio.setTitle("Talio: Board Settings");
+        primaryStageTalio.setTitle("Talio: Share a board");
         //primaryStageTalio.setScene(type here);
     }
     

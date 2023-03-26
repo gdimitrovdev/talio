@@ -7,7 +7,7 @@
 
     <ToolBar prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
         <items>
-            <Button fx:id="BackHomeBTN" text=" Back to HomePage" onAction="#backToJoinBoard"/>
+            <Button fx:id="backHomeBTN" text=" Back to HomePage" onAction="#backToHome"/>
             <HBox fx:id="spacer" prefWidth="150.0" />
             <TextField fx:id="boardName" editable="false"/>
             <HBox fx:id="spacer1" prefWidth="200.0" />

@@ -41,7 +41,7 @@ public class BoardComponentCtrl extends AnchorPane implements Initializable {
     private Button settingsBTN;
 
     @FXML
-    private Button BackHomeBTN;
+    private Button backHomeBTN;
 
     @FXML
     private TextField boardName;
@@ -89,8 +89,8 @@ public class BoardComponentCtrl extends AnchorPane implements Initializable {
 
     //return to home method
     @FXML
-    protected void backToJoinBoard() throws IOException {
-        mainCtrlTalio.showOverview();
+    protected void backToHome() throws IOException {
+        mainCtrlTalio.showHome();
         // mainCtrlTalio.getPrimaryStage().setScene(scene);
     }
     //open share board method
