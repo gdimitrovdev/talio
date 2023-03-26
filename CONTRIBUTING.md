@@ -31,7 +31,7 @@ However, by default IntelliJ uses a different working directory to gradle, which
 
 #### Client
 To run the Client app, create a new run configuration which runs the Client project's Main class. Do the following steps:
-- **Settings of client run config > Build and Run > Modify Options > Operating Sustem > Allow Multiple Instances**
+- **Settings of client run config > Build and Run > Modify Options > Operating System > Allow Multiple Instances**
 - Due to IntelliJ bugs: https://youtrack.jetbrains.com/issue/IDEA-259706 and https://youtrack.jetbrains.com/issue/IDEA-232340/JavaFX-with-11-JDK-IDE-Run-Debug-Configuration-gradle-delegate-doesnt-work-correctly, we need to do the following(in theory it could also be solved by using Java Modules, but this is unforuntaly non-trivial; this is also the reason gradle says `no module-info.java found` when configuring the client project, but this should not be a problem):
   - Download the JavaFX SDK with the same version as the one in the Gradle build configs
   - **Settings of client run config > Build and Run > Modify Options > Java > VM options**
