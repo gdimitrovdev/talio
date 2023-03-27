@@ -43,7 +43,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
-    private static String SERVER = "http://localhost:8080/";
+    private static String server = "http://localhost:8080/";
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -57,7 +57,7 @@ public class ServerUtils {
 
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(server).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {});
@@ -65,7 +65,7 @@ public class ServerUtils {
 
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(server).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
@@ -108,7 +108,7 @@ public class ServerUtils {
     //public void deleteBoardById can be substituted by public Response deleteCardById
     public void deleteBoardById(Long id){
         ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/boards/"+id)
+                .target(server).path("/api/boards/"+id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -116,14 +116,14 @@ public class ServerUtils {
 
     public Board retrieveBoard(String hash){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/boards/byCode/"+hash)
+                .target(server).path("api/boards/byCode/"+hash)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>(){});
     }
     public Board createBoard(Board board){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/boards/")
+                .target(server).path("api/boards/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -142,7 +142,7 @@ public class ServerUtils {
         }
     }
 
-    public static void setSERVER(String SERVER) {
-        ServerUtils.SERVER = SERVER;
+    public static void setServer(String server) {
+        ServerUtils.server = server;
     }
 }
