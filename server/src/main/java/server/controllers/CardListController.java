@@ -16,11 +16,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.*;
 import server.services.CardListService;
 
 @RestController
 @RequestMapping("/api/lists")
 public class CardListController {
+    @Autowired
+    private SimpMessagingTemplate template;
+
 
     private final CardListService cardListService;
 
@@ -49,12 +58,15 @@ public class CardListController {
     @SendTo("/topic/lists")
     public CardList addMessage(CardList cardList) {
         createOne(cardList);
+        System.out.println("/lists/lists received " + cardList);
         return cardList;
     }
 
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<CardList> createOne(@RequestBody CardList cardList) {
+        System.out.println(cardList);
+        template.convertAndSend("/topic/lists", cardList);
         return ResponseEntity.ok(cardListService.createOne(cardList));
     }
 
@@ -68,6 +80,7 @@ public class CardListController {
             @RequestBody CardList cardList) {
         try {
             CardList updatedCardList = cardListService.updateOne(id, cardList);
+            template.convertAndSend("/topic/lists", cardList);
             return ResponseEntity.ok(updatedCardList);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().build();

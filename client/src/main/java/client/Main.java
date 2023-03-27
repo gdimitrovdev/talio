@@ -33,8 +33,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
-    private static final Injector INJECTOR = createInjector(new MyModule());
+    // TODO not sure if we should use static for the injector here
+    public static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     public static void main(String[] args) throws URISyntaxException, IOException {
@@ -45,6 +45,7 @@ public class Main extends Application {
     public void start(Stage primaryStageTalio) {
 
         var homePair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
+<<<<<<< HEAD
         var joinBoardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
         var createBoardPair =
                 FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
@@ -55,6 +56,11 @@ public class Main extends Application {
         var boardSettingsPair =
                 FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml");
 
+=======
+        var joinBoardPair = FXML.load(JoinBoardCodeCtrl.class, "client", "scenes", "JoinBoardCode.fxml");
+        var createBoardPair = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
+        var serverConnectionPair = FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
+>>>>>>> 68daa1c (Established a way to do every possible update on the server and started establishing the client-side receiving of updates. Ref #54)
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
         mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,

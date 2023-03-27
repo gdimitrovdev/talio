@@ -2,6 +2,9 @@ package client.scenes;
 
 import commons.Board;
 import java.io.IOException;
+import client.Main;
+import client.utils.ServerUtils;
+import com.google.inject.Injector;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,6 +20,7 @@ public class MainCtrlTalio {
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
+    private ServerUtils serverUtils;
 
     public void initialize(
             Stage primaryStageTalio,
@@ -52,6 +56,13 @@ public class MainCtrlTalio {
 
         // showHome();
         this.showServerConnection();
+
+        this.serverUtils = Main.INJECTOR.getInstance(ServerUtils.class);
+
+        this.serverUtils.registerForMessages("/topic/lists", commons.CardList.class, (l -> {
+            System.out.println(l);
+        }));
+
         primaryStageTalio.show();
 
     }

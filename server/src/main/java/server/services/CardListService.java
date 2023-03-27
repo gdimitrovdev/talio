@@ -40,7 +40,6 @@ public class CardListService {
                 .orElseThrow(() -> new EntityNotFoundException("List not found"));
 
         existingList.setTitle(cardList.getTitle());
-        existingList.setCards(cardList.getCards());
         existingList.setBoard(cardList.getBoard());
 
         return cardListRepository.save(existingList);

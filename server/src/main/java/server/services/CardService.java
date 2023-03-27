@@ -1,19 +1,33 @@
 package server.services;
 
 import commons.Card;
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import server.database.CardRepository;
+=======
+import commons.Tag;
+import java.util.ArrayList;
+import org.springframework.stereotype.Service;
+import server.database.CardRepository;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import server.database.TagRepository;
+>>>>>>> 68daa1c (Established a way to do every possible update on the server and started establishing the client-side receiving of updates. Ref #54)
 
 @Service
 public class CardService {
 
     private final CardRepository cardRepository;
+    private final TagRepository tagRepository;
 
-    public CardService(CardRepository cardRepository) {
+    public CardService(CardRepository cardRepository, TagRepository tagRepository) {
         this.cardRepository = cardRepository;
+        this.tagRepository = tagRepository;
     }
 
     public List<Card> getMany() {
@@ -43,8 +57,12 @@ public class CardService {
         existingCard.setColor(card.getColor());
         existingCard.setDescription(card.getDescription());
         existingCard.setList(card.getList());
-        existingCard.setTags(card.getTags());
-        existingCard.setSubtasks(card.getSubtasks());
+
+        var tags = new ArrayList<Tag>();
+        for(Tag tag : card.getTags()) {
+            tags.add(tagRepository.getById(tag.getId()));
+        }
+        existingCard.setTags(tags);
 
         return cardRepository.save(existingCard);
     }

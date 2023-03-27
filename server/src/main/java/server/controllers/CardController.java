@@ -46,6 +46,7 @@ public class CardController {
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Card> createOne(@RequestBody Card card) {
+        System.out.println(card);
         return ResponseEntity.ok(cardService.createOne(card));
     }
 

@@ -29,8 +29,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.ConnectException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
@@ -43,11 +45,95 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
+    private final String SERVER_URL;
+    private final String REST_SERVER_URL;
+    private final String WEBSOCKET_SERVER_URL;
+    private Long subscribedBoard = null;
+    private StompSession session;
+    //private Map<Object, >
 
-    private static String server = "http://localhost:8080/";
+    /*private class UpdateEvent {
+        public boolean valid = true;
+        public Consumer
+    }*/
+
+    public ServerUtils(final String serverURL) {
+        SERVER_URL = serverURL;
+        REST_SERVER_URL = "http://" + SERVER_URL;
+        WEBSOCKET_SERVER_URL = "ws://" + SERVER_URL;
+    }
+
+    public ServerUtils() {
+        this.SERVER_URL = "localhost:8080";
+        REST_SERVER_URL = "http://" + SERVER_URL;
+        WEBSOCKET_SERVER_URL = "ws://" + SERVER_URL;
+    }
+
+    public Long getSubscribedBoard() {
+        return subscribedBoard;
+    }
+
+    /**
+     * Tells the server to send updates about a particular board to ServerUtils.
+     * Use addUpdateEvent and removeUpdateEvent to react to particular updates.
+     * You can only subscribe to one board at a time (unless you are using multilple ServerUtils).
+     * Subscribing to the same board that you are currently subscribed to, will not do anything.
+     * Subscribing to another board remove all update events.
+     * @param id The id of the board you want to subscribe to.
+     */
+    public void subscribeToBoard(Long id) throws ConnectException {
+        if(Objects.equals(id, subscribedBoard))
+            return;
+        try {
+            unsubscribeFromBoard();
+            session = connectToServerUsingSTOMPWebSockets();
+        }
+        catch(Exception e) {
+            throw new ConnectException("Exception while trying to subscribe to board: " + id + "\n"
+                    + e.getMessage()
+            );
+        }
+    }
+
+    public void unsubscribeFromBoard() throws ConnectException {
+        if(subscribedBoard == null) {
+            return;
+        }
+        try {
+            session.disconnect();
+        }
+        catch(Exception e) {
+            throw new ConnectException("Exception while trying to unsubscribe from board: " + subscribedBoard + "\n"
+                    + e.getMessage()
+            );
+        }
+    }
+
+    public boolean isSubscribedToBoard() {
+        return subscribedBoard != null;
+    }
+
+    private StompSession connectToServerUsingSTOMPWebSockets() throws ConnectException {
+        var stomp = new WebSocketStompClient(new StandardWebSocketClient());
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try {
+            return stomp.connect(WEBSOCKET_SERVER_URL + "/websocket",
+                    new StompSessionHandlerAdapter() {}
+            ).get();
+        }
+        catch(Exception e) {
+            throw new ConnectException("Exception while trying to create a STOMP WebSocket Session:\n"
+                    + e.getMessage()
+            );
+        }
+    }
+
+    public <T> Object addUpdateEvent(Class<T> type, Consumer<T> consumer) {
+        return new Object();
+    }
 
     public void getQuotesTheHardWay() throws IOException {
-        var url = new URL("http://localhost:8080/api/quotes");
+        var url = new URL(REST_SERVER_URL + "/api/quotes");
         var is = url.openConnection().getInputStream();
         var br = new BufferedReader(new InputStreamReader(is));
         String line;
@@ -58,7 +144,7 @@ public class ServerUtils {
 
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/quotes") //
+                .target(REST_SERVER_URL).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {
@@ -67,27 +153,10 @@ public class ServerUtils {
 
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/quotes") //
+                .target(REST_SERVER_URL).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
-
-    private StompSession connect(String url) {
-        var client = new StandardWebSocketClient();
-        var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
-        try {
-            return stomp.connect(url, new StompSessionHandlerAdapter() {
-            }).get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-        throw new IllegalStateException();
     }
 
     public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
@@ -102,16 +171,13 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
-    }
 
-    public void send(String destination, Object o) {
-        session.send(destination, o);
     }
 
     //public void deleteBoardById can be substituted by public Response deleteCardById
     public void deleteBoardById(Long id) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("/api/boards/" + id)
+                .target(REST_SERVER_URL).path("/api/boards/"+id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();

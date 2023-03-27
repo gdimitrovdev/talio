@@ -16,6 +16,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class HomeCtrl {
     private final ServerUtils server;
