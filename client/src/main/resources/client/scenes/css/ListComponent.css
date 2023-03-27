@@ -14,7 +14,8 @@
 }
 
 #listVBox {
-    -fx-max-height: 450.0;
+    -fx-max-height: 468.0;
+    -fx-pref-height: 468.0;
     -fx-min-width: 195.0;
     -fx-border-color: black;
     -fx-border-width: 1px;
