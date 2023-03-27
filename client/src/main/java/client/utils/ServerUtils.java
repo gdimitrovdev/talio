@@ -43,7 +43,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static String SERVER = "http://localhost:8080/";
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -129,8 +129,20 @@ public class ServerUtils {
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
 
     }
-    public void SetServerUrl(String url){
+    public boolean checkConnection(String server){
+        try {
+            var res = ClientBuilder.newClient(new ClientConfig())
+                    .target(server).path("/testConnection/")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            return res.getStatus() == 200;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-   }
-
+    public static void setSERVER(String SERVER) {
+        ServerUtils.SERVER = SERVER;
+    }
 }

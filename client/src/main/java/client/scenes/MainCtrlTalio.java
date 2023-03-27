@@ -43,7 +43,8 @@ public class MainCtrlTalio {
         this.boardComponentCtrl= boardComponentPair.getKey();
         this.boardComponent=new Scene(boardComponentPair.getValue());
 
-        showHome();
+//        showHome();
+        this.showServerConnection();
         primaryStageTalio.show();
 
     }

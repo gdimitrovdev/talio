@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
@@ -24,10 +25,21 @@ public class ServerConnectionCtrl {
     public void clickConnectServer() {
         // Button click
 
-        String addr = fieldServerAddress.getText();
-        System.out.printf("Address: %s", addr);
+        String serverAddressText = fieldServerAddress.getText();
+        if(!server.checkConnection(serverAddressText)){
+            Alert box = new Alert(Alert.AlertType.ERROR);
+            box.setTitle("Wrong server");
+            box.setContentText("Wrong server address!");
+            box.showAndWait();
+        } else {
+            server.setSERVER(serverAddressText);
+            mainCtrlTalio.showHome();
+        }
     }
-
+    @FXML
+    private void setDefaultServer(){
+        fieldServerAddress.setText("http://localhost:8080/");
+    }
     public void clickBackHome() {
         mainCtrlTalio.showHome();
     }

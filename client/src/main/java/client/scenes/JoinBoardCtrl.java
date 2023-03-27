@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
+
 public class JoinBoardCtrl {
     private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
@@ -22,11 +24,12 @@ public class JoinBoardCtrl {
         this.mainCtrlTalio = mainCtrlTalio;
     }
 
-    public void clickJoinBoard() {
+    public void clickJoinBoard() throws IOException {
         // Button click
 
         String code = fieldBoardCode.getText();
         Board newBoard = server.retrieveBoard(code);
+        mainCtrlTalio.showBoard(newBoard);
         System.out.printf("Code: %s", code);
     }
 

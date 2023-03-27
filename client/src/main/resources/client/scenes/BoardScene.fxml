@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" fx:controller="client.scenes.BoardCtrl">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" fx:controller="client.scenes.BoardCtrl">
 
     <ToolBar prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
         <items>

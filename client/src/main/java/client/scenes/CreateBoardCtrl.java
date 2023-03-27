@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
+
 public class CreateBoardCtrl {
     private final MainCtrlTalio mainCtrlTalio;
 
@@ -23,12 +25,12 @@ public class CreateBoardCtrl {
         this.serverUtils = serverUtils;
     }
 
-    public void clickCreateBoard() {
+    public void clickCreateBoard() throws IOException {
         // create new board
         String name = fieldBoardName.getText();
         Board board = new Board(false,name,"","123","red");
         board = serverUtils.createBoard(board);
-
+        mainCtrlTalio.showBoard(board);
         System.out.printf("Name: %s", name);
     }
 
