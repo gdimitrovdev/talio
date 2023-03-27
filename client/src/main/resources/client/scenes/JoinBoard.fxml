@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.JoinBoardCtrl">
+   <children>
+      <TextField fx:id="fieldBoardCode" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter the boad invitation given to you." />
+      <Label layoutX="153.0" layoutY="83.0" text="Join an Existing Board">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Button fx:id="buttonJoin" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickJoinBoard" prefHeight="26.0" prefWidth="90.0" text="Join" />
+      <Button fx:id="buttonBack" layoutX="27.0" layoutY="32.0" mnemonicParsing="false" onAction="#clickBackHome" text="&lt;-- Back to Home" />
+   </children>
+</AnchorPane>

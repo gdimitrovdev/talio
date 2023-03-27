@@ -31,4 +31,8 @@ public class CreateBoardCtrl {
 
         System.out.printf("Name: %s", name);
     }
+
+    public void clickBackHome() {
+        mainCtrlTalio.showHome();
+    }
 }

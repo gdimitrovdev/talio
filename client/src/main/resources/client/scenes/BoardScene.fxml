@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" fx:controller="client.scenes.BoardCtrl">
+
+    <ToolBar prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
+        <items>
+            <Button fx:id="backHomeBTN" text=" Back to HomePage" onAction="#backToHome"/>
+            <HBox fx:id="spacer" prefWidth="150.0" />
+            <TextField fx:id="boardName" editable="false"/>
+            <HBox fx:id="spacer1" prefWidth="200.0" />
+            <Button fx:id="shareBTN" text="Share" onAction="#share">
+                <tooltip><Tooltip text="Share this board" /></tooltip>
+            </Button>
+            <Button fx:id="settingsBTN" text="⋮" onAction="#settings" >
+                <tooltip><Tooltip text="Board Settings" /></tooltip>
+            </Button>
+        </items>
+    </ToolBar>
+
+    <HBox fx:id="outerHBox" AnchorPane.topAnchor="120.0">
+        <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" maxWidth="625">
+            <HBox fx:id="innerHBox"  >
+
+            </HBox>
+        </ScrollPane>
+        <Button fx:id="newListButton" text="+" onAction="#addCardList">
+            <tooltip><Tooltip text="Add a new list" /></tooltip>
+        </Button>
+    </HBox>
+</AnchorPane>

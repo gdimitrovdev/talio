@@ -6,11 +6,12 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerConnectionCtrl">
    <children>
-      <TextField id="fieldServerAddress" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter the server URL." />
+      <TextField fx:id="fieldServerAddress" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter the server URL." />
       <Label layoutX="153.0" layoutY="83.0" text="Connect to a Server">
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Button id="buttonJoin" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickConnectServer" prefHeight="26.0" prefWidth="90.0" text="Connect" />
+      <Button fx:id="buttonJoin" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickConnectServer" prefHeight="26.0" prefWidth="90.0" text="Connect" />
+      <Button fx:id="buttonBack" layoutX="27.0" layoutY="32.0" mnemonicParsing="false" onAction="#clickBackHome" text="&lt;-- Back to Home" />
    </children>
 </AnchorPane>

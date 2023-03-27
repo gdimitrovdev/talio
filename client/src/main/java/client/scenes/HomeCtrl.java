@@ -17,19 +17,14 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 public class HomeCtrl {
-
+    private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
 
     //this set will contain all the boards that have been opened by the 'join a board' and
     //'create a board' method
     //in the 2 methods the created/joined board should be added to the hashset
     public Set<Board> recentBoards;
-
-    private final ServerUtils server;
-
     private Board board;
-
-
     @FXML
     private Button changeServerBtn;
     @FXML
@@ -44,7 +39,7 @@ public class HomeCtrl {
     @FXML Button createBoardBtn;
 
     @Inject
-    public HomeCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+    public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         this.recentBoards = new HashSet<>();
@@ -125,6 +120,13 @@ public class HomeCtrl {
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> removeRecentBoard(item));
                 boardSettingBtn.setOnAction(e -> openBoardSetting(item));
+                boardButton.setOnAction(e-> {
+                    try {
+                        displayBoard(item);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
                 GridPane.setMargin(boardButton, new Insets(10, 10, 10, 10));
                 //adding the button to the GridPane
                 recentBoardsPane.add(boardButton, i,j);
@@ -187,9 +189,10 @@ public class HomeCtrl {
     /**
      * displays the board in the overview
      */
-    public void displayBoard() throws IOException {
+    public void displayBoard(Board board) throws IOException {
 
-        root.getChildren().add(new BoardComponentCtrl(server, mainCtrlTalio, board));
+        mainCtrlTalio.showBoard(board);
+
 
     }
 }
