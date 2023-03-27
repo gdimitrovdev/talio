@@ -27,15 +27,15 @@ public class Board implements Serializable {
     private Long id;
 
     @Basic(optional = false)
-    private Boolean readOnly;
-
-    @Basic(optional = false)
     private String name;
 
-    private String password;
+    @Column(unique = true)
+    @Basic(optional = false)
+    private String code;
 
     @Column(unique = true)
-    private String hash;
+    @Basic(optional = false)
+    private String readOnlyCode;
 
     private String color;
 
@@ -45,17 +45,16 @@ public class Board implements Serializable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 
-    public Board() {
-    }
+    public Board() {}
 
-    public Board(boolean readOnly, String name, String password, String hash, String color) {
-        setReadOnly(readOnly);
+    public Board(String name, String code, String readOnlyCode, String color) {
         setName(name);
-        setPassword(password);
-        setHash(hash);
+        setCode(code);
+        setReadOnlyCode(readOnlyCode);
         setColor(color);
     }
 
+<<<<<<< HEAD
     public Board(Boolean readOnly, String name, String password, String hash, String color,
             List<CardList> lists, List<Tag> tags) {
         this.readOnly = readOnly;
@@ -65,6 +64,15 @@ public class Board implements Serializable {
         this.color = color;
         this.lists = lists;
         this.tags = tags;
+=======
+    public Board(String name, String code, String readOnlyCode, String color, List<CardList> lists, List<Tag> tags) {
+        setName(name);
+        setCode(code);
+        setReadOnlyCode(readOnlyCode);
+        setColor(color);
+        setLists(lists);
+        setTags(tags);
+>>>>>>> 5942bf9 (Subtasks with completed; Boards with two codes)
     }
 
     public void addCardList(CardList list) {
@@ -95,14 +103,6 @@ public class Board implements Serializable {
         this.id = id;
     }
 
-    public Boolean getReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(Boolean readOnly) {
-        this.readOnly = readOnly;
-    }
-
     public String getName() {
         return name;
     }
@@ -111,20 +111,20 @@ public class Board implements Serializable {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getCode() {
+        return code;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getHash() {
-        return hash;
+    public String getReadOnlyCode() {
+        return readOnlyCode;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setReadOnlyCode(String readOnlyCode) {
+        this.readOnlyCode = readOnlyCode;
     }
 
     public String getColor() {

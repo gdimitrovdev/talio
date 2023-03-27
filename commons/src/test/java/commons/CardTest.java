@@ -29,7 +29,7 @@ public class CardTest {
         var tag = new Tag("tagTitle", "green", null);
         var tags = new ArrayList<Tag>();
         tags.add(tag);
-        var subtask = new Subtask("subtaskTitle", null);
+        var subtask = new Subtask("subtaskTitle", null, false);
         var subtasks = new ArrayList<Subtask>();
         subtasks.add(subtask);
         var c = new Card("cardTitle", "desc", "red", list, tags, subtasks);
@@ -45,7 +45,7 @@ public class CardTest {
 
     @Test
     public void testSubtaskOperations() {
-        var subtask = new Subtask("subtaskTitle", null);
+        var subtask = new Subtask("subtaskTitle", null, false);
         var subtasks = new ArrayList<Subtask>();
         var c = new Card("cardTitle", "desc", "red", null, null, subtasks);
         c.addSubtask(subtask);

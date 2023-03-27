@@ -169,9 +169,9 @@ public class CardComponentCtrl extends AnchorPane {
                             new Tag("Feature", "#00FF00", null, null)
                     ),
                     List.of(
-                            new Subtask("Done", null),
-                            new Subtask("Done", null),
-                            new Subtask("TODO 3", null)
+                            new Subtask("Done", null, false),
+                            new Subtask("Done", null, false),
+                            new Subtask("TODO 3", null, false)
                     ))
             );
         } else {

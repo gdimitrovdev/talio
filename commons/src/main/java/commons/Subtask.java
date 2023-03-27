@@ -20,7 +20,12 @@ public class Subtask implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Basic(optional = false)
     private String title;
+
+    @Basic(optional = false)
+    private Boolean completed;
 
     @ManyToOne
     private Card card;
@@ -28,9 +33,10 @@ public class Subtask implements Serializable {
     private Subtask() {
     }
 
-    public Subtask(String title, Card card) {
+    public Subtask(String title, Card card, Boolean completed) {
         setTitle(title);
         setCard(card);
+        setCompleted(completed);
     }
 
     public Long getId() {
@@ -55,6 +61,14 @@ public class Subtask implements Serializable {
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
 
     @Override
