@@ -4,13 +4,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
    <children>
-      <TextField id="fieldBoardName" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter a title." />
+      <TextField fx:id="fieldBoardName" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter a title." />
       <Label layoutX="153.0" layoutY="83.0" text="Create a New Board">
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Button id="buttonCreate" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickCreateBoard" prefHeight="26.0" prefWidth="90.0" text="Join" />
+      <Button fx:id="buttonCreate" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#clickCreateBoard" prefHeight="26.0" prefWidth="90.0" text="Join" />
    </children>
 </AnchorPane>

@@ -29,6 +29,7 @@ public class Board implements Serializable {
 
     private String password;
 
+    @Column(unique = true)
     private String hash;
 
     private String color;

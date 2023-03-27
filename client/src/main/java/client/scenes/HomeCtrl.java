@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 public class HomeCtrl {
 
-    private  MainCtrlTalio mainCtrlTalio;
+    private final MainCtrlTalio mainCtrlTalio;
 
     //this set will contain all the boards that have been opened by the 'join a board' and
     //'create a board' method
@@ -144,21 +144,21 @@ public class HomeCtrl {
 
     // TODO: FIX THESE THREE METHODS.
     public void openServerScene(){
-        // mainCtrlTalio.showServerConnection();
+        mainCtrlTalio.showServerConnection();
     }
 
     /**
      * used by the createBoardBtn and displays the pop-up for creating a board
      */
     public void displayCreatePopUp(){
-        // mainCtrlTalio.showCreateBoard();
+        mainCtrlTalio.showCreateBoard();
     }
 
     /**
      * used by the joinBoardBtn and displays the pop-up for joining a board
      */
     public void displayJoinPopUp(){
-        // mainCtrlTalio.showJoinBoardCode();
+        mainCtrlTalio.showJoinBoardCode();
     }
 
 

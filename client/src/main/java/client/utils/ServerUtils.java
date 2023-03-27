@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+import commons.Board;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -104,6 +105,7 @@ public class ServerUtils {
         session.send(destination, o);
     }
 
+    //public void deleteBoardById can be substituted by public Response deleteCardById
     public void deleteBoardById(Long id){
         ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("/api/boards/"+id)
@@ -111,5 +113,24 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .delete();
     }
+
+    public Board retrieveBoard(String hash){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/boards/byCode/"+hash)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Board>(){});
+    }
+    public Board createBoard(Board board){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/boards/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+
+    }
+    public void SetServerUrl(String url){
+
+   }
 
 }

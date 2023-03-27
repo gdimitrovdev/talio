@@ -34,5 +34,6 @@ public class MyModule implements Module {
         binder.bind(JoinBoardCodeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateBoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MainCtrlTalio.class).in(Scopes.SINGLETON);
     }
 }

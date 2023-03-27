@@ -22,11 +22,9 @@
    </ScrollPane>
    <Button fx:id="changeServerBtn" layoutX="703.0" layoutY="21.0" mnemonicParsing="false" onAction="#openServerScene" prefHeight="40.0" prefWidth="40.0">
       <graphic>
-                  <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-<!--                            image to be inserted-->
-                        </image>
-                  </ImageView>
+          <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="https://cdn-icons-png.flaticon.com/512/0/340.png"/>
+          </ImageView>
       </graphic>
    </Button>
 </AnchorPane>

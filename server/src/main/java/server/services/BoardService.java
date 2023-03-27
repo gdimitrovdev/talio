@@ -25,6 +25,9 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
+    public  Optional<Board> getOneByCode(String code){
+        return boardRepository.findByCode(code);
+    }
     public Board createOne(Board board) {
         Board newBoard = boardRepository.save(board);
         return newBoard;
