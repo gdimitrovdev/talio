@@ -3,8 +3,9 @@ package server.controllers;
 import commons.Board;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,9 @@ import server.services.BoardService;
 @RestController
 @RequestMapping("/api/boards")
 public class BoardController {
+
+    @Autowired
+    private SimpMessagingTemplate template;
 
     private final BoardService boardService;
 
@@ -45,33 +49,45 @@ public class BoardController {
 
     @GetMapping("/by-code/{code}")
     @ResponseBody
-    public ResponseEntity<Board> getOneByHash(@PathVariable("code") String code) {
-        Optional<Board> optionalBoard = boardService.getOneByCode(code);
-        if (!optionalBoard.isPresent()) {
+    public ResponseEntity<Board> getOneByCode(@PathVariable("code") String code) {
+        try {
+            return ResponseEntity.ok(boardService.getOneByCode(code).get());
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-
-        return ResponseEntity.ok(optionalBoard.get());
-
     }
 
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Board> createOne(@RequestBody Board board) {
-        return ResponseEntity.ok(boardService.createOne(board));
+        try {
+            var newBoard = boardService.createOne(board);
+            template.convertAndSend("/topic/boards", newBoard);
+            return ResponseEntity.ok(newBoard);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
+    // TODO Use long-polling to notify the users of this
     @DeleteMapping("/{id}")
-    public void deleteOne(@PathVariable("id") Long id) {
-        boardService.deleteOne(id);
+    public ResponseEntity deleteOne(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Board> updateOne(@PathVariable Long id, @RequestBody Board board) {
+    @ResponseBody
+    public ResponseEntity<Board> updateOne(@PathVariable Long id,
+            @RequestBody Board board) {
         try {
             Board updatedBoard = boardService.updateOne(id, board);
+            template.convertAndSend("/topic/boards", updatedBoard);
             return ResponseEntity.ok(updatedBoard);
-        } catch (EntityNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

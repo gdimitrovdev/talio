@@ -35,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -48,9 +46,9 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
-    private final String SERVER_URL;
-    private final String REST_SERVER_URL;
-    private final String WEBSOCKET_SERVER_URL;
+    private final String serverUrl;
+    private final String restServerUrl;
+    private final String websocketServerUrl;
     private Long subscribedBoard = null;
     private StompSession session;
     private Map<Object, UpdateEvent> updateEvents = new HashMap<>();
@@ -70,15 +68,15 @@ public class ServerUtils {
     }
 
     public ServerUtils(final String serverURL) {
-        SERVER_URL = serverURL;
-        REST_SERVER_URL = "http://" + SERVER_URL;
-        WEBSOCKET_SERVER_URL = "ws://" + SERVER_URL;
+        serverUrl = serverURL;
+        restServerUrl = "http://" + serverUrl;
+        websocketServerUrl = "ws://" + serverUrl;
     }
 
     public ServerUtils() {
-        this.SERVER_URL = "localhost:8080";
-        REST_SERVER_URL = "http://" + SERVER_URL;
-        WEBSOCKET_SERVER_URL = "ws://" + SERVER_URL;
+        this.serverUrl = "localhost:8080";
+        restServerUrl = "http://" + serverUrl;
+        websocketServerUrl = "ws://" + serverUrl;
     }
 
     public Long getSubscribedBoard() {
@@ -92,16 +90,17 @@ public class ServerUtils {
      * You can only subscribe to one board at a time (unless you are using multilple ServerUtils).
      * Subscribing to the same board that you are currently subscribed to, will not do anything.
      * Subscribing to another board remove all update events.
+     *
      * @param id The id of the board you want to subscribe to.
      */
     public void subscribeToBoard(Long id) throws ConnectException {
-        if(Objects.equals(id, subscribedBoard))
+        if (Objects.equals(id, subscribedBoard)) {
             return;
+        }
         try {
             unsubscribeFromBoard();
             connectToServerUsingSTOMPWebSockets();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new ConnectException("Exception while trying to subscribe to board: " + id + "\n"
                     + e.getMessage()
             );
@@ -109,16 +108,16 @@ public class ServerUtils {
     }
 
     public void unsubscribeFromBoard() throws ConnectException {
-        if(subscribedBoard == null) {
+        if (subscribedBoard == null) {
             return;
         }
         try {
             session.disconnect();
             updateEvents.clear();
-        }
-        catch(Exception e) {
-            throw new ConnectException("Exception while trying to unsubscribe from board: " + subscribedBoard + "\n"
-                    + e.getMessage()
+        } catch (Exception e) {
+            throw new ConnectException(
+                    "Exception while trying to unsubscribe from board: " + subscribedBoard + "\n"
+                            + e.getMessage()
             );
         }
     }
@@ -131,8 +130,9 @@ public class ServerUtils {
         var stomp = new WebSocketStompClient(new StandardWebSocketClient());
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try {
-            var session = stomp.connect(WEBSOCKET_SERVER_URL + "/websocket",
-                    new StompSessionHandlerAdapter() {}
+            var session = stomp.connect(websocketServerUrl + "/websocket",
+                    new StompSessionHandlerAdapter() {
+                    }
             ).get();
             this.session = session;
             System.out.println("created session");
@@ -144,21 +144,22 @@ public class ServerUtils {
                     commons.Subtask.class, "subtasks"
             );
 
-            for(var type : classToTopic.keySet()) {
+            for (var type : classToTopic.keySet()) {
                 registerForMessages("/topic/" + classToTopic.get(type), type, (o) -> {
-                    System.out.println("received websocket from: " + "/topic/" + classToTopic.get(type));
-                    for(var key : updateEvents.keySet()) {
+                    System.out.println(
+                            "received websocket from: " + "/topic/" + classToTopic.get(type));
+                    for (var key : updateEvents.keySet()) {
                         var updateEvent = updateEvents.get(key);
-                        if(updateEvent.type.equals(type)) {
+                        if (updateEvent.type.equals(type)) {
                             updateEvent.consumer.accept(o);
                         }
                     }
                 });
             }
-        }
-        catch(Exception e) {
-            throw new ConnectException("Exception while trying to create a STOMP WebSocket Session:\n"
-                    + e.getMessage()
+        } catch (Exception e) {
+            throw new ConnectException(
+                    "Exception while trying to create a STOMP WebSocket Session:\n"
+                            + e.getMessage()
             );
         }
     }
@@ -174,7 +175,7 @@ public class ServerUtils {
     }
 
     public void getQuotesTheHardWay() throws IOException {
-        var url = new URL(REST_SERVER_URL + "/api/quotes");
+        var url = new URL(restServerUrl + "/api/quotes");
         var is = url.openConnection().getInputStream();
         var br = new BufferedReader(new InputStreamReader(is));
         String line;
@@ -185,7 +186,7 @@ public class ServerUtils {
 
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(REST_SERVER_URL).path("api/quotes") //
+                .target(restServerUrl).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {
@@ -194,7 +195,7 @@ public class ServerUtils {
 
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(REST_SERVER_URL).path("api/quotes") //
+                .target(restServerUrl).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
@@ -218,7 +219,7 @@ public class ServerUtils {
     //public void deleteBoardById can be substituted by public Response deleteCardById
     public void deleteBoardById(Long id) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(REST_SERVER_URL).path("/api/boards/"+id)
+                .target(restServerUrl).path("/api/boards/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -226,7 +227,7 @@ public class ServerUtils {
 
     public Board retrieveBoard(String hash) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/boards/by-code/" + hash)
+                .target(restServerUrl).path("api/boards/by-code/" + hash)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>() {
@@ -235,7 +236,7 @@ public class ServerUtils {
 
     public Board createBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/boards/")
+                .target(restServerUrl).path("api/boards/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -245,7 +246,7 @@ public class ServerUtils {
     public boolean checkConnection(String server) {
         try {
             var res = ClientBuilder.newClient(new ClientConfig())
-                    .target(server).path("/test-connection/")
+                    .target(restServerUrl).path("/test-connection/")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
@@ -253,10 +254,6 @@ public class ServerUtils {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public static void setServer(String server) {
-        ServerUtils.server = server;
     }
 
     public CardList addToEndOfList(CardList list, Card card) {

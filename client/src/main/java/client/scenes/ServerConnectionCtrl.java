@@ -32,7 +32,7 @@ public class ServerConnectionCtrl {
             box.setContentText("Wrong server address!");
             box.showAndWait();
         } else {
-            server.setServer(serverAddressText);
+            //server.setServer(serverAddressText);
             mainCtrlTalio.showHome();
         }
     }

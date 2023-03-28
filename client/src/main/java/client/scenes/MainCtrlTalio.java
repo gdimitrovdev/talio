@@ -1,10 +1,9 @@
 package client.scenes;
 
-import commons.Board;
-import java.io.IOException;
 import client.Main;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
+import commons.Board;
+import java.io.IOException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -65,8 +64,7 @@ public class MainCtrlTalio {
             serverUtils.addUpdateEvent(commons.Tag.class, System.out::println);
             serverUtils.addUpdateEvent(commons.Board.class, System.out::println);
             serverUtils.addUpdateEvent(commons.Subtask.class, System.out::println);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 

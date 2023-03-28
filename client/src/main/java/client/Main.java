@@ -45,7 +45,6 @@ public class Main extends Application {
     public void start(Stage primaryStageTalio) {
 
         var homePair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
-<<<<<<< HEAD
         var joinBoardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
         var createBoardPair =
                 FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
@@ -56,11 +55,6 @@ public class Main extends Application {
         var boardSettingsPair =
                 FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml");
 
-=======
-        var joinBoardPair = FXML.load(JoinBoardCodeCtrl.class, "client", "scenes", "JoinBoardCode.fxml");
-        var createBoardPair = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
-        var serverConnectionPair = FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
->>>>>>> 68daa1c (Established a way to do every possible update on the server and started establishing the client-side receiving of updates. Ref #54)
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
         mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
