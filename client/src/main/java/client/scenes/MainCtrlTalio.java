@@ -58,10 +58,18 @@ public class MainCtrlTalio {
         this.showServerConnection();
 
         this.serverUtils = Main.INJECTOR.getInstance(ServerUtils.class);
+        try {
+            serverUtils.subscribeToBoard(1L);
+            serverUtils.addUpdateEvent(commons.Card.class, System.out::println);
+            serverUtils.addUpdateEvent(commons.CardList.class, System.out::println);
+            serverUtils.addUpdateEvent(commons.Tag.class, System.out::println);
+            serverUtils.addUpdateEvent(commons.Board.class, System.out::println);
+            serverUtils.addUpdateEvent(commons.Subtask.class, System.out::println);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-        this.serverUtils.registerForMessages("/topic/lists", commons.CardList.class, (l -> {
-            System.out.println(l);
-        }));
 
         primaryStageTalio.show();
 

@@ -31,8 +31,11 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
@@ -50,12 +53,21 @@ public class ServerUtils {
     private final String WEBSOCKET_SERVER_URL;
     private Long subscribedBoard = null;
     private StompSession session;
-    //private Map<Object, >
+    private Map<Object, UpdateEvent> updateEvents = new HashMap<>();
 
-    /*private class UpdateEvent {
-        public boolean valid = true;
-        public Consumer
-    }*/
+    private class UpdateEvent<T> implements Consumer<T> {
+        public final Class<T> type;
+        public Consumer<T> consumer;
+
+        public UpdateEvent(Class<T> type, Consumer<T> consumer) {
+            this.consumer = consumer;
+            this.type = type;
+        }
+
+        public void accept(T t) {
+            consumer.accept(t);
+        }
+    }
 
     public ServerUtils(final String serverURL) {
         SERVER_URL = serverURL;
@@ -74,6 +86,7 @@ public class ServerUtils {
     }
 
     /**
+     * !Does not guarantee (yet) that the updates received will be only about the subscribed board!
      * Tells the server to send updates about a particular board to ServerUtils.
      * Use addUpdateEvent and removeUpdateEvent to react to particular updates.
      * You can only subscribe to one board at a time (unless you are using multilple ServerUtils).
@@ -86,7 +99,7 @@ public class ServerUtils {
             return;
         try {
             unsubscribeFromBoard();
-            session = connectToServerUsingSTOMPWebSockets();
+            connectToServerUsingSTOMPWebSockets();
         }
         catch(Exception e) {
             throw new ConnectException("Exception while trying to subscribe to board: " + id + "\n"
@@ -101,6 +114,7 @@ public class ServerUtils {
         }
         try {
             session.disconnect();
+            updateEvents.clear();
         }
         catch(Exception e) {
             throw new ConnectException("Exception while trying to unsubscribe from board: " + subscribedBoard + "\n"
@@ -113,13 +127,34 @@ public class ServerUtils {
         return subscribedBoard != null;
     }
 
-    private StompSession connectToServerUsingSTOMPWebSockets() throws ConnectException {
+    private void connectToServerUsingSTOMPWebSockets() throws ConnectException {
         var stomp = new WebSocketStompClient(new StandardWebSocketClient());
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try {
-            return stomp.connect(WEBSOCKET_SERVER_URL + "/websocket",
+            var session = stomp.connect(WEBSOCKET_SERVER_URL + "/websocket",
                     new StompSessionHandlerAdapter() {}
             ).get();
+            this.session = session;
+            System.out.println("created session");
+            var classToTopic = Map.of(
+                    commons.Board.class, "boards",
+                    commons.Card.class, "cards",
+                    commons.CardList.class, "lists",
+                    commons.Tag.class, "tags",
+                    commons.Subtask.class, "subtasks"
+            );
+
+            for(var type : classToTopic.keySet()) {
+                registerForMessages("/topic/" + classToTopic.get(type), type, (o) -> {
+                    System.out.println("received websocket from: " + "/topic/" + classToTopic.get(type));
+                    for(var key : updateEvents.keySet()) {
+                        var updateEvent = updateEvents.get(key);
+                        if(updateEvent.type.equals(type)) {
+                            updateEvent.consumer.accept(o);
+                        }
+                    }
+                });
+            }
         }
         catch(Exception e) {
             throw new ConnectException("Exception while trying to create a STOMP WebSocket Session:\n"
@@ -129,7 +164,13 @@ public class ServerUtils {
     }
 
     public <T> Object addUpdateEvent(Class<T> type, Consumer<T> consumer) {
-        return new Object();
+        var key = new Object();
+        updateEvents.put(key, new UpdateEvent(type, consumer));
+        return key;
+    }
+
+    public <T> void removeUpdateEvent(Object key) {
+        updateEvents.remove(key);
     }
 
     public void getQuotesTheHardWay() throws IOException {
