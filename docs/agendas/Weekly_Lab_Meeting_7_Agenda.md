@@ -58,7 +58,10 @@ Attendees:
 9. Product Showcase
    1. Vesko - Did the server-client connection (hopefully :D), but it has not been integrated into the rest of the app.
    2. Pedro - Did JoinBoard, CreateBoard and ServerConnection (merged,working); currently working on modifying common classes
-   3. ...
+   3. Dimana - created Home board UI scene (merged, working), added the actual functionality to the UI scenes created by Pedro and me by calling   methods from ServerUtils that I implemented.
+   4. George - drag and drop betweeen lists and drag and drop within a list (merged, working)
+   5. Agnese - implemented and connected the card pop-up (merged, working)
+   6. Matei - made the board into a scene and finish its implementation (merged, working)
    > Record feedback by the TA
 10. Proposed Work Distribution
    1. Vesko - ...
