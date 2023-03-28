@@ -1,0 +1,63 @@
+@import url(Common.css);
+
+#cardPopup {
+    -fx-background-color: -fx-color-background-light;
+    -fx-padding: 30;
+}
+
+.remove-subtask-button {
+    -fx-translate-y: -2;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.subtask-checkbox {
+    -fx-translate-y: 3;
+    -fx-translate-x: 3;
+}
+
+.remove-tag-button {
+    -fx-translate-y: -2;
+    -fx-translate-x: 3;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.tag {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-border-color: black;
+}
+
+.tag-text {
+    -fx-translate-y: 4;
+    -fx-translate-x: 6;
+}
+
+.tag-HBox {
+    -fx-spacing: 5;
+}
+
+.vbox {
+    -fx-spacing: 5;
+    -webkit-flex-wrap: wrap;
+}
+
+.invalid-textField-input {
+    -fx-text-fill: red;
+}
+
+.valid-textField-input {
+    -fx-text-fill: black;
+}
+
+.button:hover {
+    -fx-cursor: hand;
+}
+
+.check-box:hover {
+    -fx-cursor: hand;
+}
+
+
+
