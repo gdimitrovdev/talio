@@ -27,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import commons.Board;
+import commons.Card;
+import commons.CardList;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -144,5 +146,19 @@ public class ServerUtils {
 
     public static void setServer(String server) {
         ServerUtils.server = server;
+    }
+    public CardList addToEndOfList(CardList list, Card card) {
+        // TODO implement this method
+        return list;
+    }
+
+    public CardList addToListAfter(CardList list, Card cardToAdd, Card cardAfter) {
+        // TODO implement this method
+        return list;
+    }
+
+    public CardList removeFromList(CardList list, Card card) {
+        // TODO implement this method
+        return list;
     }
 }

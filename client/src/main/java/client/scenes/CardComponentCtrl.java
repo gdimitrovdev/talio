@@ -50,6 +50,9 @@ public class CardComponentCtrl extends AnchorPane {
     @FXML
     private FlowPane tagsContainer;
 
+    @FXML
+    private AnchorPane cardOverview;
+
     private boolean cardHasBeenCreated = false;
 
     // TODO figure out exactly how this dependency injection stuff works,
@@ -117,6 +120,18 @@ public class CardComponentCtrl extends AnchorPane {
         });
 
         title.requestFocus();
+    }
+
+    public Card getCardData() {
+        return card;
+    }
+
+    public void highlight() {
+        cardOverview.setStyle("-fx-border-color: blue;");
+    }
+
+    public void removeHighlight() {
+        cardOverview.setStyle("-fx-border-color: black;");
     }
 
     // TODO hide the progressbar, the progresslabel and the delete button

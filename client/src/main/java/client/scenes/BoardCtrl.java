@@ -35,6 +35,9 @@ public class BoardCtrl implements Initializable {
 
     @FXML
     private Button shareBTN;
+    private CardComponentCtrl currentSelectedCard;
+
+    private boolean droppedOnCard = false;
 
     @FXML
     private Button settingsBTN;
@@ -49,6 +52,22 @@ public class BoardCtrl implements Initializable {
     public BoardCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) throws IOException {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
+    }
+
+    public CardComponentCtrl getCurrentSelectedCard() {
+        return this.currentSelectedCard;
+    }
+
+    public void setCurrentSelectedCard(CardComponentCtrl card) {
+        this.currentSelectedCard = card;
+    }
+
+    public boolean getDroppedOnCard() {
+        return this.droppedOnCard;
+    }
+
+    public void setDroppedOnCard(boolean droppedOnCard) {
+        this.droppedOnCard = droppedOnCard;
     }
 
     @Override
@@ -69,14 +88,14 @@ public class BoardCtrl implements Initializable {
 
     public  void updateOverview() throws IOException {
         for(CardList cardList : board.getLists()) {
-            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, cardList));
+            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this, cardList));
         }
     }
 
     @FXML
     protected void addCardList() throws IOException {
         CardList newList = new CardList("Empty title",board);
-        innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, newList));
+        innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this, newList));
     }
     public void refreshBoard(Board board) throws IOException {
         innerHBox.getChildren().clear();

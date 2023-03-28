@@ -1,11 +1,14 @@
 package client.scenes;
+import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -13,7 +16,10 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 
 public class ListComponentCtrl extends VBox {
+
     private MainCtrlTalio mainCtrlTalio;
+    private ServerUtils server;
+    private BoardCtrl board;
 
     private CardList list;
 
@@ -32,13 +38,18 @@ public class ListComponentCtrl extends VBox {
     @FXML
     private Button addCardBtn;
 
+    @FXML
+    private VBox listVBox;
+
     //not sure about this yet
     //@FXML
    // ScrollPane scrollPane = new ScrollPane();
 
 
-    public ListComponentCtrl(MainCtrlTalio mainCtrlTalio, CardList list) throws IOException {
+    public ListComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, BoardCtrl board, CardList list) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
+        this.server = server;
+        this.board = board;
         this.list = list;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ListComponent.fxml"));
@@ -47,14 +58,125 @@ public class ListComponentCtrl extends VBox {
 
         loader.load();
 
+        this.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                event.consume();
+            }
+        });
+
+        this.setOnDragEntered(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                highlight();
+            }
+        });
+
+        this.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                if (!board.getDroppedOnCard()) {
+                    System.out.println("List from:" + board.getCurrentSelectedCard().getCardData().getList().getTitle());
+                    System.out.println("Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
+                    System.out.println("List: " + list.getTitle());
+                    CardList updatedList = server.addToEndOfList(
+                            list, board.getCurrentSelectedCard().getCardData()
+                    );
+                    server.removeFromList(
+                            board.getCurrentSelectedCard().getCardData().getList(),
+                            board.getCurrentSelectedCard().getCardData()
+                    );
+                    // TODO listen to the websocket connection for updated lists
+                } else {
+                    board.setDroppedOnCard(false);
+                }
+            }
+        });
+
+        this.setOnDragExited(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                removeHighlight();
+            }
+        });
+
         updateOverview();
         //scrollPane.setContent(this);
 
     }
 
+    public void highlight() {
+        listVBox.setStyle("-fx-border-color: blue;");
+    }
+
+    public void removeHighlight() {
+        listVBox.setStyle("-fx-border-color: black;");
+    }
+
     public void updateOverview() throws IOException {
         for (Card card : list.getCards()) {
-            cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, card));
+            var child = new CardComponentCtrl(mainCtrlTalio, card);
+
+            child.setOnMousePressed(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    board.setCurrentSelectedCard(child);
+                }
+            });
+
+            child.setOnDragDetected(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    Dragboard db = child.startDragAndDrop(TransferMode.ANY);
+                    db.setDragView(child.snapshot(null, null));
+
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString("Drag worked");
+                    db.setContent(content);
+
+                    child.startFullDrag();
+
+                    event.consume();
+                }
+            });
+
+            child.setOnDragOver(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    event.acceptTransferModes(TransferMode.ANY);
+                    event.consume();
+                }
+            });
+
+            child.setOnDragEntered(new EventHandler<DragEvent>() {
+                public void handle(DragEvent event) {
+                    child.highlight();
+                }
+            });
+
+            child.setOnDragDropped(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    board.setDroppedOnCard(true);
+                    System.out.println("List from:" + board.getCurrentSelectedCard().getCardData().getList().getTitle());
+                    System.out.println("Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
+                    System.out.println("List: " + list.getTitle());
+                    System.out.println("Under the card: " + child.getCardData().getTitle());
+                    CardList updatedList = server.addToListAfter(
+                            list, board.getCurrentSelectedCard().getCardData(), child.getCardData()
+                    );
+                    server.removeFromList(
+                            board.getCurrentSelectedCard().getCardData().getList(),
+                            board.getCurrentSelectedCard().getCardData()
+                    );
+                    // TODO listen to the websocket connection for updated lists
+                }
+            });
+
+            child.setOnDragExited(new EventHandler<DragEvent>() {
+                public void handle(DragEvent event) {
+                    child.removeHighlight();
+                }
+            });
+
+            cards.getChildren().add(child);
         }
     }
 
