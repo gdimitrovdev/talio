@@ -236,7 +236,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
     public void addNewSubtask(String entry) {
         if (!entry.isEmpty()) {
-            card.getSubtasks().add(new Subtask(entry, card));
+            card.getSubtasks().add(new Subtask(entry, card, false));
             this.setCardData(card);
         }
     }

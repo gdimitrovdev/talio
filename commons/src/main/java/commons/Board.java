@@ -45,7 +45,8 @@ public class Board implements Serializable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 
-    public Board() {}
+    public Board() {
+    }
 
     public Board(String name, String code, String readOnlyCode, String color) {
         setName(name);
@@ -54,17 +55,6 @@ public class Board implements Serializable {
         setColor(color);
     }
 
-<<<<<<< HEAD
-    public Board(Boolean readOnly, String name, String password, String hash, String color,
-            List<CardList> lists, List<Tag> tags) {
-        this.readOnly = readOnly;
-        this.name = name;
-        this.password = password;
-        this.hash = hash;
-        this.color = color;
-        this.lists = lists;
-        this.tags = tags;
-=======
     public Board(String name, String code, String readOnlyCode, String color, List<CardList> lists, List<Tag> tags) {
         setName(name);
         setCode(code);
@@ -72,7 +62,6 @@ public class Board implements Serializable {
         setColor(color);
         setLists(lists);
         setTags(tags);
->>>>>>> 5942bf9 (Subtasks with completed; Boards with two codes)
     }
 
     public void addCardList(CardList list) {
