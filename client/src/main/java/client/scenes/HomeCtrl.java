@@ -119,6 +119,13 @@ public class HomeCtrl {
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> removeRecentBoard(item));
                 boardSettingBtn.setOnAction(e -> openBoardSetting(item));
+                boardButton.setOnAction(e-> {
+                    try {
+                        displayBoard(item);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
                 GridPane.setMargin(boardButton, new Insets(10, 10, 10, 10));
                 //adding the button to the GridPane
                 recentBoardsPane.add(boardButton, i,j);
@@ -178,9 +185,10 @@ public class HomeCtrl {
     /**
      * displays the board in the overview
      */
-    public void displayBoard() throws IOException {
+    public void displayBoard(Board board) throws IOException {
 
-        root.getChildren().add(new BoardComponentCtrl(server, mainCtrlTalio, board));
+        mainCtrlTalio.showBoard(board);
+
 
     }
 }

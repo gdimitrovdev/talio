@@ -1,9 +1,15 @@
 #outerHBox {
-    -fx-min-width: 780.0;
-    -fx-min-height: 510.0;
+    -fx-max-width: 800.0;
+    -fx-pref-width: 800.0;
+    -fx-max-height: 510.0;
+    -fx-pref-height: 510.0;
     -fx-background-color: #d3dbe8;
     -fx-padding: 40 0 0 40;
     -fx-spacing: 80;
+}
+
+#boardName{
+-fx-background-color: #d3dbe8;
 }
 
 #newListButton {
