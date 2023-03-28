@@ -57,7 +57,8 @@ Attendees:
    > Record response by the TA
 9. Product Showcase
    1. Vesko - Did the server-client connection (hopefully :D), but it has not been integrated into the rest of the app.
-   2. ...
+   2. Pedro - Did JoinBoard, CreateBoard and ServerConnection (merged,working); currently working on modifying common classes
+   3. ...
    > Record feedback by the TA
 10. Proposed Work Distribution
    1. Vesko - ...
