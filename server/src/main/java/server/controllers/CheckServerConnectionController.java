@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test-connection")
 public class CheckServerConnectionController {
     @GetMapping("/")
-    public ResponseEntity<String> testConnection(){
+    public ResponseEntity<String> testConnection() {
         return ResponseEntity.ok("Success");
     }
 }

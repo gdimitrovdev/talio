@@ -18,11 +18,12 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import client.scenes.*;
+import client.scenes.BoardCtrl;
+import client.scenes.CreateBoardCtrl;
+import client.scenes.HomeCtrl;
 import client.scenes.JoinBoardCtrl;
 import client.scenes.MainCtrlTalio;
+import client.scenes.ServerConnectionCtrl;
 import com.google.inject.Injector;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -43,13 +44,16 @@ public class Main extends Application {
 
         var homePair = FXML.load(HomeCtrl.class, "client", "scenes", "HomeScene.fxml");
         var joinBoardPair = FXML.load(JoinBoardCtrl.class, "client", "scenes", "JoinBoard.fxml");
-        var createBoardPair = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
-        var serverConnectionPair = FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
-        var boardComponentPair=FXML.load(BoardCtrl.class,"client", "scenes", "BoardScene.fxml");
+        var createBoardPair =
+                FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
+        var serverConnectionPair =
+                FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
+        var boardComponentPair = FXML.load(BoardCtrl.class, "client", "scenes", "BoardScene.fxml");
 
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
-        mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair, serverConnectionPair,boardComponentPair);
+        mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
+                serverConnectionPair, boardComponentPair);
 
 
         /*var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "template", "QuoteOverview.fxml");

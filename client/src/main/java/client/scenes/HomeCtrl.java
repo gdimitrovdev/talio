@@ -5,6 +5,9 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,9 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+
 public class HomeCtrl {
     private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
@@ -34,32 +35,33 @@ public class HomeCtrl {
     @FXML
     private GridPane recentBoardsPane;
 
-    @FXML Button joinBoardBtn;
+    @FXML
+    Button joinBoardBtn;
 
-    @FXML Button createBoardBtn;
+    @FXML
+    Button createBoardBtn;
 
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         this.recentBoards = new HashSet<>();
-        for (int i = 0; i <15; i++) {
-            this.generateExampleBoard((long)i);
+        for (int i = 0; i < 15; i++) {
+            this.generateExampleBoard((long) i);
         }
     }
-
 
     private void generateExampleBoard(Long id) {
         //"Long boardID = Long.parseLong(boardField.getText());
         //Board current = serverUtils.getBoardById(boardID)" can be used
         // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
 
-        this.board = new Board(false,"Example board","pwd","hash_893290840923904", "#333333" );
+        this.board = new Board(false, "Example board", "pwd", "hash_893290840923904", "#333333");
 
         CardList list1 = new CardList("example list 1", null);
         CardList list2 = new CardList("example list 2", null);
 
-        Card c1 = new Card ("Title1", "Card1", "#FF0000", null);
+        Card c1 = new Card("Title1", "Card1", "#FF0000", null);
         Card c2 = new Card("Title2", "Card2", "#FF0000", null);
 
         list1.addCard(c1);
@@ -80,14 +82,14 @@ public class HomeCtrl {
      * the method displays all the boards that the user has connected to
      * if there are no boards: display 'no boards' message
      */
-    public void displayBoardLabels(){
-        if(recentBoards.isEmpty()){
+    public void displayBoardLabels() {
+        if (recentBoards.isEmpty()) {
             Label noBoardsLabel = new Label("No recent boards");
-            noBoardsLabel.setStyle("-fx-pref-width: 690; -fx-pref-height: 50; -fx-alignment: center;");
+            noBoardsLabel.setStyle(
+                    "-fx-pref-width: 690; -fx-pref-height: 50; -fx-alignment: center;");
             recentBoardsPane.getChildren().add(noBoardsLabel);
 
-        }
-        else {
+        } else {
             recentBoardsPane.setHgap(70);
             int i = 0;
             int j = 0;
@@ -111,16 +113,16 @@ public class HomeCtrl {
 
                 AnchorPane.setRightAnchor(boardSettingBtn, 10d);
                 AnchorPane.setRightAnchor(deleteBoardBtn, 50d);
-                AnchorPane.setTopAnchor(boardSettingBtn,10d);
-                AnchorPane.setTopAnchor(deleteBoardBtn,10d);
+                AnchorPane.setTopAnchor(boardSettingBtn, 10d);
+                AnchorPane.setTopAnchor(deleteBoardBtn, 10d);
                 AnchorPane.setTopAnchor(boardNameLbl, 16d);
-                AnchorPane.setLeftAnchor(boardNameLbl,10d);
+                AnchorPane.setLeftAnchor(boardNameLbl, 10d);
 
 
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> removeRecentBoard(item));
                 boardSettingBtn.setOnAction(e -> openBoardSetting(item));
-                boardButton.setOnAction(e-> {
+                boardButton.setOnAction(e -> {
                     try {
                         displayBoard(item);
                     } catch (IOException ex) {
@@ -129,9 +131,9 @@ public class HomeCtrl {
                 });
                 GridPane.setMargin(boardButton, new Insets(10, 10, 10, 10));
                 //adding the button to the GridPane
-                recentBoardsPane.add(boardButton, i,j);
+                recentBoardsPane.add(boardButton, i, j);
                 ++i;
-                if(i >= 2){
+                if (i >= 2) {
                     i = 0;
                     ++j;
                 }
@@ -145,30 +147,29 @@ public class HomeCtrl {
      */
 
     // TODO: FIX THESE THREE METHODS.
-    public void openServerScene(){
+    public void openServerScene() {
         mainCtrlTalio.showServerConnection();
     }
 
     /**
      * used by the createBoardBtn and displays the pop-up for creating a board
      */
-    public void displayCreatePopUp(){
+    public void displayCreatePopUp() {
         mainCtrlTalio.showCreateBoard();
     }
 
     /**
      * used by the joinBoardBtn and displays the pop-up for joining a board
      */
-    public void displayJoinPopUp(){
+    public void displayJoinPopUp() {
         mainCtrlTalio.showJoinBoardCode();
     }
 
-
     /**
      * @param board - the board that should be removed
-     * This method is called as the event of the button deleteBoardBtn
+     *              This method is called as the event of the button deleteBoardBtn
      */
-    public void removeRecentBoard(Board board){
+    public void removeRecentBoard(Board board) {
         //removes all children from the FlowPane and then
         //remove board from hashset and call displayBoardLabels method again
         server.deleteBoardById(board.getId());
@@ -178,11 +179,12 @@ public class HomeCtrl {
     }
 
     //TODO: integrate pop up once it is ready
+
     /**
      * @param board - the board for which a pop-up should be opened
-     * this pop-up lets you edit the board's settings
+     *              this pop-up lets you edit the board's settings
      */
-    public void openBoardSetting(Board board){
+    public void openBoardSetting(Board board) {
 
     }
 

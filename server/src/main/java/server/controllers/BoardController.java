@@ -42,9 +42,10 @@ public class BoardController {
 
         return ResponseEntity.ok(optionalBoard.get());
     }
+
     @GetMapping("/by-code/{code}")
     @ResponseBody
-    public ResponseEntity<Board> getOneByHash(@PathVariable("code")String code){
+    public ResponseEntity<Board> getOneByHash(@PathVariable("code") String code) {
         Optional<Board> optionalBoard = boardService.getOneByCode(code);
         if (!optionalBoard.isPresent()) {
             return ResponseEntity.badRequest().build();
@@ -53,7 +54,6 @@ public class BoardController {
         return ResponseEntity.ok(optionalBoard.get());
 
     }
-
 
     @PostMapping(path = {"", "/"})
     @ResponseBody

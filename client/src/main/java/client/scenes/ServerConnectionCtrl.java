@@ -26,7 +26,7 @@ public class ServerConnectionCtrl {
         // Button click
 
         String serverAddressText = fieldServerAddress.getText();
-        if(!server.checkConnection(serverAddressText)){
+        if (!server.checkConnection(serverAddressText)) {
             Alert box = new Alert(Alert.AlertType.ERROR);
             box.setTitle("Wrong server");
             box.setContentText("Wrong server address!");
@@ -36,10 +36,12 @@ public class ServerConnectionCtrl {
             mainCtrlTalio.showHome();
         }
     }
+
     @FXML
-    private void setDefaultServer(){
+    private void setDefaultServer() {
         fieldServerAddress.setText("http://localhost:8080/");
     }
+
     public void clickBackHome() {
         mainCtrlTalio.showHome();
     }

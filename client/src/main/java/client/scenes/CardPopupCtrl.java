@@ -2,23 +2,28 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.*;
+import commons.Card;
+import commons.Subtask;
+import commons.Tag;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-import java.util.List;
 
 public class CardPopupCtrl extends AnchorPane implements Initializable {
 
@@ -84,11 +89,9 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         loader.setController(this);
     }
 
-
     public void initialize(URL location, ResourceBundle resources) {
         this.setCardData(card);
     }
-
 
     public void setCardData(Card cardData) {
         cardTitle.setText(card.getTitle());

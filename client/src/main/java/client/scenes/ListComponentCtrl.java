@@ -1,14 +1,20 @@
 package client.scenes;
+
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import java.io.IOException;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -43,7 +49,8 @@ public class ListComponentCtrl extends VBox {
     //@FXML
     // ScrollPane scrollPane = new ScrollPane();
 
-    public ListComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, BoardCtrl board, CardList list) throws IOException {
+    public ListComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, BoardCtrl board,
+            CardList list) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
         this.server = server;
         this.board = board;
@@ -73,8 +80,10 @@ public class ListComponentCtrl extends VBox {
             @Override
             public void handle(DragEvent event) {
                 if (!board.getDroppedOnCard()) {
-                    System.out.println("List from:" + board.getCurrentSelectedCard().getCardData().getList().getTitle());
-                    System.out.println("Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
+                    System.out.println("List from:"
+                            + board.getCurrentSelectedCard().getCardData().getList().getTitle());
+                    System.out.println(
+                            "Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
                     System.out.println("List: " + list.getTitle());
                     CardList updatedList = server.addToEndOfList(
                             list, board.getCurrentSelectedCard().getCardData()
@@ -152,8 +161,10 @@ public class ListComponentCtrl extends VBox {
                 @Override
                 public void handle(DragEvent event) {
                     board.setDroppedOnCard(true);
-                    System.out.println("List from:" + board.getCurrentSelectedCard().getCardData().getList().getTitle());
-                    System.out.println("Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
+                    System.out.println("List from:"
+                            + board.getCurrentSelectedCard().getCardData().getList().getTitle());
+                    System.out.println(
+                            "Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
                     System.out.println("List: " + list.getTitle());
                     System.out.println("Under the card: " + child.getCardData().getTitle());
                     CardList updatedList = server.addToListAfter(

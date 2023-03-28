@@ -4,16 +4,15 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class BoardCtrl implements Initializable {
     private MainCtrlTalio mainCtrlTalio;
@@ -79,24 +78,26 @@ public class BoardCtrl implements Initializable {
     }
 
     public void initialize(Board board) throws IOException {
-        this.board=board;
+        this.board = board;
 
         updateOverview();
 
         boardName.setText(board.getName());
     }
 
-    public  void updateOverview() throws IOException {
-        for(CardList cardList : board.getLists()) {
-            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this, cardList));
+    public void updateOverview() throws IOException {
+        for (CardList cardList : board.getLists()) {
+            innerHBox.getChildren()
+                    .add(new ListComponentCtrl(mainCtrlTalio, server, this, cardList));
         }
     }
 
     @FXML
     protected void addCardList() throws IOException {
-        CardList newList = new CardList("Empty title",board);
+        CardList newList = new CardList("Empty title", board);
         innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this, newList));
     }
+
     public void refreshBoard(Board board) throws IOException {
         innerHBox.getChildren().clear();
         this.board = board;
@@ -109,6 +110,7 @@ public class BoardCtrl implements Initializable {
         mainCtrlTalio.showHome();
         // mainCtrlTalio.getPrimaryStage().setScene(scene);
     }
+
     //open share board method
     @FXML
     protected void share() throws IOException {

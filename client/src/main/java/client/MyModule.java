@@ -16,7 +16,13 @@
 
 package client;
 
+import client.scenes.BoardCtrl;
+import client.scenes.CardPopupCtrl;
+import client.scenes.CreateBoardCtrl;
+import client.scenes.HomeCtrl;
 import client.scenes.JoinBoardCtrl;
+import client.scenes.MainCtrlTalio;
+import client.scenes.ServerConnectionCtrl;
 import client.scenes.template.AddQuoteCtrl;
 import client.scenes.template.MainCtrl;
 import client.scenes.template.QuoteOverviewCtrl;

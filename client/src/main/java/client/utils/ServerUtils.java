@@ -18,6 +18,9 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import commons.Board;
+import commons.Card;
+import commons.CardList;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -30,9 +33,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -109,22 +109,24 @@ public class ServerUtils {
     }
 
     //public void deleteBoardById can be substituted by public Response deleteCardById
-    public void deleteBoardById(Long id){
+    public void deleteBoardById(Long id) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("/api/boards/"+id)
+                .target(server).path("/api/boards/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
     }
 
-    public Board retrieveBoard(String hash){
+    public Board retrieveBoard(String hash) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/boards/by-code/"+hash)
+                .target(server).path("api/boards/by-code/" + hash)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<Board>(){});
+                .get(new GenericType<Board>() {
+                });
     }
-    public Board createBoard(Board board){
+
+    public Board createBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/boards/")
                 .request(APPLICATION_JSON)
@@ -132,7 +134,8 @@ public class ServerUtils {
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
 
     }
-    public boolean checkConnection(String server){
+
+    public boolean checkConnection(String server) {
         try {
             var res = ClientBuilder.newClient(new ClientConfig())
                     .target(server).path("/test-connection/")
@@ -148,6 +151,7 @@ public class ServerUtils {
     public static void setServer(String server) {
         ServerUtils.server = server;
     }
+
     public CardList addToEndOfList(CardList list, Card card) {
         // TODO implement this method
         return list;
