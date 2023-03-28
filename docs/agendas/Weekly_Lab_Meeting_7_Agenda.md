@@ -39,21 +39,31 @@ Attendees:
    1. Any suggestions/ideas for the 3 situations that we have to talk about in the Teamwork Self-Reflection?
    > Record response by the TA
 7. Product Pitch
-   1. Do you have any suggestions on how to do the Pitch?
+   1. Slides or an app demo?
    > Record response by the TA
-   3. Do we need to do a video for the Draft, or can we submit a script and/or slides?
+   2. Do we need cameras or anything like that?
+   > Record response by the TA
+   3. Do you have any suggestions on how to do the Pitch?
+   > Record response by the TA
+   4. Do we need to do a video for the Draft, or can we submit a script and/or slides?
    > Record response by the TA
 8. Product Questions
-   1. We already mentioned this to you, but for password protection we plan to do two invite codes (one gives you only read permissions for the board), instead of an invite code and a password. This, we think, has a number of advantages:
+   1. Admin funcionality? Does getting codes to all boards furfill the admin parts of the backlog?
+   > Record response by the TA
+   2. Do we need to worry about security at all?
+   > Record response by the TA
+   3. Is extensibility important
+   > Record response by the TA
+   4. We already mentioned this to you, but for password protection we plan to do two invite codes (one gives you only read permissions for the board), instead of an invite code and a password. This, we think, has a number of advantages:
       1.  Easier for the user (it's easier to share a single code instead of a code and a password),
       2.  Better extensibility (the system can be extended to add more types of codes - time-sensitive codes, codes with custom restrictions),
       3.  Easier to implement (since password protection is the lowest priority, we plan to do that last, and adding another invite code is easier than adding a password, both serverside and clientside).
    
       Given all of this, would doing the two codes system be a complete implementation of the Password Protection Epic in the Backlog? I have already asked Sebastian privately and he was more than fine with it, but we just wanted to make sure, since his answer was before the Backlog.
    > Record response by the TA
-   2. Do we need a server connection indicator in the UI? It came up in the HUEs, but we thought that if there was a connection issue we would just bring the user back to the connection screen and tell them that there was an error.
+   5. Do we need a server connection indicator in the UI? It came up in the HUEs, but we thought that if there was a connection issue we would just bring the user back to the connection screen and tell them that there was an error.
    > Record response by the TA
-   3. In the Connection Screen, should we have seperate fields for the IP and Port, or just a URL? Personally, I don't see any use cases which warrant having them seperately, but there was an inconclusive discussion about that between the team and it came up in the HUEs. 
+   6. In the Connection Screen, should we have seperate fields for the IP and Port, or just a URL? Personally, I don't see any use cases which warrant having them seperately, but there was an inconclusive discussion about that between the team and it came up in the HUEs. 
    > Record response by the TA
 9. Product Showcase
    1. Vesko - Did the server-client connection (hopefully :D), but it has not been integrated into the rest of the app.
@@ -63,12 +73,8 @@ Attendees:
    5. Agnese - implemented and connected the card pop-up (merged, working)
    6. Matei - made the board into a scene and finish its implementation (merged, working)
    > Record feedback by the TA
-10. Proposed Work Distribution
-   1. Vesko - ...
-   2. 
-   > Record feedback by the TA
-11. Additional Questions
+10. Additional Questions
    1. Does anyone have any other questions for the TA before the meeting closes?
    > Record any additional questions and responses here, even if they were asked earlier
-12. Closure
+11. Closure
    > Record end time of meeting
