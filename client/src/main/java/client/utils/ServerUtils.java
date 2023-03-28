@@ -116,7 +116,7 @@ public class ServerUtils {
 
     public Board retrieveBoard(String hash){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/boards/byCode/"+hash)
+                .target(server).path("api/boards/by-code/"+hash)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>(){});
@@ -132,7 +132,7 @@ public class ServerUtils {
     public boolean checkConnection(String server){
         try {
             var res = ClientBuilder.newClient(new ClientConfig())
-                    .target(server).path("/testConnection/")
+                    .target(server).path("/test-connection/")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
