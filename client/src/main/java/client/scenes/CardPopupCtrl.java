@@ -178,13 +178,8 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             CheckBox checkBox = new CheckBox(subtask.getTitle());
             checkBox.setSelected(subtask.getCompleted());
             checkBox.setOnAction(a -> {
-                if (subtask.getCompleted()) {
-                    subtask.setCompleted(false);
-                    setCardData(card);
-                } else {
-                    subtask.setCompleted(true);
-                    setCardData(card);
-                }
+                subtask.setCompleted(!subtask.getCompleted());
+                setCardData(card);
             });
             checkBox.getStyleClass().add("subtask-checkbox");
             subtaskElement.getChildren().add(checkBox);
