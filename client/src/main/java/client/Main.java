@@ -24,6 +24,7 @@ import client.scenes.HomeCtrl;
 import client.scenes.JoinBoardCtrl;
 import client.scenes.MainCtrlTalio;
 import client.scenes.ServerConnectionCtrl;
+import client.scenes.ShareBoardCtrl;
 import com.google.inject.Injector;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -49,11 +50,12 @@ public class Main extends Application {
         var serverConnectionPair =
                 FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
         var boardComponentPair = FXML.load(BoardCtrl.class, "client", "scenes", "BoardScene.fxml");
+        var shareBoardPair = FXML.load(ShareBoardCtrl.class, "client", "scenes", "ShareBoard.fxml");
 
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
         mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
-                serverConnectionPair, boardComponentPair);
+                serverConnectionPair, boardComponentPair, shareBoardPair);
 
 
         /*var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "template", "QuoteOverview.fxml");

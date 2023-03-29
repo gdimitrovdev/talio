@@ -9,12 +9,13 @@ import javafx.util.Pair;
 
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
-    private Scene home, joinBoard, createBoard, serverConnection, boardComponent;
+    private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
     private ServerConnectionCtrl serverConnectionCtrl;
     private BoardCtrl boardComponentCtrl;
+    private ShareBoardCtrl shareBoardCtrl;
 
     public void initialize(
             Stage primaryStageTalio,
@@ -22,7 +23,8 @@ public class MainCtrlTalio {
             Pair<JoinBoardCtrl, Parent> joinBoardPair,
             Pair<CreateBoardCtrl, Parent> createBoardPair,
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
-            Pair<BoardCtrl, Parent> boardComponentPair) {
+            Pair<BoardCtrl, Parent> boardComponentPair,
+            Pair<ShareBoardCtrl, Parent> shareBoardPair) {
         this.primaryStageTalio = primaryStageTalio;
 
         this.homeCtrl = homePair.getKey();
@@ -39,6 +41,9 @@ public class MainCtrlTalio {
 
         this.boardComponentCtrl = boardComponentPair.getKey();
         this.boardComponent = new Scene(boardComponentPair.getValue());
+
+        this.shareBoardCtrl = shareBoardPair.getKey();
+        this.shareBoard = new Scene(shareBoardPair.getValue());
 
         // showHome();
         this.showServerConnection();
@@ -74,9 +79,13 @@ public class MainCtrlTalio {
     }
 
     //TODO: this method needs to be finished after someone does the shareboard popup
-    public void showShareBoard() {
+    public void showShareBoard(Board board) {
         primaryStageTalio.setTitle("Talio: Share a board");
-        //primaryStageTalio.setScene(type here);
+
+        shareBoardCtrl.initialize(board);
+        Stage stage = new Stage();
+        stage.setScene(shareBoard);
+        stage.show();
     }
 
     public void showBoard(Board board) throws IOException {

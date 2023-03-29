@@ -114,7 +114,7 @@ public class BoardCtrl implements Initializable {
     //open share board method
     @FXML
     protected void share() throws IOException {
-        mainCtrlTalio.showShareBoard();
+        mainCtrlTalio.showShareBoard(board);
     }
 
     //open the settings method
