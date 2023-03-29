@@ -120,7 +120,7 @@ public class BoardCtrl implements Initializable {
     //open the settings method
     @FXML
     protected void settings() throws IOException {
-        mainCtrlTalio.showBoardSettings();
+        mainCtrlTalio.showBoardSettings(board);
     }
 
 }

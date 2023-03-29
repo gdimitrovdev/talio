@@ -19,6 +19,7 @@ package client;
 import static com.google.inject.Guice.createInjector;
 
 import client.scenes.BoardCtrl;
+import client.scenes.BoardSettingsCtrl;
 import client.scenes.CreateBoardCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.JoinBoardCtrl;
@@ -51,11 +52,13 @@ public class Main extends Application {
                 FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
         var boardComponentPair = FXML.load(BoardCtrl.class, "client", "scenes", "BoardScene.fxml");
         var shareBoardPair = FXML.load(ShareBoardCtrl.class, "client", "scenes", "ShareBoard.fxml");
+        var boardSettingsPair =
+                FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml");
 
         var mainControl = INJECTOR.getInstance(MainCtrlTalio.class);
 
         mainControl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
-                serverConnectionPair, boardComponentPair, shareBoardPair);
+                serverConnectionPair, boardComponentPair, shareBoardPair, boardSettingsPair);
 
 
         /*var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "template", "QuoteOverview.fxml");

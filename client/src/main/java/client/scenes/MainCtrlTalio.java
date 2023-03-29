@@ -9,13 +9,14 @@ import javafx.util.Pair;
 
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
-    private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard;
+    private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard, boardSettings;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
     private ServerConnectionCtrl serverConnectionCtrl;
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
+    private BoardSettingsCtrl boardSettingsCtrl;
 
     public void initialize(
             Stage primaryStageTalio,
@@ -24,7 +25,8 @@ public class MainCtrlTalio {
             Pair<CreateBoardCtrl, Parent> createBoardPair,
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
             Pair<BoardCtrl, Parent> boardComponentPair,
-            Pair<ShareBoardCtrl, Parent> shareBoardPair) {
+            Pair<ShareBoardCtrl, Parent> shareBoardPair,
+            Pair<BoardSettingsCtrl, Parent> boardSettingsPair) {
         this.primaryStageTalio = primaryStageTalio;
 
         this.homeCtrl = homePair.getKey();
@@ -44,6 +46,9 @@ public class MainCtrlTalio {
 
         this.shareBoardCtrl = shareBoardPair.getKey();
         this.shareBoard = new Scene(shareBoardPair.getValue());
+
+        this.boardSettingsCtrl = boardSettingsPair.getKey();
+        this.boardSettings = new Scene(boardSettingsPair.getValue());
 
         // showHome();
         this.showServerConnection();
@@ -73,9 +78,13 @@ public class MainCtrlTalio {
     }
 
     //TODO: this method needs to be finished after someone does the settings
-    public void showBoardSettings() {
+    public void showBoardSettings(Board board) {
         primaryStageTalio.setTitle("Talio: Board Settings");
-        //primaryStageTalio.setScene(type here);
+
+        boardSettingsCtrl.initialize(board);
+        Stage stage = new Stage();
+        stage.setScene(boardSettings);
+        stage.show();
     }
 
     //TODO: this method needs to be finished after someone does the shareboard popup
