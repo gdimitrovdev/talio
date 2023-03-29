@@ -1,6 +1,6 @@
 package server.controllers;
 
-import commons.Board;
+import commons.Card;
 import commons.Tag;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import server.services.BoardService;
+import server.services.CardService;
 import server.services.TagService;
 
 @RestController
@@ -27,10 +28,13 @@ public class TagController {
 
     private final TagService tagService;
     private final BoardService boardService;
+    private final CardService cardService;
 
-    public TagController(TagService tagService, BoardService boardService) {
+    public TagController(TagService tagService, BoardService boardService,
+            CardService cardService) {
         this.tagService = tagService;
         this.boardService = boardService;
+        this.cardService = cardService;
     }
 
     @GetMapping(path = {"", "/"})
@@ -58,33 +62,44 @@ public class TagController {
             template.convertAndSend("topics/tags", newTag);
             return ResponseEntity.ok(newTag);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Board> deleteOne(@PathVariable("id") Long id) {
+    public ResponseEntity deleteOne(@PathVariable("id") Long id) {
         try {
-            var boardId = tagService.getOne(id).get().getBoard().getId();
+            List<Card> affectedCards =
+                    cardService.getMany().stream().filter(c -> c.getTags().stream()
+                            .anyMatch(t -> t.getId().equals(id))).toList();
             tagService.deleteOne(id);
-            var board = boardService.getOne(boardId).get();
-            template.convertAndSend("/topic/boards", board);
-            return ResponseEntity.ok(board);
+            for (Card card : affectedCards) {
+                template.convertAndSend("/topic/cards", cardService.getOne(card.getId()));
+            }
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Tag> updateOne(@PathVariable Long id,
+    public ResponseEntity updateOne(@PathVariable Long id,
             @RequestBody Tag tag) {
         try {
-            Tag updatedTag = tagService.updateOne(id, tag);
-            template.convertAndSend("/topic/tags", updatedTag);
-            return ResponseEntity.ok(updatedTag);
+            List<Card> affectedCards =
+                    cardService.getMany().stream().filter(c -> c.getTags().stream()
+                            .anyMatch(t -> t.getId().equals(id))).toList();
+            tagService.updateOne(id, tag);
+            for (Card card : affectedCards) {
+                template.convertAndSend("/topic/cards", cardService.getOne(card.getId()));
+            }
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }

@@ -58,6 +58,7 @@ public class CardListController {
             template.convertAndSend("/topic/lists", newCardList);
             return ResponseEntity.ok(newCardList);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -72,6 +73,7 @@ public class CardListController {
             template.convertAndSend("/topic/boards", board);
             return ResponseEntity.ok(board);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -85,6 +87,7 @@ public class CardListController {
             template.convertAndSend("/topic/lists", updatedCardList);
             return ResponseEntity.ok(updatedCardList);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }

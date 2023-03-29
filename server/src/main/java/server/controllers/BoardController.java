@@ -53,6 +53,7 @@ public class BoardController {
         try {
             return ResponseEntity.ok(boardService.getOneByCode(code).get());
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -65,6 +66,7 @@ public class BoardController {
             template.convertAndSend("/topic/boards", newBoard);
             return ResponseEntity.ok(newBoard);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -75,6 +77,7 @@ public class BoardController {
         try {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -88,6 +91,7 @@ public class BoardController {
             template.convertAndSend("/topic/boards", updatedBoard);
             return ResponseEntity.ok(updatedBoard);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }

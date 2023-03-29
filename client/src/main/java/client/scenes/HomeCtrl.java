@@ -171,7 +171,7 @@ public class HomeCtrl {
     public void removeRecentBoard(Board board) {
         //removes all children from the FlowPane and then
         //remove board from hashset and call displayBoardLabels method again
-        server.deleteBoardById(board.getId());
+        server.deleteBoard(board.getId());
         recentBoards.remove(board);
         recentBoardsPane.getChildren().clear();
         displayBoardLabels();

@@ -24,7 +24,6 @@ public class ServerConnectionCtrl {
 
     public void clickConnectServer() {
         // Button click
-
         String serverAddressText = fieldServerAddress.getText();
         if (!server.checkConnection(serverAddressText)) {
             Alert box = new Alert(Alert.AlertType.ERROR);

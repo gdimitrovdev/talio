@@ -58,6 +58,7 @@ public class SubtaskController {
             template.convertAndSend("topics/subtasks", newSubtask);
             return ResponseEntity.ok(newSubtask);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -72,6 +73,7 @@ public class SubtaskController {
             template.convertAndSend("/topic/cards", card);
             return ResponseEntity.ok(card);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -85,6 +87,7 @@ public class SubtaskController {
             template.convertAndSend("/topic/subtasks", updatedSubtask);
             return ResponseEntity.ok(updatedSubtask);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }

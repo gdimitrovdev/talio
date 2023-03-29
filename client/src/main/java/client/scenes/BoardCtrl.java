@@ -71,10 +71,10 @@ public class BoardCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        server.registerForMessages("/topic/lists", CardList.class, cardList -> {
+        /*server.registerForMessages("/topic/lists", CardList.class, cardList -> {
             // TODO add the new cardlist and do a board refresh
             return;
-        });
+        });*/
     }
 
     public void initialize(Board board) throws IOException {

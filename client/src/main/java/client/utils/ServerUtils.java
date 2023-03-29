@@ -22,8 +22,11 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import commons.Quote;
+import commons.Subtask;
+import commons.Tag;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,6 +55,7 @@ public class ServerUtils {
     private Long subscribedBoard = null;
     private StompSession session;
     private Map<Object, UpdateEvent> updateEvents = new HashMap<>();
+    private WebTarget webTarget;
 
     private class UpdateEvent<T> implements Consumer<T> {
         public final Class<T> type;
@@ -71,12 +75,26 @@ public class ServerUtils {
         serverUrl = serverURL;
         restServerUrl = "http://" + serverUrl;
         websocketServerUrl = "ws://" + serverUrl;
+        webTarget = ClientBuilder.newClient(new ClientConfig()).target(restServerUrl);
     }
 
     public ServerUtils() {
         this.serverUrl = "localhost:8080";
         restServerUrl = "http://" + serverUrl;
         websocketServerUrl = "ws://" + serverUrl;
+        webTarget = ClientBuilder.newClient(new ClientConfig()).target(restServerUrl);
+    }
+
+    public boolean checkConnection(String server) {
+        try {
+            var res = webTarget.path("/test-connection")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            return res.getStatus() == 200;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Long getSubscribedBoard() {
@@ -201,7 +219,7 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
-    public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
+    private <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -216,18 +234,97 @@ public class ServerUtils {
 
     }
 
-    //public void deleteBoardById can be substituted by public Response deleteCardById
-    public void deleteBoardById(Long id) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(restServerUrl).path("/api/boards/" + id)
+    public Tag getTag(Long tagId) {
+        return webTarget.path("api/tags/" + tagId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Tag>() {
+                });
+    }
+
+    public Tag createTag(Tag tag) {
+        return webTarget.path("api/tags")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag updateTag(Tag tag) {
+        return webTarget.path("api/tags/" + tag.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public void deleteTag(Long tagId) {
+        webTarget.path("/api/lists/" + tagId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
     }
 
-    public Board retrieveBoard(String hash) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(restServerUrl).path("api/boards/by-code/" + hash)
+    public Subtask getSubtask(Long subtaskId) {
+        return webTarget.path("api/subtasks/" + subtaskId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Subtask>() {
+                });
+    }
+
+    public Subtask createSubtask(Subtask subtask) {
+        return webTarget.path("api/subtasks")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+    }
+
+    public Subtask updateSubtask(Subtask subtask) {
+        return webTarget.path("api/subtasks/" + subtask.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+    }
+
+    public Card deleteSubtask(Long subtaskId) {
+        return webTarget.path("/api/lists/" + subtaskId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(new GenericType<Card>() {
+                });
+    }
+
+    public CardList getCardList(Long listId) {
+        return webTarget.path("api/lists/" + listId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<CardList>() {
+                });
+    }
+
+    public CardList createCardList(CardList list) {
+        return webTarget.path("api/lists")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(list, APPLICATION_JSON), CardList.class);
+    }
+
+    public CardList updateCardList(CardList list) {
+        return webTarget.path("api/lists/" + list.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(list, APPLICATION_JSON), CardList.class);
+    }
+
+    public Board deleteCardList(Long listId) {
+        return webTarget.path("/api/lists/" + listId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(new GenericType<Board>() {
+                });
+    }
+
+    public Board getBoard(Long boardId) {
+        return webTarget.path("api/boards/" + boardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>() {
@@ -235,39 +332,100 @@ public class ServerUtils {
     }
 
     public Board createBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(restServerUrl).path("api/boards/")
+        return webTarget.path("api/boards")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
-
     }
 
-    public boolean checkConnection(String server) {
-        try {
-            var res = ClientBuilder.newClient(new ClientConfig())
-                    .target(restServerUrl).path("/test-connection/")
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .get();
-            return res.getStatus() == 200;
-        } catch (Exception e) {
-            return false;
-        }
+    public Board updateBoard(Board board) {
+        return webTarget.path("api/boards/" + board.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
     }
 
-    public CardList addToEndOfList(CardList list, Card card) {
-        // TODO implement this method
-        return list;
+    public void deleteBoard(Long boardId) {
+        webTarget.path("api/boards/" + boardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
     }
 
-    public CardList addToListAfter(CardList list, Card cardToAdd, Card cardAfter) {
-        // TODO implement this method
-        return list;
+    public Board joinBoard(String code) {
+        return webTarget.path("api/boards/by-code/" + code)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Board>() {
+                });
     }
 
-    public CardList removeFromList(CardList list, Card card) {
-        // TODO implement this method
-        return list;
+    public Card getCard(Long cardId) {
+        return webTarget.path("api/cards/" + cardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Card>() {
+                });
+    }
+
+    /**
+     * Ignores list and tags
+     * @param card
+     * @return
+     */
+    public Card createCard(Card card) {
+        return webTarget.path("api/cards")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Ignores list and tags
+     * @param card
+     * @return
+     */
+    public Card updateCard(Card card) {
+        return webTarget.path("api/cards/" + card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public CardList deleteCard(Long cardId) {
+        return webTarget.path("/api/cards/" + cardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(new GenericType<CardList>() {
+                });
+    }
+
+    public CardList moveCardToListLast(Long cardId, Long newListId) {
+        return webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .get(new GenericType<CardList>() {
+                });
+    }
+
+    public CardList moveCardToListAfterCard(Long cardId, Long newListId, Long cardAfterId) {
+        return webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
+                        + "/" + cardAfterId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .get(new GenericType<CardList>() {
+                });
+    }
+
+    public Card addTagToCard(Long cardId, Long tagId) {
+        return webTarget.path("/api/cards/add-tag-to-card/" + cardId + "/" + tagId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .get(new GenericType<Card>() {
+                });
+    }
+
+    public Card removeTagFromCard(Long cardId, Long tagId) {
+        return webTarget.path("/api/cards/remove-tag-from-card/" + cardId + "/" + tagId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .get(new GenericType<Card>() {
+                });
     }
 }

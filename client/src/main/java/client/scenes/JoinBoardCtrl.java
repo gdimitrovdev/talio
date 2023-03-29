@@ -27,7 +27,7 @@ public class JoinBoardCtrl {
         // Button click
 
         String code = fieldBoardCode.getText();
-        Board newBoard = server.retrieveBoard(code);
+        Board newBoard = server.joinBoard(code);
         mainCtrlTalio.showBoard(newBoard);
         System.out.printf("Code: %s", code);
     }

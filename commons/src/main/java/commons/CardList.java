@@ -32,7 +32,7 @@ public class CardList implements Serializable {
     @ManyToOne
     private Board board;
 
-    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL)
     private List<Card> cards = new ArrayList<>();
 
     public CardList() {

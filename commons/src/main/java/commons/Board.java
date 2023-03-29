@@ -53,7 +53,8 @@ public class Board implements Serializable {
         setColor(color);
     }
 
-    public Board(String name, String code, String readOnlyCode, String color, List<CardList> lists, List<Tag> tags) {
+    public Board(String name, String code, String readOnlyCode, String color, List<CardList> lists,
+            List<Tag> tags) {
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);

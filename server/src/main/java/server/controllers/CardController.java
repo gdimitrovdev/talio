@@ -43,11 +43,9 @@ public class CardController {
     @ResponseBody
     public ResponseEntity<Card> getOne(@PathVariable("id") Long id) {
         Optional<Card> optionalCard = cardService.getOne(id);
-        if (!optionalCard.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
+        return optionalCard.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
 
-        return ResponseEntity.ok(optionalCard.get());
     }
 
     @PostMapping(path = {"", "/"})
@@ -58,6 +56,7 @@ public class CardController {
             template.convertAndSend("topics/cards", newCard);
             return ResponseEntity.ok(newCard);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -72,6 +71,7 @@ public class CardController {
             template.convertAndSend("/topic/lists", cardList);
             return ResponseEntity.ok(cardList);
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -85,6 +85,72 @@ public class CardController {
             template.convertAndSend("/topic/cards", updatedCard);
             return ResponseEntity.ok(updatedCard);
         } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/move-to-list-after-card/{id}/{listId}/{afterCardId}")
+    @ResponseBody
+    public ResponseEntity<CardList> moveToListAfterCard(@PathVariable Long id,
+            @PathVariable Long listId,
+            @PathVariable Long afterCardId) {
+        try {
+            Long originalListId = cardService.getOne(id).get().getList().getId();
+            Card updatedCard = cardService.moveToListAfterCard(id, listId, afterCardId);
+            CardList list = cardListService.getOne(listId).get();
+            template.convertAndSend("/topic/lists", list);
+            if (!originalListId.equals(list.getId())) {
+                template.convertAndSend("/topic/lists", cardListService.getOne(originalListId));
+            }
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/move-to-list-last/{id}/{listId}")
+    @ResponseBody
+    public ResponseEntity<CardList> moveToListLast(@PathVariable Long id,
+            @PathVariable Long listId) {
+        try {
+            Long originalListId = cardService.getOne(id).get().getList().getId();
+            cardService.moveToListLast(id, listId);
+            CardList list = cardListService.getOne(listId).get();
+            template.convertAndSend("/topic/lists", list);
+            if (!originalListId.equals(list.getId())) {
+                template.convertAndSend("/topic/lists", cardListService.getOne(originalListId));
+            }
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/add-tag-to-card/{id}/{tagId}")
+    @ResponseBody
+    public ResponseEntity<Card> addTagToCard(@PathVariable Long id, @PathVariable Long tagId) {
+        try {
+            Card updatedCard = cardService.addTagToCard(tagId, id);
+            template.convertAndSend("/topic/cards", updatedCard);
+            return ResponseEntity.ok(updatedCard);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/remove-tag-from-card/{id}/{tagId}")
+    @ResponseBody
+    public ResponseEntity<Card> removeTagFromCard(@PathVariable Long id, @PathVariable Long tagId) {
+        try {
+            Card updatedCard = cardService.removeTagFromCard(tagId, id);
+            template.convertAndSend("/topic/cards", updatedCard);
+            return ResponseEntity.ok(updatedCard);
+        } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
     }

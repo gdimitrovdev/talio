@@ -85,12 +85,8 @@ public class ListComponentCtrl extends VBox {
                     System.out.println(
                             "Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
                     System.out.println("List: " + list.getTitle());
-                    CardList updatedList = server.addToEndOfList(
-                            list, board.getCurrentSelectedCard().getCardData()
-                    );
-                    server.removeFromList(
-                            board.getCurrentSelectedCard().getCardData().getList(),
-                            board.getCurrentSelectedCard().getCardData()
+                    CardList updatedList = server.moveCardToListLast(
+                            board.getCurrentSelectedCard().getCardData().getId(), list.getId()
                     );
                     // TODO listen to the websocket connection for updated lists
                 } else {
@@ -167,12 +163,10 @@ public class ListComponentCtrl extends VBox {
                             "Card: " + board.getCurrentSelectedCard().getCardData().getTitle());
                     System.out.println("List: " + list.getTitle());
                     System.out.println("Under the card: " + child.getCardData().getTitle());
-                    CardList updatedList = server.addToListAfter(
-                            list, board.getCurrentSelectedCard().getCardData(), child.getCardData()
-                    );
-                    server.removeFromList(
-                            board.getCurrentSelectedCard().getCardData().getList(),
-                            board.getCurrentSelectedCard().getCardData()
+                    CardList updatedList = server.moveCardToListAfterCard(
+                            board.getCurrentSelectedCard().getCardData().getId(),
+                            list.getId(),
+                            child.getCardData().getId()
                     );
                     // TODO listen to the websocket connection for updated lists
                 }

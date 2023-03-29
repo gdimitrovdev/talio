@@ -32,6 +32,16 @@ public class Card implements Serializable {
     private String description;
     private String color;
 
+    private Long listPriority;
+
+    public Long getListPriority() {
+        return listPriority;
+    }
+
+    public void setListPriority(Long listPriority) {
+        this.listPriority = listPriority;
+    }
+
     @ManyToOne
     private CardList list;
 
@@ -49,6 +59,7 @@ public class Card implements Serializable {
         setDescription(description);
         setColor(color);
         setList(list);
+        setListPriority(-1L);
     }
 
     public Card(String title, String description, String color, CardList list, List<Tag> tags,
@@ -59,6 +70,7 @@ public class Card implements Serializable {
         this.list = list;
         this.tags = tags;
         this.subtasks = subtasks;
+        setListPriority(-1L);
     }
 
     public void addSubtask(Subtask subtask) {

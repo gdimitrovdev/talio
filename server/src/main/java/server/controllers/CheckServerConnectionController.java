@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test-connection")
 public class CheckServerConnectionController {
-    @GetMapping("/")
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<String> testConnection() {
         return ResponseEntity.ok("Success");
     }
