@@ -77,7 +77,7 @@ public class BoardService {
         return boardRepository.save(existingBoard);
     }
 
-    private boolean isCodeAlreadyUsed(String code) {
+    public boolean isCodeAlreadyUsed(String code) {
         return getOneByCode(code).isPresent();
     }
 
@@ -96,7 +96,7 @@ public class BoardService {
         board.setReadOnlyCode(readOnlyCode);
     }
 
-    private String getNewRandomCode(int length) {
+    public String getNewRandomCode(int length) {
         String randomNumberStr = random.nextInt() + "";
         messageDigest.update(randomNumberStr.getBytes());
 
