@@ -25,7 +25,6 @@ public class HomeCtrl {
     //'create a board' method
     //in the 2 methods the created/joined board should be added to the hashset
     public Set<Board> recentBoards;
-    private Board board;
     @FXML
     private Button changeServerBtn;
     @FXML
@@ -56,7 +55,7 @@ public class HomeCtrl {
         //Board current = serverUtils.getBoardById(boardID)" can be used
         // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
 
-        this.board = new Board("Example board", "pwd", "hash_893290840923904", "#333333");
+        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#333333");
 
         CardList list1 = new CardList("example list 1", null);
         CardList list2 = new CardList("example list 2", null);
@@ -67,8 +66,8 @@ public class HomeCtrl {
         list1.addCard(c1);
         list1.addCard(c2);
 
-        this.board.addCardList(list1);
-        this.board.addCardList(list2);
+        board.addCardList(list1);
+        board.addCardList(list2);
 
 
         //adding the board to the hashset, so it will be displayed
