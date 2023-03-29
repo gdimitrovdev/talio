@@ -57,18 +57,20 @@ public class BoardService {
     public Board updateOne(Long id, Board board) throws EntityNotFoundException {
         Board existingBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
+        if (isCodeAlreadyUsed(board.getCode())) {
+            throw new IllegalArgumentException("This code is already used by a board");
+        }
+        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
+            throw new IllegalArgumentException("This read only code is already used by a board");
+        }
+        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
+            throw new IllegalArgumentException("Code and readOnlyCode must be different");
+        }
 
         existingBoard.setColor(board.getColor());
         existingBoard.setName(board.getName());
-
-        if (isCodeAlreadyUsed(board.getCode()))
-            throw new IllegalArgumentException("This code is already used by a board");
         existingBoard.setCode(board.getCode());
-
-        if (isCodeAlreadyUsed(board.getCode()))
-            throw new IllegalArgumentException("This read only code is already used by a board");
         existingBoard.setReadOnlyCode(board.getReadOnlyCode());
-
         existingBoard.setLists(board.getLists());
         existingBoard.setTags(board.getTags());
 
@@ -88,10 +90,10 @@ public class BoardService {
         String readOnlyCode = null;
         do {
             readOnlyCode = getNewRandomCode(5);
-        } while (isCodeAlreadyUsed(readOnlyCode));
+        } while (isCodeAlreadyUsed(readOnlyCode) || readOnlyCode.contentEquals(code));
 
         board.setCode(code);
-        board.setReadOnlyCode(code);
+        board.setReadOnlyCode(readOnlyCode);
     }
 
     private String getNewRandomCode(int length) {

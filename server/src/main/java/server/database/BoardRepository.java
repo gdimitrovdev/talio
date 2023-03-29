@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    @Query(value = "SELECT * FROM BOARD WHERE CODE = ?1 OR READ_ONLY_CODE = ?1 LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM BOARD WHERE CODE = ?1 OR READ_ONLY_CODE = ?1 LIMIT 1",
+            nativeQuery = true)
     Optional<Board> findByCode(String code);
 }
