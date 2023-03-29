@@ -20,9 +20,13 @@ public class BoardSettingsCtrl {
         this.board = board;
         fieldBoardName.setText(board.getName());
 
-        //  TODO: change to something else
+        //  TODO: this can be another event
         fieldBoardName.textProperty().addListener(((observable, oldValue, newValue) -> {
-            System.out.println(newValue);
+            changeBoardName(newValue.toString());
         }));
+    }
+
+    private void changeBoardName(String newName) {
+        board.setName(newName);
     }
 }

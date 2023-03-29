@@ -139,7 +139,7 @@ public class CardComponentCtrl extends AnchorPane {
         // TODO this calculation will have to change once the Subtask Model changes in #40, #41
         int numSubtasksDone =
                 (int) card.getSubtasks().stream().filter(x -> x.getTitle().equals("Done")).count();
-        subtaskLabel.setText(numSubtasksDone + "/" + card.getSubtasks().size() + "Subtasks");
+        subtaskLabel.setText(numSubtasksDone + "/" + card.getSubtasks().size());
         subtaskProgress.setProgress((float) numSubtasksDone / card.getSubtasks().size());
 
         tagsContainer.getChildren().clear();
