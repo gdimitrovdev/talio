@@ -30,11 +30,9 @@ public class Board implements Serializable {
     private String name;
 
     @Column(unique = true)
-    @Basic(optional = false)
     private String code;
 
     @Column(unique = true)
-    @Basic(optional = false)
     private String readOnlyCode;
 
     private String color;
