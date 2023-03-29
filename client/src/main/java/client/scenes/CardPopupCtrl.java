@@ -94,8 +94,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     }
 
     public void setCardData(Card cardData) {
-        cardTitle.setText(card.getTitle());
-        cardDescription.setText(cardData.getDescription());
+        if (cardTitle.getText().isEmpty()) {
+            cardTitle.setText(card.getTitle());
+        }
+        if (cardDescription.getText().isEmpty()) {
+            cardDescription.setText(cardData.getDescription());
+        }
 
         subtaskVBox.getChildren().clear();
         tagHBox.getChildren().clear();
@@ -155,17 +159,10 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
         save = new Button("Save");
         anchorPane.getChildren().add(save);
-        save.setLayoutX(360);
+        save.setLayoutX(450);
         save.setLayoutY(10);
         save.setOnAction(a -> {
             save();
-            // TODO display the board overview again
-        });
-
-        close = new Button("Close");
-        close.setOnAction(a -> {
-            close();
-            // TODO display the board overview again
         });
     }
 
@@ -179,6 +176,11 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             HBox subtaskElement = new HBox();
 
             CheckBox checkBox = new CheckBox(subtask.getTitle());
+            checkBox.setSelected(subtask.getCompleted());
+            checkBox.setOnAction(a -> {
+                subtask.setCompleted(!subtask.getCompleted());
+                setCardData(card);
+            });
             checkBox.getStyleClass().add("subtask-checkbox");
             subtaskElement.getChildren().add(checkBox);
 
@@ -278,13 +280,6 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
                 setCardData(card);
             }
         }
-    }
-
-    public void close() {
-        // this would reset to the state of the card regardless of any changes that have been made
-        // could remove this and just use the window "X" button
-        card.setTitle(cardTitle.getText());
-        card.setTitle(cardDescription.getText());
     }
 
     public void save() {

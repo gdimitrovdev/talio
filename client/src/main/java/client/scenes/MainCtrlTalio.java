@@ -79,20 +79,18 @@ public class MainCtrlTalio {
 
     //TODO: this method needs to be finished after someone does the settings
     public void showBoardSettings(Board board) {
-        primaryStageTalio.setTitle("Talio: Board Settings");
-
         boardSettingsCtrl.initialize(board);
         Stage stage = new Stage();
+        stage.setTitle("Talio: Board Settings");
         stage.setScene(boardSettings);
         stage.show();
     }
 
     //TODO: this method needs to be finished after someone does the shareboard popup
     public void showShareBoard(Board board) {
-        primaryStageTalio.setTitle("Talio: Share a board");
-
         shareBoardCtrl.initialize(board);
         Stage stage = new Stage();
+        stage.setTitle("Talio: Share a board");
         stage.setScene(shareBoard);
         stage.show();
     }
