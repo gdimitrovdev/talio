@@ -19,5 +19,10 @@ public class BoardSettingsCtrl {
     public void initialize(Board board) {
         this.board = board;
         fieldBoardName.setText(board.getName());
+
+        //  TODO: change to something else
+        fieldBoardName.textProperty().addListener(((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
+        }));
     }
 }
