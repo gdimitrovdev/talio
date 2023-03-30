@@ -54,16 +54,16 @@ public class CardService {
 
     private Card removeCardFromItsList(Long cardId) throws EntityNotFoundException {
         try {
-            var card = cardRepository.getReferenceById(cardId);
+            var card = cardRepository.findById(cardId).get();
             if (card.getList() == null) {
                 return card;
             }
             var list = card.getList();
-            list.getCards().stream().filter(c -> c.getListPriority() > card.getListPriority())
+            /*list.getCards().stream().filter(c -> c.getListPriority() > card.getListPriority())
                     .forEach(c -> {
                         c.setListPriority(c.getListPriority() - 1);
                         cardRepository.save(c);
-                    });
+                    });*/
             card.setList(null);
             card.setListPriority(-1L);
             cardRepository.save(card);
@@ -100,14 +100,14 @@ public class CardService {
             throws EntityNotFoundException {
         try {
             var card = removeCardFromItsList(cardId);
-            var list = cardListRepository.getReferenceById(listId);
-            var afterCard = cardRepository.getReferenceById(afterCardId);
-            card.setListPriority(afterCard.getListPriority() + 1);
+            var list = cardListRepository.findById(listId).get();
+            var afterCard = cardRepository.findById(afterCardId).get();
+            /*card.setListPriority(afterCard.getListPriority() + 1);
             list.getCards().stream().filter(c -> c.getListPriority() >= card.getListPriority())
                     .forEach(c -> {
                         c.setListPriority(c.getListPriority() + 1);
                         cardRepository.save(c);
-                    });
+                    });*/
             card.setList(list);
             cardRepository.save(card);
             return card;

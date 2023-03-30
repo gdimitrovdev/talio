@@ -1,13 +1,12 @@
 package client.scenes;
 
-import client.Main;
 import client.utils.ServerUtils;
 import commons.Board;
-import java.io.IOException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import javax.inject.Inject;
 
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
@@ -20,6 +19,11 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
     private ServerUtils serverUtils;
+
+    @Inject
+    public MainCtrlTalio(ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
 
     public void initialize(
             Stage primaryStageTalio,
@@ -55,19 +59,6 @@ public class MainCtrlTalio {
 
         // showHome();
         this.showServerConnection();
-
-        this.serverUtils = Main.INJECTOR.getInstance(ServerUtils.class);
-        try {
-            serverUtils.subscribeToBoard(1L);
-            serverUtils.addUpdateEvent(commons.Card.class, System.out::println);
-            serverUtils.addUpdateEvent(commons.CardList.class, System.out::println);
-            serverUtils.addUpdateEvent(commons.Tag.class, System.out::println);
-            serverUtils.addUpdateEvent(commons.Board.class, System.out::println);
-            serverUtils.addUpdateEvent(commons.Subtask.class, System.out::println);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
 
         primaryStageTalio.show();
 
@@ -112,9 +103,14 @@ public class MainCtrlTalio {
         stage.show();
     }
 
-    public void showBoard(Board board) throws IOException {
-        boardComponentCtrl.initialize(board);
+    public void showBoard(Board board) {
+        boardComponentCtrl.initialize(board.getId());
         primaryStageTalio.setTitle("Talio: Board");
         primaryStageTalio.setScene(boardComponent);
+        try {
+            serverUtils.subscribeToBoard(board.getId());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 }

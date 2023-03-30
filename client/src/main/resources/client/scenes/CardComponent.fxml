@@ -10,7 +10,7 @@
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@./css/CardComponent.css"
             fx:id="cardOverview"
-            prefWidth="160"
+            prefWidth="220"
             prefHeight="100">
     <!-- TODO we can probably remove the prefWidth and prefHeight -->
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

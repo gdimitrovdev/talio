@@ -51,7 +51,8 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Board> getOneByCode(@PathVariable("code") String code) {
         try {
-            return ResponseEntity.ok(boardService.getOneByCode(code).get());
+            Board board = boardService.getOneByCode(code).get();
+            return ResponseEntity.ok(board);
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.badRequest().build();
@@ -63,8 +64,8 @@ public class BoardController {
     public ResponseEntity<Board> createOne(@RequestBody Board board) {
         try {
             var newBoard = boardService.createOne(board);
-            template.convertAndSend("/topic/boards", newBoard);
-            return ResponseEntity.ok(newBoard);
+            template.convertAndSend("/topic/boards", new Board(newBoard));
+            return ResponseEntity.ok(new Board(newBoard));
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.badRequest().build();
@@ -88,8 +89,8 @@ public class BoardController {
             @RequestBody Board board) {
         try {
             Board updatedBoard = boardService.updateOne(id, board);
-            template.convertAndSend("/topic/boards", updatedBoard);
-            return ResponseEntity.ok(updatedBoard);
+            template.convertAndSend("/topic/boards", new Board(updatedBoard));
+            return ResponseEntity.ok(new Board(updatedBoard));
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.badRequest().build();

@@ -23,16 +23,14 @@ public class ServerConnectionCtrl {
     }
 
     public void clickConnectServer() {
-        // Button click
         String serverAddressText = fieldServerAddress.getText();
-        if (!server.checkConnection(serverAddressText)) {
+        if (server.setServerUrl(serverAddressText)) {
+            mainCtrlTalio.showHome();
+        } else {
             Alert box = new Alert(Alert.AlertType.ERROR);
             box.setTitle("Wrong server");
             box.setContentText("Wrong server address!");
             box.showAndWait();
-        } else {
-            //server.setServer(serverAddressText);
-            mainCtrlTalio.showHome();
         }
     }
 

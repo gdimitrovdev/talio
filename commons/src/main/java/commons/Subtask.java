@@ -16,7 +16,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Subtask.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Subtask implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +32,7 @@ public class Subtask implements Serializable {
     @ManyToOne
     private Card card;
 
-    private Subtask() {
+    public Subtask() {
     }
 
     public Subtask(String title, Card card, Boolean completed) {

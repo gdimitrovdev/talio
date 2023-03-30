@@ -45,13 +45,14 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
-    private final String serverUrl;
-    private final String restServerUrl;
-    private final String websocketServerUrl;
+    private String serverUrl;
+    private String restServerUrl;
+    private String websocketServerUrl;
     private Long subscribedBoard = null;
     private StompSession session;
     private Map<Object, UpdateEvent> updateEvents = new HashMap<>();
@@ -71,28 +72,42 @@ public class ServerUtils {
         }
     }
 
-    public ServerUtils(final String serverURL) {
-        serverUrl = serverURL;
-        restServerUrl = "http://" + serverUrl;
-        websocketServerUrl = "ws://" + serverUrl;
-        webTarget = ClientBuilder.newClient(new ClientConfig()).target(restServerUrl);
+    public ServerUtils(String serverURL) {
+        setServerUrl(serverURL);
     }
 
     public ServerUtils() {
-        this.serverUrl = "localhost:8080";
-        restServerUrl = "http://" + serverUrl;
-        websocketServerUrl = "ws://" + serverUrl;
-        webTarget = ClientBuilder.newClient(new ClientConfig()).target(restServerUrl);
+        setServerUrl("localhost:8080");
     }
 
-    public boolean checkConnection(String server) {
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public boolean setServerUrl(String serverUrl) {
+        if (serverUrl.startsWith("http://")) {
+            serverUrl = serverUrl.substring(7);
+        } else if (serverUrl.startsWith("https://")) {
+            serverUrl = serverUrl.substring(8);
+        }
         try {
+            unsubscribeFromBoard();
+            WebTarget webTarget =
+                    ClientBuilder.newClient(new ClientConfig()).target("http://" + serverUrl);
             var res = webTarget.path("/test-connection")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
-            return res.getStatus() == 200;
+            if (res.getStatus() == 200) {
+                this.serverUrl = serverUrl;
+                this.webTarget = webTarget;
+                this.restServerUrl = "http://" + serverUrl;
+                this.websocketServerUrl = "ws://" + serverUrl;
+                return true;
+            }
+            return false;
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -168,7 +183,9 @@ public class ServerUtils {
                             "received websocket from: " + "/topic/" + classToTopic.get(type));
                     for (var key : updateEvents.keySet()) {
                         var updateEvent = updateEvents.get(key);
+                        System.out.println(updateEvent.type + " " + type);
                         if (updateEvent.type.equals(type)) {
+                            System.out.println();
                             updateEvent.consumer.accept(o);
                         }
                     }
@@ -188,7 +205,10 @@ public class ServerUtils {
         return key;
     }
 
-    public <T> void removeUpdateEvent(Object key) {
+    public void removeUpdateEvent(Object key) {
+        if (key == null) {
+            return;
+        }
         updateEvents.remove(key);
     }
 
@@ -294,11 +314,17 @@ public class ServerUtils {
     }
 
     public CardList getCardList(Long listId) {
-        return webTarget.path("api/lists/" + listId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<CardList>() {
-                });
+        try {
+            return webTarget.path("api/lists/" + listId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(new GenericType<CardList>() {
+                    });
+        } catch (Exception e) {
+            System.out.println("Error in getCardList(" + listId + "):\n" + e);
+            throw new RuntimeException();
+        }
+
     }
 
     public CardList createCardList(CardList list) {
@@ -324,11 +350,15 @@ public class ServerUtils {
     }
 
     public Board getBoard(Long boardId) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(restServerUrl + "/api/boards/" + boardId, Board.class);
+        /*
         return webTarget.path("api/boards/" + boardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>() {
                 });
+                */
     }
 
     public Board createBoard(Board board) {
@@ -353,11 +383,15 @@ public class ServerUtils {
     }
 
     public Board joinBoard(String code) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(restServerUrl + "/api/boards/by-code/" + code,
+                Board.class);
+        /*
         return webTarget.path("api/boards/by-code/" + code)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>() {
-                });
+                });*/
     }
 
     public Card getCard(Long cardId) {
@@ -400,19 +434,28 @@ public class ServerUtils {
                 });
     }
 
-    public CardList moveCardToListLast(Long cardId, Long newListId) {
-        return webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
-                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<CardList>() {
-                });
+    public void moveCardToListLast(Long cardId, Long newListId) {
+        try {
+            webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
+                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                    .get(new GenericType<CardList>() {
+                    });
+        } catch (Exception e) {
+            System.out.println("Error on moveCardToListLast(" + cardId + ", " + newListId + "):\n" + e);
+        }
     }
 
-    public CardList moveCardToListAfterCard(Long cardId, Long newListId, Long cardAfterId) {
-        return webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
-                        + "/" + cardAfterId)
-                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<CardList>() {
-                });
+    public void moveCardToListAfterCard(Long cardId, Long newListId, Long cardAfterId) {
+        try {
+            webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
+                            + "/" + cardAfterId)
+                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                    .get(new GenericType<CardList>() {
+                    });
+        } catch (Exception e) {
+            System.out.println("Error on moveCardToListAfterCard(" + cardId + ", " + newListId
+                    + ", " + cardAfterId + "):\n" + e);
+        }
     }
 
     public Card addTagToCard(Long cardId, Long tagId) {

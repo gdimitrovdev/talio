@@ -10,8 +10,8 @@ import javafx.scene.control.TextField;
 
 public class CreateBoardCtrl {
     private final MainCtrlTalio mainCtrlTalio;
+    private final ServerUtils server;
 
-    private final ServerUtils serverUtils;
     @FXML
     private TextField fieldBoardName;
 
@@ -19,18 +19,15 @@ public class CreateBoardCtrl {
     private Button buttonCreate;
 
     @Inject
-    public CreateBoardCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils serverUtils) {
+    public CreateBoardCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.mainCtrlTalio = mainCtrlTalio;
-        this.serverUtils = serverUtils;
+        this.server = server;
     }
 
     public void clickCreateBoard() throws IOException {
-        // create new board
         String name = fieldBoardName.getText();
-        Board board = new Board(name, "", "123", "red");
-        board = serverUtils.createBoard(board);
+        Board board = server.createBoard(new Board(name, "", "", ""));
         mainCtrlTalio.showBoard(board);
-        System.out.printf("Name: %s", name);
     }
 
     public void clickBackHome() {

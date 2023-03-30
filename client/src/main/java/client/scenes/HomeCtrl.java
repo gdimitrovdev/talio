@@ -45,9 +45,9 @@ public class HomeCtrl {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         this.recentBoards = new HashSet<>();
-        for (int i = 0; i < 15; i++) {
+        /*for (int i = 0; i < 15; i++) {
             this.generateExampleBoard((long) i);
-        }
+        }*/
     }
 
     private void generateExampleBoard(Long id) {

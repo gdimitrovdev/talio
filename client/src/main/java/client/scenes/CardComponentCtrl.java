@@ -1,10 +1,9 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Card;
 import commons.Subtask;
-import commons.Tag;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -23,15 +22,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class CardComponentCtrl extends AnchorPane {
-    private final MainCtrlTalio mainCtrlTalio;
+    private MainCtrlTalio mainCtrlTalio;
+    private ServerUtils server;
+    private Long cardId;
+    private Object updateCard;
 
-    private Card card;
     @FXML
     private TextField title;
 
@@ -52,35 +52,32 @@ public class CardComponentCtrl extends AnchorPane {
 
     private boolean cardHasBeenCreated = false;
 
-    // TODO figure out exactly how this dependency injection stuff works,
-    //  I don't think we need it for now though
-
-    // TODO figure out a better way to initialize these UI components,
-    //  but for now it should be fine
-
-    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, Card card) throws IOException {
+    private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+        this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CardComponent.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
-        loader.load();
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         addClickedEventHandler();
-        setCard(card);
-
         title.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
                 if (!cardHasBeenCreated) {
-                    System.out.println("Should cancel the creation of the card now");
+                    // Should cancel the creation of a card now
+                    ((ListComponentCtrl) getParent()).getChildren().remove(this);
                 }
                 title.setDisable(true);
             } else {
                 title.selectAll();
             }
         });
-
         this.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             if (KeyCode.ESCAPE == event.getCode() && !title.isDisabled()) {
                 title.setDisable(true);
@@ -91,7 +88,8 @@ public class CardComponentCtrl extends AnchorPane {
         setOnMouseSingleClicked((me) -> {
             FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
             try {
-                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio, card));
+                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
+                        server.getCard(cardId)));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -104,9 +102,9 @@ public class CardComponentCtrl extends AnchorPane {
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
             stage.show();
-            stage.setOnCloseRequest(event -> {
-                setCard(card);
-            });
+            /*stage.setOnCloseRequest(event -> {
+                setCard(server.getCard(cardId));
+            });*/
         });
         setOnMouseDoubleClicked((me) -> {
             if (title.isDisabled()) {
@@ -114,12 +112,32 @@ public class CardComponentCtrl extends AnchorPane {
                 title.requestFocus();
             }
         });
+    }
 
+    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, Long cardId) {
+        init(mainCtrlTalio, server);
+        this.cardHasBeenCreated = true;
+        this.cardId = cardId;
+        setCard(server.getCard(cardId));
+        // Updates that this should handle
+        // card: card update DONE
+        // card: add tag DONE
+        // card: remove tag DONE
+        updateCard = server.addUpdateEvent(Card.class, card -> {
+            if (card.getId().equals(cardId)) {
+                setCard(card);
+            }
+        });
+    }
+
+    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+        init(mainCtrlTalio, server);
+        setCard(new Card("Untitled", "", "", null));
         title.requestFocus();
     }
 
-    public Card getCardData() {
-        return card;
+    public Long getCardId() {
+        return cardId;
     }
 
     public void highlight() {
@@ -134,65 +152,61 @@ public class CardComponentCtrl extends AnchorPane {
     //  if the card has not been created yet
 
     public void setCard(Card newCardData) {
-        card = newCardData;
-        title.setText(card.getTitle());
-        // TODO this calculation will have to change once the Subtask Model changes in #40, #41
+        title.setText(newCardData.getTitle());
+
+        subtaskProgress.setVisible(newCardData.getSubtasks().size() != 0);
+        subtaskLabel.setVisible(newCardData.getSubtasks().size() != 0);
+        deleteButton.setVisible(cardHasBeenCreated);
+
         int numSubtasksDone =
-                (int) card.getSubtasks().stream().filter(x -> x.getCompleted()).count();
-        subtaskLabel.setText(numSubtasksDone + "/" + card.getSubtasks().size());
-        subtaskProgress.setProgress((float) numSubtasksDone / card.getSubtasks().size());
+                (int) newCardData.getSubtasks().stream().filter(Subtask::getCompleted).count();
+        subtaskLabel.setText(numSubtasksDone + "/" + newCardData.getSubtasks().size());
+        subtaskProgress.setProgress((float) numSubtasksDone / newCardData.getSubtasks().size());
 
         tagsContainer.getChildren().clear();
-        for (var tag : card.getTags()) {
+        for (var tag : newCardData.getTags()) {
             var rect = new Rectangle();
             // TODO remove magic numbers from here
             rect.setHeight(10);
             rect.setWidth(70);
-            rect.setFill(Color.web("0x" + tag.getColor().substring(2)));
+            // TODO fix this, when we figure out the colors
+            //rect.setFill(Color.web("0x" + tag.getColor().substring(2)));
+            rect.setFill(Color.web("0xFF0000"));
             // TODO perhaps move those to a CSS file
             rect.setArcHeight(5);
             rect.setArcWidth(5);
             tagsContainer.getChildren().add(rect);
         }
-
     }
 
     public void saveTitle() {
-        // TODO remove the details, they are just here for testing
         if (!cardHasBeenCreated) {
-            setCard(new Card(title.getText(),
-                    "Do certain things",
-                    null,
-                    null,
-                    List.of(
-                            new Tag("Urgent", "#FF0000", null, null),
-                            new Tag("Feature", "#00FF00", null, null)
-                    ),
-                    List.of(
-                            new Subtask("Done", null, false),
-                            new Subtask("Done", null, false),
-                            new Subtask("TODO 3", null, false)
-                    ))
-            );
+            ((ListComponentCtrl) getParent()).getChildren().remove(this);
+            server.createCard(new Card(title.getText(), "", "",
+                    server.getCardList(((ListComponentCtrl) getParent()).getListId())));
         } else {
+            Card card = server.getCard(cardId);
             card.setTitle(title.getText());
-            setCard(card);
+            server.updateCard(card);
         }
-
-        cardHasBeenCreated = true;
         title.setDisable(true);
     }
 
     @FXML
     private void delete() {
-        // Get the parent of the card
+        server.deleteCard(cardId);
+        /*// Get the parent of the card
         Parent parent = this.getParent();
 
         // Remove the card from the parent if it is an instance of Pane
         if (parent instanceof Pane) {
             Pane parentPane = (Pane) parent;
             parentPane.getChildren().remove(this);
-        }
+        }*/
+    }
+
+    public void close() {
+        server.removeUpdateEvent(updateCard);
     }
 
     // TODO extract the single/double click event handler so that it can be used with any UI

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,6 +91,11 @@ public class CardController {
         }
     }
 
+    @SendTo("/topic/lists")
+    public CardList sendList(CardList list) {
+        return list;
+    }
+
     @GetMapping("/move-to-list-after-card/{id}/{listId}/{afterCardId}")
     @ResponseBody
     public ResponseEntity<CardList> moveToListAfterCard(@PathVariable Long id,
@@ -97,17 +103,26 @@ public class CardController {
             @PathVariable Long afterCardId) {
         try {
             Long originalListId = cardService.getOne(id).get().getList().getId();
-            Card updatedCard = cardService.moveToListAfterCard(id, listId, afterCardId);
+            cardService.moveToListAfterCard(id, listId, afterCardId);
             CardList list = cardListService.getOne(listId).get();
+            System.out.println("Cowabunga!");
             template.convertAndSend("/topic/lists", list);
+            //sendList(list);
+            System.out.println("Cowabunga 2!");
             if (!originalListId.equals(list.getId())) {
-                template.convertAndSend("/topic/lists", cardListService.getOne(originalListId));
+                System.out.println("Cowabunga 3!");
+                template.convertAndSend("/topic/lists",
+                        cardListService.getOne(originalListId).get());
+                //sendList(cardListService.getOne(originalListId).get());
+                System.out.println("Cowabunga 4!");
             }
+            //System.out.println(list);
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
+        //return ResponseEntity.ok(cardListService.getOne(listId).get());
     }
 
     @GetMapping("/move-to-list-last/{id}/{listId}")
@@ -120,7 +135,8 @@ public class CardController {
             CardList list = cardListService.getOne(listId).get();
             template.convertAndSend("/topic/lists", list);
             if (!originalListId.equals(list.getId())) {
-                template.convertAndSend("/topic/lists", cardListService.getOne(originalListId));
+                template.convertAndSend("/topic/lists",
+                        cardListService.getOne(originalListId).get());
             }
             return ResponseEntity.ok(list);
         } catch (Exception e) {

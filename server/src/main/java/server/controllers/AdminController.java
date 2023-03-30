@@ -5,6 +5,7 @@ import commons.Card;
 import commons.CardList;
 import commons.Subtask;
 import commons.Tag;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import server.database.SubtaskRepository;
 import server.database.TagRepository;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private BoardController boardController;
@@ -61,6 +62,25 @@ public class AdminController {
                 """;
     }
 
+    @GetMapping(path = {"boards", "boards/"})
+    @ResponseBody
+    public String getBoards() {
+        return """
+                Avaliable boards:
+                <table style="border: 1px solid black; border-collapse: collapse">
+                    <tr>
+                        <th style="border: 1px solid black">Id</th>
+                        <th style="border: 1px solid black">Name</th>
+                        <th style="border: 1px solid black">Join Code</th>
+                        <th style="border: 1px solid black">Read-Only Join Code</th>
+                    </tr>
+                """
+                + boardRepository.findAll().stream().map(b -> "<tr><td style=\"border: 1px solid black\">"
+                    + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName() + "</td><td style=\"border: 1px solid black\">"
+                    + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode() + "</td></tr>"
+                ).collect(Collectors.joining("\n")) + "</table>";
+    }
+
     @GetMapping(path = {"/clear", "/clear/"})
     @ResponseBody
     public ResponseEntity clear() {
@@ -92,7 +112,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity fill() {
         try {
-            // TODO fill this with example data
+            // TODO fill this with proper example data
             // Colors in format #Background/#Foreground
 
             Board team69Board =

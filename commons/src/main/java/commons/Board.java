@@ -20,7 +20,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,13 +38,28 @@ public class Board implements Serializable {
 
     private String color;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval =
+            true)
     private List<CardList> lists = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 
     public Board() {
+    }
+
+    public Board(Board board) {
+        this.id = board.id;
+        this.name = board.name;
+        this.code = board.code;
+        this.readOnlyCode = board.readOnlyCode;
+        this.color = board.color;
+        if (board.lists != null) {
+            this.lists = new ArrayList<CardList>(board.lists);
+        }
+        if (board.tags != null) {
+            this.tags = new ArrayList<Tag>(board.tags);
+        }
     }
 
     public Board(String name, String code, String readOnlyCode, String color) {

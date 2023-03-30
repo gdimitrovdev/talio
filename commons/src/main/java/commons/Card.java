@@ -21,7 +21,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Card.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
