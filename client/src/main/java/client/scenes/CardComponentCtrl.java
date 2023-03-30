@@ -27,50 +27,26 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class CardComponentCtrl extends AnchorPane {
-<<<<<<< HEAD
-    private final MainCtrlTalio mainCtrlTalio;
-    private final ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty =
-            new SimpleObjectProperty<>();
-    private final ObjectProperty<EventHandler<MouseEvent>> onMouseDoubleClickedProperty =
-            new SimpleObjectProperty<>();
-    private Card card;
-=======
     private MainCtrlTalio mainCtrlTalio;
     private ServerUtils server;
     private Long cardId;
     private Object updateCard;
 
->>>>>>> connection
     @FXML
     private TextField title;
+
     @FXML
     private Button deleteButton;
+
     @FXML
     private ProgressBar subtaskProgress;
+
     @FXML
     private Label subtaskLabel;
+
     @FXML
     private FlowPane tagsContainer;
 
-<<<<<<< HEAD
-    // TODO figure out exactly how this dependency injection stuff works,
-    //  I don't think we need it for now though
-
-    // TODO figure out a better way to initialize these UI components,
-    //  but for now it should be fine
-    @FXML
-    private AnchorPane cardOverview;
-    private boolean cardHasBeenCreated = false;
-    // TODO extract the single/double click event handler so that it can be used with any UI
-    //  component using composition
-    private long delayMs = 250;
-    private ClickRunner latestClickRunner = null;
-
-    // TODO hide the progressbar, the progresslabel and the delete button
-    //  if the card has not been created yet
-
-    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, Card card) throws IOException {
-=======
     @FXML
     private AnchorPane cardOverview;
 
@@ -78,7 +54,6 @@ public class CardComponentCtrl extends AnchorPane {
 
     private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.server = server;
->>>>>>> connection
         this.mainCtrlTalio = mainCtrlTalio;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CardComponent.fxml"));
@@ -173,6 +148,9 @@ public class CardComponentCtrl extends AnchorPane {
         cardOverview.setStyle("-fx-border-color: black;");
     }
 
+    // TODO hide the progressbar, the progresslabel and the delete button
+    //  if the card has not been created yet
+
     public void setCard(Card newCardData) {
         title.setText(newCardData.getTitle());
 
@@ -231,6 +209,42 @@ public class CardComponentCtrl extends AnchorPane {
         server.removeUpdateEvent(updateCard);
     }
 
+    // TODO extract the single/double click event handler so that it can be used with any UI
+    //  component using composition
+    private long delayMs = 250;
+    private ClickRunner latestClickRunner = null;
+
+    private final ObjectProperty<EventHandler<MouseEvent>> onMouseSingleClickedProperty =
+            new SimpleObjectProperty<>();
+    private final ObjectProperty<EventHandler<MouseEvent>> onMouseDoubleClickedProperty =
+            new SimpleObjectProperty<>();
+
+    private class ClickRunner implements Runnable {
+
+        private final Runnable onClick;
+        private boolean aborted = false;
+
+        public ClickRunner(Runnable onClick) {
+            this.onClick = onClick;
+        }
+
+        public void abort() {
+            this.aborted = true;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(delayMs);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (!aborted) {
+                Platform.runLater(onClick);
+            }
+        }
+    }
+
     private void addClickedEventHandler() {
         //Handling the mouse clicked event (not using 'onMouseClicked' so it can still be used by developer).
         EventHandler<MouseEvent> eventHandler = me -> {
@@ -276,31 +290,5 @@ public class CardComponentCtrl extends AnchorPane {
 
     public void setSingleClickDelayMillis(long singleClickDelayMillis) {
         this.delayMs = singleClickDelayMillis;
-    }
-
-    private class ClickRunner implements Runnable {
-
-        private final Runnable onClick;
-        private boolean aborted = false;
-
-        public ClickRunner(Runnable onClick) {
-            this.onClick = onClick;
-        }
-
-        public void abort() {
-            this.aborted = true;
-        }
-
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(delayMs);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (!aborted) {
-                Platform.runLater(onClick);
-            }
-        }
     }
 }
