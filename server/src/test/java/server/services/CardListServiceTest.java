@@ -1,6 +1,13 @@
 package server.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import commons.CardList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -8,16 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import server.database.BoardRepository;
 import server.database.CardListRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 class CardListServiceTest {
@@ -49,7 +47,6 @@ class CardListServiceTest {
         assertEquals(cardList2, returnedCardLists.get(1));
     }
 
-
     @Test
     void getOne() {
         Long listId = 1L;
@@ -61,7 +58,6 @@ class CardListServiceTest {
 
 
     }
-
 
     @Test
     void createOne() {

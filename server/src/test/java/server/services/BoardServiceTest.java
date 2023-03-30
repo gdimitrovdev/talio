@@ -1,22 +1,27 @@
 package server.services;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import commons.Board;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import server.database.BoardRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
 
 @RunWith(MockitoJUnitRunner.class)
-class BoardServiceTest  {
+class BoardServiceTest {
 
 
     // @Mock annotation is used to create a mock BoardRepository object
@@ -28,11 +33,11 @@ class BoardServiceTest  {
     @InjectMocks
     private BoardService boardServiceMock;
 
-
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     public void getMany() {
         List<Board> expectedBoards = new ArrayList<>();
@@ -45,7 +50,6 @@ class BoardServiceTest  {
         assertEquals(expectedBoards, returnedBoards);
     }
 
-
     @Test
     public void getOne() {
         Long boardId = 1L;
@@ -56,7 +60,6 @@ class BoardServiceTest  {
         assertEquals(expectedBoard, returnedBoard.get());
     }
 
-
     @Test
     public void getOneWithInvalidId() {
         Optional<Board> optionalBoard = Optional.empty();
@@ -64,8 +67,9 @@ class BoardServiceTest  {
 
         Optional<Board> result = boardServiceMock.getOne(1L);
 
-        assertThat(result).isEmpty();
+        assertTrue(result.isEmpty());
     }
+
     @Test
     public void getOneByCode() {
         Board board = new Board();
@@ -75,14 +79,14 @@ class BoardServiceTest  {
         assertEquals("12345", result.get().getCode());
     }
 
-
     @Test
     public void getOneByInvalidCode() {
         Optional<Board> optionalBoard = Optional.empty();
         when(boardRepositoryMock.findByCode("12345")).thenReturn(optionalBoard);
         Optional<Board> result = boardServiceMock.getOneByCode("12345");
-        assertThat(result).isEmpty();
+        assertTrue(result.isEmpty());
     }
+
     @Test
     public void createOne() {
         Board board = new Board();
@@ -99,12 +103,11 @@ class BoardServiceTest  {
 
         when(boardRepositoryMock.existsById(1L)).thenReturn(true);
 
-        boardServiceMock.deleteOne( 1L);
+        boardServiceMock.deleteOne(1L);
 
         verify(boardRepositoryMock).deleteById(1L);
 
     }
-
 
     @Test
     public void updateOne() {
@@ -136,6 +139,7 @@ class BoardServiceTest  {
         assertEquals(existingBoard.getReadOnlyCode(), updatedBoard.getReadOnlyCode());
 
     }
+
     @Test
     public void isCodeAlreadyUsed() {
         String code = "123";
@@ -144,8 +148,9 @@ class BoardServiceTest  {
 
         when(boardRepositoryMock.findByCode(code)).thenReturn(Optional.of(board));
 
-        Assertions.assertEquals(boardServiceMock.isCodeAlreadyUsed(code), true);
+        Assertions.assertTrue(boardServiceMock.isCodeAlreadyUsed(code));
     }
+
     @Test
     public void updateBoardCodes() {
         Board board = new Board();
@@ -166,8 +171,4 @@ class BoardServiceTest  {
         Assertions.assertNotEquals(code1, code2);
 
     }
-
-
-
-
 }

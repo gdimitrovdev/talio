@@ -45,6 +45,11 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ServerUtils {
 
     private static String server = "http://localhost:8080/";
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
+    public static void setServer(String server) {
+        ServerUtils.server = server;
+    }
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -72,8 +77,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();
@@ -146,10 +149,6 @@ public class ServerUtils {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public static void setServer(String server) {
-        ServerUtils.server = server;
     }
 
     public CardList addToEndOfList(CardList list, Card card) {

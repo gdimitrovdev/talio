@@ -34,6 +34,10 @@ public class QuoteControllerTest {
 
     private QuoteController sut;
 
+    private static Quote getQuote(String q) {
+        return new Quote(new Person(q, q), q);
+    }
+
     @BeforeEach
     public void setup() {
         random = new MyRandom();
@@ -62,10 +66,6 @@ public class QuoteControllerTest {
     public void databaseIsUsed() {
         sut.add(getQuote("q1"));
         repo.calledMethods.contains("save");
-    }
-
-    private static Quote getQuote(String q) {
-        return new Quote(new Person(q, q), q);
     }
 
     @SuppressWarnings("serial")

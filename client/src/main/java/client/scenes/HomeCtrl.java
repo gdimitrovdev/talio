@@ -26,6 +26,10 @@ public class HomeCtrl {
     //in the 2 methods the created/joined board should be added to the hashset
     public Set<Board> recentBoards;
     @FXML
+    Button joinBoardBtn;
+    @FXML
+    Button createBoardBtn;
+    @FXML
     private Button changeServerBtn;
     @FXML
     private AnchorPane root;
@@ -33,12 +37,6 @@ public class HomeCtrl {
     private ScrollPane outerContainer;
     @FXML
     private GridPane recentBoardsPane;
-
-    @FXML
-    Button joinBoardBtn;
-
-    @FXML
-    Button createBoardBtn;
 
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {

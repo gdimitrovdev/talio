@@ -1,6 +1,13 @@
 package server.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import commons.Subtask;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -9,14 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import server.database.SubtaskRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 class SubtaskServiceTest {
@@ -30,8 +29,6 @@ class SubtaskServiceTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
     }
-
-
 
     @Test
     void getMany() {

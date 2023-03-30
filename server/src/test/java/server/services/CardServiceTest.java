@@ -1,6 +1,13 @@
 package server.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import commons.Card;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,14 +17,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import server.database.CardRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 class CardServiceTest {
     @Mock
@@ -25,6 +24,7 @@ class CardServiceTest {
 
     @InjectMocks
     private CardService cardServiceMock;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);

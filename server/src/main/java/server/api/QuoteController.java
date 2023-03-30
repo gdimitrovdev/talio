@@ -40,6 +40,10 @@ public class QuoteController {
         this.repo = repo;
     }
 
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
+
     @GetMapping(path = {"", "/"})
     public List<Quote> getAll() {
         return repo.findAll();
@@ -64,10 +68,6 @@ public class QuoteController {
 
         Quote saved = repo.save(quote);
         return ResponseEntity.ok(saved);
-    }
-
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
     }
 
     @GetMapping("rnd")
