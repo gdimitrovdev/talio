@@ -71,11 +71,16 @@ class CardServiceTest {
     // Test whether deleteById() method of the repository was called for the correct card
     @Test
     void deleteOne() {
+        Card card = new Card();
+        card.setId(1L);
         when(cardRepositoryMock.existsById(1L)).thenReturn(true);
 
         cardServiceMock.deleteOne(1L);
 
         verify(cardRepositoryMock).deleteById(1L);
+
+
+
     }
 
     @Test
