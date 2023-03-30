@@ -47,17 +47,17 @@ class CardListServiceTest {
         assertEquals(cardList2, returnedCardLists.get(1));
     }
 
-//    @Test
-//    void getOne() {
-//        Long listId = 1L;
-//        CardList cardList = new CardList();
-//        when(cardListRepositoryMock.findById(listId)).thenReturn(Optional.of(cardList));
-//
-//        Optional<CardList> returnedCardList = cardListServiceMock.getOne(1L);
-//        assertEquals(cardList, returnedCardList.get());
-//
-//
-//    }
+    //    @Test
+    //    void getOne() {
+    //        Long listId = 1L;
+    //        CardList cardList = new CardList();
+    //        when(cardListRepositoryMock.findById(listId)).thenReturn(Optional.of(cardList));
+    //
+    //        Optional<CardList> returnedCardList = cardListServiceMock.getOne(1L);
+    //        assertEquals(cardList, returnedCardList.get());
+    //
+    //
+    //    }
 
     @Test
     void createOne() {
