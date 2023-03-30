@@ -31,7 +31,7 @@ public class Subtask implements Serializable {
     @ManyToOne
     private Card card;
 
-    private Subtask() {
+    public Subtask() {
     }
 
     public Subtask(String title, Card card, Boolean completed) {

@@ -40,9 +40,9 @@ class BoardServiceTest  {
         expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "blue"));
         when(boardRepositoryMock.findAll()).thenReturn(expectedBoards);
 
-        List<Board> actualBoards = boardServiceMock.getMany();
+        List<Board> returnedBoards = boardServiceMock.getMany();
 
-        assertEquals(expectedBoards, actualBoards);
+        assertEquals(expectedBoards, returnedBoards);
     }
 
 
@@ -52,8 +52,8 @@ class BoardServiceTest  {
         Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "red");
         when(boardRepositoryMock.findById(boardId)).thenReturn(Optional.of(expectedBoard));
 
-        Optional<Board> actualBoard = boardServiceMock.getOne(boardId);
-        assertEquals(expectedBoard, actualBoard.get());
+        Optional<Board> returnedBoard = boardServiceMock.getOne(boardId);
+        assertEquals(expectedBoard, returnedBoard.get());
     }
 
 
@@ -70,8 +70,7 @@ class BoardServiceTest  {
     public void getOneByCode() {
         Board board = new Board();
         board.setCode("12345");
-        Optional<Board> optionalBoard = Optional.of(board);
-        when(boardRepositoryMock.findByCode("12345")).thenReturn(optionalBoard);
+        when(boardRepositoryMock.findByCode("12345")).thenReturn(Optional.of(board));
         Optional<Board> result = boardServiceMock.getOneByCode("12345");
         assertEquals("12345", result.get().getCode());
     }
@@ -126,8 +125,6 @@ class BoardServiceTest  {
 
 
         when(boardRepositoryMock.findById(1L)).thenReturn(Optional.of(existingBoard));
-        when(boardRepositoryMock.findByCode(updatedBoard.getCode())).thenReturn(Optional.empty());
-        when(boardRepositoryMock.findByCode(updatedBoard.getReadOnlyCode())).thenReturn(Optional.empty());
         when(boardRepositoryMock.save(existingBoard)).thenReturn(existingBoard);
 
         Board result = boardServiceMock.updateOne(1L, updatedBoard);

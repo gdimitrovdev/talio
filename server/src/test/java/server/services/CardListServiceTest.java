@@ -36,14 +36,12 @@ class CardListServiceTest {
 
     @Test
     void getMany() {
-        // Create a list of CardList objects for testing purposes
         List<CardList> cardLists = new ArrayList<>();
         CardList cardList1 = new CardList();
         CardList cardList2 = new CardList();
         cardLists.add(cardList1);
         cardLists.add(cardList2);
 
-        // Specifying the behavior of the findAll() method of the CardListRepository mock
         when(cardListRepositoryMock.findAll()).thenReturn(cardLists);
 
         List<CardList> returnedCardLists = cardListServiceMock.getMany();
