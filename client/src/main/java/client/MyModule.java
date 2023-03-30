@@ -26,6 +26,7 @@ import client.scenes.ServerConnectionCtrl;
 import client.scenes.template.AddQuoteCtrl;
 import client.scenes.template.MainCtrl;
 import client.scenes.template.QuoteOverviewCtrl;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -44,5 +45,6 @@ public class MyModule implements Module {
         binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
     }
 }

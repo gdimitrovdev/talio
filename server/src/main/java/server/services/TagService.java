@@ -24,9 +24,15 @@ public class TagService {
         return tagRepository.findById(id);
     }
 
+    /**
+     * Ignores cards
+     *
+     * @param tag
+     * @return
+     */
     public Tag createOne(Tag tag) {
-        Tag newTag = tagRepository.save(tag);
-        return newTag;
+        tag.getCards().clear();
+        return tagRepository.save(tag);
     }
 
     public void deleteOne(Long id) {
@@ -35,6 +41,14 @@ public class TagService {
         }
     }
 
+    /**
+     * Ignores cards
+     *
+     * @param id
+     * @param tag
+     * @return
+     * @throws EntityNotFoundException
+     */
     public Tag updateOne(Long id, Tag tag) throws EntityNotFoundException {
         Tag existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tag not found"));

@@ -42,7 +42,6 @@ public class ShareBoardCtrl {
     }
 
     private void copyToClipboard(String text) {
-
         ClipboardContent content = new ClipboardContent();
         content.putString(text);
         clipboard.setContent(content);

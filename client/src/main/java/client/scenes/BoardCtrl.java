@@ -16,10 +16,12 @@ import javafx.scene.layout.HBox;
 
 public class BoardCtrl implements Initializable {
     private MainCtrlTalio mainCtrlTalio;
-
     private ServerUtils server;
+    private Long boardId;
+    private CardComponentCtrl currentSelectedCard;
+    private boolean droppedOnCard = false;
+    private Object updateBoard, updateList;
 
-    private Board board;
     @FXML
     private ScrollPane root;
 
@@ -34,9 +36,6 @@ public class BoardCtrl implements Initializable {
 
     @FXML
     private Button shareBTN;
-    private CardComponentCtrl currentSelectedCard;
-
-    private boolean droppedOnCard = false;
 
     @FXML
     private Button settingsBTN;
@@ -71,56 +70,64 @@ public class BoardCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        server.registerForMessages("/topic/lists", CardList.class, cardList -> {
-            // TODO add the new cardlist and do a board refresh
-            return;
+
+    }
+
+    public void initialize(Long boardId) {
+        this.boardId = boardId;
+        refresh();
+        // Updates that the board controller should handle:
+        // - board updates DONE
+        // - list creation DONE
+        // - list deletion DONE
+        // - board deletion TODO
+        updateBoard = server.addUpdateEvent(Board.class, (board) -> {
+            if (board.getId().equals(boardId)) {
+                refresh();
+            }
+        });
+        updateList = server.addUpdateEvent(CardList.class, (list) -> {
+            if (list.getBoard().getId().equals(boardId)) {
+                refresh();
+            }
         });
     }
 
-    public void initialize(Board board) throws IOException {
-        this.board = board;
-
-        updateOverview();
-
+    public void refresh() {
+        var board = server.getBoard(boardId);
         boardName.setText(board.getName());
-    }
-
-    public void updateOverview() throws IOException {
+        innerHBox.getChildren().forEach(c -> ((ListComponentCtrl) c).close());
+        innerHBox.getChildren().clear();
         for (CardList cardList : board.getLists()) {
-            innerHBox.getChildren()
-                    .add(new ListComponentCtrl(mainCtrlTalio, server, this, cardList));
+            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this,
+                    cardList.getId()));
         }
     }
 
+    // TODO I believe, we shouldn't really create the list, before the user enters the title
     @FXML
-    protected void addCardList() throws IOException {
-        CardList newList = new CardList("Empty title", board);
-        innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this, newList));
+    protected void addCardList() {
+        server.createCardList(new CardList("Untitled", server.getBoard(boardId)));
     }
 
-    public void refreshBoard(Board board) throws IOException {
-        innerHBox.getChildren().clear();
-        this.board = board;
-        this.updateOverview();
-    }
-
-    //return to home method
     @FXML
-    protected void backToHome() throws IOException {
+    protected void backToHome() {
         mainCtrlTalio.showHome();
-        // mainCtrlTalio.getPrimaryStage().setScene(scene);
     }
 
-    //open share board method
     @FXML
-    protected void share() throws IOException {
-        mainCtrlTalio.showShareBoard(board);
+    protected void share() {
+        mainCtrlTalio.showShareBoard(server.getBoard(boardId));
     }
 
-    //open the settings method
     @FXML
-    protected void settings() throws IOException {
-        mainCtrlTalio.showBoardSettings(board);
+    protected void settings() {
+        mainCtrlTalio.showBoardSettings(server.getBoard(boardId));
     }
 
+    public void close() {
+        innerHBox.getChildren().forEach(c -> ((ListComponentCtrl) c).close());
+        server.removeUpdateEvent(updateBoard);
+        server.removeUpdateEvent(updateList);
+    }
 }

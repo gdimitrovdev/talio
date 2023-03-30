@@ -43,9 +43,9 @@ public class HomeCtrl {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         this.recentBoards = new HashSet<>();
-        for (int i = 0; i < 15; i++) {
+        /*for (int i = 0; i < 15; i++) {
             this.generateExampleBoard((long) i);
-        }
+        }*/
     }
 
     private void generateExampleBoard(Long id) {
@@ -169,7 +169,7 @@ public class HomeCtrl {
     public void removeRecentBoard(Board board) {
         //removes all children from the FlowPane and then
         //remove board from hashset and call displayBoardLabels method again
-        server.deleteBoardById(board.getId());
+        server.deleteBoard(board.getId());
         recentBoards.remove(board);
         recentBoardsPane.getChildren().clear();
         displayBoardLabels();

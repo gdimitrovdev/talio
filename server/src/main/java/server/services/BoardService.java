@@ -71,8 +71,6 @@ public class BoardService {
         existingBoard.setName(board.getName());
         existingBoard.setCode(board.getCode());
         existingBoard.setReadOnlyCode(board.getReadOnlyCode());
-        existingBoard.setLists(board.getLists());
-        existingBoard.setTags(board.getTags());
 
         return boardRepository.save(existingBoard);
     }
