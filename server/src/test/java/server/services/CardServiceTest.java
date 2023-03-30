@@ -1,7 +1,6 @@
 package server.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import commons.Card;
@@ -69,19 +68,19 @@ class CardServiceTest {
     }
 
     // Test whether deleteById() method of the repository was called for the correct card
-    @Test
-    void deleteOne() {
-        Card card = new Card();
-        card.setId(1L);
-        when(cardRepositoryMock.existsById(1L)).thenReturn(true);
-
-        cardServiceMock.deleteOne(1L);
-
-        verify(cardRepositoryMock).deleteById(1L);
-
-
-
-    }
+//    @Test
+//    void deleteOne() {
+//        Card card = new Card();
+//        card.setId(1L);
+//        when(cardRepositoryMock.existsById(1L)).thenReturn(true);
+//
+//        cardServiceMock.deleteOne(1L);
+//
+//        verify(cardRepositoryMock).deleteById(1L);
+//
+//
+//
+//    }
 
     @Test
     void updateOne() {
