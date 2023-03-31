@@ -76,6 +76,7 @@ public class BoardController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOne(@PathVariable("id") Long id) {
         try {
+            boardService.deleteOne(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             System.out.println(e);

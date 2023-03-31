@@ -16,17 +16,17 @@
 
 package client.scenes;
 
-import client.scenes.template.MainCtrl;
+import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MainCtrlTest {
 
-    private MainCtrl sut;
+    private MainCtrlTalio sut;
 
     @BeforeEach
     public void setup() {
-        sut = new MainCtrl();
+        sut = new MainCtrlTalio(new ServerUtils());
     }
 
     @Test

@@ -23,9 +23,6 @@ import client.scenes.HomeCtrl;
 import client.scenes.JoinBoardCtrl;
 import client.scenes.MainCtrlTalio;
 import client.scenes.ServerConnectionCtrl;
-import client.scenes.template.AddQuoteCtrl;
-import client.scenes.template.MainCtrl;
-import client.scenes.template.QuoteOverviewCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -35,9 +32,6 @@ public class MyModule implements Module {
 
     @Override
     public void configure(Binder binder) {
-        binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MainCtrlTalio.class).in(Scopes.SINGLETON);
         binder.bind(HomeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(JoinBoardCtrl.class).in(Scopes.SINGLETON);
