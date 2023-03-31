@@ -4,6 +4,8 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import java.io.IOException;
+import java.util.List;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -85,12 +87,25 @@ public class ListComponentCtrl extends VBox {
         // - list: move card to or from DONE
         // - list: create list DONE
         // - list: update list DONE
-        updateList = server.addUpdateEvent(CardList.class, cardList -> {
-            System.out.println("refresh list (1): " + listId + " update id: " + cardList.getId());
-            if (cardList.getId().equals(listId)) {
+        server.registerForMessages("/topic/lists", Card.class, card -> {
+            if (card.getList().getId().equals(listId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
+            }
+        });
 
-                System.out.println("refresh list: " + listId);
-                refresh();
+        server.registerForMessages("/topic/lists", CardList.class, cardList -> {
+            if (cardList.getId().equals(listId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
             }
         });
     }
@@ -117,7 +132,8 @@ public class ListComponentCtrl extends VBox {
         System.out.println("refreshing: " + listId);
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
-        for (Card card : server.getCardList(listId).getCards()) {
+        List<Card> cardsOfList = server.getCardList(listId).getCards();
+        for (Card card : cardsOfList) {
             var child = new CardComponentCtrl(mainCtrlTalio, server, card.getId());
 
             child.setOnMousePressed(event -> boardCtrl.setCurrentSelectedCard(child));
@@ -173,8 +189,7 @@ public class ListComponentCtrl extends VBox {
 
     @FXML
     protected void addCard() {
-        cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, server));
-        /*Card card = server.createCard(new Card("Untitled", "", "", server.getCardList(listId)));
-        server.moveCardToListLast(listId, card.getId());*/
+        Card card = server.createCard(new Card("Untitled", "", "", server.getCardList(listId)));
+        server.moveCardToListLast(card.getId(), listId);
     }
 }

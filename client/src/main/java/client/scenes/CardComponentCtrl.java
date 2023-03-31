@@ -123,10 +123,13 @@ public class CardComponentCtrl extends AnchorPane {
         // card: card update DONE
         // card: add tag DONE
         // card: remove tag DONE
-        updateCard = server.addUpdateEvent(Card.class, card -> {
-            if (card.getId().equals(cardId)) {
-                setCard(card);
-            }
+        server.registerForMessages("/topic/cards", Card.class, card -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    setCard(card);
+                }
+            });
         });
     }
 

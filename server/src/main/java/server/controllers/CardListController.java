@@ -55,7 +55,7 @@ public class CardListController {
     public ResponseEntity<CardList> createOne(@RequestBody CardList cardList) {
         try {
             var newCardList = cardListService.createOne(cardList);
-            template.convertAndSend("/topic/lists", newCardList);
+            template.convertAndSend("/topic/boards", newCardList);
             return ResponseEntity.ok(newCardList);
         } catch (Exception e) {
             System.out.println(e);

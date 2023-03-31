@@ -104,13 +104,13 @@ public class MainCtrlTalio {
     }
 
     public void showBoard(Board board) {
-        boardComponentCtrl.initialize(board.getId());
-        primaryStageTalio.setTitle("Talio: Board");
-        primaryStageTalio.setScene(boardComponent);
         try {
             serverUtils.subscribeToBoard(board.getId());
         } catch (Exception e) {
             throw new RuntimeException();
         }
+        boardComponentCtrl.initialize(board.getId());
+        primaryStageTalio.setTitle("Talio: Board");
+        primaryStageTalio.setScene(boardComponent);
     }
 }

@@ -1,6 +1,7 @@
 package server.services;
 
 import commons.Card;
+import commons.CardList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -39,9 +40,10 @@ public class CardService {
      * @return
      */
     public Card createOne(Card card) {
-        card.setList(null);
         card.getTags().clear();
         Card newCard = cardRepository.save(card);
+        CardList list = cardListRepository.findById(card.getList().getId()).get();
+        list.addCard(newCard);
         return newCard;
     }
 

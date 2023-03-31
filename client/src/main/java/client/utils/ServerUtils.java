@@ -169,6 +169,7 @@ public class ServerUtils {
             ).get();
             this.session = session;
             System.out.println("created session");
+            /*
             var classToTopic = Map.of(
                     commons.Board.class, "boards",
                     commons.Card.class, "cards",
@@ -181,16 +182,20 @@ public class ServerUtils {
                 registerForMessages("/topic/" + classToTopic.get(type), type, (o) -> {
                     System.out.println(
                             "received websocket from: " + "/topic/" + classToTopic.get(type));
+                    System.out.println(updateEvents);
+                    System.out.println(updateEvents.keySet());
                     for (var key : updateEvents.keySet()) {
                         var updateEvent = updateEvents.get(key);
                         System.out.println(updateEvent.type + " " + type);
                         if (updateEvent.type.equals(type)) {
                             System.out.println();
-                            updateEvent.consumer.accept(o);
+                            updateEvent.accept(o);
+                            System.out.println("After consumer accept");
                         }
                     }
                 });
             }
+            */
         } catch (Exception e) {
             throw new ConnectException(
                     "Exception while trying to create a STOMP WebSocket Session:\n"
@@ -239,7 +244,7 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
-    private <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
+    public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
