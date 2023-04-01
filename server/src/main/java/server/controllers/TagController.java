@@ -87,7 +87,7 @@ public class TagController {
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity updateOne(@PathVariable Long id,
+    public ResponseEntity<Tag> updateOne(@PathVariable Long id,
             @RequestBody Tag tag) {
         try {
             List<Card> affectedCards =
