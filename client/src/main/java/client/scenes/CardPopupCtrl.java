@@ -315,6 +315,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         card.setTitle(cardTitle.getText());
         card.setDescription(cardDescription.getText());
 
+        //card.setSubtasks(subtasks);
         // TODO maybe make sure this doesn't crash if the card was deleted while we were editing it
         List<Tag> tagsOnServer = server.getCard(card.getId()).getTags();
         List<Tag> tagsToAdd = new ArrayList<Tag>();

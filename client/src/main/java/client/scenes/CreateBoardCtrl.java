@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
@@ -26,9 +27,17 @@ public class CreateBoardCtrl {
 
     public void clickCreateBoard() throws IOException {
         String name = fieldBoardName.getText();
-        Board board = server.createBoard(new Board(name, "", "", ""));
-        mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
-        mainCtrlTalio.showBoard(board);
+        if (name.equals("")) {
+            Alert box = new Alert(Alert.AlertType.ERROR);
+            box.setTitle("Invalid name");
+            box.setContentText("The name of the board cannot be empty");
+            box.showAndWait();
+        }
+        else {
+            Board board = server.createBoard(new Board(name, "", "", ""));
+            mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
+            mainCtrlTalio.showBoard(board);
+        }
     }
 
     public void clickBackHome() {

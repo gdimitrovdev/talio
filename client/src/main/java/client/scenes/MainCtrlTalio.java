@@ -111,6 +111,7 @@ public class MainCtrlTalio {
     public void showServerConnection() {
         primaryStageTalio.setTitle("Talio: Connect to a Server");
         primaryStageTalio.setScene(serverConnection);
+        serverConnectionCtrl.refreshServerAddress();
     }
 
     //TODO: this method needs to be finished after someone does the settings

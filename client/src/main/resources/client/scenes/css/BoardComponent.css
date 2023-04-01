@@ -8,8 +8,8 @@
     -fx-spacing: 80;
 }
 
-#boardName{
--fx-background-color: #d3dbe8;
+#boardNameLabel{
+-fx-font-size:30px;
 }
 
 #newListButton {

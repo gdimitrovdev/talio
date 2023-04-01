@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" fx:controller="client.scenes.BoardCtrl">
 
     <ToolBar prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
         <items>
-            <Button fx:id="backHomeBTN" text=" Back to HomePage" onAction="#backToHome"/>
-            <HBox fx:id="spacer" prefWidth="150.0" />
-            <TextField fx:id="boardName" editable="false"/>
-            <HBox fx:id="spacer1" prefWidth="200.0" />
-            <Button fx:id="shareBTN" text="Share" onAction="#share">
+            <Button fx:id="backHomeBTN" onAction="#backToHome">
+                <graphic>
+                    <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/images/home.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip><Tooltip text="Return to Homepage" /></tooltip>
+            </Button>
+            <HBox fx:id="spacer" prefWidth="275.0" />
+            <Label fx:id="boardNameLabel" />
+            <HBox fx:id="spacer1" prefWidth="275.0" />
+            <Button fx:id="shareBTN" onAction="#share">
+                <graphic>
+                    <ImageView fx:id="myImage2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@/images/sharefinal.png">
+                        </Image>
+                    </ImageView>
+                </graphic>
                 <tooltip><Tooltip text="Share this board" /></tooltip>
             </Button>
-            <Button fx:id="settingsBTN" text="⋮" onAction="#settings" >
-                <tooltip><Tooltip text="Board Settings" /></tooltip>
+            <Button fx:id="settingsBTN" onAction="#settings" >
+                <graphic>
+                    <ImageView fx:id="myImage3" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/images/ellipsis.png">
+                        </Image>
+                    </ImageView>
+                </graphic>
+                <tooltip><Tooltip text="BoardSettings" /></tooltip>
             </Button>
         </items>
     </ToolBar>
