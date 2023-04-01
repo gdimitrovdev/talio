@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.converter.MessageConversionException;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +56,7 @@ public class CardController {
     public ResponseEntity<Card> createOne(@RequestBody Card card) {
         try {
             Card newCard = cardService.createOne(card);
-            template.convertAndSend("topics/cards", newCard);
+            template.convertAndSend("/topic/lists", newCard);
             return ResponseEntity.ok(newCard);
         } catch (Exception e) {
             System.out.println(e);
@@ -103,14 +104,19 @@ public class CardController {
             @PathVariable Long listId,
             @PathVariable Long afterCardId) {
         try {
-            Long originalListId = cardService.getOne(id).get().getList().getId();
+            Long originalListId;
+            try {
+                originalListId = cardService.getOne(id).get().getList().getId();
+            } catch (NullPointerException e) {
+                originalListId = 0L;
+            }
             cardService.moveToListAfterCard(id, listId, afterCardId);
             CardList list = cardListService.getOne(listId).get();
             System.out.println("Cowabunga!");
             template.convertAndSend("/topic/lists", list);
             //sendList(list);
             System.out.println("Cowabunga 2!");
-            if (!originalListId.equals(list.getId())) {
+            if (originalListId != 0L && !originalListId.equals(list.getId())) {
                 System.out.println("Cowabunga 3!");
                 template.convertAndSend("/topic/lists",
                         cardListService.getOne(originalListId).get());
@@ -131,11 +137,16 @@ public class CardController {
     public ResponseEntity<CardList> moveToListLast(@PathVariable Long id,
             @PathVariable Long listId) {
         try {
-            Long originalListId = cardService.getOne(id).get().getList().getId();
+            Long originalListId;
+            try {
+                originalListId = cardService.getOne(id).get().getList().getId();
+            } catch (NullPointerException e) {
+                originalListId = 0L;
+            }
             cardService.moveToListLast(id, listId);
             CardList list = cardListService.getOne(listId).get();
             template.convertAndSend("/topic/lists", list);
-            if (!originalListId.equals(list.getId())) {
+            if (originalListId != 0L && !originalListId.equals(list.getId())) {
                 template.convertAndSend("/topic/lists",
                         cardListService.getOne(originalListId).get());
             }

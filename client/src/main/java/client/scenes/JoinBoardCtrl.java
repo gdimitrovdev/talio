@@ -25,6 +25,7 @@ public class JoinBoardCtrl {
     public void clickJoinBoard() {
         String code = fieldBoardCode.getText();
         Board newBoard = server.joinBoard(code);
+        mainCtrlTalio.addJoinedBoard(server.getServerUrl(), newBoard.getId());
         mainCtrlTalio.showBoard(newBoard);
     }
 

@@ -1,6 +1,7 @@
 package server.services;
 
 import commons.Card;
+import commons.CardList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -39,9 +40,19 @@ public class CardService {
      * @return
      */
     public Card createOne(Card card) {
-        card.setList(null);
         card.getTags().clear();
         Card newCard = cardRepository.save(card);
+        CardList list = cardListRepository.findById(card.getList().getId()).get();
+        list.addCard(newCard);
+        if (list.getCards().size() == 1) {
+            newCard.setListPriority(0L);
+        } else {
+            newCard.setListPriority(
+                    list.getCards().stream().max(Comparator.comparing(Card::getListPriority)).get().getListPriority()
+                            + 1L
+            );
+        }
+        newCard = cardRepository.save(newCard);
         return newCard;
     }
 
@@ -64,8 +75,7 @@ public class CardService {
                         c.setListPriority(c.getListPriority() - 1);
                         cardRepository.save(c);
                     });*/
-            card.setList(null);
-            card.setListPriority(-1L);
+            list.removeCard(card);
             cardRepository.save(card);
             return card;
         } catch (Exception e) {
@@ -86,7 +96,7 @@ public class CardService {
             } else {
                 card = removeCardFromItsList(card.getId());
                 card.setListPriority(0L);
-                card.setList(list);
+                list.addCard(card);
                 cardRepository.save(card);
                 return card;
             }
@@ -108,7 +118,14 @@ public class CardService {
                         c.setListPriority(c.getListPriority() + 1);
                         cardRepository.save(c);
                     });*/
-            card.setList(list);
+            list.addCard(card);
+            card.setListPriority(afterCard.getListPriority() + 1L);
+            for (Card cardOfList : list.getCards()) {
+                if (cardOfList.getListPriority() > afterCard.getListPriority() && cardOfList.getId() != card.getId()) {
+                    cardOfList.setListPriority(cardOfList.getListPriority() + 1L);
+                    cardRepository.save(cardOfList);
+                }
+            }
             cardRepository.save(card);
             return card;
         } catch (Exception e) {

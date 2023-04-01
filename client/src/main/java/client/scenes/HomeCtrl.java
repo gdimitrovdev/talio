@@ -24,7 +24,6 @@ public class HomeCtrl {
     //this set will contain all the boards that have been opened by the 'join a board' and
     //'create a board' method
     //in the 2 methods the created/joined board should be added to the hashset
-    public Set<Board> recentBoards;
     @FXML
     Button joinBoardBtn;
     @FXML
@@ -37,12 +36,12 @@ public class HomeCtrl {
     private ScrollPane outerContainer;
     @FXML
     private GridPane recentBoardsPane;
+    private boolean nestedButtonPressed = false;
 
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
-        this.recentBoards = new HashSet<>();
         /*for (int i = 0; i < 15; i++) {
             this.generateExampleBoard((long) i);
         }*/
@@ -71,7 +70,6 @@ public class HomeCtrl {
         //adding the board to the hashset, so it will be displayed
         //in 'your boards' on the home scene
         board.setId(id);
-        recentBoards.add(board);
     }
 
     /**
@@ -80,6 +78,10 @@ public class HomeCtrl {
      * if there are no boards: display 'no boards' message
      */
     public void displayBoardLabels() {
+        Set<Long> recentBoards = mainCtrlTalio.getJoinedBoardForServer(server.getServerUrl());
+        if (recentBoards == null) {
+            recentBoards = new HashSet<>();
+        }
         if (recentBoards.isEmpty()) {
             Label noBoardsLabel = new Label("No recent boards");
             noBoardsLabel.setStyle(
@@ -87,11 +89,12 @@ public class HomeCtrl {
             recentBoardsPane.getChildren().add(noBoardsLabel);
 
         } else {
+            recentBoardsPane.getChildren().clear();
             recentBoardsPane.setHgap(70);
             int i = 0;
             int j = 0;
-            for (var item : recentBoards) {
-
+            for (Long itemId : recentBoards) {
+                Board item = server.getBoard(itemId);
                 //initializing the button and its content
                 Button boardButton = new Button();
                 AnchorPane innerPane = new AnchorPane();
@@ -117,8 +120,14 @@ public class HomeCtrl {
 
 
                 //setting the action of the buttons for removing and editing
-                deleteBoardBtn.setOnAction(e -> removeRecentBoard(item));
-                boardSettingBtn.setOnAction(e -> openBoardSetting(item));
+                deleteBoardBtn.setOnAction(e -> {
+                    nestedButtonPressed = true;
+                    removeRecentBoard(item);
+                });
+                boardSettingBtn.setOnAction(e -> {
+                    nestedButtonPressed = true;
+                    openBoardSetting(item);
+                });
                 boardButton.setOnAction(e -> {
                     try {
                         displayBoard(item);
@@ -170,7 +179,7 @@ public class HomeCtrl {
         //removes all children from the FlowPane and then
         //remove board from hashset and call displayBoardLabels method again
         server.deleteBoard(board.getId());
-        recentBoards.remove(board);
+        mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
         recentBoardsPane.getChildren().clear();
         displayBoardLabels();
     }
@@ -189,6 +198,11 @@ public class HomeCtrl {
      * displays the board in the overview
      */
     public void displayBoard(Board board) throws IOException {
+
+        if (nestedButtonPressed) {
+            nestedButtonPressed = false;
+            return;
+        }
 
         mainCtrlTalio.showBoard(board);
 

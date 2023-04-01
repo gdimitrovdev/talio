@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -80,13 +81,36 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     private Button close;
 
     @Inject
-    public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, Card card) throws IOException {
+    public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, Card card, ServerUtils server) throws IOException {
         this.mainCtrlTalio = mainCtrlTalio;
         this.card = card;
+        this.server = server;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
         loader.setRoot(this);
         loader.setController(this);
+
+        server.registerForMessages("/topic/subtasks", Subtask.class, subtask -> {
+            if (subtask.getCard().getId().equals(card.getId())) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshSubtasks();
+                    }
+                });
+            }
+        });
+
+        server.registerForMessages("/topic/subtasks", Card.class, cardReceived -> {
+            if (cardReceived.getId().equals(card.getId())) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshSubtasks();
+                    }
+                });
+            }
+        });
     }
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -167,11 +191,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     }
 
     public void deleteSubtask(Subtask subtask) {
-        card.getSubtasks().remove(subtask);
-        this.setCardData(card);
+        System.out.println(subtask.getId());
+        server.deleteSubtask(subtask.getId());
     }
 
     public void initializeSubtasks(Card cardData) {
+        subtaskVBox.getChildren().clear();
         for (Subtask subtask : cardData.getSubtasks()) {
             HBox subtaskElement = new HBox();
 
@@ -239,9 +264,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
     public void addNewSubtask(String entry) {
         if (!entry.isEmpty()) {
-            card.getSubtasks().add(new Subtask(entry, card, false));
-            this.setCardData(card);
+            server.createSubtask(new Subtask(entry, card, false));
         }
+    }
+
+    public void refreshSubtasks() {
+        initializeSubtasks(server.getCard(card.getId()));
     }
 
     public void checkTagDuplicate(String entry) {

@@ -89,7 +89,7 @@ public class CardComponentCtrl extends AnchorPane {
             FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
             try {
                 cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
-                        server.getCard(cardId)));
+                        server.getCard(cardId), server));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -123,9 +123,36 @@ public class CardComponentCtrl extends AnchorPane {
         // card: card update DONE
         // card: add tag DONE
         // card: remove tag DONE
-        updateCard = server.addUpdateEvent(Card.class, card -> {
+        server.registerForMessages("/topic/cards", Card.class, card -> {
             if (card.getId().equals(cardId)) {
-                setCard(card);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setCard(card);
+                    }
+                });
+            }
+        });
+
+        server.registerForMessages("/topic/subtasks", Subtask.class, subtask -> {
+            if (subtask.getCard().getId().equals(cardId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setCard(subtask.getCard());
+                    }
+                });
+            }
+        });
+
+        server.registerForMessages("/topic/subtasks", Card.class, cardReceived -> {
+            if (cardReceived.getId().equals(cardId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setCard(cardReceived);
+                    }
+                });
             }
         });
     }

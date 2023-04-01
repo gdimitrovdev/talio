@@ -27,6 +27,7 @@ public class CreateBoardCtrl {
     public void clickCreateBoard() throws IOException {
         String name = fieldBoardName.getText();
         Board board = server.createBoard(new Board(name, "", "", ""));
+        mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
         mainCtrlTalio.showBoard(board);
     }
 

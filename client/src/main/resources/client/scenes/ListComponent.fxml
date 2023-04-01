@@ -7,7 +7,7 @@
 
 
     <HBox fx:id="titleHolder">
-        <TextField fx:id="titleField" HBox.hgrow="ALWAYS" text="Empty title"></TextField>
+        <TextField fx:id="titleField" HBox.hgrow="ALWAYS" text="Empty title" onAction="#updateListTitle"></TextField>
         <Button fx:id="deleteListBtn" text="X" onAction="#deleteList">
             <tooltip><Tooltip text="Delete this list" /></tooltip>
         </Button>

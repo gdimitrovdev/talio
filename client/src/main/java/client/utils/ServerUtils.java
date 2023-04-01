@@ -163,6 +163,7 @@ public class ServerUtils {
             ).get();
             this.session = session;
             System.out.println("created session");
+            /*
             var classToTopic = Map.of(
                     commons.Board.class, "boards",
                     commons.Card.class, "cards",
@@ -175,16 +176,20 @@ public class ServerUtils {
                 registerForMessages("/topic/" + classToTopic.get(type), type, (o) -> {
                     System.out.println(
                             "received websocket from: " + "/topic/" + classToTopic.get(type));
+                    System.out.println(updateEvents);
+                    System.out.println(updateEvents.keySet());
                     for (var key : updateEvents.keySet()) {
                         var updateEvent = updateEvents.get(key);
                         System.out.println(updateEvent.type + " " + type);
                         if (updateEvent.type.equals(type)) {
                             System.out.println();
-                            updateEvent.consumer.accept(o);
+                            updateEvent.accept(o);
+                            System.out.println("After consumer accept");
                         }
                     }
                 });
             }
+            */
         } catch (Exception e) {
             throw new ConnectException(
                     "Exception while trying to create a STOMP WebSocket Session:\n"
@@ -206,7 +211,7 @@ public class ServerUtils {
         updateEvents.remove(key);
     }
 
-    private <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
+    public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -273,7 +278,7 @@ public class ServerUtils {
     }
 
     public Card deleteSubtask(Long subtaskId) {
-        return webTarget.path("/api/lists/" + subtaskId)
+        return webTarget.path("/api/subtasks/" + subtaskId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(new GenericType<Card>() {
@@ -402,6 +407,18 @@ public class ServerUtils {
     }
 
     public void moveCardToListLast(Long cardId, Long newListId) {
+        Long oldListId = this.getCard(cardId).getList().getId();
+        try {
+            webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
+                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                    .get(new GenericType<CardList>() {
+                    });
+        } catch (Exception e) {
+            System.out.println("The expected error");
+        }
+        webTarget.path("/api/lists/refresh-list/" + oldListId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .get(new GenericType<CardList>() {});
         try {
             webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
@@ -413,6 +430,19 @@ public class ServerUtils {
     }
 
     public void moveCardToListAfterCard(Long cardId, Long newListId, Long cardAfterId) {
+        Long oldListId = this.getCard(cardId).getList().getId();
+        try {
+            webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
+                            + "/" + cardAfterId)
+                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                    .get(new GenericType<CardList>() {
+                    });
+        } catch (Exception e) {
+            System.out.println("The expected error");
+        }
+        webTarget.path("/api/lists/refresh-list/" + oldListId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .get(new GenericType<CardList>() {});
         try {
             webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
                             + "/" + cardAfterId)

@@ -7,8 +7,10 @@ import commons.CardList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -81,14 +83,25 @@ public class BoardCtrl implements Initializable {
         // - list creation DONE
         // - list deletion DONE
         // - board deletion TODO
-        updateBoard = server.addUpdateEvent(Board.class, (board) -> {
-            if (board.getId().equals(boardId)) {
-                refresh();
+        server.registerForMessages("/topic/boards", CardList.class, cardList -> {
+            if (cardList.getBoard().getId().equals(boardId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
             }
         });
-        updateList = server.addUpdateEvent(CardList.class, (list) -> {
-            if (list.getBoard().getId().equals(boardId)) {
-                refresh();
+
+        server.registerForMessages("/topic/boards", Board.class, board -> {
+            if (board.getId().equals(boardId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
             }
         });
     }
@@ -96,7 +109,6 @@ public class BoardCtrl implements Initializable {
     public void refresh() {
         var board = server.getBoard(boardId);
         boardName.setText(board.getName());
-        innerHBox.getChildren().forEach(c -> ((ListComponentCtrl) c).close());
         innerHBox.getChildren().clear();
         for (CardList cardList : board.getLists()) {
             innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this,

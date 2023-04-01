@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,6 +20,7 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
     private ServerUtils serverUtils;
+    private Map<String, Set<Long>> joinedBoards = new HashMap<>();
 
     @Inject
     public MainCtrlTalio(ServerUtils serverUtils) {
@@ -64,6 +66,32 @@ public class MainCtrlTalio {
 
     }
 
+    public Set<Long> getJoinedBoardForServer(String serverUrl) {
+        return joinedBoards.get(serverUrl);
+    }
+
+    public void addJoinedBoard(String serverUrl, Long boardId) {
+        if (!joinedBoards.keySet().contains(serverUrl)) {
+            joinedBoards.put(serverUrl, new HashSet<Long>());
+        }
+
+        if (!joinedBoards.get(serverUrl).contains(boardId)) {
+            joinedBoards.get(serverUrl).add(boardId);
+        }
+    }
+
+    public void removeJoinedBoard(String serverUrl, Long boardId) {
+        if (!joinedBoards.keySet().contains(serverUrl)) {
+            return;
+        }
+
+        if (!joinedBoards.get(serverUrl).contains(boardId)) {
+            return;
+        }
+
+        joinedBoards.get(serverUrl).remove(boardId);
+    }
+
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
@@ -104,13 +132,13 @@ public class MainCtrlTalio {
     }
 
     public void showBoard(Board board) {
-        boardComponentCtrl.initialize(board.getId());
-        primaryStageTalio.setTitle("Talio: Board");
-        primaryStageTalio.setScene(boardComponent);
         try {
             serverUtils.subscribeToBoard(board.getId());
         } catch (Exception e) {
             throw new RuntimeException();
         }
+        boardComponentCtrl.initialize(board.getId());
+        primaryStageTalio.setTitle("Talio: Board");
+        primaryStageTalio.setScene(boardComponent);
     }
 }

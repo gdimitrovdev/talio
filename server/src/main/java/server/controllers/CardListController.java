@@ -54,7 +54,7 @@ public class CardListController {
     public ResponseEntity<CardList> createOne(@RequestBody CardList cardList) {
         try {
             var newCardList = cardListService.createOne(cardList);
-            template.convertAndSend("/topic/lists", newCardList);
+            template.convertAndSend("/topic/boards", newCardList);
             return ResponseEntity.ok(newCardList);
         } catch (Exception e) {
             System.out.println(e);
@@ -89,6 +89,13 @@ public class CardListController {
             System.out.println(e);
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/refresh-list/{id}")
+    @ResponseBody
+    public ResponseEntity<CardList> refreshList(@PathVariable Long id) {
+        template.convertAndSend("/topic/lists", cardListService.getOne(id).get());
+        return ResponseEntity.ok(cardListService.getOne(id).get());
     }
 
 }

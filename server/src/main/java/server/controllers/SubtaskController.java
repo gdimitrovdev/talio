@@ -56,7 +56,7 @@ public class SubtaskController {
     public ResponseEntity<Subtask> createOne(@RequestBody Subtask subtask) {
         try {
             Subtask newSubtask = subtaskService.createOne(subtask);
-            template.convertAndSend("topics/subtasks", newSubtask);
+            template.convertAndSend("/topic/subtasks", newSubtask);
             return ResponseEntity.ok(newSubtask);
         } catch (Exception e) {
             System.out.println(e);
@@ -71,7 +71,7 @@ public class SubtaskController {
             var cardId = subtaskService.getOne(id).get().getCard().getId();
             subtaskService.deleteOne(id);
             var card = cardService.getOne(cardId).get();
-            template.convertAndSend("/topic/cards", card);
+            template.convertAndSend("/topic/subtasks", card);
             return ResponseEntity.ok(card);
         } catch (Exception e) {
             System.out.println(e);
