@@ -32,7 +32,7 @@ class CardControllerTest {
     private CardListService cardListServiceMock;
 
     @Mock
-    private SimpMessagingTemplate templateMock;
+    private SimpMessagingTemplate templateMock; 
 
     @Autowired
     @InjectMocks
