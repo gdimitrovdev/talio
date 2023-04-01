@@ -6,46 +6,37 @@ import commons.CardList;
 import commons.Subtask;
 import commons.Tag;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.database.SubtaskRepository;
-import server.database.TagRepository;
+import server.services.BoardService;
+import server.services.CardListService;
+import server.services.CardService;
+import server.services.SubtaskService;
+import server.services.TagService;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private BoardController boardController;
-    @Autowired
-    private CardController cardController;
-    @Autowired
-    private CardListController cardListController;
-    @Autowired
-    private SubtaskController subtaskController;
-    @Autowired
-    private TagController tagController;
 
-    private final BoardRepository boardRepository;
-    private final TagRepository tagRepository;
-    private final SubtaskRepository subtaskRepository;
-    private final CardListRepository cardListRepository;
-    private final CardRepository cardRepository;
+    private final BoardService boardService;
+    private final TagService tagService;
+    private final SubtaskService subtaskService;
+    private final CardListService cardListService;
+    private final CardService cardService;
 
-    public AdminController(BoardRepository boardRepository, TagRepository tagRepository,
-            SubtaskRepository subtaskRepository, CardListRepository cardListRepository,
-            CardRepository cardRepository) {
-        this.boardRepository = boardRepository;
-        this.tagRepository = tagRepository;
-        this.subtaskRepository = subtaskRepository;
-        this.cardListRepository = cardListRepository;
-        this.cardRepository = cardRepository;
+    @Inject
+    public AdminController(BoardService boardService, TagService tagService,
+            SubtaskService subtaskService, CardListService cardListService,
+            CardService cardService) {
+        this.boardService = boardService;
+        this.tagService = tagService;
+        this.subtaskService = subtaskService;
+        this.cardListService = cardListService;
+        this.cardService = cardService;
     }
 
     @GetMapping(path = {"", "/"})
@@ -75,7 +66,7 @@ public class AdminController {
                         <th style="border: 1px solid black">Read-Only Join Code</th>
                     </tr>
                 """
-                + boardRepository.findAll().stream().map(b -> "<tr><td style=\"border: 1px solid black\">"
+                + boardService.getMany().stream().map(b -> "<tr><td style=\"border: 1px solid black\">"
                     + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName() + "</td><td style=\"border: 1px solid black\">"
                     + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode() + "</td></tr>"
                 ).collect(Collectors.joining("\n")) + "</table>";
@@ -85,11 +76,11 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity clear() {
         try {
-            subtaskRepository.deleteAll();
-            cardRepository.deleteAll();
-            tagRepository.deleteAll();
-            cardListRepository.deleteAll();
-            boardRepository.deleteAll();
+            subtaskService.deleteMany();
+            cardService.deleteMany();
+            tagService.deleteMany();
+            cardListService.deleteMany();
+            boardService.deleteMany();
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -116,68 +107,65 @@ public class AdminController {
             // Colors in format #Background/#Foreground
 
             Board team69Board =
-                    boardController.createOne(new Board("Team 69", "", "", "#FFFFFF/#000000"))
-                            .getBody();
+                    boardService.createOne(new Board("Team 69", "", "", "#FFFFFF/#000000"));
             Tag b1urgentTag =
-                    tagController.createOne(new Tag("Urgent", "#FF0000/#FFFFFF", team69Board))
-                            .getBody();
+                    tagService.createOne(new Tag("Urgent", "#FF0000/#FFFFFF", team69Board));
             Tag b1bugTag =
-                    tagController.createOne(new Tag("Bug", "#AA0000/#FFFFFF", team69Board))
-                            .getBody();
-            Tag b1documentationTag = tagController.createOne(new Tag("Documentation",
-                    "#0000AA/#FFFFFF", team69Board)).getBody();
-            Tag b1featureTag = tagController.createOne(new Tag("Feature",
-                    "#00AA00/#FFFFFF", team69Board)).getBody();
+                    tagService.createOne(new Tag("Bug", "#AA0000/#FFFFFF", team69Board));
+            Tag b1documentationTag = tagService.createOne(new Tag("Documentation",
+                    "#0000AA/#FFFFFF", team69Board));
+            Tag b1featureTag = tagService.createOne(new Tag("Feature",
+                    "#00AA00/#FFFFFF", team69Board));
             CardList b1toDoCardList =
-                    cardListController.createOne(new CardList("To Do", team69Board)).getBody();
-            CardList b1doingCardList = cardListController.createOne(new CardList("Doing",
-                    team69Board)).getBody();
-            CardList b1doneCardList = cardListController.createOne(new CardList("Done",
-                    team69Board)).getBody();
-            CardList b1CardList4 = cardListController.createOne(new CardList("Card List 4",
-                    team69Board)).getBody();
-            CardList b1CardList5 = cardListController.createOne(new CardList("Card List 5",
-                    team69Board)).getBody();
-            Card b1DuplicateTagWarningCard = cardController.createOne(new Card("Warning message "
-                    + "for duplicate tags", "", "", null)).getBody();
-            cardController.moveToListLast(b1DuplicateTagWarningCard.getId(),
+                    cardListService.createOne(new CardList("To Do", team69Board));
+            CardList b1doingCardList = cardListService.createOne(new CardList("Doing",
+                    team69Board));
+            CardList b1doneCardList = cardListService.createOne(new CardList("Done",
+                    team69Board));
+            CardList b1CardList4 = cardListService.createOne(new CardList("Card List 4",
+                    team69Board));
+            CardList b1CardList5 = cardListService.createOne(new CardList("Card List 5",
+                    team69Board));
+            Card b1DuplicateTagWarningCard = cardService.createOne(new Card("Warning message "
+                    + "for duplicate tags", "", "", null));
+            cardService.moveToListLast(b1DuplicateTagWarningCard.getId(),
                     b1toDoCardList.getId());
-            cardController.addTagToCard(b1DuplicateTagWarningCard.getId(), b1featureTag.getId());
-            Card b1TestClientControllersCard = cardController.createOne(new Card("Test Client "
-                    + "Controllers", "", "", null)).getBody();
-            cardController.moveToListLast(b1TestClientControllersCard.getId(),
+            cardService.addTagToCard(b1DuplicateTagWarningCard.getId(), b1featureTag.getId());
+            Card b1TestClientControllersCard = cardService.createOne(new Card("Test Client "
+                    + "Controllers", "", "", null));
+            cardService.moveToListLast(b1TestClientControllersCard.getId(),
                     b1toDoCardList.getId());
-            cardController.addTagToCard(b1TestClientControllersCard.getId(), b1featureTag.getId());
-            cardController.addTagToCard(b1TestClientControllersCard.getId(), b1bugTag.getId());
-            cardController.addTagToCard(b1TestClientControllersCard.getId(), b1urgentTag.getId());
-            cardController.addTagToCard(b1TestClientControllersCard.getId(),
+            cardService.addTagToCard(b1TestClientControllersCard.getId(), b1featureTag.getId());
+            cardService.addTagToCard(b1TestClientControllersCard.getId(), b1bugTag.getId());
+            cardService.addTagToCard(b1TestClientControllersCard.getId(), b1urgentTag.getId());
+            cardService.addTagToCard(b1TestClientControllersCard.getId(),
                     b1documentationTag.getId());
-            Subtask b1Subtask1 = subtaskController.createOne(new Subtask("Subtask 1",
-                    b1TestClientControllersCard, true)).getBody();
-            Subtask b1Subtask2 = subtaskController.createOne(new Subtask("Subtask 2",
-                    b1TestClientControllersCard, false)).getBody();
-            Subtask b1Subtask3 = subtaskController.createOne(new Subtask("Subtask 3",
-                    b1TestClientControllersCard, false)).getBody();
-            Subtask b1Subtask4 = subtaskController.createOne(new Subtask("Subtask 4",
-                    b1TestClientControllersCard, false)).getBody();
-            Card b1Card3 = cardController.createOne(new Card("Card 3", "", "", null)).getBody();
-            cardController.moveToListLast(b1Card3.getId(), b1doingCardList.getId());
-            Card b1Card4 = cardController.createOne(new Card("Card 4", "", "", null)).getBody();
-            cardController.moveToListLast(b1Card4.getId(), b1doingCardList.getId());
-            Card b1Card6 = cardController.createOne(new Card("Card 6", "", "", null)).getBody();
-            cardController.moveToListLast(b1Card6.getId(), b1doingCardList.getId());
-            Card b1Card5 = cardController.createOne(new Card("Card 5", "", "", null)).getBody();
-            cardController.moveToListAfterCard(b1Card5.getId(), b1doingCardList.getId(),
+            Subtask b1Subtask1 = subtaskService.createOne(new Subtask("Subtask 1",
+                    b1TestClientControllersCard, true));
+            Subtask b1Subtask2 = subtaskService.createOne(new Subtask("Subtask 2",
+                    b1TestClientControllersCard, false));
+            Subtask b1Subtask3 = subtaskService.createOne(new Subtask("Subtask 3",
+                    b1TestClientControllersCard, false));
+            Subtask b1Subtask4 = subtaskService.createOne(new Subtask("Subtask 4",
+                    b1TestClientControllersCard, false));
+            Card b1Card3 = cardService.createOne(new Card("Card 3", "", "", null));
+            cardService.moveToListLast(b1Card3.getId(), b1doingCardList.getId());
+            Card b1Card4 = cardService.createOne(new Card("Card 4", "", "", null));
+            cardService.moveToListLast(b1Card4.getId(), b1doingCardList.getId());
+            Card b1Card6 = cardService.createOne(new Card("Card 6", "", "", null));
+            cardService.moveToListLast(b1Card6.getId(), b1doingCardList.getId());
+            Card b1Card5 = cardService.createOne(new Card("Card 5", "", "", null));
+            cardService.moveToListAfterCard(b1Card5.getId(), b1doingCardList.getId(),
                     b1Card4.getId());
-            Card b1Card7 = cardController.createOne(new Card("Card 7", "", "", null)).getBody();
-            cardController.moveToListLast(b1Card7.getId(), b1CardList4.getId());
-            Card b1Card8 = cardController.createOne(new Card("Card 8", "", "", null)).getBody();
-            cardController.moveToListLast(b1Card8.getId(), b1CardList5.getId());
+            Card b1Card7 = cardService.createOne(new Card("Card 7", "", "", null));
+            cardService.moveToListLast(b1Card7.getId(), b1CardList4.getId());
+            Card b1Card8 = cardService.createOne(new Card("Card 8", "", "", null));
+            cardService.moveToListLast(b1Card8.getId(), b1CardList5.getId());
 
             Board studyingBoard =
-                    boardController.createOne(new Board("Studying", "", "", "#FFFFFF")).getBody();
+                    boardService.createOne(new Board("Studying", "", "", "#FFFFFF"));
             Board team99Board =
-                    boardController.createOne(new Board("Team 99", "", "", "#FFFFFF")).getBody();
+                    boardService.createOne(new Board("Team 99", "", "", "#FFFFFF"));
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

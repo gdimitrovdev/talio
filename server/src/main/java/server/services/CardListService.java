@@ -60,4 +60,7 @@ public class CardListService {
         return cardListRepository.save(existingList);
     }
 
+    public void deleteMany() {
+        cardListRepository.deleteAll();
+    }
 }

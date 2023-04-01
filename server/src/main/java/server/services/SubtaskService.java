@@ -45,4 +45,7 @@ public class SubtaskService {
         return subtaskRepository.save(existingSubtask);
     }
 
+    public void deleteMany() {
+        subtaskRepository.deleteAll();
+    }
 }

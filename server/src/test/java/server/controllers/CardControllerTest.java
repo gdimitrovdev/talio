@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,26 +111,87 @@ class CardControllerTest {
 
     @Test
     void sendList() {
-
+        CardList list = new CardList("My list", null);
+        assertEquals(list, cardControllerMock.sendList(list));
     }
 
     @Test
     void moveToListAfterCard() {
+        Card    card = new Card("My card", "Bla", "Ble", null),
+                after = new Card("Another card", "Bli", "Blo", null);
 
+        card.setId(1L);
+        after.setId(2L);
+
+        CardList    list1 = new CardList("First list", null),
+                    list2 = new CardList("Second list", null);
+
+        list1.setId(1L);
+        list2.setId(2L);
+
+        list1.addCard(card);
+        list2.addCard(after);
+
+        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(card));
+        when(cardServiceMock.getOne(2L)).thenReturn(Optional.of(after));
+        when(cardListServiceMock.getOne(1L)).thenReturn((Optional.of(list1)));
+        when(cardListServiceMock.getOne(2L)).thenReturn((Optional.of(list2)));
+
+        assertEquals(list2, cardControllerMock.moveToListAfterCard(1L, 2L, 2L).getBody());
     }
 
     @Test
     void moveToListLast() {
+        Card    card = new Card("My card", "Bla", "Ble", null);
 
+        card.setId(1L);
+
+        CardList    list1 = new CardList("First list", null),
+                    list2 = new CardList("Second list", null);
+
+        list1.setId(1L);
+        list2.setId(2L);
+
+        list1.addCard(card);
+
+        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(card));
+        when(cardListServiceMock.getOne(1L)).thenReturn((Optional.of(list1)));
+        when(cardListServiceMock.getOne(2L)).thenReturn((Optional.of(list2)));
+
+        assertEquals(list2, cardControllerMock.moveToListLast(1L, 2L).getBody());
     }
 
     @Test
     void addTagToCard() {
+        Card    withoutTag = new Card("My card", "Bla", "Ble", null),
+                withTag = new Card("My card 2", "Bla 2", "Ble 2", null);
 
+        withTag.setId(1L);
+        withoutTag.setId(1L);
+
+        Tag tag = new Tag("Name", "Red", null);
+        tag.setId(1L);
+
+        withTag.addTag(tag);
+
+        when(cardServiceMock.addTagToCard(1L, 1L)).thenReturn(withTag);
+        assertEquals(withTag, cardControllerMock.addTagToCard(1L, 1L).getBody());
     }
 
     @Test
     void removeTagFromCard() {
+        Card    withoutTag = new Card("My card", "Bla", "Ble", null),
+                withTag = new Card("My card 2", "Bla 2", "Ble 2", null);
 
+        withTag.setId(1L);
+        withoutTag.setId(1L);
+
+        Tag tag = new Tag("Name", "Red", null);
+        tag.setId(1L);
+
+        withTag.addTag(tag);
+
+        when(cardServiceMock.addTagToCard(1L, 1L)).thenReturn(withoutTag);
+        assertEquals(withoutTag, cardControllerMock.addTagToCard(1L, 1L).getBody());
     }
 }

@@ -177,4 +177,8 @@ public class CardService {
             throw new EntityNotFoundException("Error while removing tag from card");
         }
     }
+
+    public void deleteMany() {
+        cardRepository.deleteAll();
+    }
 }
