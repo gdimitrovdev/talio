@@ -92,4 +92,11 @@ public class CardListController {
         }
     }
 
+    @GetMapping("/refresh-list/{id}")
+    @ResponseBody
+    public ResponseEntity<CardList> refreshList(@PathVariable Long id) {
+        template.convertAndSend("/topic/lists", cardListService.getOne(id).get());
+        return ResponseEntity.ok(cardListService.getOne(id).get());
+    }
+
 }

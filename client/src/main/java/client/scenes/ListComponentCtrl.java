@@ -79,6 +79,10 @@ public class ListComponentCtrl extends VBox {
 
         this.setOnDragExited(event -> removeHighlight());
 
+        titleField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            titleField.selectAll();
+        });
+
         refresh();
         //scrollPane.setContent(this);
 
@@ -129,6 +133,7 @@ public class ListComponentCtrl extends VBox {
     }
 
     public void refresh() {
+        titleField.setText(server.getCardList(listId).getTitle());
         System.out.println("refreshing: " + listId);
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
@@ -171,6 +176,12 @@ public class ListComponentCtrl extends VBox {
 
             cards.getChildren().add(child);
         }
+    }
+
+    public void updateListTitle() {
+        CardList currentList = server.getCardList(listId);
+        currentList.setTitle(titleField.getText());
+        server.updateCardList(currentList);
     }
 
     @FXML
