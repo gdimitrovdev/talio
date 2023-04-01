@@ -18,12 +18,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.services.BoardService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BoardControllerTest {
     @Mock
     private BoardService boardServiceMock;
+
+    @Mock
+    private SimpMessagingTemplate templateMock;
 
     @InjectMocks
     private BoardController boardControllerMock;

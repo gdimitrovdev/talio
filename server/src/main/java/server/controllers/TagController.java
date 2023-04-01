@@ -4,7 +4,7 @@ import commons.Card;
 import commons.Tag;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,18 +23,19 @@ import server.services.TagService;
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {
-    @Autowired
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
 
     private final TagService tagService;
     private final BoardService boardService;
     private final CardService cardService;
 
+    @Inject
     public TagController(TagService tagService, BoardService boardService,
-            CardService cardService) {
+            CardService cardService, SimpMessagingTemplate template) {
         this.tagService = tagService;
         this.boardService = boardService;
         this.cardService = cardService;
+        this.template = template;
     }
 
     @GetMapping(path = {"", "/"})
@@ -93,11 +94,11 @@ public class TagController {
             List<Card> affectedCards =
                     cardService.getMany().stream().filter(c -> c.getTags().stream()
                             .anyMatch(t -> t.getId().equals(id))).toList();
-            tagService.updateOne(id, tag);
+            Tag updated = tagService.updateOne(id, tag);
             for (Card card : affectedCards) {
                 template.convertAndSend("/topic/cards", cardService.getOne(card.getId()));
             }
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(updated);
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.badRequest().build();

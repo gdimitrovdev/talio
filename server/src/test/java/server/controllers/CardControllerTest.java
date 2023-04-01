@@ -1,7 +1,6 @@
 package server.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,12 +12,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.services.CardListService;
 import server.services.CardService;
@@ -34,22 +31,12 @@ class CardControllerTest {
     @Mock
     private SimpMessagingTemplate templateMock; 
 
-    @Autowired
     @InjectMocks
     private CardController cardControllerMock;
 
     @BeforeEach
     public void setup() {
-
         MockitoAnnotations.openMocks(this);
-        //templateMock = mock(SimpMessagingTemplate.class);
-
-        //when(cardListServiceMock.getMany()).thenReturn(List.of());
-        /*
-        ArgumentCaptor<String> stringCapture = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<Card> cardCapture = ArgumentCaptor.forClass(Card.class);
-
-        doNothing().when(templateMock).convertAndSend(stringCapture.capture(), cardCapture.capture());*/
     }
 
     @Test
@@ -83,7 +70,6 @@ class CardControllerTest {
     void createOne() {
         Card card = new Card("Card name", "Desc", "Bla", null);
         when(cardServiceMock.createOne(card)).thenReturn(card);
-        doNothing().when(templateMock).convertAndSend(ArgumentMatchers.anyString(), ArgumentMatchers.any(Object.class));
 
         Card returnedCard = cardControllerMock.createOne(card).getBody();
         assertEquals(card, returnedCard);
@@ -113,12 +99,13 @@ class CardControllerTest {
         card.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
         card.setTitle("title1");
 
-        when(cardServiceMock.updateOne(1L, card)).thenReturn(card);
-
         Card updatedCard = new Card();
         updatedCard.setTitle("title2");
-        Card returnedCard = cardControllerMock.updateOne(1L, updatedCard).getBody();
-        assertEquals(updatedCard.getTitle(), returnedCard.getTitle());
+
+        when(cardServiceMock.updateOne(1L, card)).thenReturn(updatedCard);
+
+        Card returnedCard = cardControllerMock.updateOne(1L, card).getBody();
+        assertEquals(updatedCard, returnedCard);
     }
 
     @Test

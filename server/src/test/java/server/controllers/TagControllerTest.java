@@ -15,13 +15,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import server.services.BoardService;
+import server.services.CardService;
 import server.services.TagService;
 
 @RunWith(MockitoJUnitRunner.class)
 class TagControllerTest {
     @Mock
-    private TagService tagRepositoryMock;
-
+    private TagService tagServiceMock;
+    @Mock
+    private BoardService boardServiceMock;
+    @Mock
+    private CardService cardServiceMock;
+    @Mock
+    private SimpMessagingTemplate templateMock;
     @InjectMocks
     private TagController tagControllerMock;
 
@@ -38,7 +46,7 @@ class TagControllerTest {
         tags.add(tag1);
         tags.add(tag2);
 
-        when(tagRepositoryMock.getMany()).thenReturn(tags);
+        when(tagServiceMock.getMany()).thenReturn(tags);
 
         List<Tag> returnedTags = tagControllerMock.getMany();
         assertEquals(tag1, returnedTags.get(0));
@@ -51,7 +59,7 @@ class TagControllerTest {
         Long tagId = 1L;
         Tag tag = new Tag();
         tag.setId(tagId);
-        when(tagRepositoryMock.getOne(tagId)).thenReturn(Optional.of(tag));
+        when(tagServiceMock.getOne(tagId)).thenReturn(Optional.of(tag));
 
         Tag returnedTag = tagControllerMock.getOne(tagId).getBody();
         assertEquals(tag, returnedTag);
@@ -61,7 +69,7 @@ class TagControllerTest {
     void createOne() {
         Tag tag = new Tag();
 
-        when(tagRepositoryMock.createOne(tag)).thenReturn(tag);
+        when(tagServiceMock.createOne(tag)).thenReturn(tag);
 
         Tag returnedTag = tagControllerMock.createOne(tag).getBody();
         assertEquals(tag, returnedTag);
@@ -70,9 +78,12 @@ class TagControllerTest {
     @Test
     void deleteOne() {
 
+        //TODO: maybe make this test more sophisticated with boards and cards
+        // the tag relates to
+
         tagControllerMock.deleteOne(1L);
 
-        verify(tagRepositoryMock).deleteOne(1L);
+        verify(tagServiceMock).deleteOne(1L);
     }
 
     @Test
@@ -81,11 +92,12 @@ class TagControllerTest {
         tag.setId(1L);
         tag.setTitle("title1");
 
-        when(tagRepositoryMock.updateOne(1L, tag)).thenReturn(tag);
-
         Tag updatedTag = new Tag();
         updatedTag.setTitle("title2");
-        Tag returnedTag = tagControllerMock.updateOne(1L, updatedTag).getBody();
-        assertEquals(updatedTag.getTitle(), returnedTag.getTitle());
+
+        when(tagServiceMock.updateOne(1L, tag)).thenReturn(updatedTag);
+
+        Tag returnedTag = tagControllerMock.updateOne(1L, tag).getBody();
+        assertEquals(updatedTag, returnedTag);
     }
 }

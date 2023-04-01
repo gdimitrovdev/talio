@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import commons.Card;
 import commons.Subtask;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import server.services.CardService;
 import server.services.SubtaskService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,6 +25,10 @@ class SubtaskControllerTest {
 
     @Mock
     private SubtaskService subtaskServiceMock;
+    @Mock
+    private CardService cardServiceMock;
+    @Mock
+    private SimpMessagingTemplate templateMock;
     @InjectMocks
     private SubtaskController subtaskControllerMock;
 
@@ -69,6 +76,16 @@ class SubtaskControllerTest {
 
     @Test
     void deleteOne() {
+        Subtask s = new Subtask("Subt", null, false);
+        Card c = new Card("My cards", "Desc", "color", null);
+
+        s.setId(1L);
+        c.setId(1L);
+
+        c.addSubtask(s);
+
+        when(subtaskServiceMock.getOne(1L)).thenReturn(Optional.of(s));
+        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(c));
 
         subtaskControllerMock.deleteOne(1L);
 
@@ -81,12 +98,13 @@ class SubtaskControllerTest {
         subtask.setId(1L);
         subtask.setTitle("title1");
 
-        when(subtaskServiceMock.updateOne(1L, subtask)).thenReturn(subtask);
-
         Subtask updatedSubtask = new Subtask();
         updatedSubtask.setTitle("title2");
-        Subtask returnedSubtask = subtaskControllerMock.updateOne(1L, updatedSubtask).getBody();
-        assertEquals(updatedSubtask.getTitle(), returnedSubtask.getTitle());
+
+        when(subtaskServiceMock.updateOne(1L, subtask)).thenReturn(updatedSubtask);
+
+        Subtask returnedSubtask = subtaskControllerMock.updateOne(1L, subtask).getBody();
+        assertEquals(updatedSubtask, returnedSubtask);
 
     }
 }

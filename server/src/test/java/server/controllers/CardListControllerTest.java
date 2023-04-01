@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import commons.Board;
 import commons.CardList;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import server.services.BoardService;
 import server.services.CardListService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,6 +26,12 @@ class CardListControllerTest {
     // @Mock annotation is used to create a mock BoardRepository object
     @Mock
     private CardListService cardListServiceMock;
+
+    @Mock
+    private BoardService boardServiceMock;
+
+    @Mock
+    private SimpMessagingTemplate templateMock;
 
     @InjectMocks
     private CardListController cardListControllerMock;
@@ -70,6 +79,13 @@ class CardListControllerTest {
     // Test whether deleteById() method of the repository was called for the correct cardList
     @Test
     void deleteOne() {
+        Board board = new Board("My baord", "bla", "ble", "blu");
+        board.setId(1L);
+        CardList list = new CardList("My list", board);
+        list.setId(1L);
+
+        when(cardListServiceMock.getOne(1L)).thenReturn(Optional.of(list));
+        when(boardServiceMock.getOne(1L)).thenReturn(Optional.of(board));
 
         cardListControllerMock.deleteOne(1L);
 
@@ -82,13 +98,14 @@ class CardListControllerTest {
         cardList.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
         cardList.setTitle("title1");
 
-        when(cardListServiceMock.getOne(1L)).thenReturn(Optional.of(cardList));
-        when(cardListServiceMock.createOne(cardList)).thenReturn(cardList);
-
         CardList updatedCardList = new CardList();
         updatedCardList.setTitle("title2");
-        CardList returnedCardList = cardListControllerMock.updateOne(1L, updatedCardList).getBody();
-        assertEquals(updatedCardList.getTitle(), returnedCardList.getTitle());
+
+        when(cardListServiceMock.updateOne(1L, cardList)).thenReturn(updatedCardList);
+
+        CardList returnedCardList = cardListControllerMock.updateOne(1L, cardList).getBody();
+
+        assertEquals(updatedCardList, returnedCardList);
 
     }
 }
