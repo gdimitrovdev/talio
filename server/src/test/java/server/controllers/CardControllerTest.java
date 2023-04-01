@@ -93,4 +93,29 @@ class CardControllerTest {
         Card returnedCard = cardControllerMock.updateOne(1L, updatedCard).getBody();
         assertEquals(updatedCard.getTitle(), returnedCard.getTitle());
     }
+
+    @Test
+    void sendList() {
+
+    }
+
+    @Test
+    void moveToListAfterCard() {
+
+    }
+
+    @Test
+    void moveToListLast() {
+
+    }
+
+    @Test
+    void addTagToCard() {
+
+    }
+
+    @Test
+    void removeTagFromCard() {
+
+    }
 }

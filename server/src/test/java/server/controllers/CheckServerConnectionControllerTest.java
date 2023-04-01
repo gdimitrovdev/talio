@@ -1,5 +1,7 @@
 package server.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -8,9 +10,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdminControllerTest {
+public class CheckServerConnectionControllerTest {
     @InjectMocks
-    private AdminController adminControllerMock;
+    private CheckServerConnectionController checkServerConnectionControllerMock;
 
     @BeforeEach
     public void setup() {
@@ -18,27 +20,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    void get() {
-
+    void testConnection() {
+        assertTrue(checkServerConnectionControllerMock.testConnection().getStatusCode().is2xxSuccessful());
     }
-
-    @Test
-    void getBoards() {
-
-    }
-
-    @Test
-    void clear() {
-
-    }
-    @Test
-    void refill() {
-
-    }
-
-    @Test
-    void fill() {
-
-    }
-
 }
