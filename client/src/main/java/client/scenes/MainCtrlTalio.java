@@ -5,6 +5,7 @@ import commons.Board;
 import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -63,7 +64,6 @@ public class MainCtrlTalio {
         this.showServerConnection();
 
         primaryStageTalio.show();
-
     }
 
     public Set<Long> getJoinedBoardForServer(String serverUrl) {
@@ -96,21 +96,25 @@ public class MainCtrlTalio {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
         homeCtrl.displayBoardLabels();
+        this.listenForQuestionMarkPressed();
     }
 
     public void showJoinBoardCode() {
         primaryStageTalio.setTitle("Talio: Join an Existing Board");
         primaryStageTalio.setScene(joinBoard);
+        this.listenForQuestionMarkPressed();
     }
 
     public void showCreateBoard() {
         primaryStageTalio.setTitle("Talio: Create a New Board");
         primaryStageTalio.setScene(createBoard);
+        this.listenForQuestionMarkPressed();
     }
 
     public void showServerConnection() {
         primaryStageTalio.setTitle("Talio: Connect to a Server");
         primaryStageTalio.setScene(serverConnection);
+        this.listenForQuestionMarkPressed();
     }
 
     //TODO: this method needs to be finished after someone does the settings
@@ -120,6 +124,7 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Board Settings");
         stage.setScene(boardSettings);
         stage.show();
+        this.listenForQuestionMarkPressed();
     }
 
     //TODO: this method needs to be finished after someone does the shareboard popup
@@ -129,6 +134,7 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Share a board");
         stage.setScene(shareBoard);
         stage.show();
+        this.listenForQuestionMarkPressed();
     }
 
     public void showBoard(Board board) {
@@ -140,5 +146,14 @@ public class MainCtrlTalio {
         boardComponentCtrl.initialize(board.getId());
         primaryStageTalio.setTitle("Talio: Board");
         primaryStageTalio.setScene(boardComponent);
+        this.listenForQuestionMarkPressed();
+    }
+
+    public void listenForQuestionMarkPressed() {
+        this.primaryStageTalio.getScene().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.SLASH && e.isShiftDown()) {
+                System.out.println("Should open the help window now");
+            }
+        });
     }
 }

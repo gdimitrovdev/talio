@@ -1,9 +1,13 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import commons.Subtask;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -21,6 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -51,6 +56,7 @@ public class CardComponentCtrl extends AnchorPane {
     private AnchorPane cardOverview;
 
     private boolean cardHasBeenCreated = false;
+    public boolean selected = false;
 
     private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.server = server;
@@ -86,25 +92,7 @@ public class CardComponentCtrl extends AnchorPane {
         // TODO not exactly like the backlog says, but I think this is more intuitive
         //  determine whether it should be this way
         setOnMouseSingleClicked((me) -> {
-            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
-            try {
-                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
-                        server.getCard(cardId), server));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Parent root1 = null;
-            try {
-                root1 = cardPopupLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.show();
-            /*stage.setOnCloseRequest(event -> {
-                setCard(server.getCard(cardId));
-            });*/
+            this.loadPopup();
         });
         setOnMouseDoubleClicked((me) -> {
             if (title.isDisabled()) {
@@ -204,6 +192,16 @@ public class CardComponentCtrl extends AnchorPane {
             rect.setArcWidth(5);
             tagsContainer.getChildren().add(rect);
         }
+
+        this.setOnMouseEntered(e -> {
+            this.highlight();
+            selected = true;
+        });
+
+        this.setOnMouseExited(e -> {
+            this.removeHighlight();
+            selected = false;
+        });
     }
 
     public void saveTitle() {
@@ -230,6 +228,33 @@ public class CardComponentCtrl extends AnchorPane {
             Pane parentPane = (Pane) parent;
             parentPane.getChildren().remove(this);
         }*/
+    }
+
+    public void loadPopup() {
+        FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
+        try {
+            cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
+                    server.getCard(cardId), server));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Parent root1 = null;
+        try {
+            root1 = cardPopupLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root1));
+        stage.show();
+        root1.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ESCAPE) {
+                stage.close();
+            }
+        });
+        /*stage.setOnCloseRequest(event -> {
+            setCard(server.getCard(cardId));
+        });*/
     }
 
     public void close() {
