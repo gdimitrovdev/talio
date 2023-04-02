@@ -13,6 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+<<<<<<< HEAD
+=======
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
+>>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
 import javafx.scene.layout.HBox;
 
 public class BoardCtrl implements Initializable {
@@ -22,6 +28,12 @@ public class BoardCtrl implements Initializable {
     private CardComponentCtrl currentSelectedCard;
     private boolean droppedOnCard = false;
     private Object updateBoard, updateList;
+
+    @FXML
+    private AnchorPane pane;
+
+    @FXML
+    private ToolBar toolbar;
 
     @FXML
     private ScrollPane root;
@@ -48,7 +60,8 @@ public class BoardCtrl implements Initializable {
     private Label boardNameLabel;
 
     @Inject
-    public BoardCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) throws IOException {
+    public BoardCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio,
+                     BoardSettingsCtrl boardSettingsCtrl) throws IOException {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
     }
@@ -107,11 +120,39 @@ public class BoardCtrl implements Initializable {
 
     public void refresh() {
         var board = server.getBoard(boardId);
+<<<<<<< HEAD
         boardNameLabel.setText(board.getName());
+=======
+
+        //split the string with the colors
+        String[] colors = board.getBoardColor().split("/"); // Split the string into two parts
+        String bgColor = colors[0]; // Get the first part
+        String fontColor = colors[1];
+        //changing the color of the board
+        outerHBox.setStyle("-fx-background-color:" + bgColor);
+        toolbar.setStyle("-fx-background-color:" + bgColor);
+
+        //changing the color of the board font
+        boardName.setStyle("-fx-text-fill: " + fontColor);
+        settingsBTN.setStyle("-fx-text-fill: " + fontColor);
+        shareBTN.setStyle("-fx-text-fill: " + fontColor);
+        newListButton.setStyle("-fx-text-fill: " + fontColor);
+        backHomeBTN.setStyle("-fx-text-fill: " + fontColor);
+
+        //get the color of the lists
+        String[] colorsLists = board.getListsColor().split("/"); // Split the string into two parts
+        String bgColorLists = colorsLists[0];
+        String fontColorLists = colorsLists[1];
+
+
+        boardName.setText(board.getName());
+>>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
         innerHBox.getChildren().clear();
         for (CardList cardList : board.getLists()) {
-            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this,
-                    cardList.getId()));
+            ListComponentCtrl listComponent = new ListComponentCtrl(mainCtrlTalio,
+                    server, this, cardList.getId());
+            listComponent.setStyle("-fx-background-color:" + bgColor);
+            innerHBox.getChildren().add(listComponent);
         }
     }
 

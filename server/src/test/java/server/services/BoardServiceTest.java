@@ -41,8 +41,8 @@ class BoardServiceTest {
     @Test
     public void getMany() {
         List<Board> expectedBoards = new ArrayList<>();
-        expectedBoards.add(new Board("board1", "code1", "readOnlyCode1", "red"));
-        expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "blue"));
+        expectedBoards.add(new Board("board1", "code1", "readOnlyCode1", "", ""));
+        expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "", ""));
         when(boardRepositoryMock.findAll()).thenReturn(expectedBoards);
 
         List<Board> returnedBoards = boardServiceMock.getMany();
@@ -53,7 +53,7 @@ class BoardServiceTest {
     @Test
     public void getOne() {
         Long boardId = 1L;
-        Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "red");
+        Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "", "");
         when(boardRepositoryMock.findById(boardId)).thenReturn(Optional.of(expectedBoard));
 
         Optional<Board> returnedBoard = boardServiceMock.getOne(boardId);
@@ -115,14 +115,16 @@ class BoardServiceTest {
         Board existingBoard = new Board();
         existingBoard.setId(1L);
         existingBoard.setName("Test Board");
-        existingBoard.setColor("#red");
+        existingBoard.setBoardColor("#000000/#555555");
+        existingBoard.setListsColor("#000000/#555555");
         existingBoard.setCode("abc");
         existingBoard.setReadOnlyCode("a");
 
         Board updatedBoard = new Board();
         updatedBoard.setId(2L);
         updatedBoard.setName("Updated Board");
-        updatedBoard.setColor("#blue");
+        updatedBoard.setBoardColor("#000000/#222222");
+        updatedBoard.setListsColor("#000000/#222222");
         updatedBoard.setCode("abc");
         updatedBoard.setReadOnlyCode("b");
 
@@ -134,7 +136,8 @@ class BoardServiceTest {
 
         assertEquals(result, existingBoard);
         assertEquals(existingBoard.getName(), updatedBoard.getName());
-        assertEquals(existingBoard.getColor(), updatedBoard.getColor());
+        assertEquals(existingBoard.getBoardColor(), updatedBoard.getBoardColor());
+        assertEquals(existingBoard.getListsColor(), updatedBoard.getListsColor());
         assertEquals(existingBoard.getCode(), updatedBoard.getCode());
         assertEquals(existingBoard.getReadOnlyCode(), updatedBoard.getReadOnlyCode());
 

@@ -11,7 +11,7 @@ public class TagTest {
 
     @Test
     public void checkConstructorWithoutList() {
-        var b = new Board("boardName", "password", "asdfgh", "green");
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
         var t = new Tag("tagTitle", "red", b);
         assertEquals("tagTitle", t.getTitle());
         assertEquals("red", t.getColor());
@@ -22,7 +22,7 @@ public class TagTest {
 
     @Test
     public void checkConstructor() {
-        var b = new Board("boardName", "password", "asdfgh", "green");
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
         var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
@@ -36,7 +36,7 @@ public class TagTest {
 
     @Test
     public void equalsHashCode() {
-        var b = new Board("boardName", "password", "asdfgh", "green");
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
         var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
@@ -48,7 +48,7 @@ public class TagTest {
 
     @Test
     public void notEqualsHashCode() {
-        var b = new Board("boardName", "password", "asdfgh", "green");
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
         var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);
@@ -60,7 +60,7 @@ public class TagTest {
 
     @Test
     public void hasToString() {
-        var b = new Board("boardName", "password", "asdfgh", "green");
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
         var c = new Card("cardTitle", "desc", "green", null);
         var cards = new ArrayList<Card>();
         cards.add(c);

@@ -36,7 +36,9 @@ public class Board implements Serializable {
     @Column(unique = true)
     private String readOnlyCode;
 
-    private String color;
+    private String listsColor;
+
+    private String boardColor;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval =
             true)
@@ -53,7 +55,8 @@ public class Board implements Serializable {
         this.name = board.name;
         this.code = board.code;
         this.readOnlyCode = board.readOnlyCode;
-        this.color = board.color;
+        this.boardColor = board.boardColor;
+        this.listsColor = board.listsColor;
         if (board.lists != null) {
             this.lists = new ArrayList<CardList>(board.lists);
         }
@@ -62,19 +65,21 @@ public class Board implements Serializable {
         }
     }
 
-    public Board(String name, String code, String readOnlyCode, String color) {
+    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor) {
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);
-        setColor(color);
+        setBoardColor(boardColor);
+        setListsColor(listsColor);
     }
 
-    public Board(String name, String code, String readOnlyCode, String color, List<CardList> lists,
+    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<CardList> lists,
             List<Tag> tags) {
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);
-        setColor(color);
+        setListsColor(listsColor);
+        setBoardColor(boardColor);
         setLists(lists);
         setTags(tags);
     }
@@ -131,14 +136,6 @@ public class Board implements Serializable {
         this.readOnlyCode = readOnlyCode;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public List<CardList> getLists() {
         return lists;
     }
@@ -168,5 +165,21 @@ public class Board implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+    }
+
+    public String getListsColor() {
+        return listsColor;
+    }
+
+    public void setListsColor(String listsColor) {
+        this.listsColor = listsColor;
+    }
+
+    public String getBoardColor() {
+        return boardColor;
+    }
+
+    public void setBoardColor(String boardColor) {
+        this.boardColor = boardColor;
     }
 }

@@ -27,6 +27,7 @@ public class CreateBoardCtrl {
 
     public void clickCreateBoard() throws IOException {
         String name = fieldBoardName.getText();
+<<<<<<< HEAD
         if (name.equals("")) {
             Alert box = new Alert(Alert.AlertType.ERROR);
             box.setTitle("Invalid name");
@@ -37,6 +38,11 @@ public class CreateBoardCtrl {
             mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
             mainCtrlTalio.showBoard(board);
         }
+=======
+        Board board = server.createBoard(new Board(name, "", "", "#bababa/#000000","#dedede/#000000"));
+        mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
+        mainCtrlTalio.showBoard(board);
+>>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
     }
 
     public void clickBackHome() {

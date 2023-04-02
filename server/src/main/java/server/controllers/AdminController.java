@@ -107,7 +107,13 @@ public class AdminController {
             // Colors in format #Background/#Foreground
 
             Board team69Board =
+<<<<<<< HEAD
                     boardService.createOne(new Board("Team 69", "", "", "#FFFFFF/#000000"));
+=======
+                    boardController.createOne(new Board("Team 69", "", "",
+                                    "#/#000000", "#dedede/#000000"))
+                            .getBody();
+>>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
             Tag b1urgentTag =
                     tagService.createOne(new Tag("Urgent", "#FF0000/#FFFFFF", team69Board));
             Tag b1bugTag =
@@ -163,9 +169,15 @@ public class AdminController {
             cardService.moveToListLast(b1Card8.getId(), b1CardList5.getId());
 
             Board studyingBoard =
+<<<<<<< HEAD
                     boardService.createOne(new Board("Studying", "", "", "#FFFFFF"));
             Board team99Board =
                     boardService.createOne(new Board("Team 99", "", "", "#FFFFFF"));
+=======
+                    boardController.createOne(new Board("Studying", "", "", "#bababa/#000000", "#dedede/#000000")).getBody();
+            Board team99Board =
+                    boardController.createOne(new Board("Team 99", "", "", "#bababa/#000000", "#dedede/#000000")).getBody();
+>>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

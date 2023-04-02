@@ -52,7 +52,7 @@ public class HomeCtrl {
         //Board current = serverUtils.getBoardById(boardID)" can be used
         // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
 
-        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#333333");
+        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000","#dedede/#000000");
 
         CardList list1 = new CardList("example list 1", null);
         CardList list2 = new CardList("example list 2", null);

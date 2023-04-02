@@ -57,17 +57,18 @@ public class BoardService {
     public Board updateOne(Long id, Board board) throws EntityNotFoundException {
         Board existingBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
-        if (isCodeAlreadyUsed(board.getCode())) {
-            throw new IllegalArgumentException("This code is already used by a board");
-        }
-        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
-            throw new IllegalArgumentException("This read only code is already used by a board");
-        }
-        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
-            throw new IllegalArgumentException("Code and readOnlyCode must be different");
-        }
+        //        if (isCodeAlreadyUsed(board.getCode())) {
+        //            throw new IllegalArgumentException("This code is already used by a board");
+        //        }
+        //        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
+        //            throw new IllegalArgumentException("This read only code is already used by a board");
+        //        }
+        //        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
+        //            throw new IllegalArgumentException("Code and readOnlyCode must be different");
+        //        }
 
-        existingBoard.setColor(board.getColor());
+        existingBoard.setBoardColor(board.getBoardColor());
+        existingBoard.setListsColor(board.getListsColor());
         existingBoard.setName(board.getName());
         existingBoard.setCode(board.getCode());
         existingBoard.setReadOnlyCode(board.getReadOnlyCode());
