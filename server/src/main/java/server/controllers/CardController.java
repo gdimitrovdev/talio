@@ -4,7 +4,7 @@ import commons.Card;
 import commons.CardList;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.converter.MessageConversionException;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -24,15 +24,16 @@ import server.services.CardService;
 @RestController
 @RequestMapping("/api/cards")
 public class CardController {
-    @Autowired
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
 
     private final CardListService cardListService;
     private final CardService cardService;
 
-    public CardController(CardListService cardListService, CardService cardService) {
+    @Inject
+    public CardController(CardListService cardListService, CardService cardService, SimpMessagingTemplate template) {
         this.cardListService = cardListService;
         this.cardService = cardService;
+        this.template = template;
     }
 
     @GetMapping(path = {"", "/"})
