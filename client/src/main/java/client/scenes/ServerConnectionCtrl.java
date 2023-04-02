@@ -20,6 +20,7 @@ public class ServerConnectionCtrl {
     @FXML
     private Button buttonBack;
     private BooleanProperty isConnected = new SimpleBooleanProperty(false);
+
     @Inject
     public ServerConnectionCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
@@ -54,7 +55,7 @@ public class ServerConnectionCtrl {
 
     public void refreshServerAddress() {
         if (isConnected.get()) {
-            fieldServerAddress.setText("http://"+server.getServerUrl());
+            fieldServerAddress.setText("http://" + server.getServerUrl());
         } else {
             fieldServerAddress.setText("");
         }

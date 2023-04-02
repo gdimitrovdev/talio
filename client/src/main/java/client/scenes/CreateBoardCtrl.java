@@ -32,8 +32,7 @@ public class CreateBoardCtrl {
             box.setTitle("Invalid name");
             box.setContentText("The name of the board cannot be empty");
             box.showAndWait();
-        }
-        else {
+        } else {
             Board board = server.createBoard(new Board(name, "", "", ""));
             mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
             mainCtrlTalio.showBoard(board);
