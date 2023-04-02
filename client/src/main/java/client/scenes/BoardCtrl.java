@@ -145,13 +145,18 @@ public class BoardCtrl implements Initializable {
         String fontColorLists = colorsLists[1];
 
 
+
         boardName.setText(board.getName());
 >>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
         innerHBox.getChildren().clear();
         for (CardList cardList : board.getLists()) {
             ListComponentCtrl listComponent = new ListComponentCtrl(mainCtrlTalio,
                     server, this, cardList.getId());
-            listComponent.setStyle("-fx-background-color:" + bgColor);
+            listComponent.setStyle("-fx-background-color:" + bgColorLists);
+            listComponent.titleField.setStyle("-fx-text-fill: "+fontColorLists);
+            listComponent.deleteListBtn.setStyle("-fx-text-fill: "+fontColorLists);
+            listComponent.addCardBtn.setStyle("-fx-text-fill: "+fontColorLists);
+
             innerHBox.getChildren().add(listComponent);
         }
     }

@@ -30,16 +30,20 @@ public class ListComponentCtrl extends VBox {
     private HBox titleHolder;
 
     @FXML
+<<<<<<< HEAD
     private TitleField titleField;
+=======
+    public TextField titleField;
+>>>>>>> 5668765 (working color settings for board and list colors + passing tests)
 
     @FXML
-    private Button deleteListBtn;
+    public Button deleteListBtn;
 
     @FXML
     private VBox cards;
 
     @FXML
-    private Button addCardBtn;
+    public Button addCardBtn;
 
     @FXML
     ScrollPane scrollPane = new ScrollPane();
@@ -180,4 +184,5 @@ public class ListComponentCtrl extends VBox {
             scrollPane.setVvalue(1);
         });
     }
+
 }

@@ -344,7 +344,8 @@ public class ServerUtils {
         return webTarget.path("api/boards/" + board.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+                .put(Entity.json(board))
+                .readEntity(new GenericType<>(){});
     }
 
     public void deleteBoard(Long boardId) {

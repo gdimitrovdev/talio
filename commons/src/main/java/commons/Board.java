@@ -2,8 +2,6 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +17,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+//circular reference problem
 @Entity
-@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,6 +38,7 @@ public class Board implements Serializable {
     private String listsColor;
 
     private String boardColor;
+
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval =
             true)
@@ -71,6 +71,7 @@ public class Board implements Serializable {
         setReadOnlyCode(readOnlyCode);
         setBoardColor(boardColor);
         setListsColor(listsColor);
+
     }
 
     public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<CardList> lists,
@@ -182,4 +183,5 @@ public class Board implements Serializable {
     public void setBoardColor(String boardColor) {
         this.boardColor = boardColor;
     }
+
 }

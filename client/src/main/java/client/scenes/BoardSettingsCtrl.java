@@ -91,4 +91,27 @@ public class BoardSettingsCtrl {
         board = server.updateBoard(board);
         changeBoardName(fieldBoardName.getText());
     }
+
+    public void resetBoardColors(){
+        String defaultCombo = "#bababa/#000000";
+        //updates after you press 'save'
+        board.setBoardColor(defaultCombo);
+        cpBackgroundBoard.setValue(Color.web("#bababa"));
+        cpFontBoard.setValue(Color.web("#000000"));
+
+    }
+    public void resetListColors(){
+        String defaultCombo = "#dedede/#000000";
+        //updates after you press 'save'
+        board.setListsColor(defaultCombo);
+        cpBackgroundLists.setValue(Color.web("#dedede"));
+        cpFontLists.setValue(Color.web("#000000"));
+    }
+    public void deleteBoard(){
+        mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
+        server.deleteBoard(board.getId());
+        mainCtrlTalio.showHome();
+        //not sure if it is actually deleted from db
+        //since for deleteBoard() we will use long polling
+    }
 }
