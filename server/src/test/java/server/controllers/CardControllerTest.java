@@ -191,7 +191,7 @@ class CardControllerTest {
 
         withTag.addTag(tag);
 
-        when(cardServiceMock.addTagToCard(1L, 1L)).thenReturn(withoutTag);
-        assertEquals(withoutTag, cardControllerMock.addTagToCard(1L, 1L).getBody());
+        when(cardServiceMock.removeTagFromCard(1L, 1L)).thenReturn(withoutTag);
+        assertEquals(withoutTag, cardControllerMock.removeTagFromCard(1L, 1L).getBody());
     }
 }
