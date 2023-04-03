@@ -153,18 +153,18 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     posList = n;
                     posCard = k;
                 }
             }
         }
-        if (posList > 0 && listComponentCtrls.get(posList).cards.getChildren().size() > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).selected = false;
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).cards.getChildren().get(0)).selected = true;
-            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).cards.getChildren().get(0)).highlight();
+        if (posList > 0 && listComponentCtrls.get(posList).getCards().getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).getCards().getChildren().get(0)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).getCards().getChildren().get(0)).highlight();
         }
     }
 
@@ -175,21 +175,21 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     posList = n;
                     posCard = k;
                 }
             }
         }
-        if (posList < listComponentCtrls.size() - 1 && listComponentCtrls.get(posList).cards.getChildren().size() > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard))
-                    .selected = false;
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard))
+        if (posList < listComponentCtrls.size() - 1 && listComponentCtrls.get(posList).getCards().getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard))
+                    .setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard))
                     .removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).cards.getChildren().get(0))
-                    .selected = true;
-            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).cards.getChildren().get(0))
+            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).getCards().getChildren().get(0))
+                    .setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).getCards().getChildren().get(0))
                     .highlight();
         }
     }
@@ -201,18 +201,18 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     posList = n;
                     posCard = k;
                 }
             }
         }
-        if (!listComponentCtrls.isEmpty() && posCard < listComponentCtrls.get(posList).cards.getChildren().size() - 1) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).selected = false;
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard + 1)).selected = true;
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard + 1)).highlight();
+        if (!listComponentCtrls.isEmpty() && posCard < listComponentCtrls.get(posList).getCards().getChildren().size() - 1) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard + 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard + 1)).highlight();
         }
     }
 
@@ -223,18 +223,18 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     posList = n;
                     posCard = k;
                 }
             }
         }
         if (posCard > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).selected = false;
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard - 1)).selected = true;
-            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard - 1)).highlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard - 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard - 1)).highlight();
         }
     }
 
@@ -243,10 +243,10 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected
-                        && !(listComponentCtrl.cards.getChildren().get(k)).isFocusWithin()) {
-                    ((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).loadPopup();
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()
+                        && !(listComponentCtrl.getCards().getChildren().get(k)).isFocusWithin()) {
+                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).loadPopup();
                 }
             }
         }
@@ -258,10 +258,10 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected
-                        && !(listComponentCtrl.cards.getChildren().get(k)).isFocusWithin()) {
-                    cardComponentCtrl = (CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k);
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()
+                        && !(listComponentCtrl.getCards().getChildren().get(k)).isFocusWithin()) {
+                    cardComponentCtrl = (CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k);
                 }
             }
         }
@@ -278,10 +278,10 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected
-                        && !(listComponentCtrl.cards.getChildren().get(k)).isFocusWithin()) {
-                    server.deleteCard(((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).getCardId());
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()
+                        && !(listComponentCtrl.getCards().getChildren().get(k)).isFocusWithin()) {
+                    server.deleteCard(((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getCardId());
                 }
             }
         }
@@ -294,8 +294,8 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     posList = n;
                     posCard = k;
                 }
@@ -303,8 +303,8 @@ public class BoardCtrl implements Initializable {
         }
         ListComponentCtrl listComponentCtrl = listComponentCtrls.get(posList);
         List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
-        for (int n = 0; n < listComponentCtrl.cards.getChildren().size(); n++) {
-            cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(n));
+        for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
+            cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
         }
 
         if (posCard > 0) {
@@ -312,9 +312,9 @@ public class BoardCtrl implements Initializable {
             cardComponentCtrls.set(posCard - 1, cardComponentCtrls.get(posCard));
             cardComponentCtrls.set(posCard, temp);
 
-            listComponentCtrl.cards.getChildren().clear();
+            listComponentCtrl.getCards().getChildren().clear();
             for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
-                listComponentCtrl.cards.getChildren().add(cardComponentCtrl);
+                listComponentCtrl.getCards().getChildren().add(cardComponentCtrl);
             }
         }
     }
@@ -326,8 +326,8 @@ public class BoardCtrl implements Initializable {
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     posList = n;
                     posCard = k;
                 }
@@ -336,18 +336,18 @@ public class BoardCtrl implements Initializable {
         ListComponentCtrl listComponentCtrl = listComponentCtrls.get(posList);
         List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
 
-        for (int n = 0; n < listComponentCtrl.cards.getChildren().size(); n++) {
-            cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(n));
+        for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
+            cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
         }
 
-        if (posCard < listComponentCtrl.cards.getChildren().size() - 1) {
+        if (posCard < listComponentCtrl.getCards().getChildren().size() - 1) {
             CardComponentCtrl temp = cardComponentCtrls.get(posCard + 1);
             cardComponentCtrls.set(posCard + 1, cardComponentCtrls.get(posCard));
             cardComponentCtrls.set(posCard, temp);
 
-            listComponentCtrl.cards.getChildren().clear();
+            listComponentCtrl.getCards().getChildren().clear();
             for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
-                listComponentCtrl.cards.getChildren().add(cardComponentCtrl);
+                listComponentCtrl.getCards().getChildren().add(cardComponentCtrl);
             }
         }
     }

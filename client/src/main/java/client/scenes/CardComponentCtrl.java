@@ -56,7 +56,7 @@ public class CardComponentCtrl extends AnchorPane {
     private AnchorPane cardOverview;
 
     private boolean cardHasBeenCreated = false;
-    public boolean selected = false;
+    private boolean selected = false;
 
     private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.server = server;
@@ -342,5 +342,13 @@ public class CardComponentCtrl extends AnchorPane {
 
     public void setSingleClickDelayMillis(long singleClickDelayMillis) {
         this.delayMs = singleClickDelayMillis;
+    }
+
+    public boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
     }
 }

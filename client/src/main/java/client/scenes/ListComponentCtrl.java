@@ -34,7 +34,7 @@ public class ListComponentCtrl extends VBox {
     private Button deleteListBtn;
 
     @FXML
-    protected VBox cards;
+    private VBox cards;
 
     @FXML
     private Button addCardBtn;
@@ -202,5 +202,9 @@ public class ListComponentCtrl extends VBox {
     protected void addCard() {
         Card card = server.createCard(new Card("Untitled", "", "", server.getCardList(listId)));
         server.moveCardToListLast(card.getId(), listId);
+    }
+
+    public VBox getCards() {
+        return cards;
     }
 }
