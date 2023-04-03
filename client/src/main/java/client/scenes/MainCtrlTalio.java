@@ -106,6 +106,7 @@ public class MainCtrlTalio {
     public void showCreateBoard() {
         primaryStageTalio.setTitle("Talio: Create a New Board");
         primaryStageTalio.setScene(createBoard);
+        createBoardCtrl.refreshFieldBoardName();
     }
 
     public void showServerConnection() {

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 public class CreateBoardCtrl {
     private final MainCtrlTalio mainCtrlTalio;
@@ -23,6 +24,19 @@ public class CreateBoardCtrl {
     public CreateBoardCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.mainCtrlTalio = mainCtrlTalio;
         this.server = server;
+    }
+
+    @FXML
+    public void initialize() {
+        fieldBoardName.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    clickCreateBoard();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void clickCreateBoard() throws IOException {
@@ -41,5 +55,9 @@ public class CreateBoardCtrl {
 
     public void clickBackHome() {
         mainCtrlTalio.showHome();
+    }
+
+    public void refreshFieldBoardName() {
+        fieldBoardName.setText("");
     }
 }
