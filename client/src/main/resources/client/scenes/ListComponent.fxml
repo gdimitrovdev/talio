@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" fx:id="listVBox" VBox.vgrow ="ALWAYS" stylesheets="@./css/ListComponent.css" >
-
-
+<?import client.components.TitleField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" fx:id="listVBox"
+         VBox.vgrow="ALWAYS" stylesheets="@./css/ListComponent.css">
     <HBox fx:id="titleHolder">
-        <TextField fx:id="titleField" HBox.hgrow="ALWAYS" text="Empty title" onAction="#updateListTitle"></TextField>
+        <TitleField fx:id="titleField"/>
         <Button fx:id="deleteListBtn" text="X" onAction="#deleteList">
-            <tooltip><Tooltip text="Delete this list" /></tooltip>
+            <tooltip>
+                <Tooltip text="Delete this list"/>
+            </tooltip>
         </Button>
     </HBox>
     <ScrollPane fx:id="scrollpane" hbarPolicy="NEVER">
-    <VBox fx:id="cards">
-    </VBox>
+        <VBox fx:id="cards">
+        </VBox>
     </ScrollPane>
     <!--<VBox fx:id="cards">
     </VBox> -->
     <Button fx:id="addCardBtn" text="+" onAction="#addCard">
-        <tooltip><Tooltip text="Add a new card" /></tooltip>
+        <tooltip>
+            <Tooltip text="Add a new card"/>
+        </tooltip>
     </Button>
 </fx:root>

@@ -3,10 +3,10 @@
     -fx-pref-width: 180.0;
 }
 
-#titleField {
+/*#titleField {
     -fx-pref-height: 25.0;
     -fx-pref-width: 130.0;
-}
+}*/
 
 #deleteListBtn {
     -fx-pref-height: 25.0;

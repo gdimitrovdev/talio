@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.TitleField;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
@@ -10,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -28,7 +28,7 @@ public class ListComponentCtrl extends VBox {
     private HBox titleHolder;
 
     @FXML
-    private TextField titleField;
+    private TitleField titleField;
 
     @FXML
     private Button deleteListBtn;
@@ -62,6 +62,12 @@ public class ListComponentCtrl extends VBox {
             throw new RuntimeException(e);
         }
 
+        titleField.init("Untitled", (newTitle) -> {
+            CardList currentList = server.getCardList(listId);
+            currentList.setTitle(newTitle);
+            server.updateCardList(currentList);
+        });
+
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             event.consume();
@@ -79,10 +85,6 @@ public class ListComponentCtrl extends VBox {
 
         this.setOnDragExited(event -> removeHighlight());
 
-        titleField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            titleField.selectAll();
-        });
-
         refresh();
         //scrollPane.setContent(this);
 
@@ -93,23 +95,13 @@ public class ListComponentCtrl extends VBox {
         // - list: update list DONE
         server.registerForMessages("/topic/lists", Card.class, card -> {
             if (card.getList().getId().equals(listId)) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        refresh();
-                    }
-                });
+                Platform.runLater(this::refresh);
             }
         });
 
         server.registerForMessages("/topic/lists", CardList.class, cardList -> {
             if (cardList.getId().equals(listId)) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        refresh();
-                    }
-                });
+                Platform.runLater(this::refresh);
             }
         });
     }
@@ -133,8 +125,7 @@ public class ListComponentCtrl extends VBox {
     }
 
     public void refresh() {
-        titleField.setText(server.getCardList(listId).getTitle());
-        System.out.println("refreshing: " + listId);
+        titleField.setTitle(server.getCardList(listId).getTitle());
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
         List<Card> cardsOfList = server.getCardList(listId).getCards();
@@ -176,12 +167,6 @@ public class ListComponentCtrl extends VBox {
 
             cards.getChildren().add(child);
         }
-    }
-
-    public void updateListTitle() {
-        CardList currentList = server.getCardList(listId);
-        currentList.setTitle(titleField.getText());
-        server.updateCardList(currentList);
     }
 
     @FXML

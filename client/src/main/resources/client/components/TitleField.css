@@ -1,0 +1,12 @@
+@import url("../Common.css");
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+    -fx-font-size: 14;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.text-field:disabled {
+    -fx-opacity: 1;
+}

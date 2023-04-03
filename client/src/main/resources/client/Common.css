@@ -3,5 +3,9 @@
     -fx-color-background-dark: rgb(181, 217, 191);
     -fx-color-foreground-accent: rgb(26, 255, 105);
     -fx-padding: 0;
-    -fx-font-family: Verdana;
+}
+
+* {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13;
 }
