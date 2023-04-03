@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-
 import java.io.*;
 import java.util.*;
 import javafx.scene.Parent;
