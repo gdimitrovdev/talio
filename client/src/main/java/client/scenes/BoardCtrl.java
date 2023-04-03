@@ -4,6 +4,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -288,11 +290,68 @@ public class BoardCtrl implements Initializable {
     }
 
     public void pressedShiftUp() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        int posList = 0;
+        int posCard = 0;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+                    posList = n;
+                    posCard = k;
+                }
+            }
+        }
+        ListComponentCtrl listComponentCtrl = listComponentCtrls.get(posList);
+        List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+        for (int n = 0; n < listComponentCtrl.cards.getChildren().size(); n++) {
+            cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(n));
+        }
 
+        if (posCard > 0) {
+            CardComponentCtrl temp = cardComponentCtrls.get(posCard - 1);
+            cardComponentCtrls.set(posCard - 1, cardComponentCtrls.get(posCard));
+            cardComponentCtrls.set(posCard, temp);
+
+            listComponentCtrl.cards.getChildren().clear();
+            for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
+                listComponentCtrl.cards.getChildren().add(cardComponentCtrl);
+            }
+        }
     }
 
     public void pressedShiftDown() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        int posList = 0;
+        int posCard = 0;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+                    posList = n;
+                    posCard = k;
+                }
+            }
+        }
+        ListComponentCtrl listComponentCtrl = listComponentCtrls.get(posList);
+        List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
 
+        for (int n = 0; n < listComponentCtrl.cards.getChildren().size(); n++) {
+            cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(n));
+        }
+
+        if (posCard < listComponentCtrl.cards.getChildren().size() - 1) {
+            CardComponentCtrl temp = cardComponentCtrls.get(posCard + 1);
+            cardComponentCtrls.set(posCard + 1, cardComponentCtrls.get(posCard));
+            cardComponentCtrls.set(posCard, temp);
+
+            listComponentCtrl.cards.getChildren().clear();
+            for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
+                listComponentCtrl.cards.getChildren().add(cardComponentCtrl);
+            }
+        }
     }
 
     public void pressedT() {
