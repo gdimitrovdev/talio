@@ -101,6 +101,7 @@ public class MainCtrlTalio {
     public void showJoinBoardCode() {
         primaryStageTalio.setTitle("Talio: Join an Existing Board");
         primaryStageTalio.setScene(joinBoard);
+        joinBoardCodeCtrl.refreshFieldBoardCode();
     }
 
     public void showCreateBoard() {

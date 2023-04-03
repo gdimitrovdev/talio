@@ -6,6 +6,7 @@ import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 public class JoinBoardCtrl {
     private final ServerUtils server;
@@ -22,6 +23,15 @@ public class JoinBoardCtrl {
         this.mainCtrlTalio = mainCtrlTalio;
     }
 
+    @FXML
+    public void initialize() {
+        fieldBoardCode.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                clickJoinBoard();
+            }
+        });
+    }
+
     public void clickJoinBoard() {
         String code = fieldBoardCode.getText();
         Board newBoard = server.joinBoard(code);
@@ -31,5 +41,9 @@ public class JoinBoardCtrl {
 
     public void clickBackHome() {
         mainCtrlTalio.showHome();
+    }
+
+    public void refreshFieldBoardCode() {
+        fieldBoardCode.setText("");
     }
 }
