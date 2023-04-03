@@ -186,7 +186,7 @@ public class CardComponentCtrl extends AnchorPane {
             rect.setWidth(70);
             // TODO fix this, when we figure out the colors
             //rect.setFill(Color.web("0x" + tag.getColor().substring(2)));
-            rect.setFill(Color.web("0xFF0000"));
+            rect.setFill(Color.web(tag.getColor()));
             // TODO perhaps move those to a CSS file
             rect.setArcHeight(5);
             rect.setArcWidth(5);

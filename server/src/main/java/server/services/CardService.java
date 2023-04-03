@@ -156,11 +156,11 @@ public class CardService {
 
     public Card addTagToCard(Long tagId, Long cardId) {
         try {
-            var tag = tagRepository.getReferenceById(tagId);
-            var card = cardRepository.getReferenceById(cardId);
+            var tag = tagRepository.findById(tagId).get();
+            var card = cardRepository.findById(cardId).get();
             card.getTags().add(tag);
             cardRepository.save(card);
-            return cardRepository.getReferenceById(cardId);
+            return cardRepository.findById(cardId).get();
         } catch (Exception e) {
             throw new EntityNotFoundException("Error while adding tag to card");
         }
@@ -168,11 +168,11 @@ public class CardService {
 
     public Card removeTagFromCard(Long tagId, Long cardId) {
         try {
-            var tag = tagRepository.getReferenceById(tagId);
-            var card = cardRepository.getReferenceById(cardId);
+            var tag = tagRepository.findById(tagId).get();
+            var card = cardRepository.findById(cardId).get();
             card.getTags().remove(tag);
             cardRepository.save(card);
-            return cardRepository.getReferenceById(cardId);
+            return cardRepository.findById(cardId).get();
         } catch (Exception e) {
             throw new EntityNotFoundException("Error while removing tag from card");
         }
