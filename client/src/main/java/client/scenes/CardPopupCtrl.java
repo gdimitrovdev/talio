@@ -2,12 +2,12 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -233,7 +233,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
             Button deleteTagButton = new Button("x");
             deleteTagButton.setOnAction(a -> {
-                card.getTags().remove(tag);
+                card.removeTag(tag);
                 setCardData(card);
             });
             deleteTagButton.getStyleClass().add("remove-tag-button");
@@ -293,19 +293,25 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     public void addAndMakeNewTag(String entry) {
         if (!entry.isEmpty()) {
             boolean tagExists = false;
+            Tag tagToAdd = null;
+
             for (Tag tag : card.getList().getBoard().getTags()) {
                 if (newTagTextfield.getText().equals(tag.getTitle())) {
                     tagExists = true;
+                    tagToAdd = tag;
                 }
             }
 
             if (!tagExists) {
-                Tag tag = server.createTag(new Tag(entry, tagColorPicker.getValue().toString(),
-                        card.getList().getBoard()));
-                card.getTags().add(tag);
-                newTagTextfield.clear();
-                setCardData(card);
+                Board emptyBoardId = new Board();
+                emptyBoardId.setId(card.getList().getBoard().getId());
+                tagToAdd = server.createTag(new Tag(entry, tagColorPicker.getValue().toString(),
+                        emptyBoardId));
             }
+
+            card.addTag(tagToAdd);
+            newTagTextfield.clear();
+            setCardData(card);
         }
     }
 
@@ -315,8 +321,10 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         card.setTitle(cardTitle.getText());
         card.setDescription(cardDescription.getText());
 
+        server.updateCard(card);
+
         // TODO maybe make sure this doesn't crash if the card was deleted while we were editing it
-        List<Tag> tagsOnServer = server.getCard(card.getId()).getTags();
+        /*List<Tag> tagsOnServer = server.getCard(card.getId()).getTags();
         List<Tag> tagsToAdd = new ArrayList<Tag>();
         List<Tag> tagsToRemove = new ArrayList<Tag>();
         // TODO this may break if someone changes the color of a tag while the popup is opened,
@@ -339,7 +347,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         }
         for (Tag tag : tagsToRemove) {
             server.removeTagFromCard(card.getId(), tag.getId());
-        }
+        }*/
     }
 
     public Card getCard() {
