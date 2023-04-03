@@ -4,7 +4,7 @@ import commons.Card;
 import commons.Subtask;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,15 +22,16 @@ import server.services.SubtaskService;
 @RestController
 @RequestMapping("/api/subtasks")
 public class SubtaskController {
-    @Autowired
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
 
     private final SubtaskService subtaskService;
     private final CardService cardService;
 
-    public SubtaskController(SubtaskService subtaskService, CardService cardService) {
+    @Inject
+    public SubtaskController(SubtaskService subtaskService, CardService cardService, SimpMessagingTemplate template) {
         this.subtaskService = subtaskService;
         this.cardService = cardService;
+        this.template = template;
     }
 
     @GetMapping(path = {"", "/"})

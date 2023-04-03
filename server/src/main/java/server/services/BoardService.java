@@ -102,4 +102,7 @@ public class BoardService {
         return hash.substring(0, length);
     }
 
+    public void deleteMany() {
+        boardRepository.deleteAll();
+    }
 }

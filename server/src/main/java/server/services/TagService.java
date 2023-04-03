@@ -61,4 +61,7 @@ public class TagService {
         return tagRepository.save(existingTag);
     }
 
+    public void deleteMany() {
+        tagRepository.deleteAll();
+    }
 }

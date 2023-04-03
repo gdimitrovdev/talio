@@ -3,7 +3,7 @@ package server.controllers;
 import commons.Board;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,13 +21,14 @@ import server.services.BoardService;
 @RequestMapping("/api/boards")
 public class BoardController {
 
-    @Autowired
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
 
     private final BoardService boardService;
 
-    public BoardController(BoardService boardService) {
+    @Inject
+    public BoardController(BoardService boardService, SimpMessagingTemplate template) {
         this.boardService = boardService;
+        this.template = template;
     }
 
     @GetMapping(path = {"", "/"})
@@ -76,6 +77,7 @@ public class BoardController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOne(@PathVariable("id") Long id) {
         try {
+            boardService.deleteOne(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             System.out.println(e);
