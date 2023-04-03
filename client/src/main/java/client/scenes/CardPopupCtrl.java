@@ -272,7 +272,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     }
 
     public void refresh() {
-        card=server.getCard(card.getId());
+        card = server.getCard(card.getId());
         initializeSubtasks();
         initializeTags();
     }
