@@ -40,7 +40,7 @@ Attendees:
     > Record answer from the TA
 7. Product Showcase
     1. Vesko - Did the server-client connection, but some errors happened
-    2. Pedro - Modified common classes, finished the ShareBoard, created BoardSettings, did tests for the server controllers. Currently working on tags
+    2. Pedro - Modified common classes, finished the ShareBoard, created BoardSettings, did tests for the server controllers, fixed tags in card popup. Next task is adding tag functionality to BoardSettings
     3. Dimana - Did tests for server services. Currently working on BoardSettings. 
     4. George - Fixed issues for the client-server connection. After that, the application was fixed in many aspects and the basic requirements were done. Currently working on saving recent boards locally
     5. Agnese - researched about client side testing and tried her best to do it but could not. Currently working on keyboard shortcuts.
