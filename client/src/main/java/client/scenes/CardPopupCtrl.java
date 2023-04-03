@@ -207,6 +207,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             checkBox.setOnAction(a -> {
                 subtask.setCompleted(!subtask.getCompleted());
                 server.updateSubtask(subtask);
+                //refreshCardData();
             });
             checkBox.getStyleClass().add("subtask-checkbox");
             subtaskElement.getChildren().add(checkBox);
@@ -271,6 +272,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     }
 
     public void refresh() {
+        card=server.getCard(card.getId());
         initializeSubtasks();
         initializeTags();
     }
