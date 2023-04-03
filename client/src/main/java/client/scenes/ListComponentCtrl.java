@@ -4,16 +4,16 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -110,6 +110,109 @@ public class ListComponentCtrl extends VBox {
                         refresh();
                     }
                 });
+            }
+        });
+
+        this.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+
+            if (e.getCode() == KeyCode.ENTER) {
+                List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+                for (int n = 0; n < cards.getChildren().size(); n++) {
+                    CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) cards.getChildren().get(n);
+                    cardComponentCtrls.add(cardComponentCtrl);
+                }
+                if (cards.getChildren().size() > 0) {
+                    CardComponentCtrl cardComponentCtrl = cardComponentCtrls.
+                            stream().filter(a -> a.selected).toList().get(0);
+                    cardComponentCtrl.loadPopup();
+                }
+            }
+
+            if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
+                List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+                for (int n = 0; n < cards.getChildren().size(); n++) {
+                    CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) cards.getChildren().get(n);
+                    cardComponentCtrls.add(cardComponentCtrl);
+                }
+                CardComponentCtrl cardComponentCtrl = cardComponentCtrls.
+                        stream().filter(a -> a.selected).toList().get(0);
+                if (!cardComponentCtrl.isFocusWithin() == true) {
+                    server.deleteCard(cardComponentCtrl.getCardId());
+                }
+            }
+
+            if (e.getCode() == KeyCode.DOWN) {
+                List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+                int pos = 0;
+                for (int n = 0; n < cards.getChildren().size(); n++) {
+                    CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) cards.getChildren().get(n);
+                    if (cardComponentCtrl.selected) {
+                        pos = n;
+                    }
+                    cardComponentCtrls.add(cardComponentCtrl);
+                }
+                CardComponentCtrl cardComponentCtrlSelected = cardComponentCtrls.
+                        stream().filter(a -> a.selected).toList().get(0);
+                if (pos < cards.getChildren().size() - 1) {
+                    cardComponentCtrlSelected.selected = false;
+                    cardComponentCtrlSelected.removeHighlight();
+                    cardComponentCtrls.get(pos + 1).selected = true;
+                    cardComponentCtrls.get(pos + 1).highlight();
+                }
+            }
+
+            if (e.getCode() == KeyCode.UP) {
+                List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+                int pos = 0;
+                for (int n = 0; n < cards.getChildren().size(); n++) {
+                    CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) cards.getChildren().get(n);
+                    if (cardComponentCtrl.selected) {
+                        pos = n;
+                    }
+                    cardComponentCtrls.add(cardComponentCtrl);
+                }
+                CardComponentCtrl cardComponentCtrlSelected = cardComponentCtrls.
+                        stream().filter(a -> a.selected).toList().get(0);
+                if (pos > 0) {
+                    cardComponentCtrlSelected.selected = false;
+                    cardComponentCtrlSelected.removeHighlight();
+                    cardComponentCtrls.get(pos - 1).selected = true;
+                    cardComponentCtrls.get(pos - 1).highlight();
+                }
+            }
+
+            if (e.getCode() == KeyCode.RIGHT) {
+                List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+                int pos = 0;
+                for (int n = 0; n < cards.getChildren().size(); n++) {
+                    CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) cards.getChildren().get(n);
+                    if (cardComponentCtrl.selected) {
+                        pos = n;
+                    }
+                    cardComponentCtrls.add(cardComponentCtrl);
+                }
+                CardComponentCtrl cardComponentCtrlSelected = cardComponentCtrls.
+                        stream().filter(a -> a.selected).toList().get(0);
+            }
+
+            if (e.getCode() == KeyCode.E) {
+                List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
+                int pos = 0;
+                for (int n = 0; n < cards.getChildren().size(); n++) {
+                    CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) cards.getChildren().get(n);
+                    if (cardComponentCtrl.selected) {
+                        pos = n;
+                    }
+                    cardComponentCtrls.add(cardComponentCtrl);
+                }
+                CardComponentCtrl cardComponentCtrlSelected = cardComponentCtrls.
+                        stream().filter(a -> a.selected).toList().get(0);
+                VBox vBox = (VBox) cardComponentCtrlSelected.getChildren().get(0);
+                HBox hBox = (HBox) vBox.getChildren().get(0);
+                TextField textField = (TextField) hBox.getChildren().get(0);
+                textField.requestFocus();
+                textField.clear();
+                textField.setText(server.getCard(cardComponentCtrlSelected.getCardId()).getTitle());
             }
         });
     }
