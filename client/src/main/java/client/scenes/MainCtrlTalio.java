@@ -7,7 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.TilePane;
+import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Pair;
 import javax.inject.Inject;
 
@@ -154,7 +158,27 @@ public class MainCtrlTalio {
     public void listenForQuestionMarkPressed() {
         this.primaryStageTalio.getScene().setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.SLASH && e.isShiftDown()) {
-                System.out.println("Should open the help window now");
+                Stage stage = new Stage();
+                stage.setTitle("Talio: Help");
+                TilePane tilepane = new TilePane();
+                Text text = new Text(" The available key shortcuts are: \n"
+                        + " Press ? anywhere in the application to open/close this help screen \n \n"
+                        + " The following shortcuts can be used on a task which is highlighted: "
+                        + " - Task highlight can be moved with arrow keys (Up/Down/Left/Right) \n"
+                        + " - Task can be moved up/down within a list by pressing Shift+Up/Down \n"
+                        + " - Task name can be edited in the board overview by pressing E \n"
+                        + " - Task can be deleted from the board overview by fressing delete or backspace \n"
+                        + " - Task editing pop-up can be opened by pressing enter \n"
+                        + " - Task editing pop-up can be closed by pressing esc");
+                tilepane.getChildren().add(text);
+                Scene scene = new Scene(tilepane, 730, 150);
+                stage.setScene(scene);
+                stage.show();
+                scene.setOnKeyPressed(e1 -> {
+                    if (e1.getCode() == KeyCode.SLASH && e1.isShiftDown()) {
+                        stage.close();
+                    }
+                });
             }
         });
     }
