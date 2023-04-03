@@ -3,12 +3,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Line?>
+
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardSettingsCtrl">
     <children>
    <TextField fx:id="fieldBoardName" layoutX="34.0" layoutY="29.0" prefHeight="26.0" prefWidth="206.0" />
@@ -25,12 +28,6 @@
       <Label layoutX="30.0" layoutY="227.0" text="Card color schemes:" />
       <Label layoutX="168.0" layoutY="228.0" text="B:" />
       <Label layoutX="193.0" layoutY="228.0" text="F:" />
-      <Button fx:id="setDefaultScheme1" layoutX="237.0" layoutY="247.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="94.0" text="set as default" />
-      <Button fx:id="setDefaultScheme2" layoutX="237.0" layoutY="292.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="94.0" text="set as default" />
-      <Button fx:id="setDefaultScheme3" layoutX="237.0" layoutY="339.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="94.0" text="set as default" />
-      <TextField fx:id="scheme1Name" layoutX="9.0" layoutY="247.0" prefHeight="26.0" prefWidth="141.0" />
-      <TextField fx:id="scheme2Name" layoutX="9.0" layoutY="292.0" prefHeight="26.0" prefWidth="141.0" />
-      <TextField fx:id="scheme3Name" layoutX="9.0" layoutY="339.0" prefHeight="26.0" prefWidth="141.0" />
       <ColorPicker fx:id="cpBackgroundBoard" layoutX="143.0" layoutY="134.0" prefHeight="26.0" prefWidth="38.0">
          <value>
             <Color red="0.729411780834198" green="0.729411780834198" blue="0.729411780834198" />
@@ -49,9 +46,20 @@
          </value></ColorPicker>
       <Button layoutX="470.0" layoutY="29.0" mnemonicParsing="false" onAction="#save" text="Save" />
       <Button layoutX="543.0" layoutY="28.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="25.0" prefWidth="25.0">
-         <ImageView  fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="https://cdn-icons-png.flaticon.com/512/860/860829.png"/>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="https://cdn-icons-png.flaticon.com/512/860/860829.png" />
          </ImageView>
       </Button>
+      <ScrollPane layoutX="30.0" layoutY="249.0" prefHeight="115.0" prefWidth="278.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="presetsBox" layoutX="1.0" layoutY="-2.0" prefHeight="115.0" prefWidth="262.0" />
+                  <Button layoutX="83.0" layoutY="119.0" mnemonicParsing="false" onAction="#addColorPreset" prefHeight="26.0" prefWidth="121.0" text="add a color scheme" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Label layoutX="226.0" layoutY="227.0" prefHeight="18.0" prefWidth="66.0" text="Default:" />
     </children>
 </AnchorPane>

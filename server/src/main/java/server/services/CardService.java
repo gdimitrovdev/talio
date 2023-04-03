@@ -148,7 +148,7 @@ public class CardService {
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));
 
         existingCard.setTitle(card.getTitle());
-        existingCard.setColor(card.getColor());
+        existingCard.setColorPresetNumber(card.getColorPresetNumber());
         existingCard.setDescription(card.getDescription());
 
         return cardRepository.save(existingCard);

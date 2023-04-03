@@ -23,7 +23,7 @@ public class TagTest {
     @Test
     public void checkConstructor() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t = new Tag("tagTitle", "red", b, cards);
@@ -37,7 +37,7 @@ public class TagTest {
     @Test
     public void equalsHashCode() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t1 = new Tag("tagTitle", "red", b);
@@ -49,7 +49,7 @@ public class TagTest {
     @Test
     public void notEqualsHashCode() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t1 = new Tag("tagTitle", "red", b);
@@ -61,7 +61,7 @@ public class TagTest {
     @Test
     public void hasToString() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var actual = new Tag("tagTitle", "red", b).toString();

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,6 +40,10 @@ public class Board implements Serializable {
 
     private String boardColor;
 
+    @ElementCollection
+    private List<String> cardColorPresets;
+
+    private Integer defaultPresetNum;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval =
             true)
@@ -57,6 +62,8 @@ public class Board implements Serializable {
         this.readOnlyCode = board.readOnlyCode;
         this.boardColor = board.boardColor;
         this.listsColor = board.listsColor;
+        this.cardColorPresets = board.cardColorPresets;
+        this.defaultPresetNum = board.defaultPresetNum;
         if (board.lists != null) {
             this.lists = new ArrayList<CardList>(board.lists);
         }
@@ -65,17 +72,20 @@ public class Board implements Serializable {
         }
     }
 
-    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor) {
+    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<String> cardColorPresets,
+                 Integer defaultPresetNum) {
+        setDefaultPresetNum(defaultPresetNum);
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);
         setBoardColor(boardColor);
         setListsColor(listsColor);
+        setCardColorPresets(cardColorPresets);
 
     }
 
     public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<CardList> lists,
-            List<Tag> tags) {
+                 List<Tag> tags, List<String> cardColorPresets, Integer defaultPresetNum) {
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);
@@ -83,6 +93,8 @@ public class Board implements Serializable {
         setBoardColor(boardColor);
         setLists(lists);
         setTags(tags);
+        setCardColorPresets(cardColorPresets);
+        setDefaultPresetNum(defaultPresetNum);
     }
 
     public void addCardList(CardList list) {
@@ -184,4 +196,19 @@ public class Board implements Serializable {
         this.boardColor = boardColor;
     }
 
+    public List<String> getCardColorPresets() {
+        return cardColorPresets;
+    }
+
+    public void setCardColorPresets(List<String> cardColorPresets) {
+        this.cardColorPresets = cardColorPresets;
+    }
+
+    public Integer getDefaultPresetNum() {
+        return defaultPresetNum;
+    }
+
+    public void setDefaultPresetNum(Integer defaultPresetNum) {
+        this.defaultPresetNum = defaultPresetNum;
+    }
 }

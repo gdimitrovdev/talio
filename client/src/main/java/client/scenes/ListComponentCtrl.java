@@ -30,11 +30,7 @@ public class ListComponentCtrl extends VBox {
     private HBox titleHolder;
 
     @FXML
-<<<<<<< HEAD
     private TitleField titleField;
-=======
-    public TextField titleField;
->>>>>>> 5668765 (working color settings for board and list colors + passing tests)
 
     @FXML
     public Button deleteListBtn;

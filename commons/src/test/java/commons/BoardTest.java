@@ -28,7 +28,7 @@ public class BoardTest {
         var tags = new ArrayList<Tag>();
         tags.add(new Tag());
         var cardList = new CardList("cardListTitle", new Board());
-        cardList.getCards().add(new Card("cardTitle", "desc", "green", null));
+        cardList.getCards().add(new Card("cardTitle", "desc", "green", null, colorPresetNumber));
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
         var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#222222", cardlists, tags);
@@ -54,7 +54,7 @@ public class BoardTest {
     @Test
     public void testCardListOperations() {
         var cardList = new CardList("cardListTitle", new Board());
-        cardList.getCards().add(new Card("cardTitle", "desc", "green", null));
+        cardList.getCards().add(new Card("cardTitle", "desc", "green", null, colorPresetNumber));
         var cardlists = new ArrayList<CardList>();
         var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", cardlists, null);
         b.addCardList(cardList);

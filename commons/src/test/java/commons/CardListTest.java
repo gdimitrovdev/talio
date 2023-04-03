@@ -13,7 +13,7 @@ public class CardListTest {
     @Test
     public void checkConstructor() {
         var b = new Board("boardName", "password", "asdfgh", "", "");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var cl = new CardList("listTitle", b, cards);
@@ -36,7 +36,7 @@ public class CardListTest {
     @Test
     public void equalsHashCode() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var cl1 = new CardList("listTitle", b);
@@ -48,7 +48,7 @@ public class CardListTest {
     @Test
     public void testCardOperations() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         var cl = new CardList("listTitle", b, cards);
         cl.addCard(c);
@@ -62,7 +62,7 @@ public class CardListTest {
     @Test
     public void notEqualsHashCode() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var cl1 = new CardList("listTitleDifferent", b);
@@ -74,7 +74,7 @@ public class CardListTest {
     @Test
     public void hasToString() {
         var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null);
+        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var actual = new CardList("listTitleDifferent", b).toString();

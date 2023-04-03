@@ -6,7 +6,9 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -52,13 +54,17 @@ public class HomeCtrl {
         //Board current = serverUtils.getBoardById(boardID)" can be used
         // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
 
-        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000","#dedede/#000000");
+        List<String> defaultPresets = new ArrayList<>();
+        defaultPresets.add("#ffffff/#000000");
+        defaultPresets.add("#ff0008/#000000");
+        defaultPresets.add("#abffc3/#004714");
+        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000","#dedede/#000000", defaultPresets,1);
 
         CardList list1 = new CardList("example list 1", null);
         CardList list2 = new CardList("example list 2", null);
 
-        Card c1 = new Card("Title1", "Card1", "#FF0000", null);
-        Card c2 = new Card("Title2", "Card2", "#FF0000", null);
+        Card c1 = new Card("Title1", "Card1", null, 1);
+        Card c2 = new Card("Title2", "Card2", null, 1);
 
         list1.addCard(c1);
         list1.addCard(c2);

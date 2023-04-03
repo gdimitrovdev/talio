@@ -72,6 +72,8 @@ public class BoardService {
         existingBoard.setName(board.getName());
         existingBoard.setCode(board.getCode());
         existingBoard.setReadOnlyCode(board.getReadOnlyCode());
+        existingBoard.setDefaultPresetNum(board.getDefaultPresetNum());
+        existingBoard.setCardColorPresets(board.getCardColorPresets());
 
         return boardRepository.save(existingBoard);
     }

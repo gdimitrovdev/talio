@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<<<<<<< HEAD
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml" stylesheets="@./css/BoardComponent.css" fx:controller="client.scenes.BoardCtrl">
-=======
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
@@ -20,13 +9,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+
+
 
 <AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="800.0" stylesheets="@./css/BoardComponent.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
->>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
 
     <ToolBar fx:id="toolbar" prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
         <items>
-<<<<<<< HEAD
+            <Pane>
+                <Region prefWidth="7" />
+            </Pane>
             <Button fx:id="backHomeBTN" onAction="#backToHome">
                 <graphic>
                     <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -35,9 +31,9 @@
                 </graphic>
                 <tooltip><Tooltip text="Return to Homepage" /></tooltip>
             </Button>
-            <HBox fx:id="spacer" prefWidth="275.0" />
+            <HBox fx:id="spacer" prefWidth="150.0" />
             <Label fx:id="boardNameLabel"  />
-            <HBox fx:id="spacer1" prefWidth="225.0" />
+            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0" />
             <Button fx:id="shareBTN" onAction="#share">
                 <graphic>
                     <ImageView fx:id="myImage2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -55,20 +51,6 @@
                     </ImageView>
                 </graphic>
                 <tooltip><Tooltip text="BoardSettings" /></tooltip>
-=======
-            <Pane>
-                <Region prefWidth="7" />
-            </Pane>
-            <Button fx:id="backHomeBTN" onAction="#backToHome" text=" Back to HomePage" />
-            <HBox fx:id="spacer" prefWidth="150.0" />
-            <TextField fx:id="boardName" editable="false" />
-            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0" />
-            <Button fx:id="shareBTN" onAction="#share" text="Share">
-                <tooltip><Tooltip text="Share this board" /></tooltip>
-            </Button>
-            <Button fx:id="settingsBTN" onAction="#settings" text="⋮">
-                <tooltip><Tooltip text="Board Settings" /></tooltip>
->>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
             </Button>
         </items>
     </ToolBar>
