@@ -6,6 +6,7 @@ import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -147,12 +148,66 @@ public class MainCtrlTalio {
         primaryStageTalio.setTitle("Talio: Board");
         primaryStageTalio.setScene(boardComponent);
         this.listenForQuestionMarkPressed();
+        this.listenForKeyPressedForBoard();
     }
 
     public void listenForQuestionMarkPressed() {
         this.primaryStageTalio.getScene().setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.SLASH && e.isShiftDown()) {
                 System.out.println("Should open the help window now");
+            }
+        });
+    }
+
+    public void listenForKeyPressedForBoard() {
+        this.primaryStageTalio.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            switch (e.getCode()) {
+                case RIGHT -> {
+                    System.out.println("Move right");
+                    boardComponentCtrl.switchRight();
+                }
+                case LEFT -> {
+                    System.out.println("Move left");
+                    boardComponentCtrl.switchLeft();
+                }
+                case UP -> {
+                    if (e.isShiftDown()) {
+                        System.out.println("Move card up");
+                        boardComponentCtrl.pressedShiftUp();
+                    } else {
+                        System.out.println("Move up");
+                        boardComponentCtrl.moveUp();
+                    }
+                }
+                case DOWN -> {
+                    if (e.isShiftDown()) {
+                        System.out.println("Move card down");
+                        boardComponentCtrl.pressedShiftDown();
+                    } else {
+                        System.out.println("Move down");
+                        boardComponentCtrl.moveDown();
+                    }
+                }
+                case ENTER -> {
+                    System.out.println("Open popup");
+                    boardComponentCtrl.pressedEnter();
+                }
+                case E -> {
+                    System.out.println("Edit card title");
+                    boardComponentCtrl.pressedE();
+                }
+                case BACK_SPACE, DELETE -> {
+                    System.out.println("Delete the card");
+                    boardComponentCtrl.pressedDelete();
+                }
+                case T -> {
+                    System.out.println("Open popup for adding tags");
+                    boardComponentCtrl.pressedT();
+                }
+                case C -> {
+                    System.out.println("Open popup for color preset selection");
+                    boardComponentCtrl.pressedC();
+                }
             }
         });
     }

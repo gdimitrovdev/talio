@@ -6,6 +6,8 @@ import commons.Board;
 import commons.CardList;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class BoardCtrl implements Initializable {
     private MainCtrlTalio mainCtrlTalio;
@@ -141,5 +144,162 @@ public class BoardCtrl implements Initializable {
         innerHBox.getChildren().forEach(c -> ((ListComponentCtrl) c).close());
         server.removeUpdateEvent(updateBoard);
         server.removeUpdateEvent(updateList);
+    }
+
+    public void switchLeft() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        int posList = 0;
+        int posCard = 0;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+                    posList = n;
+                    posCard = k;
+                }
+            }
+        }
+        if (posList > 0 && listComponentCtrls.get(posList).cards.getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).selected = false;
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).cards.getChildren().get(0)).selected = true;
+            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).cards.getChildren().get(0)).highlight();
+        }
+    }
+
+    public void switchRight() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        int posList = 0;
+        int posCard = 0;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+                    posList = n;
+                    posCard = k;
+                }
+            }
+        }
+        if (posList < listComponentCtrls.size() - 1 && listComponentCtrls.get(posList).cards.getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard))
+                    .selected = false;
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard))
+                    .removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).cards.getChildren().get(0))
+                    .selected = true;
+            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).cards.getChildren().get(0))
+                    .highlight();
+        }
+    }
+
+    public void moveDown() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        int posList = 0;
+        int posCard = 0;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+                    posList = n;
+                    posCard = k;
+                }
+            }
+        }
+        if (!listComponentCtrls.isEmpty() && posCard < listComponentCtrls.get(posList).cards.getChildren().size() - 1) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).selected = false;
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard + 1)).selected = true;
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard + 1)).highlight();
+        }
+    }
+
+    public void moveUp() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        int posList = 0;
+        int posCard = 0;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected) {
+                    posList = n;
+                    posCard = k;
+                }
+            }
+        }
+        if (posCard > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).selected = false;
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard)).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard - 1)).selected = true;
+            ((CardComponentCtrl) listComponentCtrls.get(posList).cards.getChildren().get(posCard - 1)).highlight();
+        }
+    }
+
+    public void pressedEnter() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected
+                        && !(listComponentCtrl.cards.getChildren().get(k)).isFocusWithin()) {
+                    ((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).loadPopup();
+                }
+            }
+        }
+    }
+
+    public void pressedE() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        CardComponentCtrl cardComponentCtrl = null;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected
+                        && !(listComponentCtrl.cards.getChildren().get(k)).isFocusWithin()) {
+                    cardComponentCtrl = (CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k);
+                }
+            }
+        }
+        if (cardComponentCtrl != null) {
+            VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
+            HBox hBox = (HBox) vBox.getChildren().get(0);
+            TextField textField = (TextField) hBox.getChildren().get(0);
+            textField.requestFocus();
+        }
+    }
+
+    public void pressedDelete() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.cards.getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).selected
+                        && !(listComponentCtrl.cards.getChildren().get(k)).isFocusWithin()) {
+                    server.deleteCard(((CardComponentCtrl) listComponentCtrl.cards.getChildren().get(k)).getCardId());
+                }
+            }
+        }
+    }
+
+    public void pressedShiftUp() {
+
+    }
+
+    public void pressedShiftDown() {
+
+    }
+
+    public void pressedT() {
+
+    }
+
+    public void pressedC() {
+
     }
 }
