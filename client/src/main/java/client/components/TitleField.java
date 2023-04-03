@@ -2,6 +2,7 @@ package client.components;
 
 import java.io.IOException;
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -44,11 +45,11 @@ public class TitleField extends AnchorPane {
     public void init(Consumer<String> onSave, Consumer<String> onFirstSave,
             Runnable onFirstCancel) {
         init(onSave);
-        setTitle("");
+        //setTitle("");
         this.onSave = onSave;
         this.onFirstSave = onFirstSave;
         this.onFirstCancel = onFirstCancel;
-        onClick();
+        Platform.runLater(this::onClick);
     }
 
     private void init(Consumer<String> onSave) {
@@ -61,6 +62,8 @@ public class TitleField extends AnchorPane {
             System.out.println("Error while creating a title field");
             throw new RuntimeException(e);
         }
+
+        textField.setPromptText("Enter a title...");
 
         // Setting these through the FXML does not seem to work.
         // If you set them in there, the events are called on an empty TitleField, instead of on
@@ -100,6 +103,7 @@ public class TitleField extends AnchorPane {
         } else {
             onFirstSave.accept(textField.getText());
             onFirstSave = null;
+            onFirstCancel = null;
         }
         this.requestFocus();
     }
@@ -107,9 +111,10 @@ public class TitleField extends AnchorPane {
     private void onLoseFocus() {
         disable();
         setTitle(savedTitle);
-        if (onFirstCancel != null) {
+        if (onFirstSave != null) {
             onFirstCancel.run();
             onFirstCancel = null;
+            onFirstSave = null;
         }
     }
 

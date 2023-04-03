@@ -11,19 +11,21 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import client.components.TitleField?>
 <fx:root type="javafx.scene.layout.AnchorPane"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@./css/CardComponent.css"
-            fx:id="cardOverview"
-            prefWidth="280"
-            prefHeight="100">
+         xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         stylesheets="@./css/CardComponent.css"
+         fx:id="cardOverview"
+         prefWidth="280"
+         prefHeight="100">
     <!-- TODO we can probably remove the prefWidth and prefHeight -->
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
           AnchorPane.topAnchor="0.0"
           styleClass="vbox">
         <HBox maxWidth="Infinity" styleClass="hbox">
-            <TextField fx:id="title" HBox.hgrow="ALWAYS" onAction="#saveTitle"/>
+            <TitleField fx:id="titleField"/>
             <!-- TODO replace the "X" with a proper image -->
             <Button fx:id="deleteButton" onAction="#delete">
                 <graphic>

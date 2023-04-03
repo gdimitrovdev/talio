@@ -1,3 +1,9 @@
+@import url(../../Common.css);
+
+.root {
+    -fx-background-color: red;
+}
+
 #titleHolder {
     -fx-pref-height: 30.0;
     -fx-pref-width: 180.0;

@@ -1,16 +1,15 @@
 @import url(../../Common.css);
 
+.root {
+    -fx-background-color: -fx-color-background-dark;
+}
+
 #cardOverview {
     -fx-background: #808080;
     -fx-padding: 10;
-    //this is only to see the cards a bit better
+    /*this is only to see the cards a bit better*/
     -fx-border-color: black;
     -fx-border-width: 1px;
-}
-
-/* TODO fix the styling for when the title is disabled */
-#title {
-    -fx-background-color: #e6e6e6;
 }
 
 #deleteButton {

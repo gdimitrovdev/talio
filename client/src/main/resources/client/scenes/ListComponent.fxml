@@ -17,12 +17,10 @@
             </tooltip>
         </Button>
     </HBox>
-    <ScrollPane fx:id="scrollpane" hbarPolicy="NEVER">
+    <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER">
         <VBox fx:id="cards">
         </VBox>
     </ScrollPane>
-    <!--<VBox fx:id="cards">
-    </VBox> -->
     <Button fx:id="addCardBtn" text="+" onAction="#addCard">
         <tooltip>
             <Tooltip text="Add a new card"/>

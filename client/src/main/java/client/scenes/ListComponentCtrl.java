@@ -24,6 +24,8 @@ public class ListComponentCtrl extends VBox {
     private Object updateList;
     private Long listId;
 
+    private boolean scrollToBottom = false;
+
     @FXML
     private HBox titleHolder;
 
@@ -38,9 +40,6 @@ public class ListComponentCtrl extends VBox {
 
     @FXML
     private Button addCardBtn;
-
-    @FXML
-    private VBox listVBox;
 
     @FXML
     ScrollPane scrollPane = new ScrollPane();
@@ -62,7 +61,7 @@ public class ListComponentCtrl extends VBox {
             throw new RuntimeException(e);
         }
 
-        titleField.init("Untitled", (newTitle) -> {
+        titleField.init("You should not see this", (newTitle) -> {
             CardList currentList = server.getCardList(listId);
             currentList.setTitle(newTitle);
             server.updateCardList(currentList);
@@ -86,7 +85,6 @@ public class ListComponentCtrl extends VBox {
         this.setOnDragExited(event -> removeHighlight());
 
         refresh();
-        //scrollPane.setContent(this);
 
         // Updates that the list should handle
         // - list: card deleted DONE
@@ -112,11 +110,11 @@ public class ListComponentCtrl extends VBox {
 
     // TODO replace this with standard colors
     public void highlight() {
-        listVBox.setStyle("-fx-border-color: blue;");
+        this.setStyle("-fx-border-color: blue;");
     }
 
     public void removeHighlight() {
-        listVBox.setStyle("-fx-border-color: black;");
+        this.setStyle("-fx-border-color: black;");
     }
 
     public void close() {
@@ -172,20 +170,14 @@ public class ListComponentCtrl extends VBox {
     @FXML
     private void deleteList() {
         server.deleteCardList(listId);
-        /*
-        // Get the parent of the list component, which is the board
-        Parent parent = this.getParent();
-        // Remove the list component from the parent
-        if (parent instanceof Pane) {
-            Pane parentPane = (Pane) parent;
-            parentPane.getChildren().remove(this);
-        }
-        */
     }
 
     @FXML
     protected void addCard() {
-        Card card = server.createCard(new Card("Untitled", "", "", server.getCardList(listId)));
-        server.moveCardToListLast(card.getId(), listId);
+        cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, server, this));
+        // Scroll to bottom
+        Platform.runLater(() -> {
+            scrollPane.setVvalue(1);
+        });
     }
 }

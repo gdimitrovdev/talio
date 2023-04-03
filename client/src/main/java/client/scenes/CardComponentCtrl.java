@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.TitleField;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.Subtask;
@@ -16,12 +17,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -29,11 +28,12 @@ import javafx.stage.Stage;
 public class CardComponentCtrl extends AnchorPane {
     private MainCtrlTalio mainCtrlTalio;
     private ServerUtils server;
+    private ListComponentCtrl list;
     private Long cardId;
     private Object updateCard;
 
     @FXML
-    private TextField title;
+    private TitleField titleField;
 
     @FXML
     private Button deleteButton;
@@ -50,8 +50,6 @@ public class CardComponentCtrl extends AnchorPane {
     @FXML
     private AnchorPane cardOverview;
 
-    private boolean cardHasBeenCreated = false;
-
     private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
@@ -67,25 +65,8 @@ public class CardComponentCtrl extends AnchorPane {
         }
 
         addClickedEventHandler();
-        title.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) {
-                if (!cardHasBeenCreated) {
-                    // Should cancel the creation of a card now
-                    ((ListComponentCtrl) getParent()).getChildren().remove(this);
-                }
-                title.setDisable(true);
-            } else {
-                title.selectAll();
-            }
-        });
-        this.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-            if (KeyCode.ESCAPE == event.getCode() && !title.isDisabled()) {
-                title.setDisable(true);
-            }
-        });
-        // TODO not exactly like the backlog says, but I think this is more intuitive
-        //  determine whether it should be this way
-        setOnMouseSingleClicked((me) -> {
+
+        setOnMouseDoubleClicked((me) -> {
             FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
             try {
                 cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
@@ -106,19 +87,24 @@ public class CardComponentCtrl extends AnchorPane {
                 setCard(server.getCard(cardId));
             });*/
         });
-        setOnMouseDoubleClicked((me) -> {
+        /*setOnMouseDoubleClicked((me) -> {
             if (title.isDisabled()) {
                 title.setDisable(false);
                 title.requestFocus();
             }
-        });
+        });*/
     }
 
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, Long cardId) {
         init(mainCtrlTalio, server);
-        this.cardHasBeenCreated = true;
         this.cardId = cardId;
+        titleField.init("Untitled", newTitle -> {
+            Card card = server.getCard(this.cardId);
+            card.setTitle(newTitle);
+            server.updateCard(card);
+        });
         setCard(server.getCard(cardId));
+
         // Updates that this should handle
         // card: card update DONE
         // card: add tag DONE
@@ -157,10 +143,29 @@ public class CardComponentCtrl extends AnchorPane {
         });
     }
 
-    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
+    public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server,
+            ListComponentCtrl list) {
+        this.list = list;
         init(mainCtrlTalio, server);
-        setCard(new Card("Untitled", "", "", null));
-        title.requestFocus();
+
+        titleField.init(newTitle -> {
+            Card card = server.getCard(cardId);
+            card.setTitle(newTitle);
+            server.updateCard(card);
+        }, newTitle -> {
+            Platform.runLater(() -> {
+                server.createCard(new Card(newTitle, "", "",
+                        server.getCardList((list).getListId())));
+            });
+
+        }, () -> {
+            Platform.runLater(() -> {
+                ((VBox) getParent()).getChildren().remove(this);
+            });
+
+        });
+
+        setCard(new Card("", "", "", null));
     }
 
     public Long getCardId() {
@@ -179,11 +184,10 @@ public class CardComponentCtrl extends AnchorPane {
     //  if the card has not been created yet
 
     public void setCard(Card newCardData) {
-        title.setText(newCardData.getTitle());
+        titleField.setTitle(newCardData.getTitle());
 
         subtaskProgress.setVisible(newCardData.getSubtasks().size() != 0);
         subtaskLabel.setVisible(newCardData.getSubtasks().size() != 0);
-        deleteButton.setVisible(cardHasBeenCreated);
 
         int numSubtasksDone =
                 (int) newCardData.getSubtasks().stream().filter(Subtask::getCompleted).count();
@@ -206,30 +210,9 @@ public class CardComponentCtrl extends AnchorPane {
         }
     }
 
-    public void saveTitle() {
-        if (!cardHasBeenCreated) {
-            ((ListComponentCtrl) getParent()).getChildren().remove(this);
-            server.createCard(new Card(title.getText(), "", "",
-                    server.getCardList(((ListComponentCtrl) getParent()).getListId())));
-        } else {
-            Card card = server.getCard(cardId);
-            card.setTitle(title.getText());
-            server.updateCard(card);
-        }
-        title.setDisable(true);
-    }
-
     @FXML
     private void delete() {
         server.deleteCard(cardId);
-        /*// Get the parent of the card
-        Parent parent = this.getParent();
-
-        // Remove the card from the parent if it is an instance of Pane
-        if (parent instanceof Pane) {
-            Pane parentPane = (Pane) parent;
-            parentPane.getChildren().remove(this);
-        }*/
     }
 
     public void close() {
@@ -280,7 +263,12 @@ public class CardComponentCtrl extends AnchorPane {
                     if (me.getClickCount() == 1) {
                         latestClickRunner = new ClickRunner(() -> {
                             System.out.println("ButtonWithDblClick : SINGLE Click fired");
-                            onMouseSingleClickedProperty.get().handle(me);
+                            try {
+                                onMouseSingleClickedProperty.get().handle(me);
+                            } catch (Exception ignored) {
+
+                            }
+
                         });
                         CompletableFuture.runAsync(latestClickRunner);
                     }
