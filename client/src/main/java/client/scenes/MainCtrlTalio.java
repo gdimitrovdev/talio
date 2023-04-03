@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
+
+import java.io.*;
 import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,7 +22,7 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
     private ServerUtils serverUtils;
-    private Map<String, Set<Long>> joinedBoards = new HashMap<>();
+    private Map<String, Set<Long>> joinedBoards;
 
     @Inject
     public MainCtrlTalio(ServerUtils serverUtils) {
@@ -36,6 +38,20 @@ public class MainCtrlTalio {
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
             Pair<BoardSettingsCtrl, Parent> boardSettingsPair) {
+
+        try {
+            File toRead = new File("local_data");
+            FileInputStream fis = new FileInputStream(toRead);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            this.joinedBoards = (HashMap<String, Set<Long>>) ois.readObject();
+
+            ois.close();
+            fis.close();
+        } catch (Exception e) {
+            this.joinedBoards = new HashMap<String, Set<Long>>();
+        }
+
         this.primaryStageTalio = primaryStageTalio;
 
         this.homeCtrl = homePair.getKey();
@@ -78,6 +94,17 @@ public class MainCtrlTalio {
         if (!joinedBoards.get(serverUrl).contains(boardId)) {
             joinedBoards.get(serverUrl).add(boardId);
         }
+
+        try {
+            File localData = new File("local_data");
+            FileOutputStream fos = new FileOutputStream(localData);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(joinedBoards);
+            oos.flush();
+            oos.close();
+            fos.close();
+        } catch (Exception e) { }
     }
 
     public void removeJoinedBoard(String serverUrl, Long boardId) {
@@ -90,6 +117,16 @@ public class MainCtrlTalio {
         }
 
         joinedBoards.get(serverUrl).remove(boardId);
+        try {
+            File localData = new File("local_data");
+            FileOutputStream fos = new FileOutputStream(localData);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(joinedBoards);
+            oos.flush();
+            oos.close();
+            fos.close();
+        } catch (Exception e) { }
     }
 
     public void showHome() {
