@@ -17,9 +17,9 @@
             </tooltip>
         </Button>
     </HBox>
-    <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER">
-        <VBox fx:id="cards">
-        </VBox>
+    <!-- TODO figure out how to properly show/hide the scrollbar -->
+    <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+        <VBox fx:id="cards" prefWidth="280"/>
     </ScrollPane>
     <Button fx:id="addCardBtn" text="+" onAction="#addCard">
         <tooltip>

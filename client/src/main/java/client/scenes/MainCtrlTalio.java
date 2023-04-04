@@ -12,7 +12,8 @@ import javax.inject.Inject;
 
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
-    private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard, boardSettings;
+    private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard,
+            boardSettings;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;

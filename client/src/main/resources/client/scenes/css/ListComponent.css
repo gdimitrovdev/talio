@@ -35,3 +35,9 @@
     -fx-pref-height: 30px;
     -fx-spacing: 10px;
 }
+
+#cards {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+}
