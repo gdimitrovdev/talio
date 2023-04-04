@@ -240,7 +240,7 @@ public class MainCtrlTalio {
     }
 
     public void listenToMouse() {
-        this.boardComponent.getRoot().addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
+        this.boardComponent.getRoot().addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET, e -> {
             boardComponentCtrl.mouseMovement(e);
         });
     }

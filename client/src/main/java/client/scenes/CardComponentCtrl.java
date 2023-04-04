@@ -192,16 +192,6 @@ public class CardComponentCtrl extends AnchorPane {
             rect.setArcWidth(5);
             tagsContainer.getChildren().add(rect);
         }
-
-        this.setOnMouseEntered(e -> {
-            this.highlight();
-            selected = true;
-        });
-
-        this.setOnMouseExited(e -> {
-            this.removeHighlight();
-            selected = false;
-        });
     }
 
     public void saveTitle() {
