@@ -41,8 +41,8 @@ class BoardServiceTest {
     @Test
     public void getMany() {
         List<Board> expectedBoards = new ArrayList<>();
-        expectedBoards.add(new Board("board1", "code1", "readOnlyCode1", "", ""));
-        expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "", ""));
+        expectedBoards.add(new Board("board1", "code1", "readOnlyCode1", "", "", null, 0));
+        expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "", "", null, 0));
         when(boardRepositoryMock.findAll()).thenReturn(expectedBoards);
 
         List<Board> returnedBoards = boardServiceMock.getMany();
@@ -53,7 +53,7 @@ class BoardServiceTest {
     @Test
     public void getOne() {
         Long boardId = 1L;
-        Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "", "");
+        Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "", "", null, 0);
         when(boardRepositoryMock.findById(boardId)).thenReturn(Optional.of(expectedBoard));
 
         Optional<Board> returnedBoard = boardServiceMock.getOne(boardId);
@@ -119,6 +119,10 @@ class BoardServiceTest {
         existingBoard.setListsColor("#000000/#555555");
         existingBoard.setCode("abc");
         existingBoard.setReadOnlyCode("a");
+        ArrayList<String> list = new ArrayList<>();
+        list.add("#000000/#222222");
+        existingBoard.setCardColorPresets(list);
+        existingBoard.setDefaultPresetNum(0);
 
         Board updatedBoard = new Board();
         updatedBoard.setId(2L);
@@ -127,6 +131,11 @@ class BoardServiceTest {
         updatedBoard.setListsColor("#000000/#222222");
         updatedBoard.setCode("abc");
         updatedBoard.setReadOnlyCode("b");
+        ArrayList<String> updatedList = new ArrayList<>();
+        updatedList.add("#000000/#222223");
+        updatedBoard.setCardColorPresets(updatedList);
+        existingBoard.setDefaultPresetNum(1);
+
 
 
         when(boardRepositoryMock.findById(1L)).thenReturn(Optional.of(existingBoard));
@@ -140,6 +149,8 @@ class BoardServiceTest {
         assertEquals(existingBoard.getListsColor(), updatedBoard.getListsColor());
         assertEquals(existingBoard.getCode(), updatedBoard.getCode());
         assertEquals(existingBoard.getReadOnlyCode(), updatedBoard.getReadOnlyCode());
+        assertEquals(existingBoard.getCardColorPresets(), updatedBoard.getCardColorPresets());
+        assertEquals(existingBoard.getDefaultPresetNum(), updatedBoard.getDefaultPresetNum());
 
     }
 

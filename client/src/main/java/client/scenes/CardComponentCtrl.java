@@ -3,6 +3,7 @@ package client.scenes;
 import client.components.TitleField;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import commons.Subtask;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -158,7 +159,7 @@ public class CardComponentCtrl extends AnchorPane {
                 deleteButton.setVisible(true);
                 deleteButton.setManaged(true);
                 CardList cardList = server.getCardList((list).getListId());
-                server.createCard(new Card(newTitle, "", "",cardList,
+                server.createCard(new Card(newTitle, "", cardList,
                         server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
             });
         }, () -> {
@@ -168,7 +169,7 @@ public class CardComponentCtrl extends AnchorPane {
 
         });
         CardList cardList = server.getCardList((list).getListId());
-        setCard(new Card("", "", "", cardList,
+        setCard(new Card("", "", cardList,
                         server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
     }
 

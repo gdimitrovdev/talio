@@ -58,7 +58,7 @@ public class HomeCtrl {
         defaultPresets.add("#ffffff/#000000");
         defaultPresets.add("#ff0008/#000000");
         defaultPresets.add("#abffc3/#004714");
-        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000","#dedede/#000000", defaultPresets,1);
+        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1);
 
         CardList list1 = new CardList("example list 1", null);
         CardList list2 = new CardList("example list 2", null);

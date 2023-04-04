@@ -13,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -117,9 +116,6 @@ public class BoardCtrl implements Initializable {
 
     public void refresh() {
         var board = server.getBoard(boardId);
-<<<<<<< HEAD
-        boardNameLabel.setText(board.getName());
-=======
 
         //split the string with the colors
         String[] colors = board.getBoardColor().split("/"); // Split the string into two parts
@@ -130,7 +126,7 @@ public class BoardCtrl implements Initializable {
         toolbar.setStyle("-fx-background-color:" + bgColor);
 
         //changing the color of the board font
-        boardName.setStyle("-fx-text-fill: " + fontColor);
+        boardNameLabel.setStyle("-fx-text-fill: " + fontColor);
         settingsBTN.setStyle("-fx-text-fill: " + fontColor);
         shareBTN.setStyle("-fx-text-fill: " + fontColor);
         newListButton.setStyle("-fx-text-fill: " + fontColor);
@@ -138,20 +134,12 @@ public class BoardCtrl implements Initializable {
 
 
 
-        boardName.setText(board.getName());
-<<<<<<< HEAD
->>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
-        innerHBox.getChildren().clear();
-=======
+        boardNameLabel.setText(board.getName());
         Platform.runLater(() -> innerHBox.getChildren().clear());
->>>>>>> 9c6971a (implemented all of the needed fields in the popup)
         for (CardList cardList : board.getLists()) {
             ListComponentCtrl listComponent = new ListComponentCtrl(mainCtrlTalio,
                     server, this, cardList.getId());
-
-
-
-            innerHBox.getChildren().add(listComponent);
+            Platform.runLater(() -> innerHBox.getChildren().add(listComponent));
         }
 
     }

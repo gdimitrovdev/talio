@@ -1,6 +1,8 @@
 package server.services;
 
 import commons.Board;
+import commons.Card;
+import commons.CardList;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -10,16 +12,19 @@ import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.DatatypeConverter;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
+import server.database.CardRepository;
 
 @Service
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final CardRepository cardRepository;
     private final MessageDigest messageDigest;
     private final Random random;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, CardRepository cardRepository) {
         this.boardRepository = boardRepository;
+        this.cardRepository = cardRepository;
 
         try {
             this.messageDigest = MessageDigest.getInstance("md5");
@@ -66,6 +71,18 @@ public class BoardService {
         //        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
         //            throw new IllegalArgumentException("Code and readOnlyCode must be different");
         //        }
+        if (!existingBoard.getDefaultPresetNum().equals(board.getDefaultPresetNum())) {
+            for (CardList cardList : board.getLists()) {
+                for (Card card : cardList.getCards()) {
+                    if (card.getColorPresetNumber() == existingBoard.getDefaultPresetNum()) {
+                        Card newCard = cardRepository.findById(card.getId()).get();
+                        newCard.setColorPresetNumber(board.getDefaultPresetNum());
+                        cardRepository.saveAndFlush(newCard);
+
+                    }
+                }
+            }
+        }
 
         existingBoard.setBoardColor(board.getBoardColor());
         existingBoard.setListsColor(board.getListsColor());

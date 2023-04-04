@@ -41,8 +41,10 @@ public class BoardControllerTest {
     public void getMany() {
 
         List<Board> expectedBoards = new ArrayList<>();
-        expectedBoards.add(new Board("board1", "code1", "readOnlyCode1", "red"));
-        expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "blue"));
+        List<String> defaultPresets = new ArrayList<>();
+        defaultPresets.add("#ffffff/#000000");
+        expectedBoards.add(new Board("board1", "code1", "readOnlyCode1", "#ffffff/#000000", "#ffffff/#000000", defaultPresets, 0));
+        expectedBoards.add(new Board("board2", "code2", "readOnlyCode2", "#ffffff/#000000", "#ffffff/#000000", defaultPresets, 0));
         when(boardServiceMock.getMany()).thenReturn(expectedBoards);
 
         List<Board> returnedBoards = boardControllerMock.getMany();
@@ -53,7 +55,9 @@ public class BoardControllerTest {
     @Test
     public void getOne() {
         Long boardId = 1L;
-        Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "red");
+        List<String> defaultPresets = new ArrayList<>();
+        defaultPresets.add("#ffffff/#000000");
+        Board expectedBoard = new Board("board1", "code1", "readOnlyCode1", "#ffffff/#000000", "#ffffff/#000000", defaultPresets, 0);
         when(boardServiceMock.getOne(boardId)).thenReturn(Optional.of(expectedBoard));
 
         Board returnedBoard = boardControllerMock.getOne(boardId).getBody();
@@ -113,16 +117,23 @@ public class BoardControllerTest {
         Board existingBoard = new Board();
         existingBoard.setId(1L);
         existingBoard.setName("Test Board");
-        existingBoard.setColor("#red");
         existingBoard.setCode("abc");
         existingBoard.setReadOnlyCode("a");
+        existingBoard.setCardColorPresets(null);
+        existingBoard.setDefaultPresetNum(0);
+        existingBoard.setBoardColor("#ffffff/#000000");;
+        existingBoard.setListsColor("#ffffff/#000000");;
 
         Board updatedBoard = new Board();
         updatedBoard.setId(1L);
         updatedBoard.setName("Updated Board");
-        updatedBoard.setColor("#blue");
         updatedBoard.setCode("abc");
         updatedBoard.setReadOnlyCode("b");
+        List<String> defaultPresets = new ArrayList<>();
+        defaultPresets.add("#ffffff/#000000");
+        updatedBoard.setCardColorPresets(defaultPresets);
+        existingBoard.setBoardColor("#ffffff/#000001");;
+        existingBoard.setListsColor("#ffffff/#000001");;
 
         when(boardServiceMock.updateOne(1L, existingBoard)).thenReturn(updatedBoard);
 

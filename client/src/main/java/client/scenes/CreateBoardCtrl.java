@@ -39,7 +39,7 @@ public class CreateBoardCtrl {
             defaultPresets.add("#ffffff/#000000");
             defaultPresets.add("#ff0008/#000000");
             defaultPresets.add("#abffc3/#004714");
-            Board board = server.createBoard(new Board(name, "", "", "#bababa/#000000","#dedede/#000000", defaultPresets, 1));
+            Board board = server.createBoard(new Board(name, "", "", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
             mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
             mainCtrlTalio.showBoard(board);
         }

@@ -5,8 +5,6 @@ import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -88,11 +86,11 @@ public class BoardSettingsCtrl {
         cpBackgroundLists.setValue(Color.web(bgColorList));
         cpFontLists.setValue(Color.web(fontColorList));
         int counter = 0;
-        for(String preset : board.getCardColorPresets()){
-            if(!preset.equals("")){
+        for (String preset : board.getCardColorPresets()) {
+            if (!preset.equals("")) {
                 HBox hboxPreset = generateHboxPreset(preset, counter);
-                if(counter== board.getDefaultPresetNum()){
-                    ((CheckBox)hboxPreset.getChildren().get(3)).setSelected(true);
+                if (counter == board.getDefaultPresetNum()) {
+                    ((CheckBox) hboxPreset.getChildren().get(3)).setSelected(true);
                 }
                 presetsBox.getChildren().add(hboxPreset);
             }
@@ -100,7 +98,8 @@ public class BoardSettingsCtrl {
 
         }
     }
-    private HBox generateHboxPreset(String preset, int counter){
+
+    private HBox generateHboxPreset(String preset, int counter) {
         //get the colors for this preset
         String[] colors = preset.split("/");
         String presetBg = colors[0];
@@ -126,28 +125,21 @@ public class BoardSettingsCtrl {
             //update the board's preset id
             //update the cards that have a preset id = the board's preset id
             //ignore the preset id of the cards which don't match to that of the board
-            for(Node hbox :presetsBox.getChildren()){
-                if(!hbox.equals(hboxPreset)){
-                    ((CheckBox)((HBox) hbox).getChildren().get(3)).setSelected(false);
-                    ((Button)((HBox) hbox).getChildren().get(4)).setDisable(false);
+            for (Node hbox : presetsBox.getChildren()) {
+                if (!hbox.equals(hboxPreset)) {
+                    ((CheckBox) ((HBox) hbox).getChildren().get(3)).setSelected(false);
+                    ((Button) ((HBox) hbox).getChildren().get(4)).setDisable(false);
                 }
 
             }
-            for(CardList cardList : board.getLists()){
-                for(Card card : cardList.getCards()){
-                    if(card.getColorPresetNumber()==board.getDefaultPresetNum()){
-                        card.setColorPresetNumber(counter);
-                    }
-                    server.updateCard(card);
-                }
-            }
+
             board.setDefaultPresetNum(counter);
             server.updateBoard(board);
         });
         Label name = new Label("Your color scheme:");
 
         //style the elements for the hbox
-        name.setMinSize(105,26);
+        name.setMinSize(105, 26);
         colorPickerBG.setMaxSize(38, 26); // 38 x 26
         colorPickerF.setMaxSize(38, 26); // 38 x 26
         name.setPrefSize(USE_COMPUTED_SIZE, 26);
@@ -167,8 +159,6 @@ public class BoardSettingsCtrl {
 
     }
 
-
-
     private void changeBoardName(String newName) {
         board.setName(newName);
         server.updateBoard(board);
@@ -187,44 +177,38 @@ public class BoardSettingsCtrl {
 
         List<String> presets = new ArrayList<>();
 
-                int counter = 0;
-        //get the string values of the colorpickers and connect them in one string and put it in the array
-        //check the checkbox - if its checked: update te board.defaultNum
-        //the board's list get overwritten - the colors are takan again and set and strings and inserted in the list
-        //the board's attribute for DefaultPresetNum is also updated.
-        // and if there are leftover hboxes then they are added in the list
-                //iterating over old entries and updating them
-                for (int i = 0; i < board.getCardColorPresets().size(); i++) {
-                    HBox presetHbox = (HBox) presetsBox.getChildren().get(i);
-                    String bgColor = "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(1)).
+        int counter = 0;
+        for (int i = 0; i < board.getCardColorPresets().size(); i++) {
+            HBox presetHbox = (HBox) presetsBox.getChildren().get(i);
+            String bgColor = "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(1)).
+                    getValue().toString().substring(2, 8);
+            String fontColor =
+                    "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(2)).
                             getValue().toString().substring(2, 8);
-                    String fontColor =
-                            "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(2)).
-                                    getValue().toString().substring(2, 8);
-                    String colorCombo = bgColor+"/"+fontColor;
+            String colorCombo = bgColor + "/" + fontColor;
 
-                    counter++;
-                    if(((CheckBox) presetHbox.getChildren().get(3)).isSelected()){
-                        board.setDefaultPresetNum(counter);
-                    }
-                }
-                if (board.getCardColorPresets().size() < (presetsBox.getChildren().size())) {
-                    for (int i = 0; i < (presetsBox.getChildren().size() -
-                            board.getCardColorPresets().size()); i++) {
-                        //get new entries
-                        HBox presetHbox = (HBox) presetsBox.getChildren().get(counter++);
-                        String bgColor = "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(1)).
+            counter++;
+            if (((CheckBox) presetHbox.getChildren().get(3)).isSelected()) {
+                board.setDefaultPresetNum(counter);
+            }
+        }
+        if (board.getCardColorPresets().size() < (presetsBox.getChildren().size())) {
+            for (int i = 0; i < (presetsBox.getChildren().size()
+                    - board.getCardColorPresets().size()); i++) {
+                //get new entries
+                HBox presetHbox = (HBox) presetsBox.getChildren().get(counter++);
+                String bgColor = "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(1)).
+                        getValue().toString().substring(2, 8);
+                String fontColor =
+                        "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(2)).
                                 getValue().toString().substring(2, 8);
-                        String fontColor =
-                                "#" + ((ColorPicker) ((HBox) presetHbox).getChildren().get(2)).
-                                        getValue().toString().substring(2, 8);
-                        String colorCombo = bgColor+"/"+fontColor;
+                String colorCombo = bgColor + "/" + fontColor;
 
-                        if(((CheckBox) presetHbox.getChildren().get(3)).isSelected()){
-                            board.setDefaultPresetNum(counter);
-                        }
-                    }
+                if (((CheckBox) presetHbox.getChildren().get(3)).isSelected()) {
+                    board.setDefaultPresetNum(counter);
                 }
+            }
+        }
 
 
         board.setCardColorPresets(presets);
@@ -232,7 +216,7 @@ public class BoardSettingsCtrl {
         board = server.updateBoard(board);
     }
 
-    public void resetBoardColors(){
+    public void resetBoardColors() {
         String defaultCombo = "#bababa/#000000";
         //updates after you press 'save'
         board.setBoardColor(defaultCombo);
@@ -240,23 +224,26 @@ public class BoardSettingsCtrl {
         cpFontBoard.setValue(Color.web("#000000"));
 
     }
-    public void resetListColors(){
+
+    public void resetListColors() {
         String defaultCombo = "#dedede/#000000";
         //updates after you press 'save'
         board.setListsColor(defaultCombo);
         cpBackgroundLists.setValue(Color.web("#dedede"));
         cpFontLists.setValue(Color.web("#000000"));
     }
-    public void deleteBoard(){
+
+    public void deleteBoard() {
         mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
         server.deleteBoard(board.getId());
         mainCtrlTalio.showHome();
         //not sure if it is actually deleted from db
         //since for deleteBoard() we will use long polling
     }
-    public void addColorPreset(){
+
+    public void addColorPreset() {
         HBox newHbox = generateHboxPreset("#ffffff/#000000",
-                board.getCardColorPresets().size()+1);
+                board.getCardColorPresets().size() + 1);
         presetsBox.getChildren().add(newHbox);
 
     }

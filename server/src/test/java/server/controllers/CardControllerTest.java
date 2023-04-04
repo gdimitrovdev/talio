@@ -69,7 +69,7 @@ class CardControllerTest {
 
     @Test
     void createOne() {
-        Card card = new Card("Card name", "Desc", "Bla", null);
+        Card card = new Card("Card name", "Desc", null, 0);
         when(cardServiceMock.createOne(card)).thenReturn(card);
 
         Card returnedCard = cardControllerMock.createOne(card).getBody();
@@ -82,7 +82,7 @@ class CardControllerTest {
     void deleteOne() {
 
         CardList list = new CardList("List", null);
-        Card c = new Card("Title", "Desc", "Red", null);
+        Card c = new Card("Title", "Desc", null, 1);
         c.setId(1L);
         list.addCard(c);
 
@@ -117,8 +117,8 @@ class CardControllerTest {
 
     @Test
     void moveToListAfterCard() {
-        Card    card = new Card("My card", "Bla", "Ble", null),
-                after = new Card("Another card", "Bli", "Blo", null);
+        Card    card = new Card("My card", "Bla", null, 1),
+                after = new Card("Another card", "Bli", null, 1);
 
         card.setId(1L);
         after.setId(2L);
@@ -142,7 +142,7 @@ class CardControllerTest {
 
     @Test
     void moveToListLast() {
-        Card    card = new Card("My card", "Bla", "Ble", null);
+        Card    card = new Card("My card", "Bla", null, 1);
 
         card.setId(1L);
 
@@ -163,8 +163,8 @@ class CardControllerTest {
 
     @Test
     void addTagToCard() {
-        Card    withoutTag = new Card("My card", "Bla", "Ble", null),
-                withTag = new Card("My card 2", "Bla 2", "Ble 2", null);
+        Card    withoutTag = new Card("My card", "Bla",  null, 1),
+                withTag = new Card("My card 2", "Bla 2", null, 1);
 
         withTag.setId(1L);
         withoutTag.setId(1L);
@@ -180,8 +180,8 @@ class CardControllerTest {
 
     @Test
     void removeTagFromCard() {
-        Card    withoutTag = new Card("My card", "Bla", "Ble", null),
-                withTag = new Card("My card 2", "Bla 2", "Ble 2", null);
+        Card    withoutTag = new Card("My card", "Bla", null, 1),
+                withTag = new Card("My card 2", "Bla 2", null, 1);
 
         withTag.setId(1L);
         withoutTag.setId(1L);

@@ -11,7 +11,7 @@ public class TagTest {
 
     @Test
     public void checkConstructorWithoutList() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
         var t = new Tag("tagTitle", "red", b);
         assertEquals("tagTitle", t.getTitle());
         assertEquals("red", t.getColor());
@@ -22,8 +22,8 @@ public class TagTest {
 
     @Test
     public void checkConstructor() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t = new Tag("tagTitle", "red", b, cards);
@@ -36,8 +36,8 @@ public class TagTest {
 
     @Test
     public void equalsHashCode() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t1 = new Tag("tagTitle", "red", b);
@@ -48,8 +48,8 @@ public class TagTest {
 
     @Test
     public void notEqualsHashCode() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var t1 = new Tag("tagTitle", "red", b);
@@ -60,8 +60,8 @@ public class TagTest {
 
     @Test
     public void hasToString() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222");
-        var c = new Card("cardTitle", "desc", "green", null, colorPresetNumber);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);
         var actual = new Tag("tagTitle", "red", b).toString();
