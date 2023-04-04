@@ -12,8 +12,8 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -49,7 +49,7 @@ public class BoardCtrl implements Initializable {
     private Button backHomeBTN;
 
     @FXML
-    private TextField boardName;
+    private Label boardNameLabel;
 
     @Inject
     public BoardCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) throws IOException {
@@ -111,7 +111,7 @@ public class BoardCtrl implements Initializable {
 
     public void refresh() {
         var board = server.getBoard(boardId);
-        boardName.setText(board.getName());
+        boardNameLabel.setText(board.getName());
         innerHBox.getChildren().clear();
         for (CardList cardList : board.getLists()) {
             innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this,

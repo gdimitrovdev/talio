@@ -206,7 +206,8 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             checkBox.setSelected(subtask.getCompleted());
             checkBox.setOnAction(a -> {
                 subtask.setCompleted(!subtask.getCompleted());
-                refreshCardData();
+                server.updateSubtask(subtask);
+                //refreshCardData();
             });
             checkBox.getStyleClass().add("subtask-checkbox");
             subtaskElement.getChildren().add(checkBox);
@@ -271,6 +272,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     }
 
     public void refresh() {
+        card = server.getCard(card.getId());
         initializeSubtasks();
         initializeTags();
     }
@@ -342,6 +344,8 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         for (Tag tag : tagsToRemove) {
             server.removeTagFromCard(card.getId(), tag.getId());
         }
+        //card.
+        //mainCtrlTalio.showBoard(card.getList().getBoard());
     }
 
     private void assignEmptyBoardWithId(Tag tag) {

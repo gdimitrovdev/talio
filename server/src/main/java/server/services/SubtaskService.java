@@ -40,7 +40,7 @@ public class SubtaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Subtask not found"));
 
         existingSubtask.setTitle(subtask.getTitle());
-        existingSubtask.setCard(subtask.getCard());
+        existingSubtask.setCompleted(subtask.getCompleted());
 
         return subtaskRepository.save(existingSubtask);
     }

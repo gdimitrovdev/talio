@@ -4,11 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
-
 <AnchorPane fx:id="root" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
    <Button fx:id="joinBoardBtn" layoutX="58.0" layoutY="86.0" mnemonicParsing="false" onAction="#displayJoinPopUp" prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #90dea5;" text="Join board" />
    <Button fx:id="createBoardBtn" layoutX="444.0" layoutY="86.0" mnemonicParsing="false" onAction="#displayCreatePopUp" prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #90dea5;" text="Create board" />
@@ -23,8 +23,9 @@
    <Button fx:id="changeServerBtn" layoutX="703.0" layoutY="21.0" mnemonicParsing="false" onAction="#openServerScene" prefHeight="40.0" prefWidth="40.0">
       <graphic>
           <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="https://cdn-icons-png.flaticon.com/512/0/340.png"/>
+                <Image url="@/images/cogwheel.png"/>
           </ImageView>
       </graphic>
+      <tooltip><Tooltip text="Return to ServerConnection page" /></tooltip>
    </Button>
 </AnchorPane>

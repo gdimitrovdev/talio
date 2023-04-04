@@ -191,7 +191,7 @@ public class HomeCtrl {
      *              this pop-up lets you edit the board's settings
      */
     public void openBoardSetting(Board board) {
-
+        mainCtrlTalio.showBoardSettings(board);
     }
 
     /**

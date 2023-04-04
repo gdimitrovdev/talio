@@ -119,6 +119,7 @@ public class MainCtrlTalio {
     public void showServerConnection() {
         primaryStageTalio.setTitle("Talio: Connect to a Server");
         primaryStageTalio.setScene(serverConnection);
+        serverConnectionCtrl.refreshServerAddress();
         this.listenForQuestionMarkPressed();
     }
 
