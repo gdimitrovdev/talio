@@ -12,10 +12,12 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -259,13 +261,13 @@ public class BoardCtrl implements Initializable {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
             for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()
-                        && !(listComponentCtrl.getCards().getChildren().get(k)).isFocusWithin()) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     cardComponentCtrl = (CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k);
                 }
             }
         }
         if (cardComponentCtrl != null) {
+            System.out.println("1");
             VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
             HBox hBox = (HBox) vBox.getChildren().get(0);
             TextField textField = (TextField) hBox.getChildren().get(0);
@@ -358,5 +360,25 @@ public class BoardCtrl implements Initializable {
 
     public void pressedC() {
 
+    }
+
+    public void mouseMovement(MouseEvent event) {
+        if (event.getTarget().getClass().getSimpleName().equals("CardComponentCtrl")) {
+            CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) event.getTarget();
+            if (!cardComponentCtrl.getSelected()) {
+                List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+                for (Object object : this.innerHBox.getChildren()) {
+                    listComponentCtrls.add((ListComponentCtrl) object);
+                    ListComponentCtrl listComponentCtrl = (ListComponentCtrl) object;
+                    for (Node node : listComponentCtrl.getCards().getChildren()) {
+                        CardComponentCtrl cardComponentCtrl1 = (CardComponentCtrl) node;
+                        cardComponentCtrl1.setSelected(false);
+                        cardComponentCtrl1.removeHighlight();
+                    }
+                }
+                cardComponentCtrl.setSelected(true);
+                cardComponentCtrl.highlight();
+            }
+        }
     }
 }

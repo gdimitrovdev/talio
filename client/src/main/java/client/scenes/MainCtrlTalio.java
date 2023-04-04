@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -154,6 +155,7 @@ public class MainCtrlTalio {
         primaryStageTalio.setScene(boardComponent);
         this.listenForQuestionMarkPressed();
         this.listenForKeyPressedForBoard();
+        this.listenToMouse();
     }
 
     public void listenForQuestionMarkPressed() {
@@ -185,7 +187,7 @@ public class MainCtrlTalio {
     }
 
     public void listenForKeyPressedForBoard() {
-        this.primaryStageTalio.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+        this.boardComponent.getRoot().addEventFilter(KeyEvent.KEY_RELEASED, e -> {
             switch (e.getCode()) {
                 case RIGHT -> {
                     System.out.println("Move right");
@@ -234,6 +236,12 @@ public class MainCtrlTalio {
                     boardComponentCtrl.pressedC();
                 }
             }
+        });
+    }
+
+    public void listenToMouse() {
+        this.boardComponent.getRoot().addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
+            boardComponentCtrl.mouseMovement(e);
         });
     }
 }
