@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
 import java.io.IOException;
 import java.net.URL;
@@ -13,13 +14,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class BoardCtrl implements Initializable {
     private MainCtrlTalio mainCtrlTalio;
@@ -354,31 +358,66 @@ public class BoardCtrl implements Initializable {
         }
     }
 
+    // TODO put the focus on the tag creation section
     public void pressedT() {
-
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()
+                        && !(listComponentCtrl.getCards().getChildren().get(k)).isFocusWithin()) {
+                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).loadPopup();
+                }
+            }
+        }
     }
 
     public void pressedC() {
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        CardComponentCtrl cardComponentCtrl = null;
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
+                    cardComponentCtrl = (CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k);
+                }
+            }
+        }
 
+        Stage stage = new Stage();
+        stage.setTitle("Talio: Pick Card color");
+        TilePane tilepane = new TilePane();
+
+        // TODO add the color presets to the window
+
+        Scene scene = new Scene(tilepane, 730, 150);
+        stage.setScene(scene);
+        stage.show();
+        Card card = server.getCard(cardComponentCtrl.getCardId());
+        scene.setOnKeyPressed(e1 -> {
+            if (e1.getCode() == KeyCode.ESCAPE) {
+                stage.close();
+            }
+        });
     }
 
     public void mouseMovement(MouseEvent event) {
         if (event.getTarget().getClass().getSimpleName().equals("CardComponentCtrl")) {
             CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) event.getTarget();
-            if (!cardComponentCtrl.getSelected()) {
-                List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-                for (Object object : this.innerHBox.getChildren()) {
-                    listComponentCtrls.add((ListComponentCtrl) object);
-                    ListComponentCtrl listComponentCtrl = (ListComponentCtrl) object;
-                    for (Node node : listComponentCtrl.getCards().getChildren()) {
-                        CardComponentCtrl cardComponentCtrl1 = (CardComponentCtrl) node;
-                        cardComponentCtrl1.setSelected(false);
-                        cardComponentCtrl1.removeHighlight();
-                    }
+            List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+            for (Object object : this.innerHBox.getChildren()) {
+                listComponentCtrls.add((ListComponentCtrl) object);
+                ListComponentCtrl listComponentCtrl = (ListComponentCtrl) object;
+                for (Node node : listComponentCtrl.getCards().getChildren()) {
+                    CardComponentCtrl cardComponentCtrl1 = (CardComponentCtrl) node;
+                    cardComponentCtrl1.setSelected(false);
+                    cardComponentCtrl1.removeHighlight();
                 }
-                cardComponentCtrl.setSelected(true);
-                cardComponentCtrl.highlight();
             }
+            cardComponentCtrl.setSelected(true);
+            cardComponentCtrl.highlight();
         }
     }
 }
