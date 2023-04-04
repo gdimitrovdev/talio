@@ -39,18 +39,7 @@ public class MainCtrlTalio {
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
             Pair<BoardSettingsCtrl, Parent> boardSettingsPair) {
 
-        try {
-            File toRead = new File("local_data");
-            FileInputStream fis = new FileInputStream(toRead);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-
-            this.joinedBoards = (HashMap<String, Set<Long>>) ois.readObject();
-
-            ois.close();
-            fis.close();
-        } catch (Exception e) {
-            this.joinedBoards = new HashMap<String, Set<Long>>();
-        }
+        readFromLocalData();
 
         this.primaryStageTalio = primaryStageTalio;
 
@@ -95,16 +84,7 @@ public class MainCtrlTalio {
             joinedBoards.get(serverUrl).add(boardId);
         }
 
-        try {
-            File localData = new File("local_data");
-            FileOutputStream fos = new FileOutputStream(localData);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            oos.writeObject(joinedBoards);
-            oos.flush();
-            oos.close();
-            fos.close();
-        } catch (Exception e) { }
+        writeToLocalData();
     }
 
     public void removeJoinedBoard(String serverUrl, Long boardId) {
@@ -117,15 +97,31 @@ public class MainCtrlTalio {
         }
 
         joinedBoards.get(serverUrl).remove(boardId);
-        try {
-            File localData = new File("local_data");
-            FileOutputStream fos = new FileOutputStream(localData);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+        writeToLocalData();
+    }
 
+    private void readFromLocalData() {
+        File toRead = new File(".local_data");
+
+        try (
+                FileInputStream fis = new FileInputStream(toRead);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                ) {
+            this.joinedBoards = (HashMap<String, Set<Long>>) ois.readObject();
+        } catch (Exception e) {
+            this.joinedBoards = new HashMap<String, Set<Long>>();
+        }
+    }
+
+    private void writeToLocalData() {
+        File localData = new File(".local_data");
+
+        try (
+                FileOutputStream fos = new FileOutputStream(localData);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                ) {
             oos.writeObject(joinedBoards);
             oos.flush();
-            oos.close();
-            fos.close();
         } catch (Exception e) { }
     }
 
