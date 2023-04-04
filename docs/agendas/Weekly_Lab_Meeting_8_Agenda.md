@@ -30,26 +30,25 @@ Attendees:
     > Record answer from the TA
     2. For the requirement of deleting boards from the overview as an admin: if the users can delete boards, admins can also do that. Does this satisfy the requirement?
     > Record answer from the TA
-5. Basic requirements
-    1. For the requirement "To open task details through double-click, so I can add further details": can we also do this with a single click?
-    > Record answer from the TA
-6. Testing
+5. Testing
     1. What percentage of test coverage should we aim for? We currently have almost 100% for commons, 50% for server, and 0% for client.
     > Record answer from the TA
     2. Are the server tests sufficient if they are simple? Should we aim to write more extensive tests?
     > Record answer from the TA
-7. Product Showcase
-    1. Vesko - Did the server-client connection, but some errors happened
+    3. How should we test the UI since Sebastian said we should extract the logic from controllers to services, and our logic is manipulating UI and not data?
+    > Record answer from the TA
+6. Product Showcase
+    1. Vesko - Did the server-client connection, but some errors happened. Fixed the list and card overview components (not merged yet).
     2. Pedro - Modified common classes, finished the ShareBoard, created BoardSettings, did tests for the server controllers, fixed tags in card popup. Next task is adding tag functionality to BoardSettings
-    3. Dimana - Did tests for server services. Currently working on BoardSettings. 
-    4. George - Fixed issues for the client-server connection. After that, the application was fixed in many aspects and the basic requirements were done. Currently working on saving recent boards locally
+    3. Dimana - Did tests for server services. Currently working on BoardSettings: she will finish it soon. 
+    4. George - Fixed issues for the client-server connection. After that, the application was fixed in many aspects and the basic requirements were done. Worked on saving recent boards locally. Currently working on reordering subtasks.  
     5. Agnese - researched about client side testing and tried her best to do it but could not. Implemented most of the keyboard shortcuts, except for C and T, currently working on these.
-    6. Matei - currently working on UI Fixes, which are changes to the UI to improve coherency and usability
+    6. Matei - working on UI Fixes, which are changes to the UI to improve coherency and usability. Currently working on making the connection smoother.
     > Record feedback by the TA
-8. Task distribution 
+7. Task distribution 
     1. What should we focus more on: doing the remaining epics, testing, refactoring code, making the UI nicer?
-10. Additional Questions
+8. Additional Questions
     1. Does anyone have any other questions for the TA before the meeting closes?
     > Record any additional questions and responses here, even if they were asked earlier
-11. Closure
+9. Closure
     > Record end time of meeting
