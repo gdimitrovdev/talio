@@ -13,12 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-<<<<<<< HEAD
-=======
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
->>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
 import javafx.scene.layout.HBox;
 
 public class BoardCtrl implements Initializable {
@@ -139,26 +136,24 @@ public class BoardCtrl implements Initializable {
         newListButton.setStyle("-fx-text-fill: " + fontColor);
         backHomeBTN.setStyle("-fx-text-fill: " + fontColor);
 
-        //get the color of the lists
-        String[] colorsLists = board.getListsColor().split("/"); // Split the string into two parts
-        String bgColorLists = colorsLists[0];
-        String fontColorLists = colorsLists[1];
-
 
 
         boardName.setText(board.getName());
+<<<<<<< HEAD
 >>>>>>> 3cb5612 (added UI elements and their functionalities in the BoardSettings.fxml and BoardSettingsCtrl.java, also added new attributes for the Board class and adjusted the tests according to the changes)
         innerHBox.getChildren().clear();
+=======
+        Platform.runLater(() -> innerHBox.getChildren().clear());
+>>>>>>> 9c6971a (implemented all of the needed fields in the popup)
         for (CardList cardList : board.getLists()) {
             ListComponentCtrl listComponent = new ListComponentCtrl(mainCtrlTalio,
                     server, this, cardList.getId());
-            listComponent.setStyle("-fx-background-color:" + bgColorLists);
-            listComponent.titleField.setStyle("-fx-text-fill: "+fontColorLists);
-            listComponent.deleteListBtn.setStyle("-fx-text-fill: "+fontColorLists);
-            listComponent.addCardBtn.setStyle("-fx-text-fill: "+fontColorLists);
+
+
 
             innerHBox.getChildren().add(listComponent);
         }
+
     }
 
     // TODO I believe, we shouldn't really create the list, before the user enters the title

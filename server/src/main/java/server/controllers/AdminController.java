@@ -113,7 +113,7 @@ public class AdminController {
             defaultPresets.add("#abffc3/#004714");
             Board team69Board =
                     boardService.createOne(new Board("Team 69", "", "",
-                                    "#/#000000", "#dedede/#000000", defaultPresets, 1));
+                                    "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
             Tag b1urgentTag =
                     tagService.createOne(new Tag("Urgent", "#FF0000/#FFFFFF", team69Board));
             Tag b1bugTag =

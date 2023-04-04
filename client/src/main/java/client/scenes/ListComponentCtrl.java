@@ -123,7 +123,17 @@ public class ListComponentCtrl extends VBox {
     }
 
     public void refresh() {
+        //get the color of the lists
+        String[] colorsLists = server.getCardList(listId).
+                getBoard().getListsColor().split("/"); // Split the string into two parts
+        String bgColorLists = colorsLists[0];
+        String fontColorLists = colorsLists[1];
+        this.setStyle("-fx-background-color:" + bgColorLists);
+        this.titleField.setStyle("-fx-text-fill: "+fontColorLists);
+        this.deleteListBtn.setStyle("-fx-text-fill: "+fontColorLists);
+        this.addCardBtn.setStyle("-fx-text-fill: "+fontColorLists);
         titleField.setTitle(server.getCardList(listId).getTitle());
+        System.out.println("refreshing: " + listId);
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
         List<Card> cardsOfList = server.getCardList(listId).getCards();

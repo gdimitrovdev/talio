@@ -5,10 +5,13 @@ import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Card;
+import commons.CardList;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
@@ -16,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -85,41 +89,85 @@ public class BoardSettingsCtrl {
         cpFontLists.setValue(Color.web(fontColorList));
         int counter = 0;
         for(String preset : board.getCardColorPresets()){
-            HBox hboxPreset = generateHboxPreset(preset);
-            if(counter++== board.getDefaultPresetNum()){
-                ((CheckBox)hboxPreset.getChildren().get(3)).setSelected(true);
+            if(!preset.equals("")){
+                HBox hboxPreset = generateHboxPreset(preset, counter);
+                if(counter== board.getDefaultPresetNum()){
+                    ((CheckBox)hboxPreset.getChildren().get(3)).setSelected(true);
+                }
+                presetsBox.getChildren().add(hboxPreset);
             }
-            presetsBox.getChildren().add(hboxPreset);
+            counter++;
+
         }
     }
-    private HBox generateHboxPreset(String preset){
+    private HBox generateHboxPreset(String preset, int counter){
         //get the colors for this preset
         String[] colors = preset.split("/");
         String presetBg = colors[0];
         String presetFont = colors[1];
 
-        HBox hboxPreset = new HBox(10);
-        hboxPreset.setPrefSize(260, 40);
+        HBox hboxPreset = new HBox(5);
+        hboxPreset.setMinHeight(40);
+        hboxPreset.setMinWidth(260);
 
         //initialize the elements for the hbox
         Button deleteBtn = new Button();
+        deleteBtn.setOnAction((e) -> {
+            presetsBox.getChildren().remove(hboxPreset);
+            board.getCardColorPresets().set(counter, "");
+        });
         ColorPicker colorPickerBG = new ColorPicker();
         ColorPicker colorPickerF = new ColorPicker();
         CheckBox setAsDefault = new CheckBox();
+        setAsDefault.setOnAction((e) -> {
+            //disable the delete button
+            deleteBtn.setDisable(true);
+            //for all other hboxes in the presetsBox disselect their checkbox
+            //update the board's preset id
+            //update the cards that have a preset id = the board's preset id
+            //ignore the preset id of the cards which don't match to that of the board
+            for(Node hbox :presetsBox.getChildren()){
+                if(!hbox.equals(hboxPreset)){
+                    ((CheckBox)((HBox) hbox).getChildren().get(3)).setSelected(false);
+                    ((Button)((HBox) hbox).getChildren().get(4)).setDisable(false);
+                }
+
+            }
+            for(CardList cardList : board.getLists()){
+                for(Card card : cardList.getCards()){
+                    if(card.getColorPresetNumber()==board.getDefaultPresetNum()){
+                        card.setColorPresetNumber(counter);
+                    }
+                    server.updateCard(card);
+                }
+            }
+            board.setDefaultPresetNum(counter);
+            server.updateBoard(board);
+        });
         Label name = new Label("Your color scheme:");
 
         //style the elements for the hbox
-        deleteBtn.setPrefSize(26, 36); // 26 x 36
-        colorPickerBG.setPrefSize(38, 26); // 38 x 26
-        colorPickerF.setPrefSize(38, 26); // 38 x 26
-        setAsDefault.setPrefSize(115, 26); // 115 x 26
+        name.setMinSize(105,26);
+        colorPickerBG.setMaxSize(38, 26); // 38 x 26
+        colorPickerF.setMaxSize(38, 26); // 38 x 26
         name.setPrefSize(USE_COMPUTED_SIZE, 26);
-        hboxPreset.setAlignment(Pos.CENTER);
 
-        hboxPreset.getChildren().addAll(name, colorPickerBG ,colorPickerF, setAsDefault, deleteBtn);
+
+
+        hboxPreset.getChildren().addAll(name, colorPickerBG, colorPickerF, setAsDefault, deleteBtn);
+
+        HBox.setHgrow(deleteBtn, Priority.ALWAYS);
+        HBox.setHgrow(colorPickerBG, Priority.ALWAYS);
+        HBox.setHgrow(colorPickerF, Priority.ALWAYS);
+        HBox.setHgrow(setAsDefault, Priority.ALWAYS);
+        HBox.setHgrow(name, Priority.ALWAYS);
+
+        hboxPreset.setAlignment(Pos.CENTER);
         return hboxPreset;
 
     }
+
+
 
     private void changeBoardName(String newName) {
         board.setName(newName);
@@ -207,7 +255,8 @@ public class BoardSettingsCtrl {
         //since for deleteBoard() we will use long polling
     }
     public void addColorPreset(){
-        HBox newHbox = generateHboxPreset("#ffffff/#000000");
+        HBox newHbox = generateHboxPreset("#ffffff/#000000",
+                board.getCardColorPresets().size()+1);
         presetsBox.getChildren().add(newHbox);
 
     }
