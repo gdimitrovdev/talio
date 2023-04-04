@@ -8,10 +8,7 @@ import commons.Subtask;
 import commons.Tag;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -68,6 +65,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
     @FXML
     private Button deleteSubtask;
+
+    @FXML
+    private Button moveUpSubtask;
+
+    @FXML
+    private Button moveDownSubtask;
 
     @FXML
     private TextField newTagTextfield;
@@ -197,9 +200,19 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         server.deleteSubtask(subtask.getId());
     }
 
+    public void moveUp(Subtask subtask) {
+        server.moveUp(subtask);
+    }
+
+    public void moveDown(Subtask subtask) {
+        server.moveDown(subtask);
+    }
+
     public void initializeSubtasks() {
         subtaskVBox.getChildren().clear();
-        for (Subtask subtask : card.getSubtasks()) {
+        for (Subtask subtask : card.getSubtasks().stream().sorted(Comparator.comparing(
+                Subtask::getPositionInCard
+        )).toList()) {
             HBox subtaskElement = new HBox();
 
             CheckBox checkBox = new CheckBox(subtask.getTitle());
@@ -218,6 +231,20 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
                 deleteSubtask(subtask);
             });
             subtaskElement.getChildren().add(deleteSubtask);
+
+            moveUpSubtask = new Button("^");
+            // moveUpSubtask.getStyleClass().add("remove-subtask-button");
+            moveUpSubtask.setOnAction(a -> {
+                moveUp(subtask);
+            });
+            subtaskElement.getChildren().add(moveUpSubtask);
+
+            moveDownSubtask = new Button("v");
+            // moveUpSubtask.getStyleClass().add("remove-subtask-button");
+            moveDownSubtask.setOnAction(a -> {
+                moveDown(subtask);
+            });
+            subtaskElement.getChildren().add(moveDownSubtask);
 
             subtaskVBox.getChildren().add(subtaskElement);
         }

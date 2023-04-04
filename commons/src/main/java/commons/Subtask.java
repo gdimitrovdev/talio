@@ -29,6 +29,9 @@ public class Subtask implements Serializable {
     @Basic(optional = false)
     private Boolean completed;
 
+    @Basic(optional = false)
+    private Long positionInCard;
+
     @ManyToOne
     private Card card;
 
@@ -71,6 +74,14 @@ public class Subtask implements Serializable {
 
     public void setCompleted(Boolean completed) {
         this.completed = completed;
+    }
+
+    public Long getPositionInCard() {
+        return positionInCard;
+    }
+
+    public void setPositionInCard(Long positionInCard) {
+        this.positionInCard = positionInCard;
     }
 
     @Override
