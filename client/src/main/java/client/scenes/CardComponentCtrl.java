@@ -140,8 +140,9 @@ public class CardComponentCtrl extends AnchorPane {
             Platform.runLater(() -> {
                 deleteButton.setVisible(true);
                 deleteButton.setManaged(true);
-                server.createCard(new Card(newTitle, "", "",
-                        server.getCardList((list).getListId())));
+                CardList cardList = server.getCardList((list).getListId());
+                server.createCard(new Card(newTitle, "", cardList,
+                        server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
             });
         }, () -> {
             Platform.runLater(() -> {
@@ -149,8 +150,9 @@ public class CardComponentCtrl extends AnchorPane {
             });
 
         });
-
-        setCard(new Card("", "", "", null));
+        CardList cardList = server.getCardList((list).getListId());
+        setCard(new Card("", "", cardList,
+                        server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
     }
 
     public Long getCardId() {

@@ -79,7 +79,7 @@ class CardListControllerTest {
     // Test whether deleteById() method of the repository was called for the correct cardList
     @Test
     void deleteOne() {
-        Board board = new Board("My baord", "bla", "ble", "blu");
+        Board board = new Board("board1", "code1", "readOnlyCode1", "", "", null, 0);
         board.setId(1L);
         CardList list = new CardList("My list", board);
         list.setId(1L);

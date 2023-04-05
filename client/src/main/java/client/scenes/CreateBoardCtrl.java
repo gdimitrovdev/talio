@@ -4,6 +4,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -33,7 +35,11 @@ public class CreateBoardCtrl {
             box.setContentText("The name of the board cannot be empty");
             box.showAndWait();
         } else {
-            Board board = server.createBoard(new Board(name, "", "", ""));
+            List<String> defaultPresets = new ArrayList<>();
+            defaultPresets.add("#ffffff/#000000");
+            defaultPresets.add("#ff0008/#000000");
+            defaultPresets.add("#abffc3/#004714");
+            Board board = server.createBoard(new Board(name, "", "", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
             mainCtrlTalio.addJoinedBoard(server.getServerUrl(), board.getId());
             mainCtrlTalio.showBoard(board);
         }
