@@ -3,6 +3,7 @@ package client.components;
 import client.scenes.CardPopupCtrl;
 import client.scenes.MainCtrlTalio;
 import client.utils.ServerUtils;
+import client.utils.Utils;
 import commons.Card;
 import commons.CardList;
 import commons.Subtask;
@@ -25,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -185,21 +187,23 @@ public class CardComponentCtrl extends AnchorPane {
         cardOverview.setStyle("-fx-border-width: 0 0 0 0;");
     }
 
-    // TODO hide the progressbar, the progresslabel and the delete button
-    //  if the card has not been created yet
-
     public void setCard(Card newCardData) {
-        titleField.setTitle(newCardData.getTitle());
-
-        String colors =
-                newCardData.getList().getBoard().getCardColorPresets()
-                        .get(newCardData.getColorPresetNumber());
+        String colors = newCardData.getList().getBoard().getCardColorPresets()
+                .get(newCardData.getColorPresetNumber());
 
         String colorBackground = colors.substring(0, 7);
         String colorForeground = colors.substring(8);
         System.out.println("bg: " + colorBackground + " / fg: " + colorForeground);
 
-        //this.setStyle("-fx-color-background: ");
+        this.setStyle("-fx-color-background: " + colorBackground + "; -fx-color-foreground: "
+                + colorForeground + ";");
+
+        this.setStyle("-fx-background-color: " + colorBackground + "; -fx-text-fill: "
+                + colorForeground + ";");
+
+        ImageView deleteButtonImageView = (ImageView) deleteButton.getGraphic();
+        deleteButtonImageView.setImage(
+                Utils.reColor(deleteButtonImageView.getImage(), colorForeground));
 
         boolean hasSubtasks = newCardData.getSubtasks().size() != 0;
         if (hasSubtasks) {
@@ -207,10 +211,38 @@ public class CardComponentCtrl extends AnchorPane {
             // This determines if the node is taken into account for the layout calculations of
             // its parent
             checkboxIcon.setManaged(true);
+            checkboxIcon.setImage(Utils.reColor(checkboxIcon.getImage(), colorForeground));
             subtaskLabel.setVisible(true);
             subtaskLabel.setManaged(true);
+            subtaskLabel.setStyle("-fx-text-fill: " + colorForeground);
             subtaskProgress.setVisible(true);
             subtaskProgress.setManaged(true);
+
+            // Yup, this is the code. You might be wondering how I got here.
+            // You see, in order to style the progressbar's colors you need to use the .track and
+            // .bar selectors, like we do in CardComponent.css. To do that in code we have to use
+            // the lookup method of Node. However, that only works once the Node has been
+            // rendered, otherwise lookup returns null. So we attach a listener to the width
+            // property of the progressbar, which will be executed only once the Node is rendered.
+            // But if we change the color of a Card, it will have already been rendered, so we
+            // have to put the same code outside the listener event. However, since we don't know if
+            // the card has been rendered, we wrap it in the try catch, so it doesn't crash if the
+            // lookup returns null.
+            subtaskProgress.widthProperty().addListener((num) -> {
+                subtaskProgress.lookup(".track").setStyle("-fx-background-color: ladder"
+                        + "(grey, " + colorBackground + " 0%, " + colorForeground + " 100%)");
+                subtaskProgress.lookup(".bar")
+                        .setStyle("-fx-background-color: " + colorForeground);
+            });
+            try {
+                subtaskProgress.lookup(".track").setStyle("-fx-background-color: ladder"
+                        + "(grey, " + colorBackground + " 0%, " + colorForeground + " 100%)");
+                subtaskProgress.lookup(".bar")
+                        .setStyle("-fx-background-color: " + colorForeground);
+            } catch (Exception ignored) {
+
+            }
+
             int numSubtasksDone =
                     (int) newCardData.getSubtasks().stream().filter(Subtask::getCompleted).count();
             subtaskLabel.setText(numSubtasksDone + "/" + newCardData.getSubtasks().size());
@@ -224,11 +256,22 @@ public class CardComponentCtrl extends AnchorPane {
             subtaskProgress.setManaged(false);
         }
 
+        // Same weirdness as with the progressbar
+        titleField.setTitle(newCardData.getTitle());
+        titleField.widthProperty().addListener(w -> titleField.lookup(".text-field")
+                .setStyle("-fx-text-fill: " + colorForeground));
+        try {
+            titleField.lookup(".text-field").setStyle("-fx-text-fill: " + colorForeground);
+        } catch (Exception ignored) {
+
+        }
+
         boolean hasDescription =
                 newCardData.getDescription() != null && !newCardData.getDescription().equals("");
         if (hasDescription) {
             descriptionIcon.setVisible(true);
             descriptionIcon.setManaged(true);
+            descriptionIcon.setImage(Utils.reColor(descriptionIcon.getImage(), colorForeground));
         } else {
             descriptionIcon.setVisible(false);
             descriptionIcon.setManaged(false);
@@ -241,14 +284,9 @@ public class CardComponentCtrl extends AnchorPane {
             Platform.runLater(() -> tagsContainer.getChildren().clear());
             for (var tag : newCardData.getTags()) {
                 var rect = new Rectangle();
-                // TODO remove magic numbers from here
                 rect.setHeight(10);
                 rect.setWidth(70);
-                // TODO fix this, when we figure out the colors
-                //rect.setFill(Color.web("0x" + tag.getColor().substring(2)));
-                String[] tagColors = tag.getColor().split("/");
-                rect.setFill(Color.web(tagColors[1]));
-                // TODO perhaps move those to a CSS file
+                rect.setFill(Color.web(tag.getColor().substring(0, 7)));
                 rect.setArcHeight(5);
                 rect.setArcWidth(5);
                 Platform.runLater(() -> tagsContainer.getChildren().add(rect));

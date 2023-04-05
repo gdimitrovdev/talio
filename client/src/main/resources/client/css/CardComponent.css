@@ -1,16 +1,7 @@
 @import url(./Common.css);
 
-* {
-    -fx-color-background: -fx-color-background-dark;
-    -fx-color-foreground: #000000;
-}
-
 #cardOverview {
-    -fx-background-color: -fx-color-background-dark;
     -fx-padding: 10;
-    /* this is only to see the cards a bit better */
-    /*-fx-border-color: black;
-    -fx-border-width: 1px;*/
     -fx-border-radius: 5;
     -fx-background-radius: 5;
 }
@@ -33,13 +24,15 @@
     -fx-vgap: 10;
 }
 
+.progress-bar:disabled {
+    -fx-opacity: 1;
+}
+
 .progress-bar .bar {
-    -fx-background-color: -fx-color-foreground;
     -fx-background-insets: 0, 1, 2;
     -fx-padding: 0.416667em;
 }
 
 #subtaskProgress > .track {
-    -fx-background-color: ladder(grey, -fx-color-background 0%, -fx-color-foreground 100%);
     -fx-background-insets: 0;
 }
