@@ -151,7 +151,7 @@ public class CardController {
 
     @GetMapping("/add-tag-to-card/{id}/{tagId}")
     @ResponseBody
-    public ResponseEntity<Card> addTagToCard(@PathVariable Long id, @PathVariable Long tagId) {
+    public ResponseEntity<Card> addTagToCard(@PathVariable Long tagId, @PathVariable Long id) {
         try {
             Card updatedCard = cardService.addTagToCard(tagId, id);
             template.convertAndSend(Topics.CARDS.toString(), updatedCard);

@@ -52,7 +52,7 @@ public class CardService {
                             .getListPriority() + 1L
             );
         }
-        newCard = cardRepository.save(newCard);
+        cardRepository.save(newCard);
         return newCard;
     }
 

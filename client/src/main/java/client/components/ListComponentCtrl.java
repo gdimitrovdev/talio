@@ -93,11 +93,11 @@ public class ListComponentCtrl extends VBox {
         // - list: move card to or from DONE
         // - list: create list DONE
         // - list: update list DONE
-        server.registerForMessages("/topic/lists", Card.class, card -> {
+        /*server.registerForMessages("/topic/lists", Card.class, card -> {
             if (card.getList().getId().equals(listId)) {
                 Platform.runLater(this::refresh);
             }
-        });
+        });*/
 
         server.registerForMessages("/topic/lists", CardList.class, cardList -> {
             if (cardList.getId().equals(listId)) {

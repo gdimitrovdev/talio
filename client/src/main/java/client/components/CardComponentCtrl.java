@@ -171,7 +171,7 @@ public class CardComponentCtrl extends AnchorPane {
         });
         CardList cardList = server.getCardList((list).getListId());
         setCard(new Card("", "", cardList,
-                        server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
+                server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
     }
 
     public Long getCardId() {
@@ -191,6 +191,9 @@ public class CardComponentCtrl extends AnchorPane {
 
     public void setCard(Card newCardData) {
         titleField.setTitle(newCardData.getTitle());
+
+
+        //this.setStyle("-fx-color-background: ");
 
         boolean hasSubtasks = newCardData.getSubtasks().size() != 0;
         if (hasSubtasks) {
