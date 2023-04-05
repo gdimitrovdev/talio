@@ -25,7 +25,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -192,6 +191,13 @@ public class CardComponentCtrl extends AnchorPane {
     public void setCard(Card newCardData) {
         titleField.setTitle(newCardData.getTitle());
 
+        String colors =
+                newCardData.getList().getBoard().getCardColorPresets()
+                        .get(newCardData.getColorPresetNumber());
+
+        String colorBackground = colors.substring(0, 7);
+        String colorForeground = colors.substring(8);
+        System.out.println("bg: " + colorBackground + " / fg: " + colorForeground);
 
         //this.setStyle("-fx-color-background: ");
 

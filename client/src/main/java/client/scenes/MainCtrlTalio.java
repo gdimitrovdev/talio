@@ -23,12 +23,12 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
     private TagManagementCtrl tagManagementCtrl;
-    private ServerUtils serverUtils;
+    private ServerUtils server;
     private Map<String, Set<Long>> joinedBoards;
 
     @Inject
-    public MainCtrlTalio(ServerUtils serverUtils) {
-        this.serverUtils = serverUtils;
+    public MainCtrlTalio(ServerUtils server) {
+        this.server = server;
     }
 
     public void initialize(
@@ -78,6 +78,18 @@ public class MainCtrlTalio {
     }
 
     public Set<Long> getJoinedBoardForServer(String serverUrl) {
+        var boardsToRemove = new ArrayList<Long>();
+        for (Long boardId : joinedBoards.get(serverUrl)) {
+            try {
+                server.getBoard(boardId);
+            } catch (Exception ignored) {
+                boardsToRemove.add(boardId);
+            }
+        }
+        boardsToRemove.forEach(joinedBoards.get(serverUrl)::remove);
+        if (!boardsToRemove.isEmpty()) {
+            saveJoinedBoards();
+        }
         return joinedBoards.get(serverUrl);
     }
 
@@ -180,7 +192,7 @@ public class MainCtrlTalio {
 
     public void showBoard(Board board) {
         try {
-            serverUtils.subscribeToBoard(board.getId());
+            server.subscribeToBoard(board.getId());
         } catch (Exception e) {
             throw new RuntimeException();
         }
