@@ -183,7 +183,8 @@ public class MainCtrlTalio {
         primaryStageTalio.setScene(boardComponent);
     }
 
-    public void showTagManagement() {
+    public void showTagManagement(Board board) {
+        tagManagementCtrl.initialize(board);
         Stage stage = new Stage();
         stage.setTitle("Talio: Manage Your Tags");
         stage.setScene(tagManagement);

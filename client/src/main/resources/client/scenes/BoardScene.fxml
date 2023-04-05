@@ -16,7 +16,7 @@
 
 
 
-<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="800.0" stylesheets="@./css/BoardComponent.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
+<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/BoardComponent.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
 
     <ToolBar fx:id="toolbar" prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
         <items>

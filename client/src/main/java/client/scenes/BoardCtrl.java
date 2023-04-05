@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.components.CardComponentCtrl;
+import client.components.ListComponentCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -166,7 +168,9 @@ public class BoardCtrl implements Initializable {
 
     @FXML
     protected void tags() {
-        mainCtrlTalio.showTagManagement();
+        Board emptyBoard = new Board();
+        emptyBoard.setId(boardId);
+        mainCtrlTalio.showTagManagement(emptyBoard);
     }
 
     public void close() {

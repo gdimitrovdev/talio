@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" fx:id="listVBox"
-         VBox.vgrow="ALWAYS" stylesheets="@./css/ListComponent.css">
+         VBox.vgrow="ALWAYS" stylesheets="@../css/ListComponent.css">
     <HBox fx:id="titleHolder">
         <TitleField fx:id="titleField"/>
         <Button fx:id="deleteListBtn" text="X" onAction="#deleteList">
