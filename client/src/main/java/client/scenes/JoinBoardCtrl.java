@@ -41,8 +41,7 @@ public class JoinBoardCtrl {
             box.setTitle("Invalid code");
             box.setContentText("There is no board that can be joined using that code!");
             box.showAndWait();
-        }
-        else {
+        } else {
             mainCtrlTalio.addJoinedBoard(server.getServerUrl(), newBoard.getId());
             mainCtrlTalio.showBoard(newBoard);
         }
