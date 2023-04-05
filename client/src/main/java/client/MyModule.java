@@ -23,6 +23,7 @@ import client.scenes.HomeCtrl;
 import client.scenes.JoinBoardCtrl;
 import client.scenes.MainCtrlTalio;
 import client.scenes.ServerConnectionCtrl;
+import client.scenes.TagManagementCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -40,5 +41,6 @@ public class MyModule implements Module {
         binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(TagManagementCtrl.class).in(Scopes.SINGLETON);
     }
 }

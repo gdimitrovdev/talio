@@ -164,6 +164,11 @@ public class BoardCtrl implements Initializable {
         mainCtrlTalio.showBoardSettings(server.getBoard(boardId));
     }
 
+    @FXML
+    protected void tags() {
+        mainCtrlTalio.showTagManagement();
+    }
+
     public void close() {
         innerHBox.getChildren().forEach(c -> ((ListComponentCtrl) c).close());
         server.removeUpdateEvent(updateBoard);

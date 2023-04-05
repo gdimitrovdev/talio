@@ -34,6 +34,9 @@
             <HBox fx:id="spacer" prefWidth="150.0" />
             <Label fx:id="boardNameLabel"  />
             <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0" />
+            <Button fx:id="tagsManagementBTN" text="Tags" onAction="#tags">
+                <tooltip><Tooltip text="Manage your tags" /></tooltip>
+            </Button>
             <Button fx:id="shareBTN" onAction="#share">
                 <graphic>
                     <ImageView fx:id="myImage2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

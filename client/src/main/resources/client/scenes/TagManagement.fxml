@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagManagementCtrl">
+   <children>
+      <VBox fx:id="tagsBox" layoutX="46.0" layoutY="94.0" prefHeight="252.0" prefWidth="375.0" />
+      <TextField fx:id="fieldTagName" layoutX="46.0" layoutY="37.0" promptText="Tag name" />
+      <Button fx:id="buttonCreateTag" layoutX="429.0" layoutY="37.0" mnemonicParsing="false" text="Create Tag" />
+      <ColorPicker layoutX="234.0" layoutY="37.0" />
+   </children>
+</AnchorPane>
