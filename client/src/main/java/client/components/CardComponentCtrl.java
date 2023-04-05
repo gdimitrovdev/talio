@@ -64,6 +64,9 @@ public class CardComponentCtrl extends AnchorPane {
     @FXML
     private HBox detailsContainer;
 
+    @FXML
+    private VBox vBox;
+
     private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
@@ -193,7 +196,6 @@ public class CardComponentCtrl extends AnchorPane {
 
         String colorBackground = colors.substring(0, 7);
         String colorForeground = colors.substring(8);
-        System.out.println("bg: " + colorBackground + " / fg: " + colorForeground);
 
         this.setStyle("-fx-color-background: " + colorBackground + "; -fx-color-foreground: "
                 + colorForeground + ";");
@@ -281,7 +283,7 @@ public class CardComponentCtrl extends AnchorPane {
         if (hasTags) {
             tagsContainer.setVisible(true);
             tagsContainer.setManaged(true);
-            Platform.runLater(() -> tagsContainer.getChildren().clear());
+            tagsContainer.getChildren().clear();
             for (var tag : newCardData.getTags()) {
                 var rect = new Rectangle();
                 rect.setHeight(10);
@@ -289,8 +291,14 @@ public class CardComponentCtrl extends AnchorPane {
                 rect.setFill(Color.web(tag.getColor().substring(0, 7)));
                 rect.setArcHeight(5);
                 rect.setArcWidth(5);
-                Platform.runLater(() -> tagsContainer.getChildren().add(rect));
+                tagsContainer.getChildren().add(rect);
             }
+            // This magic here fixes the FlowPane's height, since it doesn't properly do it, itself.
+            // If we change the design, it will break. I could do the calculations so, it doesn't
+            // use magic numbers, but it works well for now.
+            // TODO remove the magic numbers from here
+            tagsContainer.setMinHeight((newCardData.getTags().size() / 3) * 20 + 10);
+
         } else {
             tagsContainer.setVisible(false);
             tagsContainer.setManaged(false);

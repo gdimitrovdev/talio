@@ -19,7 +19,7 @@
          stylesheets="@../css/CardComponent.css"
          fx:id="cardOverview">
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0"
+          AnchorPane.topAnchor="0.0" fx:id="vBox"
           styleClass="vbox">
         <HBox maxWidth="Infinity" styleClass="hbox">
             <TitleField fx:id="titleField"/>
