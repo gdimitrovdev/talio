@@ -56,8 +56,7 @@ public class BoardCtrl implements Initializable {
     private Label boardNameLabel;
 
     @Inject
-    public BoardCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio,
-                     BoardSettingsCtrl boardSettingsCtrl) throws IOException {
+    public BoardCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) throws IOException {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
     }
