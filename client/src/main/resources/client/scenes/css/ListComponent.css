@@ -1,12 +1,18 @@
+@import url(../../Common.css);
+
+.root {
+    -fx-background-color: red;
+}
+
 #titleHolder {
     -fx-pref-height: 30.0;
     -fx-pref-width: 180.0;
 }
 
-#titleField {
+/*#titleField {
     -fx-pref-height: 25.0;
     -fx-pref-width: 130.0;
-}
+}*/
 
 #deleteListBtn {
     -fx-pref-height: 25.0;
@@ -28,4 +34,10 @@
     -fx-pref-width: 30px;
     -fx-pref-height: 30px;
     -fx-spacing: 10px;
+}
+
+#cards {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
 }

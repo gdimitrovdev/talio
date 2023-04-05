@@ -1,0 +1,10 @@
+* {
+    -fx-color-background-light: rgb(247, 255, 249);
+    -fx-color-background-dark: rgb(236, 241, 239);
+    -fx-color-foreground-accent: rgb(26, 255, 105);
+}
+
+* {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13;
+}
