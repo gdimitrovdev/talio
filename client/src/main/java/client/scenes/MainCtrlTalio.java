@@ -228,49 +228,38 @@ public class MainCtrlTalio {
         this.boardComponent.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             switch (e.getCode()) {
                 case RIGHT -> {
-                    System.out.println("Move right");
-                    boardComponentCtrl.switchRight();
+                    boardComponentCtrl.pressedRight();
                 }
                 case LEFT -> {
-                    System.out.println("Move left");
-                    boardComponentCtrl.switchLeft();
+                    boardComponentCtrl.pressedLeft();
                 }
                 case UP -> {
                     if (e.isShiftDown()) {
-                        System.out.println("Move card up");
                         boardComponentCtrl.pressedShiftUp();
                     } else {
-                        System.out.println("Move up");
-                        boardComponentCtrl.moveUp();
+                        boardComponentCtrl.pressedUp();
                     }
                 }
                 case DOWN -> {
                     if (e.isShiftDown()) {
-                        System.out.println("Move card down");
                         boardComponentCtrl.pressedShiftDown();
                     } else {
-                        System.out.println("Move down");
-                        boardComponentCtrl.moveDown();
+                        boardComponentCtrl.pressedDown();
                     }
                 }
                 case ENTER -> {
-                    System.out.println("Open popup");
                     boardComponentCtrl.pressedEnter();
                 }
                 case E -> {
-                    System.out.println("Edit card title");
                     boardComponentCtrl.pressedE();
                 }
                 case BACK_SPACE, DELETE -> {
-                    System.out.println("Delete the card");
                     boardComponentCtrl.pressedDelete();
                 }
                 case T -> {
-                    System.out.println("Open popup for adding tags");
                     boardComponentCtrl.pressedT();
                 }
                 case C -> {
-                    System.out.println("Open popup for color preset selection");
                     boardComponentCtrl.pressedC();
                 }
             }
