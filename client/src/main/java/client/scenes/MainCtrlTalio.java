@@ -261,7 +261,16 @@ public class MainCtrlTalio {
                     boardComponentCtrl.pressedT();
                 }
                 case C -> {
-                    boardComponentCtrl.pressedC();
+                    if (e.isShiftDown()) {
+                        boardComponentCtrl.pressedShiftC();
+                    } else {
+                        boardComponentCtrl.pressedC();
+                    }
+                }
+                case L -> {
+                    if (e.isShiftDown()) {
+                        boardComponentCtrl.pressedShiftL();
+                    }
                 }
             }
         });

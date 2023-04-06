@@ -198,7 +198,7 @@ public class ListComponentCtrl extends VBox {
     }
 
     @FXML
-    protected void addCard() {
+    public void addCard() {
         cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, server, this));
         // Scroll to bottom
         Platform.runLater(() -> {

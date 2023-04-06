@@ -245,6 +245,18 @@ public class BoardCtrl implements Initializable {
         }
     }
 
+    public void pressedShiftC() {
+        int[] position = this.findPositionOfCard();
+
+        List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
+
+        listComponentCtrls.get(position[0]).addCard();
+    }
+
+    public void pressedShiftL() {
+        this.addCardList();
+    }
+
     public void pressedE() {
         int[] position = this.findPositionOfCard();
 
@@ -293,6 +305,7 @@ public class BoardCtrl implements Initializable {
                     cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
                 }
                 server.moveCardToListAfterCard(cardComponentCtrls.get(position[1] - 1).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1]).getCardId());
+                listComponentCtrl.refresh();
             }
             listComponentCtrls = this.getCardListsFromBoard();
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
