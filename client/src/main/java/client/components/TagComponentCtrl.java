@@ -6,7 +6,9 @@ import commons.Tag;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -66,8 +68,13 @@ public class TagComponentCtrl extends HBox {
 
     @FXML
     protected void deleteTag() {
-        server.deleteTag(tag.getId());
-        tagManagementCtrl.removeComponent(tag, this);
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this tag ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        confirmationDialogue.showAndWait();
+
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            server.deleteTag(tag.getId());
+            tagManagementCtrl.removeComponent(tag, this);
+        }
     }
 
     private void refreshUI() {
