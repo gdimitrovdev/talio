@@ -40,6 +40,9 @@ public class BoardService {
     }
 
     public Optional<Board> getOne(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
         return boardRepository.findById(id);
     }
 
@@ -54,6 +57,9 @@ public class BoardService {
     }
 
     public void deleteOne(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
         if (boardRepository.existsById(id)) {
             boardRepository.deleteById(id);
         }
