@@ -216,7 +216,8 @@ public class MainCtrlTalio {
                 stage.setScene(scene);
                 stage.show();
                 scene.setOnKeyPressed(e1 -> {
-                    if ((e1.getCode() == KeyCode.SLASH && e1.isShiftDown()) || e.getCode() == KeyCode.ESCAPE){
+                    if ((e1.getCode() == KeyCode.SLASH && e1.isShiftDown())
+                            || e.getCode() == KeyCode.ESCAPE) {
                         stage.close();
                     }
                 });
