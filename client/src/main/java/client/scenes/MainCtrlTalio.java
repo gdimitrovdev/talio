@@ -198,13 +198,13 @@ public class MainCtrlTalio {
 
     public void listenForQuestionMarkPressed() {
         this.primaryStageTalio.getScene().setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.SLASH && e.isShiftDown()) {
+            if ((e.getCode() == KeyCode.SLASH && e.isShiftDown()) || (e.getCode() == KeyCode.ESCAPE)) {
                 Stage stage = new Stage();
                 stage.setTitle("Talio: Help");
                 TilePane tilepane = new TilePane();
                 Text text = new Text(" The available key shortcuts are: \n"
                         + " Press ? anywhere in the application to open/close this help screen \n \n"
-                        + " The following shortcuts can be used on a task which is highlighted: "
+                        + " The following shortcuts can be used on a task which is highlighted: \n"
                         + " - Task highlight can be moved with arrow keys (Up/Down/Left/Right) \n"
                         + " - Task can be moved up/down within a list by pressing Shift+Up/Down \n"
                         + " - Task name can be edited in the board overview by pressing E \n"
@@ -212,7 +212,7 @@ public class MainCtrlTalio {
                         + " - Task editing pop-up can be opened by pressing enter \n"
                         + " - Task editing pop-up can be closed by pressing esc");
                 tilepane.getChildren().add(text);
-                Scene scene = new Scene(tilepane, 730, 150);
+                Scene scene = new Scene(tilepane, 730, 170);
                 stage.setScene(scene);
                 stage.show();
                 scene.setOnKeyPressed(e1 -> {

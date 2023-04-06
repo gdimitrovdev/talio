@@ -4,6 +4,7 @@ import client.components.TitleField;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
 import java.io.IOException;
 import java.net.URL;
@@ -259,9 +260,12 @@ public class BoardCtrl implements Initializable {
             cardComponentCtrl.titleField.getChildren().get(0).requestFocus();
 
             CardComponentCtrl finalCardComponentCtrl = cardComponentCtrl;
-            cardComponentCtrl.titleField.getChildren().get(0).setOnKeyPressed(e -> {
+            cardComponentCtrl.titleField.setOnKeyPressed(e -> {
                 if (e.getCode() == KeyCode.ENTER) {
-                    finalCardComponentCtrl.requestFocus();
+                    Card card = server.getCard(finalCardComponentCtrl.getCardId());
+                    card.setTitle(((TextField) finalCardComponentCtrl.titleField.getChildren().get(0)).getText());
+                    server.updateCard(card);
+                    cardComponentCtrl.requestFocus();
                 }
             });
         }
@@ -288,22 +292,19 @@ public class BoardCtrl implements Initializable {
                 for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
                     cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
                 }
-
-                CardComponentCtrl temp = cardComponentCtrls.get(position[1] - 1);
-                cardComponentCtrls.set(position[1] - 1, cardComponentCtrls.get(position[1]));
-                cardComponentCtrls.set(position[1], temp);
-
-                listComponentCtrl.getCards().getChildren().clear();
-                for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
-                    listComponentCtrl.getCards().getChildren().add(cardComponentCtrl);
-                }
+                server.moveCardToListAfterCard(cardComponentCtrls.get(position[1] - 1).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1]).getCardId());
             }
+            listComponentCtrls = this.getCardListsFromBoard();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlight();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
         }
+
     }
 
     public void pressedShiftDown() {
         int[] position = this.findPositionOfCard();
-
         if (position[0] != -1) {
             List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
             ListComponentCtrl listComponentCtrl = listComponentCtrls.get(position[0]);
@@ -313,16 +314,9 @@ public class BoardCtrl implements Initializable {
                 cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
             }
 
-            if (position[1] < listComponentCtrl.getCards().getChildren().size() - 1
-                    && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
-                CardComponentCtrl temp = cardComponentCtrls.get(position[1] + 1);
-                cardComponentCtrls.set(position[1] + 1, cardComponentCtrls.get(position[1]));
-                cardComponentCtrls.set(position[1], temp);
-
-                listComponentCtrl.getCards().getChildren().clear();
-                for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
-                    listComponentCtrl.getCards().getChildren().add(cardComponentCtrl);
-                }
+            if (position[1] < listComponentCtrl.getCards().getChildren().size() - 1 && listComponentCtrls.size() > position[0]
+                    && listComponentCtrls.get(position[0]).getCards().getChildren().size() - 1 > position[1]) {
+                server.moveCardToListAfterCard(cardComponentCtrls.get(position[1]).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1] + 1).getCardId());
             }
         }
     }
