@@ -22,10 +22,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -188,153 +187,83 @@ public class BoardCtrl implements Initializable {
     }
 
     public void switchLeft() {
-        boolean run = true;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        int posList = 0;
-        int posCard = 0;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    posList = n;
-                    posCard = k;
-                }
-            }
         }
-        if (posList > 0 && listComponentCtrls.get(posList).getCards().getChildren().size() > 0 && run) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).getCards().getChildren().get(0)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(posList - 1).getCards().getChildren().get(0)).highlight();
+        if (position != null && position[0] > 0 && listComponentCtrls.get(position[0]).getCards().getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren().get(0)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren().get(0)).highlight();
         }
     }
 
     public void switchRight() {
-        boolean run = true;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        int posList = 0;
-        int posCard = 0;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    posList = n;
-                    posCard = k;
-                }
-            }
         }
-        if (posList < listComponentCtrls.size() - 1 && listComponentCtrls.get(posList).getCards().getChildren().size() > 0 && run) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard))
+        if (position != null && position[0] < listComponentCtrls.size() - 1 && listComponentCtrls.get(position[0]).getCards().getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1]))
                     .setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard))
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1]))
                     .removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).getCards().getChildren().get(0))
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren().get(0))
                     .setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(posList + 1).getCards().getChildren().get(0))
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren().get(0))
                     .highlight();
         }
     }
 
     public void moveDown() {
-        boolean run = true;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        int posList = 0;
-        int posCard = 0;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    posList = n;
-                    posCard = k;
-                }
-            }
         }
-        if (!listComponentCtrls.isEmpty() && posCard < listComponentCtrls.get(posList).getCards().getChildren().size() - 1 && run) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard + 1)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard + 1)).highlight();
+        if (position != null && !listComponentCtrls.isEmpty() && position[1] < listComponentCtrls.get(position[0]).getCards().getChildren().size() - 1) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] + 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] + 1)).highlight();
         }
     }
 
     public void moveUp() {
-        boolean run = true;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        int posList = 0;
-        int posCard = 0;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    posList = n;
-                    posCard = k;
-                }
-            }
         }
-        if (posCard > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard)).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard - 1)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(posList).getCards().getChildren().get(posCard - 1)).highlight();
+        if (position != null && position[1] > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlight();
         }
     }
 
     public void pressedEnter() {
-        boolean run = true;
-        int listpos = 0;
-        int cardpos = 0;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrls.get(n).getCards().getChildren().get(k)).getSelected()) {
-                    listpos = n;
-                    cardpos = k;
-                }
-            }
         }
-        if (run) {
-            ((CardComponentCtrl) listComponentCtrls.get(listpos).getCards().getChildren().get(cardpos)).loadPopup();
+        if (position != null) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).loadPopup();
         }
     }
 
@@ -347,11 +276,8 @@ public class BoardCtrl implements Initializable {
             listComponentCtrls.add(listComponentCtrl);
             for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
                 CardComponentCtrl cardComponentCtrl1 = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl1.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
+                if (run) {
+                    run = this.checkTextField(cardComponentCtrl1);
                 }
                 if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
                     cardComponentCtrl = (CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k);
@@ -360,72 +286,40 @@ public class BoardCtrl implements Initializable {
         }
         if (cardComponentCtrl != null && run) {
             System.out.println("lol");
-            VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-            HBox hBox = (HBox) vBox.getChildren().get(0);
-            TitleField titleField = (TitleField) hBox.getChildren().get(0);
-            titleField.getChildren().get(0).requestFocus();
+            (cardComponentCtrl.titleField.getChildren().get(0)).setFocusTraversable(true);
         }
     }
 
     public void pressedDelete() {
-        boolean run = true;
-        int listpos = 0;
-        int cardpos = 0;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    listpos = n;
-                    cardpos = k;
-                }
-            }
         }
-        if (run) {
-            server.deleteCard(((CardComponentCtrl) listComponentCtrls.get(listpos).getCards().getChildren().get(cardpos)).getCardId());
+        if (position != null) {
+            server.deleteCard(((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).getCardId());
         }
     }
 
     public void pressedShiftUp() {
-        boolean run = true;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        int posList = 0;
-        int posCard = 0;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    posList = n;
-                    posCard = k;
-                }
-            }
         }
-        ListComponentCtrl listComponentCtrl = listComponentCtrls.get(posList);
+        ListComponentCtrl listComponentCtrl = listComponentCtrls.get(position[0]);
         List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
         for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
             cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
         }
-
-        if (posCard > 0 && run) {
-            CardComponentCtrl temp = cardComponentCtrls.get(posCard - 1);
-            cardComponentCtrls.set(posCard - 1, cardComponentCtrls.get(posCard));
-            cardComponentCtrls.set(posCard, temp);
+        if (position != null && position[1] > 0) {
+            CardComponentCtrl temp = cardComponentCtrls.get(position[1] - 1);
+            cardComponentCtrls.set(position[1] - 1, cardComponentCtrls.get(position[1]));
+            cardComponentCtrls.set(position[1], temp);
 
             listComponentCtrl.getCards().getChildren().clear();
             for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
@@ -435,38 +329,24 @@ public class BoardCtrl implements Initializable {
     }
 
     public void pressedShiftDown() {
-        boolean run = true;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        int posList = 0;
-        int posCard = 0;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    posList = n;
-                    posCard = k;
-                }
-            }
         }
-        ListComponentCtrl listComponentCtrl = listComponentCtrls.get(posList);
+        ListComponentCtrl listComponentCtrl = listComponentCtrls.get(position[0]);
         List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
 
         for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
             cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
         }
 
-        if (posCard < listComponentCtrl.getCards().getChildren().size() - 1 && run) {
-            CardComponentCtrl temp = cardComponentCtrls.get(posCard + 1);
-            cardComponentCtrls.set(posCard + 1, cardComponentCtrls.get(posCard));
-            cardComponentCtrls.set(posCard, temp);
+        if (position != null && position[1] < listComponentCtrl.getCards().getChildren().size() - 1) {
+            CardComponentCtrl temp = cardComponentCtrls.get(position[1] + 1);
+            cardComponentCtrls.set(position[1] + 1, cardComponentCtrls.get(position[1]));
+            cardComponentCtrls.set(position[1], temp);
 
             listComponentCtrl.getCards().getChildren().clear();
             for (CardComponentCtrl cardComponentCtrl : cardComponentCtrls) {
@@ -477,59 +357,28 @@ public class BoardCtrl implements Initializable {
 
     // TODO put the focus on the tag creation section
     public void pressedT() {
-        boolean run = true;
-        int listpos = 0;
-        int cardpos = 0;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()
-                        && (listComponentCtrl.getCards().getChildren().get(k)).isFocusWithin()) {
-                    listpos = n;
-                    cardpos = k;
-                }
-            }
         }
-        if (run) {
-            ((CardComponentCtrl) listComponentCtrls.get(listpos).getCards().getChildren().get(cardpos)).loadPopup();
+        if (position != null) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).loadPopup();
         }
     }
 
     public void pressedC() {
-        boolean run = true;
-        int listpos = 0;
-        int cardpos = 0;
+        int[] position = null;
+        position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
-        CardComponentCtrl cardComponentCtrl = null;
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
-            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl1 = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
-                VBox vBox = (VBox) cardComponentCtrl1.getChildren().get(0);
-                HBox hBox = (HBox) vBox.getChildren().get(0);
-                TitleField titleField = (TitleField) hBox.getChildren().get(0);
-                if (titleField.getChildren().get(0).isFocused()) {
-                    run = false;
-                }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    listpos = n;
-                    cardpos = k;
-                }
-            }
         }
-        cardComponentCtrl = (CardComponentCtrl) listComponentCtrls.get(listpos).getCards().getChildren().get(cardpos);
-
-        if (run) {
+        if (position != null) {
+            CardComponentCtrl cardComponentCtrl = (CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1]);
             Stage stage = new Stage();
             stage.setTitle("Talio: Pick Card color");
             TilePane tilepane = new TilePane();
@@ -563,6 +412,40 @@ public class BoardCtrl implements Initializable {
             }
             cardComponentCtrl.setSelected(true);
             cardComponentCtrl.highlight();
+        }
+    }
+
+    public boolean checkTextField(CardComponentCtrl cardComponentCtrl) {
+        VBox vBox = (VBox) cardComponentCtrl.getChildren().get(0);
+        HBox hBox = (HBox) vBox.getChildren().get(0);
+        TitleField titleField = (TitleField) hBox.getChildren().get(0);
+        if (titleField.getChildren().get(0).isFocused()) {
+            return false;
+        }
+        return true;
+    }
+
+    public int[] findPositionOfCard() {
+        int[] position = new int[2];
+        boolean run = true;
+        List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
+        for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
+            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            listComponentCtrls.add(listComponentCtrl);
+            for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
+                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
+                if (run) {
+                    run = this.checkTextField(cardComponentCtrl);
+                }
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
+                    position = new int[]{n, k};
+                }
+            }
+        }
+        if (run) {
+            return position;
+        } else {
+            return null;
         }
     }
 }

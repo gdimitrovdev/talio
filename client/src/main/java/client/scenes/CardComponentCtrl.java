@@ -41,7 +41,7 @@ public class CardComponentCtrl extends AnchorPane {
     private Object updateCard;
 
     @FXML
-    private TitleField titleField;
+    public TitleField titleField;
 
     @FXML
     private Button deleteButton;
