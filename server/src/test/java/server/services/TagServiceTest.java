@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import commons.Board;
 import commons.Tag;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +16,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import server.database.BoardRepository;
 import server.database.TagRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 class TagServiceTest {
     @Mock
     private TagRepository tagRepositoryMock;
+    @Mock
+    private BoardRepository boardRepositoryMock;
 
     @InjectMocks
     private TagService tagServiceMock;
@@ -69,7 +73,9 @@ class TagServiceTest {
 
     @Test
     void deleteOne() {
-        when(tagRepositoryMock.existsById(1L)).thenReturn(true);
+        Board b = new Board("Board", "Bla", "Ble", "Blu", "Bli", List.of(), 0);
+        Tag t = new Tag("Title", "Red", b);
+        when(tagRepositoryMock.findById(1L)).thenReturn(Optional.of(t));
 
         tagServiceMock.deleteOne(1L);
 
