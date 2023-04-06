@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerConnectionCtrl">
    <children>
-      <TextField fx:id="fieldServerAddress" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter the server URL." />
+      <TextField fx:id="fieldServerAddress" layoutX="89.0" layoutY="169.0" prefHeight="26.0" prefWidth="302.0" promptText="Enter the server URL." onAction="#clickConnectServer"/>
       <Label layoutX="153.0" layoutY="83.0" text="Connect to a Server">
          <font>
             <Font size="18.0" />

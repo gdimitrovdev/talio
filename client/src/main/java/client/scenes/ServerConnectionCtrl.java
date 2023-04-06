@@ -47,6 +47,7 @@ public class ServerConnectionCtrl {
     @FXML
     private void setDefaultServer() {
         fieldServerAddress.setText("http://localhost:8080/");
+        fieldServerAddress.requestFocus();
     }
 
     public void clickBackHome() {
