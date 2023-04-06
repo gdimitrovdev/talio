@@ -109,8 +109,10 @@ public class BoardService {
         existingBoard.setBoardColor(board.getBoardColor());
         existingBoard.setListsColor(board.getListsColor());
         existingBoard.setName(board.getName());
+        System.out.println("settings board codes");
         existingBoard.setCode(board.getCode());
         existingBoard.setReadOnlyCode(board.getReadOnlyCode());
+        System.out.println("set board codes");
         existingBoard.setDefaultPresetNum(board.getDefaultPresetNum());
         existingBoard.setCardColorPresets(board.getCardColorPresets());
 

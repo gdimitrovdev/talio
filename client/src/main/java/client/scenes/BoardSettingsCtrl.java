@@ -143,7 +143,8 @@ public class BoardSettingsCtrl {
         colorPickerBG.setMaxSize(38, 26); // 38 x 26
         colorPickerF.setMaxSize(38, 26); // 38 x 26
         name.setPrefSize(USE_COMPUTED_SIZE, 26);
-
+        colorPickerBG.setValue(Color.web(presetBg));
+        colorPickerF.setValue(Color.web(presetFont));
 
 
         hboxPreset.getChildren().addAll(name, colorPickerBG, colorPickerF, setAsDefault, deleteBtn);
@@ -169,11 +170,16 @@ public class BoardSettingsCtrl {
         String boardFont = "#" + cpFontBoard.getValue().toString().substring(2, 8);
         String listColor = "#" + cpBackgroundLists.getValue().toString().substring(2, 8);
         String listFont = "#" + cpFontLists.getValue().toString().substring(2, 8);
+
         String boardColorCombo = boardColor + "/" + boardFont;
         String listColorCombo = listColor + "/" + listFont;
+        System.out.println(boardColorCombo);
+        System.out.println(listColorCombo);
         board.setBoardColor(boardColorCombo);
         board.setListsColor(listColorCombo);
-        changeBoardName(fieldBoardName.getText());
+        System.out.println(fieldBoardName.getText());
+        //changeBoardName(fieldBoardName.getText());
+        System.out.println("Cowabunga");
 
         List<String> presets = new ArrayList<>();
 
@@ -192,6 +198,7 @@ public class BoardSettingsCtrl {
                 board.setDefaultPresetNum(counter);
             }
         }
+        System.out.println("one if later");
         if (board.getCardColorPresets().size() < (presetsBox.getChildren().size())) {
             for (int i = 0; i < (presetsBox.getChildren().size()
                     - board.getCardColorPresets().size()); i++) {
@@ -209,11 +216,13 @@ public class BoardSettingsCtrl {
                 }
             }
         }
+        System.out.println("two ifs later");
 
 
         board.setCardColorPresets(presets);
-
+        System.out.println("just before the update");
         board = server.updateBoard(board);
+        System.out.println("after update");
     }
 
     public void resetBoardColors() {

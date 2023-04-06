@@ -106,6 +106,7 @@ public class CardController {
     @ResponseBody
     public ResponseEntity<Card> updateOne(@PathVariable Long id,
             @RequestBody Card card) {
+        System.out.println("CARD PUT");
         try {
             Card updatedCard = cardService.updateOne(id, card);
             template.convertAndSend(Topics.CARDS.toString(), updatedCard);

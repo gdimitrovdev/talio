@@ -26,8 +26,6 @@ public class ListComponentCtrl extends VBox {
     private Object updateList;
     private Long listId;
 
-    private boolean scrollToBottom = false;
-
     @FXML
     private HBox titleHolder;
 

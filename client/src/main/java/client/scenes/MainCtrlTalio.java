@@ -79,6 +79,9 @@ public class MainCtrlTalio {
 
     public Set<Long> getJoinedBoardForServer(String serverUrl) {
         var boardsToRemove = new ArrayList<Long>();
+        if (!joinedBoards.containsKey(serverUrl)) {
+            return new HashSet<>();
+        }
         for (Long boardId : joinedBoards.get(serverUrl)) {
             try {
                 server.getBoard(boardId);
@@ -88,25 +91,23 @@ public class MainCtrlTalio {
         }
         boardsToRemove.forEach(joinedBoards.get(serverUrl)::remove);
         if (!boardsToRemove.isEmpty()) {
-            saveJoinedBoards();
+            writeToLocalData();
         }
         return joinedBoards.get(serverUrl);
     }
 
     public void addJoinedBoard(String serverUrl, Long boardId) {
-        if (!joinedBoards.keySet().contains(serverUrl)) {
+        if (!joinedBoards.containsKey(serverUrl)) {
             joinedBoards.put(serverUrl, new HashSet<Long>());
         }
 
-        if (!joinedBoards.get(serverUrl).contains(boardId)) {
-            joinedBoards.get(serverUrl).add(boardId);
-        }
+        joinedBoards.get(serverUrl).add(boardId);
 
         writeToLocalData();
     }
 
     public void removeJoinedBoard(String serverUrl, Long boardId) {
-        if (!joinedBoards.keySet().contains(serverUrl)) {
+        if (!joinedBoards.containsKey(serverUrl)) {
             return;
         }
 
@@ -124,7 +125,7 @@ public class MainCtrlTalio {
         try (
                 FileInputStream fis = new FileInputStream(toRead);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                ) {
+        ) {
             this.joinedBoards = (HashMap<String, Set<Long>>) ois.readObject();
         } catch (Exception e) {
             this.joinedBoards = new HashMap<String, Set<Long>>();
@@ -137,10 +138,11 @@ public class MainCtrlTalio {
         try (
                 FileOutputStream fos = new FileOutputStream(localData);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                ) {
+        ) {
             oos.writeObject(joinedBoards);
             oos.flush();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public void alert(String title, String message) {
