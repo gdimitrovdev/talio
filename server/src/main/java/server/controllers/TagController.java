@@ -75,10 +75,13 @@ public class TagController {
             List<Card> affectedCards =
                     cardService.getMany().stream().filter(c -> c.getTags().stream()
                             .anyMatch(t -> t.getId().equals(id))).toList();
+
             tagService.deleteOne(id);
             for (Card card : affectedCards) {
+                cardService.removeTagFromCard(id, card.getId());
                 template.convertAndSend("/topic/cards", cardService.getOne(card.getId()));
             }
+
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             System.out.println(e);
