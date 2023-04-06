@@ -198,7 +198,7 @@ public class MainCtrlTalio {
 
     public void listenForQuestionMarkPressed() {
         this.primaryStageTalio.getScene().setOnKeyPressed(e -> {
-            if ((e.getCode() == KeyCode.SLASH && e.isShiftDown()) || (e.getCode() == KeyCode.ESCAPE)) {
+            if ((e.getCode() == KeyCode.SLASH && e.isShiftDown())) {
                 Stage stage = new Stage();
                 stage.setTitle("Talio: Help");
                 TilePane tilepane = new TilePane();
@@ -216,7 +216,7 @@ public class MainCtrlTalio {
                 stage.setScene(scene);
                 stage.show();
                 scene.setOnKeyPressed(e1 -> {
-                    if (e1.getCode() == KeyCode.SLASH && e1.isShiftDown()) {
+                    if ((e1.getCode() == KeyCode.SLASH && e1.isShiftDown()) || e.getCode() == KeyCode.ESCAPE){
                         stage.close();
                     }
                 });
