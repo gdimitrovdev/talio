@@ -106,6 +106,17 @@ public class ListComponentCtrl extends VBox {
                 Platform.runLater(this::refresh);
             }
         });
+
+        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
+            if (cardReceived.getList().getId().equals(listId)) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
+            }
+        });
     }
 
     public Long getListId() {

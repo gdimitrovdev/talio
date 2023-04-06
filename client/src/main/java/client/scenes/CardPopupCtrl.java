@@ -1,25 +1,19 @@
 package client.scenes;
 
+import client.components.TitleField;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.Card;
-import commons.Subtask;
-import commons.Tag;
+import commons.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -28,6 +22,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class CardPopupCtrl extends AnchorPane implements Initializable {
     private final MainCtrlTalio mainCtrlTalio;
@@ -68,6 +64,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
     @FXML
     private Button deleteSubtask;
+
+    @FXML
+    private Button moveUpSubtask;
+
+    @FXML
+    private Button moveDownSubtask;
 
     @FXML
     private TextField newTagTextfield;
@@ -115,8 +117,29 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         });
     }
 
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.refreshCardData();
+
+        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
+            if (cardReceived.getId().equals(card.getId())) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Window window = anchorPane.getScene().getWindow();
+
+                        if (window instanceof Stage) {
+                            ((Stage) window).close();
+                        }
+
+                        Alert box = new Alert(Alert.AlertType.ERROR);
+                        box.setTitle("Card deleted");
+                        box.setContentText("The card that you are editing has been deleted!");
+                        box.showAndWait();
+                    }
+                });
+            }
+        });
     }
 
     public void refreshCardData() {
@@ -197,12 +220,22 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         server.deleteSubtask(subtask.getId());
     }
 
+    public void moveUp(Subtask subtask) {
+        server.moveUp(subtask);
+    }
+
+    public void moveDown(Subtask subtask) {
+        server.moveDown(subtask);
+    }
+
     public void initializeSubtasks() {
         subtaskVBox.getChildren().clear();
-        for (Subtask subtask : card.getSubtasks()) {
+        for (Subtask subtask : card.getSubtasks().stream().sorted(Comparator.comparing(
+                Subtask::getPositionInCard
+        )).toList()) {
             HBox subtaskElement = new HBox();
 
-            CheckBox checkBox = new CheckBox(subtask.getTitle());
+            CheckBox checkBox = new CheckBox("");
             checkBox.setSelected(subtask.getCompleted());
             checkBox.setOnAction(a -> {
                 subtask.setCompleted(!subtask.getCompleted());
@@ -212,12 +245,34 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             checkBox.getStyleClass().add("subtask-checkbox");
             subtaskElement.getChildren().add(checkBox);
 
+            TitleField titleField = new TitleField();
+            titleField.init(subtask.getTitle(), newTitle -> {
+                Subtask serverSubtask = server.getSubtask(subtask.getId());
+                serverSubtask.setTitle(newTitle);
+                server.updateSubtask(serverSubtask);
+            });
+            subtaskElement.getChildren().add(titleField);
+
             deleteSubtask = new Button("x");
             deleteSubtask.getStyleClass().add("remove-subtask-button");
             deleteSubtask.setOnAction(a -> {
                 deleteSubtask(subtask);
             });
             subtaskElement.getChildren().add(deleteSubtask);
+
+            moveUpSubtask = new Button("^");
+            // moveUpSubtask.getStyleClass().add("remove-subtask-button");
+            moveUpSubtask.setOnAction(a -> {
+                moveUp(subtask);
+            });
+            subtaskElement.getChildren().add(moveUpSubtask);
+
+            moveDownSubtask = new Button("v");
+            // moveUpSubtask.getStyleClass().add("remove-subtask-button");
+            moveDownSubtask.setOnAction(a -> {
+                moveDown(subtask);
+            });
+            subtaskElement.getChildren().add(moveDownSubtask);
 
             subtaskVBox.getChildren().add(subtaskElement);
         }
@@ -268,6 +323,11 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     public void addNewSubtask(String entry) {
         if (!entry.isEmpty()) {
             server.createSubtask(new Subtask(entry, card, false));
+        } else {
+            Alert box = new Alert(Alert.AlertType.ERROR);
+            box.setTitle("Empty title");
+            box.setContentText("The subtask needs a title!");
+            box.showAndWait();
         }
     }
 
