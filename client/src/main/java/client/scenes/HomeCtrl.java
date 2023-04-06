@@ -183,8 +183,7 @@ public class HomeCtrl {
      */
     public void removeRecentBoard(Board board) {
         //removes all children from the FlowPane and then
-        //remove board from hashset and call displayBoardLabels method again
-        server.deleteBoard(board.getId());
+        //remove board from hashset and call displayBoardLabels method again// server.deleteBoard(board.getId());
         mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
         recentBoardsPane.getChildren().clear();
         displayBoardLabels();

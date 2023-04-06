@@ -29,9 +29,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -467,5 +465,39 @@ public class ServerUtils {
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                 .get(new GenericType<Card>() {
                 });
+    }
+
+    public void moveUp(Subtask subtask) {
+        Optional<Subtask> oneUp = subtask.getCard().getSubtasks().stream()
+                .filter(s -> (s.getPositionInCard() < subtask.getPositionInCard()))
+                .max(Comparator.comparing(Subtask::getPositionInCard));
+
+        if (oneUp.isPresent()) {
+            Subtask anotherSubtask = oneUp.get();
+
+            Long temp = anotherSubtask.getPositionInCard();
+            anotherSubtask.setPositionInCard(subtask.getPositionInCard());
+            subtask.setPositionInCard(temp);
+
+            updateSubtask(subtask);
+            updateSubtask(anotherSubtask);
+        }
+    }
+
+    public void moveDown(Subtask subtask) {
+        Optional<Subtask> oneDown = subtask.getCard().getSubtasks().stream()
+                .filter(s -> (s.getPositionInCard() > subtask.getPositionInCard()))
+                .min(Comparator.comparing(Subtask::getPositionInCard));
+
+        if (oneDown.isPresent()) {
+            Subtask anotherSubtask = oneDown.get();
+
+            Long temp = anotherSubtask.getPositionInCard();
+            anotherSubtask.setPositionInCard(subtask.getPositionInCard());
+            subtask.setPositionInCard(temp);
+
+            updateSubtask(subtask);
+            updateSubtask(anotherSubtask);
+        }
     }
 }

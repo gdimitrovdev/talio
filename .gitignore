@@ -43,4 +43,4 @@ out/
 ### VS Code ###
 .vscode/
 
-local_data
+.local_data
