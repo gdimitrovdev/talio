@@ -169,6 +169,11 @@ public class MainCtrlTalio {
         stage.setScene(boardSettings);
         stage.show();
         this.listenForQuestionMarkPressed();
+        stage.getScene().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ESCAPE) {
+                stage.close();
+            }
+        });
     }
 
     //TODO: this method needs to be finished after someone does the shareboard popup
