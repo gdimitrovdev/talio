@@ -99,7 +99,7 @@ public class BoardSettingsCtrl {
         }
     }
 
-    public HBox generateHboxPreset(String preset, int counter) {
+    private HBox generateHboxPreset(String preset, int counter) {
         //get the colors for this preset
         String[] colors = preset.split("/");
         String presetBg = colors[0];
