@@ -122,6 +122,7 @@ public class BoardCtrl implements Initializable {
         String[] colors = board.getBoardColor().split("/"); // Split the string into two parts
         String bgColor = colors[0]; // Get the first part
         String fontColor = colors[1];
+        System.out.println("BOARD COLOR " + board.getBoardColor());
         //changing the color of the board
         outerHBox.setStyle("-fx-background-color:" + bgColor);
         toolbar.setStyle("-fx-background-color:" + bgColor);

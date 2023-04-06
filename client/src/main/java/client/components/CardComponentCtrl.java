@@ -80,7 +80,7 @@ public class CardComponentCtrl extends AnchorPane {
         addClickedEventHandler();
 
         setOnMouseDoubleClicked((me) -> {
-            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
+            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));
             try {
                 cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
                         server.getCard(cardId), server));

@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class TagManagementCtrl {
     private final ServerUtils server;
@@ -37,12 +38,17 @@ public class TagManagementCtrl {
     public void initialize(Board board) {
         this.board = board;
         allTags = server.getBoard(board.getId()).getTags();
+        fieldTagTitle.clear();
+        pickerForeground.setValue(Color.WHITE);
+        pickerBackground.setValue(Color.WHITE);
 
         refreshTags();
     }
 
     public Tag makeTagFromInput(String title, String foreground,
             String background) {
+        foreground = "#" + foreground.substring(2, 8);
+        background = "#" + background.substring(2, 8);
         String tagColor = foreground + "/" + background;
 
         if (existsTagWithTitle(title)) {

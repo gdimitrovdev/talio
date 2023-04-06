@@ -22,7 +22,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -154,34 +153,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
         initializeTags();
 
-        tagMenu = new MenuButton("Select a tag");
+        tagMenu = new MenuButton("Add a tag to card");
         tagMenu.getItems().clear();
         initializeTagDropdownMenu();
         tagMenu.setLayoutX(10);
         tagMenu.setLayoutY(370);
         anchorPane.getChildren().add(tagMenu);
-
-        tagColorPicker = new ColorPicker(Color.ORANGE);
-        tagColorPicker.setValue(Color.ORANGE);
-        tagColorPicker.setLayoutX(120);
-        tagColorPicker.setLayoutY(370);
-        anchorPane.getChildren().add(tagColorPicker);
-
-        newTagTextfield = new TextField();
-        newTagTextfield.setPromptText("New Tag");
-        newTagTextfield.setLayoutX(260);
-        newTagTextfield.setLayoutY(370);
-        anchorPane.getChildren().add(newTagTextfield);
-
-        newTagTextfield.setOnKeyTyped(a -> {
-            checkTagDuplicate(newTagTextfield.getText());
-        });
-
-        newTagTextfield.setOnKeyPressed(a -> {
-            if (a.getCode() == KeyCode.ENTER) {
-                addAndMakeNewTag(newTagTextfield.getText());
-            }
-        });
 
         save = new Button("Save");
         anchorPane.getChildren().add(save);
@@ -229,10 +206,15 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             tagElement = new HBox();
             tagElement.getStyleClass().add("tag");
             // TODO fix this when we figure out the colors
-            tagElement.setStyle("-fx-background-color: #" + tag.getColor().substring(2));
+
+            String[] colors = tag.getColor().split("/");
+            System.out.println(tag.getColor());
+            tagElement.setStyle("-fx-background-color: " + colors[1]);
 
             Text tagText = new Text(tag.getTitle());
             tagText.getStyleClass().add("tag-text");
+            tagText.setFill(Color.web(colors[0]));
+            //tagText.setStyle("-fx-fill: " + colors[0]);
 
             Button deleteTagButton = new Button("x");
             deleteTagButton.setOnAction(a -> {
@@ -275,49 +257,6 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         card = server.getCard(card.getId());
         initializeSubtasks();
         initializeTags();
-    }
-
-    public void checkTagDuplicate(String entry) {
-        boolean tagExists = false;
-
-        for (Tag tag : card.getList().getBoard().getTags()) {
-            if (newTagTextfield.getText().equals(tag.getTitle())) {
-                tagExists = true;
-            }
-        }
-
-        if (tagExists) {
-            newTagTextfield.getStyleClass().remove("valid-textField-input");
-            newTagTextfield.getStyleClass().add("invalid-textField-input");
-        } else {
-            newTagTextfield.getStyleClass().remove("invalid-textField-input");
-            newTagTextfield.getStyleClass().add("valid-textField-input");
-        }
-    }
-
-    public void addAndMakeNewTag(String entry) {
-        if (!entry.isEmpty()) {
-            boolean tagExists = false;
-            Tag tagToAdd = null;
-
-            for (Tag tag : card.getList().getBoard().getTags()) {
-                if (newTagTextfield.getText().equals(tag.getTitle())) {
-                    tagExists = true;
-                    tagToAdd = tag;
-                }
-            }
-
-            if (!tagExists) {
-                tagToAdd = new Tag(entry, tagColorPicker.getValue().toString(),
-                        card.getList().getBoard());
-                assignEmptyBoardWithId(tagToAdd);
-                tagToAdd = server.createTag(tagToAdd);
-            }
-
-            cardTags.add(tagToAdd);
-            newTagTextfield.clear();
-            refreshCardData();
-        }
     }
 
     public void save() {
