@@ -314,7 +314,7 @@ public class BoardCtrl implements Initializable {
             }
 
             if (position[1] < listComponentCtrl.getCards().getChildren().size() - 1
-            && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
+                    && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
                 CardComponentCtrl temp = cardComponentCtrls.get(position[1] + 1);
                 cardComponentCtrls.set(position[1] + 1, cardComponentCtrls.get(position[1]));
                 cardComponentCtrls.set(position[1], temp);
