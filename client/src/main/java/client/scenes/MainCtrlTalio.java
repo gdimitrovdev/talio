@@ -22,6 +22,11 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
     private ServerUtils serverUtils;
+
+    public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
+        this.joinedBoards = joinedBoards;
+    }
+
     private Map<String, Set<Long>> joinedBoards;
 
     @Inject
