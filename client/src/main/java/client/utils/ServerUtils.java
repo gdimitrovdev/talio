@@ -247,7 +247,7 @@ public class ServerUtils {
     }
 
     public void deleteTag(Long tagId) {
-        webTarget.path("/api/lists/" + tagId)
+        webTarget.path("/api/tags/" + tagId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();

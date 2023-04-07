@@ -1,6 +1,7 @@
-package client.scenes;
+package client.components;
 
-import client.components.TitleField;
+import client.scenes.BoardCtrl;
+import client.scenes.MainCtrlTalio;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;

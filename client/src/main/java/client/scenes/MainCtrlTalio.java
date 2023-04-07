@@ -6,21 +6,20 @@ import java.io.*;
 import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Pair;
 import javax.inject.Inject;
 
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
     private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard,
-            boardSettings;
+            boardSettings, tagManagement;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
@@ -28,6 +27,7 @@ public class MainCtrlTalio {
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
+    private TagManagementCtrl tagManagementCtrl;
     private ServerUtils serverUtils;
     private Map<String, Set<Long>> joinedBoards;
 
@@ -44,7 +44,8 @@ public class MainCtrlTalio {
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
-            Pair<BoardSettingsCtrl, Parent> boardSettingsPair) {
+            Pair<BoardSettingsCtrl, Parent> boardSettingsPair,
+            Pair<TagManagementCtrl, Parent> tagManagementPair) {
 
         readFromLocalData();
 
@@ -70,6 +71,9 @@ public class MainCtrlTalio {
 
         this.boardSettingsCtrl = boardSettingsPair.getKey();
         this.boardSettings = new Scene(boardSettingsPair.getValue());
+
+        this.tagManagementCtrl = tagManagementPair.getKey();
+        this.tagManagement = new Scene(tagManagementPair.getValue());
 
         // showHome();
         this.showServerConnection();
@@ -131,6 +135,13 @@ public class MainCtrlTalio {
         } catch (Exception e) { }
     }
 
+    public void alert(String title, String message) {
+        Alert box = new Alert(Alert.AlertType.WARNING);
+        box.setTitle(title);
+        box.setContentText(message);
+        box.showAndWait();
+    }
+
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
@@ -159,7 +170,6 @@ public class MainCtrlTalio {
         this.listenForQuestionMarkPressed();
     }
 
-    //TODO: this method needs to be finished after someone does the settings
     public void showBoardSettings(Board board) {
         boardSettingsCtrl.initialize(board);
         Stage stage = new Stage();
@@ -174,7 +184,6 @@ public class MainCtrlTalio {
         });
     }
 
-    //TODO: this method needs to be finished after someone does the shareboard popup
     public void showShareBoard(Board board) {
         shareBoardCtrl.initialize(board);
         Stage stage = new Stage();
@@ -282,5 +291,13 @@ public class MainCtrlTalio {
         this.boardComponent.getRoot().addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
             boardComponentCtrl.mouseMovement(e);
         });
+    }
+
+    public void showTagManagement(Board board) {
+        tagManagementCtrl.initialize(board);
+        Stage stage = new Stage();
+        stage.setTitle("Talio: Manage Your Tags");
+        stage.setScene(tagManagement);
+        stage.show();
     }
 }

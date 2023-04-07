@@ -1,19 +1,25 @@
 package server.services;
 
+import commons.Board;
 import commons.Tag;
 import java.util.List;
 import java.util.Optional;
+import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import server.database.BoardRepository;
 import server.database.TagRepository;
 
 @Service
 public class TagService {
 
     private final TagRepository tagRepository;
+    private final BoardRepository boardRepository;
 
-    public TagService(TagRepository tagRepository) {
+    @Inject
+    public TagService(TagRepository tagRepository, BoardRepository boardRepository) {
         this.tagRepository = tagRepository;
+        this.boardRepository = boardRepository;
     }
 
     public List<Tag> getMany() {
@@ -36,7 +42,12 @@ public class TagService {
     }
 
     public void deleteOne(Long id) {
-        if (tagRepository.existsById(id)) {
+        Optional<Tag> optTag = tagRepository.findById(id);
+        if (optTag.isPresent()) {
+            Tag t = optTag.get();
+            Board b = t.getBoard();
+            b.removeTag(t);
+            boardRepository.save(b);
             tagRepository.deleteById(id);
         }
     }
