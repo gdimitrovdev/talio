@@ -263,7 +263,6 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             // TODO fix this when we figure out the colors
 
             String[] colors = tag.getColor().split("/");
-            System.out.println(tag.getColor());
             tagElement.setStyle("-fx-background-color: " + colors[1]);
 
             Text tagText = new Text(tag.getTitle());

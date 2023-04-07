@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -128,6 +129,13 @@ public class MainCtrlTalio {
             oos.writeObject(joinedBoards);
             oos.flush();
         } catch (Exception e) { }
+    }
+
+    public void alert(String title, String message) {
+        Alert box = new Alert(Alert.AlertType.WARNING);
+        box.setTitle(title);
+        box.setContentText(message);
+        box.showAndWait();
     }
 
     public void showHome() {

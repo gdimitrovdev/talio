@@ -7,7 +7,6 @@ import commons.Board;
 import commons.Tag;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -46,16 +45,18 @@ public class TagManagementCtrl {
     }
 
     public Tag makeTagFromInput(String title, String foreground,
-            String background) {
+            String background, Tag except) {
         foreground = "#" + foreground.substring(2, 8);
         background = "#" + background.substring(2, 8);
         String tagColor = foreground + "/" + background;
 
-        if (existsTagWithTitle(title)) {
-            Alert box = new Alert(Alert.AlertType.WARNING);
-            box.setTitle("Repeated Title");
-            box.setContentText("A tag with this title already exists.");
-            box.showAndWait();
+        if (title.contentEquals("")) {
+            mainCtrlTalio.alert("Empty Title", "The tag must have a title.");
+            return null;
+        }
+
+        if (existsTagWithTitle(title, except)) {
+            mainCtrlTalio.alert("Repeated Title", "A tag with this title already exists.");
             return null;
         }
 
@@ -73,7 +74,7 @@ public class TagManagementCtrl {
                 foreground = pickerForeground.getValue().toString(),
                 background = pickerBackground.getValue().toString();
 
-        Tag newTag = makeTagFromInput(tagTitle, foreground, background);
+        Tag newTag = makeTagFromInput(tagTitle, foreground, background, null);
 
         if (newTag == null) {
             return;
@@ -103,8 +104,9 @@ public class TagManagementCtrl {
         }
     }
 
-    private boolean existsTagWithTitle(String tagTitle) {
+    private boolean existsTagWithTitle(String tagTitle, Tag except) {
         return allTags.stream()
+                .filter(t -> !t.equals(except))
                 .anyMatch(t -> t.getTitle().contentEquals(tagTitle));
     }
 }

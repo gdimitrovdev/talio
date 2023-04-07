@@ -55,7 +55,13 @@ public class TagComponentCtrl extends HBox {
                 background = tagBackground.getValue().toString();
 
         Tag newTag = tagManagementCtrl.makeTagFromInput(
-                title, foreground, background);
+                title, foreground, background, tag);
+
+        if (newTag == null) {
+            refreshUI();
+            return;
+        }
+
         newTag.setId(tag.getId());
 
         if (newTag == null) {
