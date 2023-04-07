@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 public class HomeCtrl {
+
     private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
 
@@ -37,7 +38,7 @@ public class HomeCtrl {
     @FXML
     private ScrollPane outerContainer;
     @FXML
-    private GridPane recentBoardsPane;
+    public GridPane recentBoardsPane;
     private boolean nestedButtonPressed = false;
 
     @Inject
@@ -212,5 +213,12 @@ public class HomeCtrl {
         mainCtrlTalio.showBoard(board);
 
 
+    }
+    public ServerUtils getServer() {
+        return server;
+    }
+
+    public MainCtrlTalio getMainCtrlTalio() {
+        return mainCtrlTalio;
     }
 }
