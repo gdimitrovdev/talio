@@ -36,7 +36,7 @@ public class JoinBoardCtrl {
     public void clickJoinBoard() {
         String code = fieldBoardCode.getText();
         Board newBoard = server.joinBoard(code);
-        if (newBoard.getName().equals("NotFound")) {
+        if (newBoard.getName().equals("NotFoundInSystem")) {
             Alert box = new Alert(Alert.AlertType.ERROR);
             box.setTitle("Invalid code");
             box.setContentText("There is no board that can be joined using that code!");
