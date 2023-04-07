@@ -1,6 +1,9 @@
 package server.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,17 +50,27 @@ class CardListServiceTest {
         assertEquals(cardList2, returnedCardLists.get(1));
     }
 
-    //    @Test
-    //    void getOne() {
-    //        Long listId = 1L;
-    //        CardList cardList = new CardList();
-    //        when(cardListRepositoryMock.findById(listId)).thenReturn(Optional.of(cardList));
-    //
-    //        Optional<CardList> returnedCardList = cardListServiceMock.getOne(1L);
-    //        assertEquals(cardList, returnedCardList.get());
-    //
-    //
-    //    }
+    @Test
+    void getOne() {
+        Long listId = 1L;
+        CardList cardList = new CardList();
+        when(cardListRepositoryMock.existsById(listId)).thenReturn(true);
+        when(cardListRepositoryMock.findById(listId)).thenReturn(Optional.of(cardList));
+
+        Optional<CardList> returnedCardList = cardListServiceMock.getOne(1L);
+        assertTrue(returnedCardList.isPresent());
+        assertEquals(cardList, returnedCardList.get());
+    }
+
+    @Test
+    void getOneWhenListDoesNotExist() {
+        Long listId = 99999L;
+        when(cardListRepositoryMock.existsById(listId)).thenReturn(false);
+
+        Optional<CardList> returnedCardList = cardListServiceMock.getOne(listId);
+
+        assertTrue(returnedCardList.isEmpty());
+    }
 
     @Test
     void createOne() {
@@ -93,5 +106,37 @@ class CardListServiceTest {
         CardList returnedCardList = cardListServiceMock.updateOne(1L, updatedCardList);
         assertEquals(updatedCardList.getTitle(), returnedCardList.getTitle());
 
+    }
+
+    @Test
+    void deleteManyEmpty() {
+        cardListServiceMock.deleteMany();
+
+        verify(cardListRepositoryMock).deleteAll();
+    }
+
+    @Test
+    void deleteManyMultiple() {
+        List<CardList> cardLists = new ArrayList<>();
+        CardList cardList1 = new CardList();
+        CardList cardList2 = new CardList();
+        cardLists.add(cardList1);
+        cardLists.add(cardList2);
+
+        when(cardListRepositoryMock.findAll()).thenReturn(cardLists);
+
+        cardListServiceMock.deleteMany();
+
+        verify(cardListRepositoryMock).deleteAll();
+    }
+    @Test
+    void deleteManyThrowsException() {
+        doThrow(new RuntimeException("Unable to delete card lists")).when(cardListRepositoryMock).deleteAll();
+
+        //when(cardListRepositoryMock.deleteAll()).thenThrow(new RuntimeException("Unable to delete card lists"));
+
+        assertThrows(RuntimeException.class, () -> cardListServiceMock.deleteMany());
+
+        verify(cardListRepositoryMock).deleteAll();
     }
 }

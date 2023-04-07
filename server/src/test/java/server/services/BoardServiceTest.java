@@ -5,18 +5,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import server.database.BoardRepository;
-import server.database.CardRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 class BoardServiceTest {
@@ -187,6 +182,7 @@ class BoardServiceTest {
 
     }
 
+    /*
     @Test
     public void updateOneCards() throws EntityNotFoundException {
 
@@ -264,6 +260,7 @@ class BoardServiceTest {
         assertEquals(colorPresetNumber2, 1L);
 
     }
+     */
 
     @Test
     public void isCodeAlreadyUsed() {

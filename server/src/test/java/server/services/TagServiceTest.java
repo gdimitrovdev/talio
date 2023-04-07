@@ -8,6 +8,7 @@ import commons.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -89,5 +90,24 @@ class TagServiceTest {
         updatedTag.setTitle("title2");
         Tag returnedTag = tagServiceMock.updateOne(1L, updatedTag);
         assertEquals(updatedTag.getTitle(), returnedTag.getTitle());
+    }
+
+    @Test
+    void deleteMany()
+    {
+        Tag tag1 = new Tag();
+        Tag tag2 = new Tag();
+
+        List<Tag> tags = new ArrayList<>();
+
+        tagRepositoryMock.saveAll(List.of(tag1, tag2));
+
+        when(tagRepositoryMock.findAll()).thenReturn(tags);
+
+        tagServiceMock.deleteMany();
+
+        verify(tagRepositoryMock).deleteAll();
+
+        Assertions.assertEquals(0, tagRepositoryMock.count());
     }
 }
