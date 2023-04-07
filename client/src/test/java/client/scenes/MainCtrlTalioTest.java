@@ -3,6 +3,7 @@ package client.scenes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import client.utils.ServerUtils;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -66,5 +67,23 @@ public class MainCtrlTalioTest {
         expectedBoardIds.add(boardId2);
 
         assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+    }
+    @Test
+    void testWriteReadLocalData() {
+        // Prepare test data
+        Map<String, Set<Long>> testData = new HashMap<>();
+        testData.put("http://localhost:8080", new HashSet<>(Arrays.asList(1L, 2L, 3L)));
+        testData.put("http://example.com", new HashSet<>(Arrays.asList(4L, 5L, 6L)));
+
+        // Write test data to file
+        mainCtrlTalio.setJoinedBoards(testData);
+        mainCtrlTalio.writeToLocalData();
+
+        // Read test data from file
+        mainCtrlTalio.readFromLocalData();
+        Map<String, Set<Long>> result = mainCtrlTalio.getJoinedBoards();
+
+        // Assert that the test data was written and read successfully
+        assertEquals(testData, result);
     }
 }
