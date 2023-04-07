@@ -357,7 +357,7 @@ public class ServerUtils {
         try {
             return restTemplate.getForObject(restServerUrl + "/api/boards/by-code/" + code, Board.class);
         } catch (RuntimeException e) {
-            return new Board(" ", "", "", "", "", null, 0);
+            return new Board("NotFoundInSystem", "", "", "", "", null, 0);
         }
           
     }
