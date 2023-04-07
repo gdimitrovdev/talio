@@ -141,12 +141,14 @@ public class MainCtrlTalio {
     public void showJoinBoardCode() {
         primaryStageTalio.setTitle("Talio: Join an Existing Board");
         primaryStageTalio.setScene(joinBoard);
+        joinBoardCodeCtrl.refreshFieldBoardCode();
         this.listenForQuestionMarkPressed();
     }
 
     public void showCreateBoard() {
         primaryStageTalio.setTitle("Talio: Create a New Board");
         primaryStageTalio.setScene(createBoard);
+        createBoardCtrl.refreshFieldBoardName();
         this.listenForQuestionMarkPressed();
     }
 

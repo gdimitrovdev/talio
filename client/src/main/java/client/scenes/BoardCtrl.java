@@ -149,7 +149,6 @@ public class BoardCtrl implements Initializable {
                     server, this, cardList.getId());
             Platform.runLater(() -> innerHBox.getChildren().add(listComponent));
         }
-
     }
 
     // TODO I believe, we shouldn't really create the list, before the user enters the title
@@ -184,7 +183,7 @@ public class BoardCtrl implements Initializable {
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        if (position[0] != -1 && position[0] > 0 && listComponentCtrls.get(position[0] - 1).getCards().getChildren().size() > position[1]) {
+        if (position[0] != -1 && position[0] > 0 && listComponentCtrls.get(position[0] - 1).getCards().getChildren().size() > 0) {
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
             ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren().get(0)).setSelected(true);
@@ -305,13 +304,12 @@ public class BoardCtrl implements Initializable {
                     cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
                 }
                 server.moveCardToListAfterCard(cardComponentCtrls.get(position[1] - 1).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1]).getCardId());
-                listComponentCtrl.refresh();
             }
             listComponentCtrls = this.getCardListsFromBoard();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlight();
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlight();
         }
 
     }
