@@ -14,10 +14,10 @@ public class CardTest {
     @Test
     public void checkConstructorWithoutLists() {
         var list = new CardList();
-        var c = new Card("cardTitle", "desc", "red", list);
+        var c = new Card("cardTitle", "desc", list, 0);
         assertEquals("cardTitle", c.getTitle());
         assertEquals("desc", c.getDescription());
-        assertEquals("red", c.getColor());
+        assertEquals(0, c.getColorPresetNumber());
         assertEquals(list, c.getList());
         c.setId(1L);
         assertEquals(1, c.getId());
@@ -32,12 +32,12 @@ public class CardTest {
         var subtask = new Subtask("subtaskTitle", null, false);
         var subtasks = new ArrayList<Subtask>();
         subtasks.add(subtask);
-        var c = new Card("cardTitle", "desc", "red", list, tags, subtasks);
+        var c = new Card("cardTitle", "desc", 0, list, tags, subtasks);
         c.setTags(tags);
         c.setSubtasks(subtasks);
         assertEquals("cardTitle", c.getTitle());
         assertEquals("desc", c.getDescription());
-        assertEquals("red", c.getColor());
+        assertEquals(0, c.getColorPresetNumber());
         assertEquals(list, c.getList());
         assertEquals(tags, c.getTags());
         assertEquals(subtasks, c.getSubtasks());
@@ -47,7 +47,7 @@ public class CardTest {
     public void testSubtaskOperations() {
         var subtask = new Subtask("subtaskTitle", null, false);
         var subtasks = new ArrayList<Subtask>();
-        var c = new Card("cardTitle", "desc", "red", null, null, subtasks);
+        var c = new Card("cardTitle", "desc", 0, null, null, subtasks);
         c.addSubtask(subtask);
         assertTrue(c.getSubtasks().contains(subtask));
         assertEquals(c, subtask.getCard());
@@ -60,7 +60,7 @@ public class CardTest {
     public void testTagOperations() {
         var tag = new Tag("tagTitle", "green", null);
         var tags = new ArrayList<Tag>();
-        var c = new Card("cardTitle", "desc", "red", null, tags, null);
+        var c = new Card("cardTitle", "desc", 0, null, tags, null);
         c.addTag(tag);
         assertTrue(c.getTags().contains(tag));
         assertTrue(tag.getCards().contains(c));
@@ -71,23 +71,23 @@ public class CardTest {
 
     @Test
     public void equalsHashcode() {
-        var c1 = new Card("cardTitle", "desc", "red", null);
-        var c2 = new Card("cardTitle", "desc", "red", null);
+        var c1 = new Card("cardTitle", "desc", null, 0);
+        var c2 = new Card("cardTitle", "desc", null, 0);
         assertEquals(c1, c2);
         assertEquals(c1.hashCode(), c2.hashCode());
     }
 
     @Test
     public void notEqualsHashcode() {
-        var c1 = new Card("cardTitle", "desc", "red", null);
-        var c2 = new Card("differentCardTitle", "desc", "red", null);
+        var c1 = new Card("cardTitle", "desc", null, 0);
+        var c2 = new Card("differentCardTitle", "desc", null, 0);
         assertNotEquals(c1, c2);
         assertNotEquals(c1.hashCode(), c2.hashCode());
     }
 
     @Test
     public void hasToString() {
-        var actual = new Card("cardTitle", "desc", "red", null).toString();
+        var actual = new Card("cardTitle", "desc",  null, 0).toString();
         assertTrue(actual.contains(Card.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
         assertTrue(actual.contains("title"));

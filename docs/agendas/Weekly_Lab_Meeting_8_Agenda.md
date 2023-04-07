@@ -9,14 +9,14 @@ Location: *DW IZ2*
 Date: *Tuesday, 4th of April 2023*
 
 Time: *14:15*
-> Record start time of meeting
+> Meeting started at 14:16
 
 Attendees:
 - Team 69: Georgi Dimitrov, Dimana Stoyanova, Matei Bordea, Pedro Gomes Moreira, Veselin Mitev
   - Chair: Pedro Gomes Moreira
   - Minutetaker: Veselin Mitev
 - TA: Alexandra Ioana Neagu
-> Record who attended the meeting
+> Everyone was present
 
 ## Agenda Items
 1. Opening by chair
@@ -27,29 +27,28 @@ Attendees:
     > Make any necessary changes to the agenda and upload them so that everyone can see them
 4. Admin functionality
     1. For the admin functionality, we created another controller that provides endpoints, which are admin/boards, admin/fill, admin/clear, admin/refill, etc., which can be accessed through a web browser. Does this satisfy the requirement of having a server password? Our idea is that these endpoints are unknown to the user and cannot be accessed through the Talio application.
-    > Record answer from the TA
+    > Sebastian was not sure. We should ask in the Town Square. He was inclined to say that it meets the requirements, but we shoul make sure.
     2. For the requirement of deleting boards from the overview as an admin: if the users can delete boards, admins can also do that. Does this satisfy the requirement?
-    > Record answer from the TA
-5. Basic requirements
-    1. For the requirement "To open task details through double-click, so I can add further details": can we also do this with a single click?
-    > Record answer from the TA
-6. Testing
+    > It satisfies the requirement.
+5. Testing
     1. What percentage of test coverage should we aim for? We currently have almost 100% for commons, 50% for server, and 0% for client.
-    > Record answer from the TA
+    > We should aim for around 80% coverage. We should focus on the client, because we need to have testing on all parts of the program. We only need to test the ServerUtils class in the Client.
     2. Are the server tests sufficient if they are simple? Should we aim to write more extensive tests?
-    > Record answer from the TA
-7. Product Showcase
-    1. Vesko - Did the server-client connection, but some errors happened
+    > We should have more complex tests. The simple tests meet the coverage requirement. More complex tests involve testing for edge cases.
+    3. How should we test the UI since Sebastian said we should extract the logic from controllers to services, and our logic is manipulating UI and not data?
+    > The ServerUtils should be tested. We should hear back about whether we should test the JavaFX controllers.
+6. Product Showcase
+    1. Vesko - Did the server-client connection, but some errors happened. Fixed the list and card overview components (not merged yet).
     2. Pedro - Modified common classes, finished the ShareBoard, created BoardSettings, did tests for the server controllers, fixed tags in card popup. Next task is adding tag functionality to BoardSettings
-    3. Dimana - Did tests for server services. Currently working on BoardSettings. 
-    4. George - Fixed issues for the client-server connection. After that, the application was fixed in many aspects and the basic requirements were done. Currently working on saving recent boards locally
-    5. Agnese - researched about client side testing and tried her best to do it but could not. Currently working on keyboard shortcuts.
-    6. Matei - currently working on UI Fixes, which are changes to the UI to improve coherency and usability
-    > Record feedback by the TA
-8. Task distribution 
+    3. Dimana - Did tests for server services. Currently working on BoardSettings: she will finish it soon. 
+    4. George - Fixed issues for the client-server connection. After that, the application was fixed in many aspects and the basic requirements were done. Worked on saving recent boards locally. Currently working on reordering subtasks.  
+    5. Agnese - researched about client side testing and tried her best to do it but could not. Implemented most of the keyboard shortcuts, except for C and T, currently working on these.
+    6. Matei - working on UI Fixes, which are changes to the UI to improve coherency and usability. Currently working on making the connection smoother.
+    > We should try not to introduce bugs on main when doing an MR. A good improvement from the version a few days ago. Matei is a bit behind in the code contributions, but he has time to catch up and he was not flagged by the automatic system.
+7. Task distribution 
     1. What should we focus more on: doing the remaining epics, testing, refactoring code, making the UI nicer?
-10. Additional Questions
+8. Additional Questions
     1. Does anyone have any other questions for the TA before the meeting closes?
-    > Record any additional questions and responses here, even if they were asked earlier
-11. Closure
-    > Record end time of meeting
+    > Dimana asked a question about the Teamwork Self Reflection and the TA said that she doesn't need to do anything more.
+9. Closure
+    > 14:41

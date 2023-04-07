@@ -1,6 +1,8 @@
 package server.services;
 
 import commons.Board;
+import commons.Card;
+import commons.CardList;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -10,16 +12,19 @@ import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.DatatypeConverter;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
+import server.database.CardRepository;
 
 @Service
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final CardRepository cardRepository;
     private final MessageDigest messageDigest;
     private final Random random;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, CardRepository cardRepository) {
         this.boardRepository = boardRepository;
+        this.cardRepository = cardRepository;
 
         try {
             this.messageDigest = MessageDigest.getInstance("md5");
@@ -57,20 +62,35 @@ public class BoardService {
     public Board updateOne(Long id, Board board) throws EntityNotFoundException {
         Board existingBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
-        if (isCodeAlreadyUsed(board.getCode())) {
-            throw new IllegalArgumentException("This code is already used by a board");
-        }
-        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
-            throw new IllegalArgumentException("This read only code is already used by a board");
-        }
-        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
-            throw new IllegalArgumentException("Code and readOnlyCode must be different");
+        //        if (isCodeAlreadyUsed(board.getCode())) {
+        //            throw new IllegalArgumentException("This code is already used by a board");
+        //        }
+        //        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
+        //            throw new IllegalArgumentException("This read only code is already used by a board");
+        //        }
+        //        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
+        //            throw new IllegalArgumentException("Code and readOnlyCode must be different");
+        //        }
+        if (!existingBoard.getDefaultPresetNum().equals(board.getDefaultPresetNum())) {
+            for (CardList cardList : board.getLists()) {
+                for (Card card : cardList.getCards()) {
+                    if (card.getColorPresetNumber() == existingBoard.getDefaultPresetNum()) {
+                        Card newCard = cardRepository.findById(card.getId()).get();
+                        newCard.setColorPresetNumber(board.getDefaultPresetNum());
+                        cardRepository.saveAndFlush(newCard);
+
+                    }
+                }
+            }
         }
 
-        existingBoard.setColor(board.getColor());
+        existingBoard.setBoardColor(board.getBoardColor());
+        existingBoard.setListsColor(board.getListsColor());
         existingBoard.setName(board.getName());
         existingBoard.setCode(board.getCode());
         existingBoard.setReadOnlyCode(board.getReadOnlyCode());
+        existingBoard.setDefaultPresetNum(board.getDefaultPresetNum());
+        existingBoard.setCardColorPresets(board.getCardColorPresets());
 
         return boardRepository.save(existingBoard);
     }

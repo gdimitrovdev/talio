@@ -31,9 +31,8 @@ public class Card implements Serializable {
     @Basic(optional = false)
     private String title;
     private String description;
-    private String color;
-
     private Long listPriority;
+    private Integer colorPresetNumber;
 
     public Long getListPriority() {
         return listPriority;
@@ -55,19 +54,20 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public Card(String title, String description, String color, CardList list) {
+    public Card(String title, String description, CardList list,
+                Integer colorPresetNumber) {
+        setColorPresetNumber(colorPresetNumber);
         setTitle(title);
         setDescription(description);
-        setColor(color);
         setList(list);
         setListPriority(-1L);
     }
 
-    public Card(String title, String description, String color, CardList list, List<Tag> tags,
-            List<Subtask> subtasks) {
+    public Card(String title, String description, Integer colorPresetNumber, CardList list, List<Tag> tags,
+                List<Subtask> subtasks) {
         this.title = title;
         this.description = description;
-        this.color = color;
+        this.colorPresetNumber = colorPresetNumber;
         this.list = list;
         this.tags = tags;
         this.subtasks = subtasks;
@@ -118,14 +118,6 @@ public class Card implements Serializable {
         this.description = description;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public CardList getList() {
         return list;
     }
@@ -163,5 +155,13 @@ public class Card implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+    }
+
+    public Integer getColorPresetNumber() {
+        return colorPresetNumber;
+    }
+
+    public void setColorPresetNumber(Integer colorPresetNumber) {
+        this.colorPresetNumber = colorPresetNumber;
     }
 }

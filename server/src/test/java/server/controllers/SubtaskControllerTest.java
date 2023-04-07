@@ -77,7 +77,7 @@ class SubtaskControllerTest {
     @Test
     void deleteOne() {
         Subtask s = new Subtask("Subt", null, false);
-        Card c = new Card("My cards", "Desc", "color", null);
+        Card c = new Card("My cards", "Desc", null, 1);
 
         s.setId(1L);
         c.setId(1L);

@@ -56,7 +56,7 @@ public class AdminControllerTest {
 
     @Test
     void getBoards() {
-        Board b = new Board("My board", "Bla", "Ble", "Bli");
+        Board b = new Board("My board", "Bla", "Ble", "Bli", "", null, 0);
         b.setId(3L);
 
         when(boardServiceMock.getMany()).thenReturn(List.of(b));

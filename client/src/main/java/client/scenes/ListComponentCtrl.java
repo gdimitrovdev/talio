@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.TitleField;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
@@ -10,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -24,23 +24,22 @@ public class ListComponentCtrl extends VBox {
     private Object updateList;
     private Long listId;
 
+    private boolean scrollToBottom = false;
+
     @FXML
     private HBox titleHolder;
 
     @FXML
-    private TextField titleField;
+    private TitleField titleField;
 
     @FXML
-    private Button deleteListBtn;
+    public Button deleteListBtn;
 
     @FXML
     private VBox cards;
 
     @FXML
-    private Button addCardBtn;
-
-    @FXML
-    private VBox listVBox;
+    public Button addCardBtn;
 
     @FXML
     ScrollPane scrollPane = new ScrollPane();
@@ -62,6 +61,12 @@ public class ListComponentCtrl extends VBox {
             throw new RuntimeException(e);
         }
 
+        titleField.init("You should not see this", (newTitle) -> {
+            CardList currentList = server.getCardList(listId);
+            currentList.setTitle(newTitle);
+            server.updateCardList(currentList);
+        });
+
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             event.consume();
@@ -79,12 +84,7 @@ public class ListComponentCtrl extends VBox {
 
         this.setOnDragExited(event -> removeHighlight());
 
-        titleField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            titleField.selectAll();
-        });
-
         refresh();
-        //scrollPane.setContent(this);
 
         // Updates that the list should handle
         // - list: card deleted DONE
@@ -93,17 +93,18 @@ public class ListComponentCtrl extends VBox {
         // - list: update list DONE
         server.registerForMessages("/topic/lists", Card.class, card -> {
             if (card.getList().getId().equals(listId)) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        refresh();
-                    }
-                });
+                Platform.runLater(this::refresh);
             }
         });
 
         server.registerForMessages("/topic/lists", CardList.class, cardList -> {
             if (cardList.getId().equals(listId)) {
+                Platform.runLater(this::refresh);
+            }
+        });
+
+        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
+            if (cardReceived.getList().getId().equals(listId)) {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -120,11 +121,11 @@ public class ListComponentCtrl extends VBox {
 
     // TODO replace this with standard colors
     public void highlight() {
-        listVBox.setStyle("-fx-border-color: blue;");
+        this.setStyle("-fx-border-color: blue;");
     }
 
     public void removeHighlight() {
-        listVBox.setStyle("-fx-border-color: black;");
+        this.setStyle("-fx-border-color: black;");
     }
 
     public void close() {
@@ -133,7 +134,16 @@ public class ListComponentCtrl extends VBox {
     }
 
     public void refresh() {
-        titleField.setText(server.getCardList(listId).getTitle());
+        //get the color of the lists
+        String[] colorsLists = server.getCardList(listId).
+                getBoard().getListsColor().split("/"); // Split the string into two parts
+        String bgColorLists = colorsLists[0];
+        String fontColorLists = colorsLists[1];
+        this.setStyle("-fx-background-color:" + bgColorLists);
+        this.titleField.setStyle("-fx-text-fill: " + fontColorLists);
+        this.deleteListBtn.setStyle("-fx-text-fill: " + fontColorLists);
+        this.addCardBtn.setStyle("-fx-text-fill: " + fontColorLists);
+        titleField.setTitle(server.getCardList(listId).getTitle());
         System.out.println("refreshing: " + listId);
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
@@ -178,29 +188,18 @@ public class ListComponentCtrl extends VBox {
         }
     }
 
-    public void updateListTitle() {
-        CardList currentList = server.getCardList(listId);
-        currentList.setTitle(titleField.getText());
-        server.updateCardList(currentList);
-    }
-
     @FXML
     private void deleteList() {
         server.deleteCardList(listId);
-        /*
-        // Get the parent of the list component, which is the board
-        Parent parent = this.getParent();
-        // Remove the list component from the parent
-        if (parent instanceof Pane) {
-            Pane parentPane = (Pane) parent;
-            parentPane.getChildren().remove(this);
-        }
-        */
     }
 
     @FXML
     protected void addCard() {
-        Card card = server.createCard(new Card("Untitled", "", "", server.getCardList(listId)));
-        server.moveCardToListLast(card.getId(), listId);
+        cards.getChildren().add(new CardComponentCtrl(mainCtrlTalio, server, this));
+        // Scroll to bottom
+        Platform.runLater(() -> {
+            scrollPane.setVvalue(1);
+        });
     }
+
 }

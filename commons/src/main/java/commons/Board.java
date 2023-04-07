@@ -2,14 +2,13 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +18,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+//circular reference problem
 @Entity
-@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,7 +36,14 @@ public class Board implements Serializable {
     @Column(unique = true)
     private String readOnlyCode;
 
-    private String color;
+    private String listsColor;
+
+    private String boardColor;
+
+    @ElementCollection
+    private List<String> cardColorPresets;
+
+    private Integer defaultPresetNum;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval =
             true)
@@ -53,7 +60,10 @@ public class Board implements Serializable {
         this.name = board.name;
         this.code = board.code;
         this.readOnlyCode = board.readOnlyCode;
-        this.color = board.color;
+        this.boardColor = board.boardColor;
+        this.listsColor = board.listsColor;
+        this.cardColorPresets = board.cardColorPresets;
+        this.defaultPresetNum = board.defaultPresetNum;
         if (board.lists != null) {
             this.lists = new ArrayList<CardList>(board.lists);
         }
@@ -62,21 +72,29 @@ public class Board implements Serializable {
         }
     }
 
-    public Board(String name, String code, String readOnlyCode, String color) {
+    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<String> cardColorPresets,
+                 Integer defaultPresetNum) {
+        setDefaultPresetNum(defaultPresetNum);
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);
-        setColor(color);
+        setBoardColor(boardColor);
+        setListsColor(listsColor);
+        setCardColorPresets(cardColorPresets);
+
     }
 
-    public Board(String name, String code, String readOnlyCode, String color, List<CardList> lists,
-            List<Tag> tags) {
+    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<CardList> lists,
+                 List<Tag> tags, List<String> cardColorPresets, Integer defaultPresetNum) {
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);
-        setColor(color);
+        setListsColor(listsColor);
+        setBoardColor(boardColor);
         setLists(lists);
         setTags(tags);
+        setCardColorPresets(cardColorPresets);
+        setDefaultPresetNum(defaultPresetNum);
     }
 
     public void addCardList(CardList list) {
@@ -131,14 +149,6 @@ public class Board implements Serializable {
         this.readOnlyCode = readOnlyCode;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public List<CardList> getLists() {
         return lists;
     }
@@ -168,5 +178,37 @@ public class Board implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+    }
+
+    public String getListsColor() {
+        return listsColor;
+    }
+
+    public void setListsColor(String listsColor) {
+        this.listsColor = listsColor;
+    }
+
+    public String getBoardColor() {
+        return boardColor;
+    }
+
+    public void setBoardColor(String boardColor) {
+        this.boardColor = boardColor;
+    }
+
+    public List<String> getCardColorPresets() {
+        return cardColorPresets;
+    }
+
+    public void setCardColorPresets(List<String> cardColorPresets) {
+        this.cardColorPresets = cardColorPresets;
+    }
+
+    public Integer getDefaultPresetNum() {
+        return defaultPresetNum;
+    }
+
+    public void setDefaultPresetNum(Integer defaultPresetNum) {
+        this.defaultPresetNum = defaultPresetNum;
     }
 }

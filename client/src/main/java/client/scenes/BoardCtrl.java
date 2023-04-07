@@ -13,6 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 public class BoardCtrl implements Initializable {
@@ -22,6 +24,12 @@ public class BoardCtrl implements Initializable {
     private CardComponentCtrl currentSelectedCard;
     private boolean droppedOnCard = false;
     private Object updateBoard, updateList;
+
+    @FXML
+    private AnchorPane pane;
+
+    @FXML
+    private ToolBar toolbar;
 
     @FXML
     private ScrollPane root;
@@ -107,12 +115,32 @@ public class BoardCtrl implements Initializable {
 
     public void refresh() {
         var board = server.getBoard(boardId);
+
+        //split the string with the colors
+        String[] colors = board.getBoardColor().split("/"); // Split the string into two parts
+        String bgColor = colors[0]; // Get the first part
+        String fontColor = colors[1];
+        //changing the color of the board
+        outerHBox.setStyle("-fx-background-color:" + bgColor);
+        toolbar.setStyle("-fx-background-color:" + bgColor);
+
+        //changing the color of the board font
+        boardNameLabel.setStyle("-fx-text-fill: " + fontColor);
+        settingsBTN.setStyle("-fx-text-fill: " + fontColor);
+        shareBTN.setStyle("-fx-text-fill: " + fontColor);
+        newListButton.setStyle("-fx-text-fill: " + fontColor);
+        backHomeBTN.setStyle("-fx-text-fill: " + fontColor);
+
+
+
         boardNameLabel.setText(board.getName());
-        innerHBox.getChildren().clear();
+        Platform.runLater(() -> innerHBox.getChildren().clear());
         for (CardList cardList : board.getLists()) {
-            innerHBox.getChildren().add(new ListComponentCtrl(mainCtrlTalio, server, this,
-                    cardList.getId()));
+            ListComponentCtrl listComponent = new ListComponentCtrl(mainCtrlTalio,
+                    server, this, cardList.getId());
+            Platform.runLater(() -> innerHBox.getChildren().add(listComponent));
         }
+
     }
 
     // TODO I believe, we shouldn't really create the list, before the user enters the title
