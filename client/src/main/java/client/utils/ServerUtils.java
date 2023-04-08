@@ -247,7 +247,7 @@ public class ServerUtils {
     }
 
     public void deleteTag(Long tagId) {
-        webTarget.path("/api/lists/" + tagId)
+        webTarget.path("/api/tags/" + tagId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -354,14 +354,12 @@ public class ServerUtils {
 
     public Board joinBoard(String code) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(restServerUrl + "/api/boards/by-code/" + code,
-                Board.class);
-        /*
-        return webTarget.path("api/boards/by-code/" + code)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<Board>() {
-                });*/
+        try {
+            return restTemplate.getForObject(restServerUrl + "/api/boards/by-code/" + code, Board.class);
+        } catch (RuntimeException e) {
+            return new Board("NotFoundInSystem", "", "", "", "", null, 0);
+        }
+          
     }
 
     public Card getCard(Long cardId) {

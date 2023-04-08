@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root    type="HBox"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            HBox.hgrow="ALWAYS"
+            spacing="5"
+            minHeight="40"
+            maxHeight="260">
+
+    <TextField fx:id="tagTitle" minWidth="105" minHeight="26">
+        <tooltip><Tooltip text="Change the tag's title" /></tooltip>
+    </TextField>
+    <ColorPicker fx:id="tagForeground" maxWidth="38" minWidth="26" >
+        <tooltip><Tooltip text="Foreground color" /></tooltip>
+    </ColorPicker>
+    <ColorPicker fx:id="tagBackground" maxWidth="38" minWidth="26" >
+        <tooltip><Tooltip text="Background color" /></tooltip>
+    </ColorPicker>
+    <Button fx:id="buttonSave" onAction="#saveTag" text="Save" minWidth="60">
+        <tooltip><Tooltip text="Save this tag" /></tooltip>
+    </Button>
+    <Button fx:id="buttonDelete" onAction="#deleteTag" text="x">
+        <tooltip><Tooltip text="Delete this tag" /></tooltip>
+    </Button>
+
+</fx:root>

@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
     private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard,
-            boardSettings;
+            boardSettings, tagManagement;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
@@ -21,6 +22,7 @@ public class MainCtrlTalio {
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
+    private TagManagementCtrl tagManagementCtrl;
     private ServerUtils serverUtils;
     private Map<String, Set<Long>> joinedBoards;
 
@@ -37,7 +39,8 @@ public class MainCtrlTalio {
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
-            Pair<BoardSettingsCtrl, Parent> boardSettingsPair) {
+            Pair<BoardSettingsCtrl, Parent> boardSettingsPair,
+            Pair<TagManagementCtrl, Parent> tagManagementPair) {
 
         readFromLocalData();
 
@@ -63,6 +66,9 @@ public class MainCtrlTalio {
 
         this.boardSettingsCtrl = boardSettingsPair.getKey();
         this.boardSettings = new Scene(boardSettingsPair.getValue());
+
+        this.tagManagementCtrl = tagManagementPair.getKey();
+        this.tagManagement = new Scene(tagManagementPair.getValue());
 
         // showHome();
         this.showServerConnection();
@@ -125,6 +131,13 @@ public class MainCtrlTalio {
         } catch (Exception e) { }
     }
 
+    public void alert(String title, String message) {
+        Alert box = new Alert(Alert.AlertType.WARNING);
+        box.setTitle(title);
+        box.setContentText(message);
+        box.showAndWait();
+    }
+
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
@@ -134,11 +147,13 @@ public class MainCtrlTalio {
     public void showJoinBoardCode() {
         primaryStageTalio.setTitle("Talio: Join an Existing Board");
         primaryStageTalio.setScene(joinBoard);
+        joinBoardCodeCtrl.refreshFieldBoardCode();
     }
 
     public void showCreateBoard() {
         primaryStageTalio.setTitle("Talio: Create a New Board");
         primaryStageTalio.setScene(createBoard);
+        createBoardCtrl.refreshFieldBoardName();
     }
 
     public void showServerConnection() {
@@ -147,7 +162,6 @@ public class MainCtrlTalio {
         serverConnectionCtrl.refreshServerAddress();
     }
 
-    //TODO: this method needs to be finished after someone does the settings
     public void showBoardSettings(Board board) {
         boardSettingsCtrl.initialize(board);
         Stage stage = new Stage();
@@ -156,7 +170,6 @@ public class MainCtrlTalio {
         stage.show();
     }
 
-    //TODO: this method needs to be finished after someone does the shareboard popup
     public void showShareBoard(Board board) {
         shareBoardCtrl.initialize(board);
         Stage stage = new Stage();
@@ -174,5 +187,13 @@ public class MainCtrlTalio {
         boardComponentCtrl.initialize(board.getId());
         primaryStageTalio.setTitle("Talio: Board");
         primaryStageTalio.setScene(boardComponent);
+    }
+
+    public void showTagManagement(Board board) {
+        tagManagementCtrl.initialize(board);
+        Stage stage = new Stage();
+        stage.setTitle("Talio: Manage Your Tags");
+        stage.setScene(tagManagement);
+        stage.show();
     }
 }

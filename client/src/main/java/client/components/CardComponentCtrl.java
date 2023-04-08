@@ -1,6 +1,7 @@
-package client.scenes;
+package client.components;
 
-import client.components.TitleField;
+import client.scenes.CardPopupCtrl;
+import client.scenes.MainCtrlTalio;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
@@ -79,7 +80,7 @@ public class CardComponentCtrl extends AnchorPane {
         addClickedEventHandler();
 
         setOnMouseDoubleClicked((me) -> {
-            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
+            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));
             try {
                 cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
                         server.getCard(cardId), server));
@@ -236,7 +237,8 @@ public class CardComponentCtrl extends AnchorPane {
                 rect.setWidth(70);
                 // TODO fix this, when we figure out the colors
                 //rect.setFill(Color.web("0x" + tag.getColor().substring(2)));
-                rect.setFill(Color.web(tag.getColor()));
+                String[] tagColors = tag.getColor().split("/");
+                rect.setFill(Color.web(tagColors[1]));
                 // TODO perhaps move those to a CSS file
                 rect.setArcHeight(5);
                 rect.setArcWidth(5);
