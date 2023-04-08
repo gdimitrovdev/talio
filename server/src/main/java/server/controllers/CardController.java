@@ -3,6 +3,7 @@ package server.controllers;
 import commons.Card;
 import commons.CardList;
 import commons.Topics;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -121,20 +122,11 @@ public class CardController {
             @PathVariable Long listId,
             @PathVariable Long afterCardId) {
         try {
-            Long originalListId;
-            try {
-                originalListId = cardService.getOne(id).get().getList().getId();
-            } catch (NullPointerException e) {
-                originalListId = 0L;
-            }
-            cardService.moveToListAfterCard(id, listId, afterCardId);
-            CardList list = cardListService.getOne(listId).get();
-            template.convertAndSend("/topic/lists", list);
-            if (originalListId != 0L && !originalListId.equals(list.getId())) {
-                template.convertAndSend(Topics.LISTS.toString(),
-                        cardListService.getOne(originalListId).get());
-            }
-            return ResponseEntity.ok(list);
+            CardList newList = cardService.moveToListAfterCard(id, listId, afterCardId).getList();
+
+            template.convertAndSend(Topics.LISTS.toString(), newList);
+
+            return ResponseEntity.ok(newList);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -146,20 +138,11 @@ public class CardController {
     public ResponseEntity<CardList> moveToListLast(@PathVariable Long id,
             @PathVariable Long listId) {
         try {
-            Long originalListId;
-            try {
-                originalListId = cardService.getOne(id).get().getList().getId();
-            } catch (NullPointerException e) {
-                originalListId = 0L;
-            }
-            cardService.moveToListLast(id, listId);
-            CardList list = cardListService.getOne(listId).get();
-            template.convertAndSend(Topics.LISTS.toString(), list);
-            if (originalListId != 0L && !originalListId.equals(list.getId())) {
-                template.convertAndSend(Topics.LISTS.toString(),
-                        cardListService.getOne(originalListId).get());
-            }
-            return ResponseEntity.ok(list);
+            CardList newList = cardService.moveToListLast(id, listId).getList();
+
+            template.convertAndSend(Topics.LISTS.toString(), newList);
+
+            return ResponseEntity.ok(newList);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

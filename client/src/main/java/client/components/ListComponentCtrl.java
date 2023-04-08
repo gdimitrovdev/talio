@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -149,7 +150,7 @@ public class ListComponentCtrl extends VBox {
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
         List<Card> cardsOfList = server.getCardList(listId).getCards();
-        for (Card card : cardsOfList) {
+        for (Card card : cardsOfList.stream().sorted(Comparator.comparing(Card::getListPriority)).toList()) {
             var child = new CardComponentCtrl(mainCtrlTalio, server, card.getId());
 
             child.setOnMousePressed(event -> boardCtrl.setCurrentSelectedCard(child));

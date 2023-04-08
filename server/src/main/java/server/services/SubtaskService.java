@@ -37,22 +37,26 @@ public class SubtaskService {
      */
     public Subtask createOne(Subtask subtask) {
         subtask.setPositionInCard(0L);
-        Subtask newSubtask = subtaskRepository.save(subtask);
-        Card card;
-        try {
-            card = cardRepository.findById(subtask.getCard().getId()).get();
-        } catch (Exception ignored) {
-            throw new EntityNotFoundException("Card not found");
+
+        if (subtask.getCard() != null) {
+            Card card = cardRepository.findById(subtask.getCard().getId()).get();
+
+            if (card.getSubtasks().size() == 0) {
+                subtask.setPositionInCard(0L);
+            } else {
+                subtask.setPositionInCard(
+                        card.getSubtasks().stream().max(Comparator.comparing(
+                                Subtask::getPositionInCard
+                        )).get().getPositionInCard() + 1L
+                );
+            }
+
+            card.addSubtask(subtask);
+
+            subtask = subtaskRepository.save(subtask);
         }
-        if (card.getSubtasks().size() != 0) {
-            newSubtask.setPositionInCard(
-                    card.getSubtasks().stream().max(Comparator.comparing(
-                            Subtask::getPositionInCard
-                    )).get().getPositionInCard() + 1L
-            );
-            subtaskRepository.save(newSubtask);
-        }
-        return newSubtask;
+
+        return subtask;
     }
 
     public void deleteOne(Long id) {
