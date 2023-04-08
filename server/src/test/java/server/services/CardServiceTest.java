@@ -116,10 +116,8 @@ class CardServiceTest {
 
         Card createdCard = cardServiceMock.createOne(newCard);
         //System.out.println(newCard.getListPriority());
-        assertEquals(createdCard.getListPriority(),1L);
+        assertEquals(createdCard.getListPriority(), 1L);
     }
-
-
 
     @Test
     void testDeleteOne() {
@@ -221,6 +219,7 @@ class CardServiceTest {
             cardServiceMock.moveToListLast(cardId, listId);
         });
     }
+
     @Test
     void testAddTagToCard() {
         Long tagId = 1L;
@@ -241,7 +240,7 @@ class CardServiceTest {
         assertEquals(tag, result.getTags().get(0));
 
         verify(tagRepositoryMock).findById(tagId);
-        verify(cardRepositoryMock,times(2)).findById(cardId);
+        verify(cardRepositoryMock, times(2)).findById(cardId);
         verify(cardRepositoryMock).save(card);
     }
 
@@ -267,7 +266,7 @@ class CardServiceTest {
         verify(cardRepositoryMock, times(1)).findById(cardId);
         verify(cardRepositoryMock, times(1)).save(card);
 
-}
+    }
 
     @Test
     void testRemoveTagFromCard() {
@@ -292,6 +291,7 @@ class CardServiceTest {
         verify(tagRepositoryMock).findById(tagId);
         verify(cardRepositoryMock).save(card);
     }
+
     @Test
     void testRemoveTagFromCardException() {
         Long tagId = 1L;
@@ -316,6 +316,7 @@ class CardServiceTest {
         verify(cardRepositoryMock, times(1)).save(card);
 
     }
+
     @Test
     void testDeleteMany() {
         Card card1 = new Card();

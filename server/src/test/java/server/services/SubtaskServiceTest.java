@@ -130,9 +130,9 @@ class SubtaskServiceTest {
         assertEquals(updatedSubtask.getTitle(), returnedSubtask.getTitle());
 
     }
+
     @Test
-    void deleteMany()
-    {
+    void deleteMany() {
         Subtask subtask1 = new Subtask();
         Subtask subtask2 = new Subtask();
 

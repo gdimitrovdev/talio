@@ -129,6 +129,7 @@ class CardListServiceTest {
 
         verify(cardListRepositoryMock).deleteAll();
     }
+
     @Test
     void deleteManyThrowsException() {
         doThrow(new RuntimeException("Unable to delete card lists")).when(cardListRepositoryMock).deleteAll();

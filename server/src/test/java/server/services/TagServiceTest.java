@@ -93,8 +93,7 @@ class TagServiceTest {
     }
 
     @Test
-    void deleteMany()
-    {
+    void deleteMany() {
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
 
