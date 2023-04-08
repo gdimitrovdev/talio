@@ -1,6 +1,7 @@
 package server.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,8 +29,9 @@ class SubtaskServiceTest {
 
     @Mock
     private CardRepository cardRepositoryMock;
+    
     @InjectMocks
-    private SubtaskService subtaskServiceMock;
+    private SubtaskService subtaskService;
 
     @BeforeEach
     public void setup() {
@@ -46,7 +48,7 @@ class SubtaskServiceTest {
 
         when(subtaskRepositoryMock.findAll()).thenReturn(subtasks);
 
-        List<Subtask> returnedTasks = subtaskServiceMock.getMany();
+        List<Subtask> returnedTasks = subtaskService.getMany();
         assertEquals(subtask1, returnedTasks.get(0));
         assertEquals(subtask2, returnedTasks.get(1));
 
@@ -59,22 +61,25 @@ class SubtaskServiceTest {
         subtask.setId(taskId);
         when(subtaskRepositoryMock.findById(taskId)).thenReturn(Optional.of(subtask));
 
-        Optional<Subtask> returnedTask = subtaskServiceMock.getOne(taskId);
+        Optional<Subtask> returnedTask = subtaskService.getOne(taskId);
         assertEquals(subtask, returnedTask.get());
     }
 
     @Test
-    void createOneWhenEmpty() {
-        Subtask task = new Subtask();
+    void createOne() {
+        Card card = new Card();
+        card.setId(1L);
+        Subtask task = new Subtask("title", card, false);
 
         when(subtaskRepositoryMock.save(task)).thenReturn(task);
+        when(cardRepositoryMock.findById(card.getId())).thenReturn(Optional.of(card));
 
-        Subtask returnedSubtask = subtaskServiceMock.createOne(task);
+        Subtask returnedSubtask = subtaskService.createOne(task);
         assertEquals(task, returnedSubtask);
     }
 
     @Test
-    void createOne() {
+    void createOneWithData() {
         Card card = new Card();
         card.setId(1L);
 
@@ -96,8 +101,6 @@ class SubtaskServiceTest {
         Subtask subtask = new Subtask();
         subtask.setCard(card);
 
-        //System.out.println(subtask2.getPositionInCard());
-
         when(subtaskRepositoryMock.save(subtask)).thenReturn(subtask);
         when(cardRepositoryMock.findById(card.getId())).thenReturn(Optional.of(card));
 
@@ -107,10 +110,43 @@ class SubtaskServiceTest {
     }
 
     @Test
+    void createOneWithInvalidCard() {
+        Card card = new Card();
+        card.setId(1L);
+        Subtask task = new Subtask("title", card, false);
+
+        when(subtaskRepositoryMock.save(task)).thenReturn(task);
+        when(cardRepositoryMock.findById(card.getId())).thenReturn(Optional.empty());
+
+        assertThrows(Exception.class, () -> subtaskService.createOne(task));
+    }
+
+    @Test
+    void createOneInCardWithOtherSubtasks() {
+        Card card = new Card();
+        card.setId(1L);
+        Subtask otherSubtask = new Subtask("title", card, false);
+        otherSubtask.setPositionInCard(0L);
+        card.getSubtasks().add(otherSubtask);
+        Subtask task = new Subtask("title", card, false);
+
+
+        when(subtaskRepositoryMock.save(task)).thenReturn(task);
+        when(cardRepositoryMock.findById(card.getId())).thenReturn(Optional.of(card));
+
+        Subtask newTask = new Subtask("title", card, false);
+        newTask.setPositionInCard(1L);
+
+        task = subtaskService.createOne(task);
+
+        assertEquals(task, newTask);
+    }
+
+    @Test
     void deleteOne() {
         when(subtaskRepositoryMock.existsById(1L)).thenReturn(true);
 
-        subtaskServiceMock.deleteOne(1L);
+        subtaskService.deleteOne(1L);
 
         verify(subtaskRepositoryMock).deleteById(1L);
     }
@@ -126,7 +162,7 @@ class SubtaskServiceTest {
 
         Subtask updatedSubtask = new Subtask();
         updatedSubtask.setTitle("title2");
-        Subtask returnedSubtask = subtaskServiceMock.updateOne(1L, updatedSubtask);
+        Subtask returnedSubtask = subtaskService.updateOne(1L, updatedSubtask);
         assertEquals(updatedSubtask.getTitle(), returnedSubtask.getTitle());
 
     }

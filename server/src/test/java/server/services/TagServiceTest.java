@@ -1,6 +1,7 @@
 package server.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +29,7 @@ class TagServiceTest {
     private BoardRepository boardRepositoryMock;
 
     @InjectMocks
-    private TagService tagServiceMock;
+    private TagService tagService;
 
     @BeforeEach
     public void setup() {
@@ -45,7 +46,7 @@ class TagServiceTest {
 
         when(tagRepositoryMock.findAll()).thenReturn(tags);
 
-        List<Tag> returnedTags = tagServiceMock.getMany();
+        List<Tag> returnedTags = tagService.getMany();
         assertEquals(tag1, returnedTags.get(0));
         assertEquals(tag2, returnedTags.get(1));
 
@@ -58,18 +59,33 @@ class TagServiceTest {
         tag.setId(tagId);
         when(tagRepositoryMock.findById(tagId)).thenReturn(Optional.of(tag));
 
-        Optional<Tag> returnedTag = tagServiceMock.getOne(tagId);
+        Optional<Tag> returnedTag = tagService.getOne(tagId);
         assertEquals(tag, returnedTag.get());
     }
 
     @Test
     void createOne() {
-        Tag tag = new Tag();
+        Board board = new Board();
+        board.setId(1L);
+        Tag tag = new Tag("title", "color", board);
+        when(boardRepositoryMock.findById(board.getId())).thenReturn(Optional.of(board));
 
         when(tagRepositoryMock.save(tag)).thenReturn(tag);
 
-        Tag returnedTag = tagServiceMock.createOne(tag);
+        Tag returnedTag = tagService.createOne(tag);
         assertEquals(tag, returnedTag);
+    }
+
+    @Test
+    void createOneWithInvalidBoard() {
+        Board board = new Board();
+        board.setId(1L);
+        Tag tag = new Tag("title", "color", board);
+        when(boardRepositoryMock.findById(board.getId())).thenReturn(Optional.empty());
+        when(tagRepositoryMock.save(tag)).thenReturn(tag);
+        assertThrows(Exception.class, () -> {
+            tagService.createOne(tag);
+        });
     }
 
     @Test
@@ -78,7 +94,7 @@ class TagServiceTest {
         Tag t = new Tag("Title", "Red", b);
         when(tagRepositoryMock.findById(1L)).thenReturn(Optional.of(t));
 
-        tagServiceMock.deleteOne(1L);
+        tagService.deleteOne(1L);
 
         verify(tagRepositoryMock).deleteById(1L);
     }
@@ -94,7 +110,7 @@ class TagServiceTest {
 
         Tag updatedTag = new Tag();
         updatedTag.setTitle("title2");
-        Tag returnedTag = tagServiceMock.updateOne(1L, updatedTag);
+        Tag returnedTag = tagService.updateOne(1L, updatedTag);
         assertEquals(updatedTag.getTitle(), returnedTag.getTitle());
     }
 

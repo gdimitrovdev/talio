@@ -1,5 +1,6 @@
 package server.services;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import commons.Board;
 import commons.CardList;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import server.database.BoardRepository;
 import server.database.CardListRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,8 +30,11 @@ class CardListServiceTest {
     @Mock
     private CardListRepository cardListRepositoryMock;
 
+    @Mock
+    private BoardRepository boardRepositoryMock;
+
     @InjectMocks
-    private CardListService cardListServiceMock;
+    private CardListService cardListService;
 
     @BeforeEach
     public void setup() {
@@ -45,7 +51,7 @@ class CardListServiceTest {
 
         when(cardListRepositoryMock.findAll()).thenReturn(cardLists);
 
-        List<CardList> returnedCardLists = cardListServiceMock.getMany();
+        List<CardList> returnedCardLists = cardListService.getMany();
         assertEquals(cardList1, returnedCardLists.get(0));
         assertEquals(cardList2, returnedCardLists.get(1));
     }
@@ -74,12 +80,50 @@ class CardListServiceTest {
 
     @Test
     void createOne() {
-        CardList cardList = new CardList();
+        Board board = new Board();
+        board.setId(1L);
+        CardList list = new CardList("List title", board);
+        when(boardRepositoryMock.findById(board.getId())).thenReturn(Optional.of(board));
+        when(cardListRepositoryMock.save(list)).thenReturn(list);
 
-        when(cardListRepositoryMock.save(cardList)).thenReturn(cardList);
+        CardList returnedList = cardListService.createOne(list);
+        assertEquals(list, returnedList);
+    }
 
-        CardList returnedCardList = cardListServiceMock.createOne(cardList);
-        assertEquals(cardList, returnedCardList);
+    @Test
+    void createOneWithInvalidBoard() {
+        Board board = new Board();
+        board.setId(1L);
+        CardList list = new CardList("List title", board);
+        when(boardRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+        when(cardListRepositoryMock.save(list)).thenReturn(list);
+        assertThrows(Exception.class, () -> {
+            cardListService.createOne(list);
+        });
+    }
+
+    @Test
+    void createOneWithNullBoard() {
+        Board board = new Board();
+        board.setId(1L);
+        CardList list = new CardList("List title", null);
+        when(boardRepositoryMock.findById(1L)).thenReturn(Optional.of(board));
+        when(cardListRepositoryMock.save(list)).thenReturn(list);
+        assertThrows(Exception.class, () -> {
+            cardListService.createOne(list);
+        });
+    }
+
+    @Test
+    void createOneWithNullBoardId() {
+        Board board = new Board();
+        board.setId(null);
+        CardList list = new CardList("List title", board);
+        when(boardRepositoryMock.findById(1L)).thenReturn(Optional.of(board));
+        when(cardListRepositoryMock.save(list)).thenReturn(list);
+        assertThrows(Exception.class, () -> {
+            cardListService.createOne(list);
+        });
     }
 
     // Test whether deleteById() method of the repository was called for the correct cardList
@@ -87,7 +131,7 @@ class CardListServiceTest {
     void deleteOne() {
         when(cardListRepositoryMock.existsById(1L)).thenReturn(true);
 
-        cardListServiceMock.deleteOne(1L);
+        cardListService.deleteOne(1L);
 
         verify(cardListRepositoryMock).deleteById(1L);
     }
@@ -95,7 +139,8 @@ class CardListServiceTest {
     @Test
     void updateOne() {
         CardList cardList = new CardList();
-        cardList.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
+        cardList.setId(
+                1L); //setting the id and title manually because otherwise all constructors require a Board
         cardList.setTitle("title1");
 
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(cardList));
@@ -103,7 +148,7 @@ class CardListServiceTest {
 
         CardList updatedCardList = new CardList();
         updatedCardList.setTitle("title2");
-        CardList returnedCardList = cardListServiceMock.updateOne(1L, updatedCardList);
+        CardList returnedCardList = cardListService.updateOne(1L, updatedCardList);
         assertEquals(updatedCardList.getTitle(), returnedCardList.getTitle());
 
     }
