@@ -2,6 +2,8 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 //circular reference problem
 @Entity
-//@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
+@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -72,8 +74,9 @@ public class Board implements Serializable {
         }
     }
 
-    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<String> cardColorPresets,
-                 Integer defaultPresetNum) {
+    public Board(String name, String code, String readOnlyCode, String boardColor,
+            String listsColor, List<String> cardColorPresets,
+            Integer defaultPresetNum) {
         setDefaultPresetNum(defaultPresetNum);
         setName(name);
         setCode(code);
@@ -84,8 +87,9 @@ public class Board implements Serializable {
 
     }
 
-    public Board(String name, String code, String readOnlyCode, String boardColor, String listsColor, List<CardList> lists,
-                 List<Tag> tags, List<String> cardColorPresets, Integer defaultPresetNum) {
+    public Board(String name, String code, String readOnlyCode, String boardColor,
+            String listsColor, List<CardList> lists,
+            List<Tag> tags, List<String> cardColorPresets, Integer defaultPresetNum) {
         setName(name);
         setCode(code);
         setReadOnlyCode(readOnlyCode);

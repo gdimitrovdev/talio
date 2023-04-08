@@ -68,9 +68,12 @@ public class AdminController {
                         <th style="border: 1px solid black">Read-Only Join Code</th>
                     </tr>
                 """
-                + boardService.getMany().stream().map(b -> "<tr><td style=\"border: 1px solid black\">"
-                    + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName() + "</td><td style=\"border: 1px solid black\">"
-                    + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode() + "</td></tr>"
+                + boardService.getMany().stream()
+                .map(b -> "<tr><td style=\"border: 1px solid black\">"
+                        + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName()
+                        + "</td><td style=\"border: 1px solid black\">"
+                        + b.getCode() + "</td><td style=\"border: 1px solid black\">"
+                        + b.getReadOnlyCode() + "</td></tr>"
                 ).collect(Collectors.joining("\n")) + "</table>";
     }
 
@@ -109,19 +112,25 @@ public class AdminController {
             // Colors in format #Background/#Foreground
             List<String> defaultPresets = new ArrayList<>();
             defaultPresets.add("#ffffff/#000000");
-            defaultPresets.add("#ff0008/#000000");
+            defaultPresets.add("#ff0008/#00ff00");
             defaultPresets.add("#abffc3/#004714");
             Board team69Board =
                     boardService.createOne(new Board("Team 69", "", "",
-                                    "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
+                            "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
             Tag b1urgentTag =
                     tagService.createOne(new Tag("Urgent", "#FF0000/#FFFFFF", team69Board));
             Tag b1bugTag =
-                    tagService.createOne(new Tag("Bug", "#AA0000/#FFFFFF", team69Board));
+                    tagService.createOne(new Tag("Bug", "#BB0000/#FFFFFF", team69Board));
             Tag b1documentationTag = tagService.createOne(new Tag("Documentation",
                     "#0000AA/#FFFFFF", team69Board));
             Tag b1featureTag = tagService.createOne(new Tag("Feature",
                     "#00AA00/#FFFFFF", team69Board));
+            Tag b1LowPriorityTag = tagService.createOne(new Tag("Low Priority", "#FFFFFF/#000000"
+                    , team69Board));
+            Tag b1RegularPriorityTag = tagService.createOne(new Tag("Regular Priority", "#FFFFFF"
+                    + "/#000000", team69Board));
+            Tag b1HighPriorityTag = tagService.createOne(new Tag("Regular Priority", "#FFFF00"
+                    + "/#000000", team69Board));
             CardList b1toDoCardList =
                     cardListService.createOne(new CardList("To Do", team69Board));
             CardList b1doingCardList = cardListService.createOne(new CardList("Doing",
@@ -133,19 +142,25 @@ public class AdminController {
             CardList b1CardList5 = cardListService.createOne(new CardList("Card List 5",
                     team69Board));
             Card b1DuplicateTagWarningCard = cardService.createOne(new Card("Warning message "
-                    + "for duplicate tags", "", null, 1));
-            cardService.moveToListLast(b1DuplicateTagWarningCard.getId(),
-                    b1toDoCardList.getId());
-            cardService.addTagToCard(b1DuplicateTagWarningCard.getId(), b1featureTag.getId());
+                    + "for duplicate tags", "", b1toDoCardList, 1));
+            /*cardService.moveToListLast(b1DuplicateTagWarningCard.getId(),
+                    b1toDoCardList.getId());*/
+            cardService.addTagToCard(b1featureTag.getId(), b1DuplicateTagWarningCard.getId());
             Card b1TestClientControllersCard = cardService.createOne(new Card("Test Client "
-                    + "Controllers", "", null, 1));
-            cardService.moveToListLast(b1TestClientControllersCard.getId(),
-                    b1toDoCardList.getId());
-            cardService.addTagToCard(b1TestClientControllersCard.getId(), b1featureTag.getId());
-            cardService.addTagToCard(b1TestClientControllersCard.getId(), b1bugTag.getId());
-            cardService.addTagToCard(b1TestClientControllersCard.getId(), b1urgentTag.getId());
-            cardService.addTagToCard(b1TestClientControllersCard.getId(),
-                    b1documentationTag.getId());
+                    + "Controllers", "", b1toDoCardList, 1));
+            /*cardService.moveToListLast(b1TestClientControllersCard.getId(),
+                    b1toDoCardList.getId());*/
+            cardService.addTagToCard(b1featureTag.getId(), b1TestClientControllersCard.getId());
+            cardService.addTagToCard(b1bugTag.getId(), b1TestClientControllersCard.getId());
+            cardService.addTagToCard(b1urgentTag.getId(), b1TestClientControllersCard.getId());
+            cardService.addTagToCard(b1documentationTag.getId(),
+                    b1TestClientControllersCard.getId());
+            cardService.addTagToCard(b1LowPriorityTag.getId(),
+                    b1TestClientControllersCard.getId());
+            cardService.addTagToCard(b1RegularPriorityTag.getId(),
+                    b1TestClientControllersCard.getId());
+            cardService.addTagToCard(b1HighPriorityTag.getId(),
+                    b1TestClientControllersCard.getId());
 
             Subtask b1Subtask1 = subtaskService.createOne(new Subtask("Subtask 1",
                     b1TestClientControllersCard, true));
@@ -155,28 +170,32 @@ public class AdminController {
                     b1TestClientControllersCard, false));
             Subtask b1Subtask4 = subtaskService.createOne(new Subtask("Subtask 4",
                     b1TestClientControllersCard, false));
-            Card b1Card3 = cardService.createOne(new Card("Card 3", "", null, 1));
-            cardService.moveToListLast(b1Card3.getId(), b1doingCardList.getId());
-            Card b1Card4 = cardService.createOne(new Card("Card 4", "", null, 1));
-            cardService.moveToListLast(b1Card4.getId(), b1doingCardList.getId());
-            Card b1Card6 = cardService.createOne(new Card("Card 6", "", null, 1));
-            cardService.moveToListLast(b1Card6.getId(), b1doingCardList.getId());
-            Card b1Card5 = cardService.createOne(new Card("Card 5", "", null, 1));
-            cardService.moveToListAfterCard(b1Card5.getId(), b1doingCardList.getId(),
-                    b1Card4.getId());
-            Card b1Card7 = cardService.createOne(new Card("Card 7", "", null, 1));
-            cardService.moveToListLast(b1Card7.getId(), b1CardList4.getId());
-            Card b1Card8 = cardService.createOne(new Card("Card 8", "", null, 1));
-            cardService.moveToListLast(b1Card8.getId(), b1CardList5.getId());
+            Card b1Card3 = cardService.createOne(new Card("Card 3", "", b1doingCardList, 1));
+            //cardService.moveToListLast(b1Card3.getId(), b1doingCardList.getId());
+            Card b1Card4 = cardService.createOne(new Card("Card 4", "", b1doingCardList, 1));
+            //cardService.moveToListLast(b1Card4.getId(), b1doingCardList.getId());
+            Card b1Card6 = cardService.createOne(new Card("Card 6", "", b1doingCardList, 1));
+            //cardService.moveToListLast(b1Card6.getId(), b1doingCardList.getId());
+            Card b1Card5 = cardService.createOne(new Card("Card 5", "", b1doingCardList, 1));
+            //cardService.moveToListAfterCard(b1Card5.getId(), b1doingCardList.getId(),
+            //b1Card4.getId());
+            Card b1Card7 = cardService.createOne(new Card("Card 7", "", b1CardList4, 1));
+            //cardService.moveToListLast(b1Card7.getId(), b1CardList4.getId());
+            Card b1Card8 = cardService.createOne(new Card("Card 8", "", b1CardList5, 1));
+            //cardService.moveToListLast(b1Card8.getId(), b1CardList5.getId());
 
             Board studyingBoard =
-                    boardService.createOne(new Board("Studying", "", "", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
+                    boardService.createOne(
+                            new Board("Studying", "", "", "#bababa/#000000", "#dedede/#000000",
+                                    defaultPresets, 1));
             Board team99Board =
-                    boardService.createOne(new Board("Team 99", "", "", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));
+                    boardService.createOne(
+                            new Board("Team 99", "", "", "#bababa/#000000", "#dedede/#000000",
+                                    defaultPresets, 1));
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

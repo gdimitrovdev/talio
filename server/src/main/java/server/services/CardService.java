@@ -2,6 +2,7 @@ package server.services;
 
 import commons.Card;
 import commons.CardList;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -34,29 +35,32 @@ public class CardService {
     }
 
     /**
-     * Ignores tags and lists
+     * Ignores tags and priority and places card at the end of its list
      *
      * @param card
      * @return
      */
     public Card createOne(Card card) {
-        card.getTags().clear();
+        card.setTags(new ArrayList<>());
+        card.setList(cardListRepository.findById(card.getList().getId()).get());
         card.setListPriority(0L);
-        Card newCard = cardRepository.save(card);
+        Card newCard = cardRepository.saveAndFlush(card);
         CardList list = cardListRepository.findById(card.getList().getId()).get();
-        list.addCard(newCard);
-        if (list.getCards().size() == 1) {
-            newCard.setListPriority(0L);
-        } else {
+        if (list.getCards().size() != 0) {
             newCard.setListPriority(
-                    list.getCards().stream().max(Comparator.comparing(Card::getListPriority)).get().getListPriority()
-                            + 1L
+                    list.getCards().stream().max(Comparator.comparing(Card::getListPriority)).get()
+                            .getListPriority() + 1L
             );
         }
         newCard = cardRepository.save(newCard);
         return newCard;
     }
 
+    /**
+     * Also removes card from its list
+     *
+     * @param id
+     */
     public void deleteOne(Long id) {
         if (cardRepository.existsById(id)) {
             removeCardFromItsList(id);
@@ -64,20 +68,20 @@ public class CardService {
         }
     }
 
-    private Card removeCardFromItsList(Long cardId) throws EntityNotFoundException {
+    private Card removeCardFromItsList(Long cardId) {
         try {
             var card = cardRepository.findById(cardId).get();
             if (card.getList() == null) {
                 return card;
             }
             var list = card.getList();
-            /*list.getCards().stream().filter(c -> c.getListPriority() > card.getListPriority())
-                    .forEach(c -> {
-                        c.setListPriority(c.getListPriority() - 1);
-                        cardRepository.save(c);
-                    });*/
             list.removeCard(card);
             cardRepository.save(card);
+            list.getCards().stream().filter(c -> c.getListPriority() > card.getListPriority())
+                    .forEach(c -> {
+                        c.setListPriority(c.getListPriority() - 1);
+                        cardRepository.saveAndFlush(c);
+                    });
             return card;
         } catch (Exception e) {
             throw new EntityNotFoundException(
@@ -85,7 +89,7 @@ public class CardService {
         }
     }
 
-    public Card moveToListLast(Long cardId, Long listId) throws EntityNotFoundException {
+    public Card moveToListLast(Long cardId, Long listId) {
         try {
             var card = cardRepository.getReferenceById(cardId);
             var list = cardListRepository.getReferenceById(listId);
@@ -98,7 +102,7 @@ public class CardService {
                 card = removeCardFromItsList(card.getId());
                 card.setListPriority(0L);
                 list.addCard(card);
-                cardRepository.save(card);
+                cardRepository.saveAndFlush(card);
                 return card;
             }
         } catch (Exception e) {
@@ -107,27 +111,27 @@ public class CardService {
         }
     }
 
-    public Card moveToListAfterCard(Long cardId, Long listId, Long afterCardId)
-            throws EntityNotFoundException {
+    public Card moveToListAfterCard(Long cardId, Long listId, Long afterCardId) {
         try {
             var card = removeCardFromItsList(cardId);
             var list = cardListRepository.findById(listId).get();
             var afterCard = cardRepository.findById(afterCardId).get();
-            /*card.setListPriority(afterCard.getListPriority() + 1);
-            list.getCards().stream().filter(c -> c.getListPriority() >= card.getListPriority())
+            card.setListPriority(afterCard.getListPriority() + 1);
+            list.getCards().stream().filter(c -> c.getListPriority() > afterCard.getListPriority())
                     .forEach(c -> {
                         c.setListPriority(c.getListPriority() + 1);
-                        cardRepository.save(c);
-                    });*/
+                        cardRepository.saveAndFlush(c);
+                    });
             list.addCard(card);
             card.setListPriority(afterCard.getListPriority() + 1L);
-            for (Card cardOfList : list.getCards()) {
-                if (cardOfList.getListPriority() > afterCard.getListPriority() && cardOfList.getId() != card.getId()) {
+            /*for (Card cardOfList : list.getCards()) {
+                if (cardOfList.getListPriority() > afterCard.getListPriority()
+                        && !cardOfList.getId().equals(card.getId())) {
                     cardOfList.setListPriority(cardOfList.getListPriority() + 1L);
                     cardRepository.save(cardOfList);
                 }
-            }
-            cardRepository.save(card);
+            }*/
+            cardRepository.saveAndFlush(card);
             return card;
         } catch (Exception e) {
             throw new EntityNotFoundException(
@@ -144,7 +148,7 @@ public class CardService {
      * @return
      * @throws EntityNotFoundException
      */
-    public Card updateOne(Long id, Card card) throws EntityNotFoundException {
+    public Card updateOne(Long id, Card card) {
         Card existingCard = cardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));
 

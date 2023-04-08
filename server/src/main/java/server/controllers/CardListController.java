@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import commons.Topics;
 import server.services.BoardService;
 import server.services.CardListService;
 
@@ -26,7 +27,8 @@ public class CardListController {
     private final CardListService cardListService;
     private final BoardService boardService;
 
-    public CardListController(CardListService cardListService, BoardService boardService, SimpMessagingTemplate template) {
+    public CardListController(CardListService cardListService, BoardService boardService,
+            SimpMessagingTemplate template) {
         this.cardListService = cardListService;
         this.boardService = boardService;
         this.template = template;
@@ -42,26 +44,40 @@ public class CardListController {
     @ResponseBody
     public ResponseEntity<CardList> getOne(@PathVariable("id") Long id) {
         Optional<CardList> optionalCardList = cardListService.getOne(id);
-        if (!optionalCardList.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
+        return optionalCardList.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
 
-        return ResponseEntity.ok(optionalCardList.get());
     }
 
+    // TODO don't send update on Topic.BOARDS
+
+    /**
+     * Also sends update to Topics.BOARDS and Topics.LISTS
+     *
+     * @param cardList
+     * @return
+     */
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<CardList> createOne(@RequestBody CardList cardList) {
         try {
             var newCardList = cardListService.createOne(cardList);
-            template.convertAndSend("/topic/boards", newCardList);
+            template.convertAndSend(Topics.BOARDS.toString(), newCardList.getBoard());
             return ResponseEntity.ok(newCardList);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    // TODO send delete update using long-polling
+
+    /**
+     * Also sends update to Topics.BOARDS
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Board> deleteOne(@PathVariable("id") Long id) {
@@ -69,28 +85,36 @@ public class CardListController {
             var boardId = cardListService.getOne(id).get().getBoard().getId();
             cardListService.deleteOne(id);
             var board = boardService.getOne(boardId).get();
-            template.convertAndSend("/topic/boards", board);
+            template.convertAndSend(Topics.BOARDS.toString(), board);
             return ResponseEntity.ok(board);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    /**
+     * Also sends update to Topics.LISTS
+     *
+     * @param id
+     * @param cardList
+     * @return
+     */
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<CardList> updateOne(@PathVariable Long id,
             @RequestBody CardList cardList) {
         try {
             CardList updatedCardList = cardListService.updateOne(id, cardList);
-            template.convertAndSend("/topic/lists", updatedCardList);
+            template.convertAndSend(Topics.LISTS.toString(), updatedCardList);
             return ResponseEntity.ok(updatedCardList);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    // TODO Remove this
     @GetMapping("/refresh-list/{id}")
     @ResponseBody
     public ResponseEntity<CardList> refreshList(@PathVariable Long id) {
