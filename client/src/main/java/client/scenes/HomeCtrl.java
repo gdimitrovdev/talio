@@ -13,7 +13,9 @@ import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -127,8 +129,14 @@ public class HomeCtrl {
 
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> {
-                    nestedButtonPressed = true;
-                    removeRecentBoard(item);
+                    Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Disconnect from this board?", ButtonType.YES, ButtonType.NO);
+                    confirmationDialogue.showAndWait();
+                    if (confirmationDialogue.getResult() == ButtonType.YES) {
+                        nestedButtonPressed = true;
+                        removeRecentBoard(item);
+                    }
+
+
                 });
                 boardSettingBtn.setOnAction(e -> {
                     nestedButtonPressed = true;

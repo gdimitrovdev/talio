@@ -16,7 +16,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -96,6 +98,26 @@ public class CardComponentCtrl extends AnchorPane {
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
             stage.show();
+
+            stage.setOnCloseRequest(event -> {
+
+
+                    event.consume();
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("You have unsaved changes. Do you want to discard them?");
+                    alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+                    alert.showAndWait().ifPresent(result -> {
+                        if (result == ButtonType.YES) {
+                            stage.close();
+                        }
+                    });
+
+
+
+            });
+
             /*stage.setOnCloseRequest(event -> {
                 setCard(server.getCard(cardId));
             });*/
@@ -252,7 +274,13 @@ public class CardComponentCtrl extends AnchorPane {
 
     @FXML
     private void delete() {
-        server.deleteCard(cardId);
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete this card ?", ButtonType.YES, ButtonType.NO);
+        confirmationDialogue.showAndWait();
+
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            server.deleteCard(cardId);
+        }
     }
 
     public void close() {

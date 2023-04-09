@@ -2,11 +2,19 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -168,6 +176,27 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Board Settings");
         stage.setScene(boardSettings);
         stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            if(boardSettingsCtrl.isHasUnsavedChanges()==true) {
+
+            event.consume();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("You have unsaved changes. Do you want to discard them?");
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+            alert.showAndWait().ifPresent(result -> {
+                if (result == ButtonType.YES) {
+                    stage.close();
+                }
+            });
+
+        }
+
+        });
+
+
     }
 
     public void showShareBoard(Board board) {
@@ -176,6 +205,7 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Share a board");
         stage.setScene(shareBoard);
         stage.show();
+
     }
 
     public void showBoard(Board board) {
@@ -195,5 +225,22 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Manage Your Tags");
         stage.setScene(tagManagement);
         stage.show();
+        stage.setOnCloseRequest(event -> {
+
+                event.consume();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Any unsaved changes will be lost.");
+                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+                alert.showAndWait().ifPresent(result -> {
+                    if (result == ButtonType.YES) {
+                        stage.close();
+                    }
+                });
+
+
+
+        });
     }
 }

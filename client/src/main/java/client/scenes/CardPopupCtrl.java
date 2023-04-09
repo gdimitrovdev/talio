@@ -233,7 +233,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             deleteSubtask = new Button("x");
             deleteSubtask.getStyleClass().add("remove-subtask-button");
             deleteSubtask.setOnAction(a -> {
-                deleteSubtask(subtask);
+                Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?", ButtonType.YES);
+                confirmationDialogue.setContentText("Delete color preset ?");
+                confirmationDialogue.showAndWait();
+                if (confirmationDialogue.getResult() == ButtonType.YES) {
+                    deleteSubtask(subtask);
+                }
             });
             subtaskElement.getChildren().add(deleteSubtask);
 

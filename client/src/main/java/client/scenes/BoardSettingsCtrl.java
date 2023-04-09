@@ -10,7 +10,9 @@ import java.util.List;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -25,6 +27,17 @@ public class BoardSettingsCtrl {
     private final MainCtrlTalio mainCtrlTalio;
     private final ServerUtils server;
     private Board board;
+    private boolean hasUnsavedChanges;
+
+
+    public boolean isHasUnsavedChanges() {
+        return hasUnsavedChanges;
+    }
+
+    public void setHasUnsavedChanges(boolean hasUnsavedChanges) {
+        this.hasUnsavedChanges = hasUnsavedChanges;
+    }
+
     @FXML
     private TextField fieldBoardName;
     @FXML
@@ -71,6 +84,7 @@ public class BoardSettingsCtrl {
     }
 
     public void initialize(Board board) {
+        this.setHasUnsavedChanges(false);
         this.board = board;
         fieldBoardName.setText(board.getName());
 
@@ -97,6 +111,7 @@ public class BoardSettingsCtrl {
             counter++;
 
         }
+
     }
 
     private HBox generateHboxPreset(String preset, int counter) {
@@ -112,13 +127,20 @@ public class BoardSettingsCtrl {
         //initialize the elements for the hbox
         Button deleteBtn = new Button();
         deleteBtn.setOnAction((e) -> {
-            presetsBox.getChildren().remove(hboxPreset);
-            board.getCardColorPresets().set(counter, "");
+            Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete color preset ?", ButtonType.YES);
+            confirmationDialogue.setContentText("Delete color preset ?");
+            confirmationDialogue.showAndWait();
+            if (confirmationDialogue.getResult() == ButtonType.YES) {
+                presetsBox.getChildren().remove(hboxPreset);
+                board.getCardColorPresets().set(counter, "");
+            }
+
         });
         ColorPicker colorPickerBG = new ColorPicker();
         ColorPicker colorPickerF = new ColorPicker();
         CheckBox setAsDefault = new CheckBox();
         setAsDefault.setOnAction((e) -> {
+            this.setHasUnsavedChanges(true);
             //disable the delete button
             deleteBtn.setDisable(true);
             //for all other hboxes in the presetsBox disselect their checkbox
@@ -165,6 +187,9 @@ public class BoardSettingsCtrl {
     }
 
     public void save() {
+
+        hasUnsavedChanges = false;
+
         String boardColor = "#" + cpBackgroundBoard.getValue().toString().substring(2, 8);
         String boardFont = "#" + cpFontBoard.getValue().toString().substring(2, 8);
         String listColor = "#" + cpBackgroundLists.getValue().toString().substring(2, 8);
@@ -217,6 +242,7 @@ public class BoardSettingsCtrl {
     }
 
     public void resetBoardColors() {
+        this.setHasUnsavedChanges(true);
         String defaultCombo = "#bababa/#000000";
         //updates after you press 'save'
         board.setBoardColor(defaultCombo);
@@ -226,6 +252,7 @@ public class BoardSettingsCtrl {
     }
 
     public void resetListColors() {
+        this.setHasUnsavedChanges(true);
         String defaultCombo = "#dedede/#000000";
         //updates after you press 'save'
         board.setListsColor(defaultCombo);
@@ -234,18 +261,30 @@ public class BoardSettingsCtrl {
     }
 
     public void deleteBoard() {
-        mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
-        server.deleteBoard(board.getId());
-        mainCtrlTalio.showHome();
-        //not sure if it is actually deleted from db
-        //since for deleteBoard() we will use long polling
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this board permanently ?", ButtonType.YES);
+        confirmationDialogue.showAndWait();
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
+            server.deleteBoard(board.getId());
+            mainCtrlTalio.showHome();
+            //not sure if it is actually deleted from db
+            //since for deleteBoard() we will use long polling
+
+        }
     }
 
     public void addColorPreset() {
+        this.setHasUnsavedChanges(true);
         HBox newHbox = generateHboxPreset("#ffffff/#000000",
                 board.getCardColorPresets().size() + 1);
         presetsBox.getChildren().add(newHbox);
 
     }
+
+    @FXML
+    public void madeChange(){
+        this.setHasUnsavedChanges(true);
+    }
+
 }
 

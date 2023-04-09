@@ -19,6 +19,10 @@ public class TagManagementCtrl {
     private final MainCtrlTalio mainCtrlTalio;
     private Board board;
     private List<Tag> allTags;
+
+
+
+
     @FXML
     private TextField fieldTagTitle;
     @FXML
@@ -70,6 +74,7 @@ public class TagManagementCtrl {
 
     @FXML
     protected void createTag() {
+
         String  tagTitle = fieldTagTitle.getText().trim(),
                 foreground = pickerForeground.getValue().toString(),
                 background = pickerBackground.getValue().toString();

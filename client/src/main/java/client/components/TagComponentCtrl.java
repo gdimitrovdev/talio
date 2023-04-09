@@ -74,7 +74,7 @@ public class TagComponentCtrl extends HBox {
 
     @FXML
     protected void deleteTag() {
-        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this tag ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this tag ?", ButtonType.YES, ButtonType.NO);
         confirmationDialogue.showAndWait();
 
         if (confirmationDialogue.getResult() == ButtonType.YES) {
