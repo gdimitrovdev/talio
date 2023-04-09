@@ -122,7 +122,7 @@ public class CardController {
             @PathVariable Long listId,
             @PathVariable Long afterCardId) {
         try {
-            CardList newList = cardService.moveToListAfterCard(id, listId, afterCardId).getList();
+            CardList newList = cardService.moveToListAfterCard(id, listId, afterCardId);
 
             template.convertAndSend(Topics.LISTS.toString(), newList);
 
@@ -138,7 +138,7 @@ public class CardController {
     public ResponseEntity<CardList> moveToListLast(@PathVariable Long id,
             @PathVariable Long listId) {
         try {
-            CardList newList = cardService.moveToListLast(id, listId).getList();
+            CardList newList = cardService.moveToListLast(id, listId);
 
             template.convertAndSend(Topics.LISTS.toString(), newList);
 

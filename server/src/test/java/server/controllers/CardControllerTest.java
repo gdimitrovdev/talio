@@ -127,10 +127,7 @@ class CardControllerTest {
         list1.addCard(card);
         list2.addCard(after);
 
-        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(card));
-        when(cardServiceMock.getOne(2L)).thenReturn(Optional.of(after));
-        when(cardListServiceMock.getOne(1L)).thenReturn((Optional.of(list1)));
-        when(cardListServiceMock.getOne(2L)).thenReturn((Optional.of(list2)));
+        when(cardServiceMock.moveToListAfterCard(1L, 2L, 2L)).thenReturn(list2);
 
         assertEquals(list2, cardControllerMock.moveToListAfterCard(1L, 2L, 2L).getBody());
     }
@@ -149,9 +146,7 @@ class CardControllerTest {
 
         list1.addCard(card);
 
-        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(card));
-        when(cardListServiceMock.getOne(1L)).thenReturn((Optional.of(list1)));
-        when(cardListServiceMock.getOne(2L)).thenReturn((Optional.of(list2)));
+        when(cardServiceMock.moveToListLast(1L, 2L)).thenReturn(list2);
 
         assertEquals(list2, cardControllerMock.moveToListLast(1L, 2L).getBody());
     }

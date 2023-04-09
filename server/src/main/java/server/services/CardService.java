@@ -89,7 +89,7 @@ public class CardService {
         }
     }
 
-    public Card moveToListLast(Long cardId, Long listId) {
+    public CardList moveToListLast(Long cardId, Long listId) {
         try {
             var card = cardRepository.getReferenceById(cardId);
             var list = cardListRepository.findById(listId).get();
@@ -100,7 +100,7 @@ public class CardService {
                 Card lastCard = cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
                 card.setListPriority(lastCard.getListPriority() + 1L);
                 cardRepository.save(card);
-                return card;
+                return card.getList();
             }
 
             if (cardsInList.size() == 0) {
@@ -109,7 +109,7 @@ public class CardService {
                 list.addCard(card);
 
                 cardRepository.saveAndFlush(card);
-                return card;
+                return card.getList();
             }
 
             card = removeCardFromItsList(card.getId());
@@ -119,7 +119,7 @@ public class CardService {
 
             cardRepository.save(card);
 
-            return card;
+            return card.getList();
         } catch (Exception e) {
             throw new EntityNotFoundException(
                     "Card or list not found while moving a card to the last place in a list");
@@ -127,7 +127,7 @@ public class CardService {
 
     }
 
-    public Card moveToListAfterCard(Long cardId, Long listId, Long afterCardId) {
+    public CardList moveToListAfterCard(Long cardId, Long listId, Long afterCardId) {
         try {
             var card = cardRepository.findById(cardId).get();
             var list = cardListRepository.findById(listId).get();
@@ -153,7 +153,7 @@ public class CardService {
                 }
             }
 
-            return card;
+            return card.getList();
         } catch (Exception e) {
             throw new EntityNotFoundException(
                     "Card or list not found while moving a card to a list after another card");
