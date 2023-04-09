@@ -32,6 +32,15 @@ public class MainCtrlTalio {
     private BoardSettingsCtrl boardSettingsCtrl;
     private TagManagementCtrl tagManagementCtrl;
     private ServerUtils serverUtils;
+
+    public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
+        this.joinedBoards = joinedBoards;
+    }
+
+    public Map<String, Set<Long>> getJoinedBoards() {
+        return joinedBoards;
+    }
+
     private Map<String, Set<Long>> joinedBoards;
 
     @Inject
@@ -114,7 +123,7 @@ public class MainCtrlTalio {
         writeToLocalData();
     }
 
-    private void readFromLocalData() {
+    public void readFromLocalData() {
         File toRead = new File(".local_data");
 
         try (
@@ -127,7 +136,7 @@ public class MainCtrlTalio {
         }
     }
 
-    private void writeToLocalData() {
+    public void writeToLocalData() {
         File localData = new File(".local_data");
 
         try (

@@ -30,6 +30,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     private final ServerUtils server;
 
     private Card card;
+
+
+    public Set<Tag> getCardTags() {
+        return cardTags;
+    }
+
     private Set<Tag> cardTags;
     @FXML
     private AnchorPane anchorPane = new AnchorPane();
@@ -357,4 +363,5 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         empty.setId(tag.getBoard().getId());
         tag.setBoard(empty);
     }
+
 }
