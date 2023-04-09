@@ -9,57 +9,103 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardSettingsCtrl">
-    <children>
-   <TextField fx:id="fieldBoardName" layoutX="34.0" layoutY="29.0" prefHeight="26.0" prefWidth="206.0" />
-      <Line endX="437.800048828125" endY="-1.52587890625E-5" layoutX="131.0" layoutY="72.0" startX="-100.0" />
-      <Label layoutX="30.0" layoutY="98.0" prefHeight="18.0" prefWidth="78.0" text="Board colors:" />
-      <Label layoutX="331.0" layoutY="98.0" prefHeight="18.0" prefWidth="61.0" text="List colors:" />
-      <Button fx:id="resetColorsBoard" layoutX="111.0" layoutY="95.0" mnemonicParsing="false" onAction="#resetBoardColors" prefHeight="26.0" prefWidth="102.0" text="Reset Colors" />
-      <Button fx:id="resetColorsLists" layoutX="400.0" layoutY="95.0" mnemonicParsing="false" onAction="#resetListColors" prefHeight="26.0" prefWidth="102.0" text="Reset Colors" />
-      <Label layoutX="44.0" layoutY="139.0" text="Background:" />
-      <Label layoutX="333.0" layoutY="139.0" text="Background:" />
-      <Label layoutX="44.0" layoutY="172.0" text="Font:" />
-      <Label layoutX="331.0" layoutY="172.0" text="Font:" />
-      <Line endX="437.800048828125" endY="-1.52587890625E-5" layoutX="124.0" layoutY="207.0" startX="-100.0" />
-      <Label layoutX="30.0" layoutY="227.0" text="Card color schemes:" />
-      <Label layoutX="168.0" layoutY="228.0" text="B:" />
-      <Label layoutX="193.0" layoutY="228.0" text="F:" />
-      <ColorPicker fx:id="cpBackgroundBoard" layoutX="143.0" layoutY="134.0" prefHeight="26.0" prefWidth="38.0">
-         <value>
-            <Color red="0.729411780834198" green="0.729411780834198" blue="0.729411780834198" />
-         </value></ColorPicker>
-      <ColorPicker fx:id="cpFontBoard" layoutX="143.0" layoutY="167.0" prefHeight="26.0" prefWidth="38.0">
-         <value>
-            <Color />
-         </value></ColorPicker>
-      <ColorPicker fx:id="cpFontLists" layoutX="432.0" layoutY="167.0" prefHeight="26.0" prefWidth="38.0">
-         <value>
-            <Color />
-         </value></ColorPicker>
-      <ColorPicker fx:id="cpBackgroundLists" layoutX="432.0" layoutY="135.0" prefHeight="26.0" prefWidth="38.0">
-         <value>
-            <Color red="0.8705882430076599" green="0.8705882430076599" blue="0.8705882430076599" />
-         </value></ColorPicker>
-      <Button layoutX="470.0" layoutY="29.0" mnemonicParsing="false" onAction="#save" text="Save" />
-      <Button layoutX="543.0" layoutY="28.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="25.0" prefWidth="25.0">
-         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="https://cdn-icons-png.flaticon.com/512/860/860829.png" />
-         </ImageView>
-      </Button>
-      <ScrollPane layoutX="30.0" layoutY="249.0" prefHeight="115.0" prefWidth="278.0" hbarPolicy="NEVER">
-        <content>
-<!--          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="114.0" prefWidth="258.0">-->
-<!--               <children>-->
-                  <VBox fx:id="presetsBox" layoutX="1.0" layoutY="-2.0" prefHeight="115.0" prefWidth="262.0" />
-<!--               </children>-->
-<!--            </AnchorPane>-->
-        </content>
-      </ScrollPane>
-      <Label layoutX="226.0" layoutY="227.0" prefHeight="18.0" prefWidth="66.0" text="Default:" />
-      <Button layoutX="108.0" layoutY="372.0" mnemonicParsing="false" onAction="#addColorPreset" prefHeight="26.0" prefWidth="121.0" text="add a color scheme" />
-    </children>
-</AnchorPane>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Separator?>
+<fx:root type="javafx.scene.layout.AnchorPane"
+         prefHeight="600.0"
+         prefWidth="700.0"
+         xmlns="http://javafx.com/javafx/19"
+         xmlns:fx="http://javafx.com/fxml/1"
+         style="-fx-padding: 20"
+         stylesheets="@/client/css/BoardCustomizationPopup.css"
+>
+    <VBox AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0"
+          styleClass="vbox"
+    >
+        <Label alignment="BASELINE_CENTER" maxWidth="Infinity"
+               style="-fx-font-family: 'Segoe UI Semibold'; -fx-font-size: 24; -fx-alignment: center">
+            Customization
+        </Label>
+        <Separator/>
+        <TextField fx:id="fieldBoardName"/>
+        <Separator/>
+        <HBox style="-fx-spacing: 60" styleClass="hbox">
+            <VBox HBox.hgrow="ALWAYS" styleClass="vbox">
+                <HBox styleClass="hbox">
+                    <Label>Board Colors</Label>
+                    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="resetColorsBoard" onAction="#resetBoardColors" text="Reset"/>
+                </HBox>
+                <HBox styleClass="hbox">
+                    <Label minWidth="30"/>
+                    <Label>Background</Label>
+                    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <ColorPicker fx:id="cpBackgroundBoard" prefHeight="26.0" prefWidth="38.0"/>
+                </HBox>
+                <HBox styleClass="hbox">
+                    <Label minWidth="30"/>
+                    <Label>Foreground</Label>
+                    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <ColorPicker fx:id="cpFontBoard" prefHeight="26.0" prefWidth="38.0"/>
+                </HBox>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS" styleClass="vbox">
+                <HBox styleClass="hbox">
+                    <Label>List Colors</Label>
+                    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="resetColorsLists" onAction="#resetListColors" text="Reset"/>
+                </HBox>
+                <HBox styleClass="hbox">
+                    <Label minWidth="30"/>
+                    <Label>Background</Label>
+                    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <ColorPicker fx:id="cpBackgroundLists" prefHeight="26.0" prefWidth="38.0"/>
+                </HBox>
+                <HBox styleClass="hbox">
+                    <Label minWidth="30"/>
+                    <Label>Foreground</Label>
+                    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <ColorPicker fx:id="cpFontLists" prefHeight="26.0" prefWidth="38.0"/>
+                </HBox>
+            </VBox>
+        </HBox>
+        <Separator/>
+        <HBox style="-fx-spacing: 10; -fx-padding: 10" styleClass="hbox">
+            <Label minWidth="250" maxWidth="250"
+                   style="-fx-font-family: 'Segoe UI Semibold'; -fx-font-size: 14">
+                Color Scheme
+            </Label>
+            <Label minWidth="38" style="-fx-font-family: 'Segoe UI Semibold'; -fx-font-size: 14">
+                B
+            </Label>
+            <Label minWidth="18" style="-fx-font-family: 'Segoe UI Semibold'; -fx-font-size: 14">
+                F
+            </Label>
+            <Label style="-fx-font-family: 'Segoe UI Semibold'; -fx-font-size: 14">
+                Default
+            </Label>
+            <Label HBox.hgrow="ALWAYS" maxWidth="Infinity" text=" "/>
+            <Button mnemonicParsing="false"
+                    onAction="#addColorPreset"
+                    text="Add a New Color Scheme"
+            />
+        </HBox>
+        <ScrollPane
+                vbarPolicy="ALWAYS"
+                VBox.vgrow="ALWAYS"
+                hbarPolicy="NEVER">
+            <VBox fx:id="presetsBox" styleClass="vbox"/>
+        </ScrollPane>
+        <HBox alignment="BASELINE_CENTER" styleClass="hbox" style="-fx-spacing: 60">
+            <Button onAction="#save" text="Save"/>
+            <Button fx:id="deleteBoardButton" onAction="#deleteBoard">
+                Delete Board
+            </Button>
+        </HBox>
+    </VBox>
+</fx:root>

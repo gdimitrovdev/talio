@@ -90,6 +90,10 @@ public class TitleField extends AnchorPane {
         textField.setText(title);
     }
 
+    public String getTitle() {
+        return savedTitle;
+    }
+
     /**
      * This is called when a user presses enter while they are editing this title field
      */

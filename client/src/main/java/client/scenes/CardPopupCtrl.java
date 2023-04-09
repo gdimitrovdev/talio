@@ -3,17 +3,21 @@ package client.scenes;
 import client.components.TitleField;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.*;
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
+import commons.Board;
+import commons.Card;
+import commons.Subtask;
+import commons.Tag;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -24,12 +28,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class CardPopupCtrl extends AnchorPane implements Initializable {
+public class CardPopupCtrl extends AnchorPane {
     private final MainCtrlTalio mainCtrlTalio;
 
     private final ServerUtils server;
 
     private Card card;
+
     @FXML
     private AnchorPane anchorPane = new AnchorPane();
 
@@ -81,63 +86,58 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     @FXML
     private Button close;
 
+    Stage stage;
+
     @Inject
-    public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, Card card, ServerUtils server)
-            throws IOException {
+    public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, Card card, ServerUtils server, Stage stage) {
         this.mainCtrlTalio = mainCtrlTalio;
         this.card = card;
         this.server = server;
+        this.stage = stage;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
-        server.registerForMessages("/topic/subtasks", Subtask.class, subtask -> {
+        try {
+            loader.load();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        /*server.registerForMessages(Topics.SUBTASKS.toString(), Subtask.class, subtask -> {
             if (subtask.getCard().getId().equals(card.getId())) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        refresh();
-                    }
-                });
+                Platform.runLater(this::refresh);
             }
         });
 
-        server.registerForMessages("/topic/subtasks", Card.class, cardReceived -> {
+        server.registerForMessages(Topics.SUBTASKS.toString(), Card.class, cardReceived -> {
             if (cardReceived.getId().equals(card.getId())) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        refresh();
+                Platform.runLater(this::refresh);
+            }
+        });*/
+        this.refreshCardData();
+
+        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
+            if (cardReceived.getId().equals(card.getId())) {
+                Platform.runLater(() -> {
+                    Window window = anchorPane.getScene().getWindow();
+
+                    if (window instanceof Stage) {
+                        ((Stage) window).close();
                     }
+
+                    Alert box = new Alert(Alert.AlertType.ERROR);
+                    box.setTitle("Card deleted");
+                    box.setContentText("The card that you are editing has been deleted!");
+                    box.showAndWait();
                 });
             }
         });
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.refreshCardData();
+    public void init() {
 
-        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
-            if (cardReceived.getId().equals(card.getId())) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Window window = anchorPane.getScene().getWindow();
-
-                        if (window instanceof Stage) {
-                            ((Stage) window).close();
-                        }
-
-                        Alert box = new Alert(Alert.AlertType.ERROR);
-                        box.setTitle("Card deleted");
-                        box.setContentText("The card that you are editing has been deleted!");
-                        box.showAndWait();
-                    }
-                });
-            }
-        });
     }
 
     public void refreshCardData() {
@@ -175,7 +175,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
         initializeTags();
 
-        tagMenu = new MenuButton("Add a tag to card");
+        tagMenu = new MenuButton("+");
         tagMenu.getItems().clear();
         initializeTagDropdownMenu();
         tagMenu.setLayoutX(10);
@@ -272,7 +272,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             Button deleteTagButton = new Button("x");
             deleteTagButton.setOnAction(a -> {
                 card.getTags().remove(tag);
-                refreshCardData();
+                //refreshCardData();
             });
             deleteTagButton.getStyleClass().add("remove-tag-button");
 
@@ -292,7 +292,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
                 MenuItem menuItem = new MenuItem(tag.getTitle());
                 menuItem.setOnAction(event -> {
                     card.getTags().add(tag);
-                    refreshCardData();
+                    //refreshCardData();
                 });
 
                 tagMenu.getItems().add(menuItem);
@@ -322,9 +322,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         // TODO take care of the color as well
         card.setTitle(cardTitle.getText());
         card.setDescription(cardDescription.getText());
-        System.out.println("Card gonna be updated now");
         server.updateCard(card);
-        System.out.println("Card updated");
 
         List<Tag> tagsOnServer = server.getCard(card.getId()).getTags();
         List<Tag> tagsToAdd = new ArrayList<Tag>();
@@ -342,17 +340,15 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             }
         }
 
-        System.out.println("tags calculated");
         for (Tag tag : tagsToAdd) {
-            System.out.println("adding tag");
             server.addTagToCard(card.getId(), tag.getId());
 
         }
         for (Tag tag : tagsToRemove) {
-            System.out.println("removing tag");
             server.removeTagFromCard(card.getId(), tag.getId());
         }
-        System.out.println("done");
+
+        stage.close();
     }
 
     private void assignEmptyBoardWithId(Tag tag) {

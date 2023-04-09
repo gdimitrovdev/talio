@@ -7,6 +7,7 @@ import client.utils.Utils;
 import commons.Card;
 import commons.CardList;
 import commons.Subtask;
+import commons.Topics;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
@@ -15,7 +16,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -84,36 +84,36 @@ public class CardComponentCtrl extends AnchorPane {
         addClickedEventHandler();
 
         setOnMouseDoubleClicked((me) -> {
-            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));
-            try {
-                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
-                        server.getCard(cardId), server));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Parent root1 = null;
-            try {
-                root1 = cardPopupLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            /*FXMLLoader cardPopupLoader =
+                    new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));*/
             Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.show();
-            /*stage.setOnCloseRequest(event -> {
-                setCard(server.getCard(cardId));
-            });*/
-        });
-        /*setOnMouseDoubleClicked((me) -> {
-            if (title.isDisabled()) {
-                title.setDisable(false);
-                title.requestFocus();
+            /*try {
+                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
+                        server.getCard(cardId), server, stage));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        });*/
+            Parent root = null;
+            try {
+                root = cardPopupLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }*/
+            stage.setScene(new Scene(new CardPopupCtrl(mainCtrlTalio, server.getCard(cardId),
+                    server, stage)));
+            stage.show();
+        });
 
         subtaskProgress.setDisable(true);
     }
 
+    /**
+     * This constructor is used when creating a CardComponent of a card that's already on the server
+     *
+     * @param mainCtrlTalio
+     * @param server
+     * @param cardId
+     */
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, Long cardId) {
         init(mainCtrlTalio, server);
         this.cardId = cardId;
@@ -128,25 +128,33 @@ public class CardComponentCtrl extends AnchorPane {
         // card: card update DONE
         // card: add tag DONE
         // card: remove tag DONE
-        server.registerForMessages("/topic/cards", Card.class, card -> {
+        server.registerForMessages(Topics.CARDS.toString(), Card.class, card -> {
             if (card.getId().equals(cardId)) {
                 Platform.runLater(() -> setCard(card));
             }
         });
 
-        server.registerForMessages("/topic/subtasks", Subtask.class, subtask -> {
+        server.registerForMessages(Topics.SUBTASKS.toString(), Subtask.class, subtask -> {
             if (subtask.getCard().getId().equals(cardId)) {
                 Platform.runLater(() -> setCard(subtask.getCard()));
             }
         });
 
-        server.registerForMessages("/topic/subtasks", Card.class, cardReceived -> {
+        server.registerForMessages(Topics.SUBTASKS.toString(), Card.class, cardReceived -> {
             if (cardReceived.getId().equals(cardId)) {
                 Platform.runLater(() -> setCard(cardReceived));
             }
         });
     }
 
+    /**
+     * Create a CardComponent for a card that does not yet exist on the server
+     * Once the user enters a title and presses enter it will create the card on the server
+     *
+     * @param mainCtrlTalio
+     * @param server
+     * @param list
+     */
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server,
             ListComponentCtrl list) {
         this.list = list;
@@ -164,8 +172,7 @@ public class CardComponentCtrl extends AnchorPane {
                 deleteButton.setVisible(true);
                 deleteButton.setManaged(true);
                 CardList cardList = server.getCardList((list).getListId());
-                server.createCard(new Card(newTitle, "", cardList,
-                        server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
+                server.createCard(new Card(newTitle, "", cardList, -1));
             });
         }, () -> {
             Platform.runLater(() -> {
@@ -191,11 +198,19 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     public void setCard(Card newCardData) {
-        String colors = newCardData.getList().getBoard().getCardColorPresets()
-                .get(newCardData.getColorPresetNumber());
+        String colors;
 
-        String colorBackground = colors.substring(0, 7);
-        String colorForeground = colors.substring(8);
+        if (newCardData.getColorPresetNumber().equals(-1)) {
+            // Board's default color preset
+            colors = newCardData.getList().getBoard().getCardColorPresets()
+                    .get(newCardData.getList().getBoard().getDefaultPresetNum());
+        } else {
+            colors = newCardData.getList().getBoard().getCardColorPresets()
+                    .get(newCardData.getColorPresetNumber());
+        }
+
+        String colorBackground = Utils.getBackgroundColor(colors);
+        String colorForeground = Utils.getForegroundColor(colors);
 
         this.setStyle("-fx-color-background: " + colorBackground + "; -fx-color-foreground: "
                 + colorForeground + ";");
@@ -297,7 +312,7 @@ public class CardComponentCtrl extends AnchorPane {
             // If we change the design, it will break. I could do the calculations so, it doesn't
             // use magic numbers, but it works well for now.
             // TODO remove the magic numbers from here
-            tagsContainer.setMinHeight((newCardData.getTags().size() / 3) * 20 + 10);
+            tagsContainer.setMinHeight((newCardData.getTags().size() / 3 * 20) + 10);
 
         } else {
             tagsContainer.setVisible(false);
@@ -314,6 +329,7 @@ public class CardComponentCtrl extends AnchorPane {
         server.removeUpdateEvent(updateCard);
     }
 
+    // Adapted from https://stackoverflow.com/a/70493396/6431494
     // TODO extract the single/double click event handler so that it can be used with any UI
     //  component using composition
     private long delayMs = 250;
@@ -351,13 +367,13 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     private void addClickedEventHandler() {
-        //Handling the mouse clicked event (not using 'onMouseClicked' so it can still be used by developer).
+        // Handling the mouse clicked event (not using 'onMouseClicked' so it can still be used
+        // by developer).
         EventHandler<MouseEvent> eventHandler = me -> {
             switch (me.getButton()) {
                 case PRIMARY:
                     if (me.getClickCount() == 1) {
                         latestClickRunner = new ClickRunner(() -> {
-                            System.out.println("ButtonWithDblClick : SINGLE Click fired");
                             try {
                                 onMouseSingleClickedProperty.get().handle(me);
                             } catch (Exception ignored) {
@@ -371,18 +387,13 @@ public class CardComponentCtrl extends AnchorPane {
                         if (latestClickRunner != null) {
                             latestClickRunner.abort();
                         }
-                        System.out.println("ButtonWithDblClick : DOUBLE Click fired");
                         onMouseDoubleClickedProperty.get().handle(me);
                     }
-                    break;
-                case SECONDARY:
-                    // Right-click operation. Not implemented since usually no double RIGHT click needs to be caught.
                     break;
                 default:
                     break;
             }
         };
-        //Adding the event handler
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 

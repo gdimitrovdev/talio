@@ -15,7 +15,7 @@
 
 
 <AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="800.0"
-            stylesheets="@/client/scenes/css/BoardComponent.css" xmlns="http://javafx.com/javafx/19"
+            stylesheets="@/client/css/BoardComponent.css" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
 
     <ToolBar fx:id="toolbar" prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
@@ -34,11 +34,13 @@
                     <Tooltip text="Return to Homepage"/>
                 </tooltip>
             </Button>
-            <HBox fx:id="spacer" prefWidth="150.0" />
-            <Label fx:id="boardNameLabel"  />
-            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0" />
+            <HBox fx:id="spacer" prefWidth="150.0"/>
+            <Label fx:id="boardNameLabel"/>
+            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0"/>
             <Button fx:id="tagsManagementBTN" text="Tags" onAction="#tags">
-                <tooltip><Tooltip text="Manage your tags" /></tooltip>
+                <tooltip>
+                    <Tooltip text="Manage your tags"/>
+                </tooltip>
             </Button>
             <Button fx:id="shareBTN" onAction="#share">
                 <graphic>

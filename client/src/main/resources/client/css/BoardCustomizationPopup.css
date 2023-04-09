@@ -1,0 +1,23 @@
+@import url(./Common.css);
+
+.label {
+    -fx-font-size: 14;
+    -fx-font-family: 'Segoe UI Semibold';
+}
+
+#deleteBoardButton {
+    -fx-background-color: rgb(255, 97, 97);
+}
+
+.hbox {
+    -fx-spacing: 5;
+}
+
+.vbox {
+    -fx-spacing: 10;
+}
+
+.separator .line {
+    -fx-border-color: #626262;
+    -fx-border-width: 1;
+}

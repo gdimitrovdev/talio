@@ -109,7 +109,6 @@ public class ServerUtils {
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -209,7 +208,7 @@ public class ServerUtils {
 
     public <T> Object addUpdateEvent(Class<T> type, Consumer<T> consumer) {
         var key = new Object();
-        updateEvents.put(key, new UpdateEvent(type, consumer));
+        updateEvents.put(key, new UpdateEvent<T>(type, consumer));
         return key;
     }
 
@@ -220,6 +219,7 @@ public class ServerUtils {
         updateEvents.remove(key);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override

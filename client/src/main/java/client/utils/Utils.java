@@ -12,6 +12,14 @@ import javafx.scene.paint.Color;
  */
 public class Utils {
     // Adapted from https://stackoverflow.com/a/51726678/6431494
+
+    /**
+     * Recolors an image, so that every pixel that is not transparent, becomes the target color
+     *
+     * @param inputImage
+     * @param color
+     * @return
+     */
     public static Image reColor(Image inputImage, String color) {
         Color newColor = Color.web(color);
         int width = (int) inputImage.getWidth();
@@ -39,5 +47,33 @@ public class Utils {
             }
         }
         return outputImage;
+    }
+
+    /**
+     * @param color color in format #XXXXXX/#XXXXXX/OPTIONAL_NAME
+     * @return the background color
+     */
+    public static String getBackgroundColor(String color) {
+        return color.split("/")[0];
+    }
+
+    /**
+     * @param color color in format #XXXXXX/#XXXXXX/OPTIONAL_NAME
+     * @return the foreground color
+     */
+    public static String getForegroundColor(String color) {
+        return color.split("/")[1];
+    }
+
+    /**
+     * The color schemes also need a name, so the easiest way to add the name is to append it
+     * to the end of the color of the scheme, since that was already a single string in the
+     * format #XXXXXX/#XXXXXX
+     *
+     * @param color color in format #XXXXXX/#XXXXXX/COLOR_SCHEME_NAME
+     * @return the name of the color scheme
+     */
+    public static String getColorSchemeName(String color) {
+        return color.split("/")[2];
     }
 }

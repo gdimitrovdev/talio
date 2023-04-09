@@ -2,11 +2,20 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -21,10 +30,10 @@ public class MainCtrlTalio {
     private ServerConnectionCtrl serverConnectionCtrl;
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
-    private BoardSettingsCtrl boardSettingsCtrl;
     private TagManagementCtrl tagManagementCtrl;
-    private ServerUtils server;
+    private final ServerUtils server;
     private Map<String, Set<Long>> joinedBoards;
+    //private MyFXML fxml;
 
     @Inject
     public MainCtrlTalio(ServerUtils server) {
@@ -39,8 +48,8 @@ public class MainCtrlTalio {
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
-            Pair<BoardSettingsCtrl, Parent> boardSettingsPair,
-            Pair<TagManagementCtrl, Parent> tagManagementPair) {
+            Pair<TagManagementCtrl, Parent> tagManagementPair
+    ) {
 
         readFromLocalData();
 
@@ -64,13 +73,9 @@ public class MainCtrlTalio {
         this.shareBoardCtrl = shareBoardPair.getKey();
         this.shareBoard = new Scene(shareBoardPair.getValue());
 
-        this.boardSettingsCtrl = boardSettingsPair.getKey();
-        this.boardSettings = new Scene(boardSettingsPair.getValue());
-
         this.tagManagementCtrl = tagManagementPair.getKey();
         this.tagManagement = new Scene(tagManagementPair.getValue());
 
-        // showHome();
         this.showServerConnection();
 
         primaryStageTalio.show();
@@ -119,6 +124,7 @@ public class MainCtrlTalio {
         writeToLocalData();
     }
 
+    @SuppressWarnings("unchecked")
     private void readFromLocalData() {
         File toRead = new File(".local_data");
 
@@ -141,7 +147,7 @@ public class MainCtrlTalio {
         ) {
             oos.writeObject(joinedBoards);
             oos.flush();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -177,10 +183,11 @@ public class MainCtrlTalio {
     }
 
     public void showBoardSettings(Board board) {
-        boardSettingsCtrl.initialize(board);
         Stage stage = new Stage();
+        var boardSettingsCtrl = new BoardSettingsCtrl(this, server, stage, board);
         stage.setTitle("Talio: Board Settings");
-        stage.setScene(boardSettings);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(boardSettingsCtrl));
         stage.show();
     }
 

@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import commons.Topics;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -92,7 +93,7 @@ public class BoardCtrl implements Initializable {
         // - list creation DONE
         // - list deletion DONE
         // - board deletion TODO
-        server.registerForMessages("/topic/boards", CardList.class, cardList -> {
+        server.registerForMessages(Topics.BOARDS.toString(), CardList.class, cardList -> {
             if (cardList.getBoard().getId().equals(boardId)) {
                 Platform.runLater(new Runnable() {
                     @Override
@@ -103,7 +104,7 @@ public class BoardCtrl implements Initializable {
             }
         });
 
-        server.registerForMessages("/topic/boards", Board.class, board -> {
+        server.registerForMessages(Topics.BOARDS.toString(), Board.class, board -> {
             if (board.getId().equals(boardId)) {
                 Platform.runLater(new Runnable() {
                     @Override
@@ -132,10 +133,8 @@ public class BoardCtrl implements Initializable {
         shareBTN.setStyle("-fx-text-fill: " + fontColor);
         newListButton.setStyle("-fx-text-fill: " + fontColor);
         backHomeBTN.setStyle("-fx-text-fill: " + fontColor);
-
-
-
         boardNameLabel.setText(board.getName());
+
         Platform.runLater(() -> innerHBox.getChildren().clear());
         for (CardList cardList : board.getLists()) {
             ListComponentCtrl listComponent = new ListComponentCtrl(mainCtrlTalio,
