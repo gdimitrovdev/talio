@@ -2,6 +2,7 @@ package server.controllers;
 
 import commons.Card;
 import commons.Tag;
+import commons.Topics;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -55,19 +56,34 @@ public class TagController {
         return ResponseEntity.ok(optionalTag.get());
     }
 
+    /**
+     * Sends websocket update to Topics.TAGS
+     *
+     * @param tag
+     * @return
+     */
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Tag> createOne(@RequestBody Tag tag) {
         try {
             Tag newTag = tagService.createOne(tag);
-            template.convertAndSend("topics/tags", newTag);
+            template.convertAndSend(Topics.TAGS.toString(), newTag);
             return ResponseEntity.ok(newTag);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    // TODO send update about this using long-polling and don't send updates to the cards
+
+    /**
+     * Sends update to Topic.CARDS for each card that has this tag
+     * Also removes tag from any cards that have it
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity deleteOne(@PathVariable("id") Long id) {
@@ -75,36 +91,43 @@ public class TagController {
             List<Card> affectedCards =
                     cardService.getMany().stream().filter(c -> c.getTags().stream()
                             .anyMatch(t -> t.getId().equals(id))).toList();
-
             for (Card card : affectedCards) {
                 cardService.removeTagFromCard(id, card.getId());
-                template.convertAndSend("/topic/cards", cardService.getOne(card.getId()));
+                template.convertAndSend(Topics.CARDS.toString(), cardService.getOne(card.getId()));
             }
-
             tagService.deleteOne(id);
-
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    // TODO don't send updates to the cards
+
+    /**
+     * Sends websocket updates to Topics.TAGS and Topics.CARD for each card that has this tag
+     *
+     * @param id
+     * @param tag
+     * @return
+     */
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Tag> updateOne(@PathVariable Long id,
             @RequestBody Tag tag) {
         try {
+            Tag updated = tagService.updateOne(id, tag);
             List<Card> affectedCards =
                     cardService.getMany().stream().filter(c -> c.getTags().stream()
                             .anyMatch(t -> t.getId().equals(id))).toList();
-            Tag updated = tagService.updateOne(id, tag);
             for (Card card : affectedCards) {
-                template.convertAndSend("/topic/cards", cardService.getOne(card.getId()));
+                template.convertAndSend(Topics.CARDS.toString(), cardService.getOne(card.getId()));
             }
+            template.convertAndSend(Topics.TAGS.toString(), updated);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

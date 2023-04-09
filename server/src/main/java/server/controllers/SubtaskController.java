@@ -2,6 +2,7 @@ package server.controllers;
 
 import commons.Card;
 import commons.Subtask;
+import commons.Topics;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -28,7 +29,8 @@ public class SubtaskController {
     private final CardService cardService;
 
     @Inject
-    public SubtaskController(SubtaskService subtaskService, CardService cardService, SimpMessagingTemplate template) {
+    public SubtaskController(SubtaskService subtaskService, CardService cardService,
+            SimpMessagingTemplate template) {
         this.subtaskService = subtaskService;
         this.cardService = cardService;
         this.template = template;
@@ -51,19 +53,33 @@ public class SubtaskController {
         return ResponseEntity.ok(optionalSubtask.get());
     }
 
+    /**
+     * Also sends an update to Topics.SUBTASKS
+     *
+     * @param subtask
+     * @return
+     */
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Subtask> createOne(@RequestBody Subtask subtask) {
         try {
             Subtask newSubtask = subtaskService.createOne(subtask);
-            template.convertAndSend("/topic/subtasks", newSubtask);
+            template.convertAndSend(Topics.CARDS.toString(), newSubtask.getCard());
             return ResponseEntity.ok(newSubtask);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    // TODO Make this send a Topics.SUBTASK update
+
+    /**
+     * Also sends an update to the card that the subtasks was in
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Card> deleteOne(@PathVariable("id") Long id) {
@@ -71,24 +87,31 @@ public class SubtaskController {
             var cardId = subtaskService.getOne(id).get().getCard().getId();
             subtaskService.deleteOne(id);
             var card = cardService.getOne(cardId).get();
-            template.convertAndSend("/topic/subtasks", card);
+            template.convertAndSend(Topics.CARDS.toString(), card);
             return ResponseEntity.ok(card);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    /**
+     * Also sends an update to Topics.CARDS
+     *
+     * @param id
+     * @param subtask
+     * @return
+     */
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Subtask> updateOne(@PathVariable Long id,
             @RequestBody Subtask subtask) {
         try {
             Subtask updatedSubtask = subtaskService.updateOne(id, subtask);
-            template.convertAndSend("/topic/subtasks", updatedSubtask);
+            template.convertAndSend(Topics.CARDS.toString(), updatedSubtask.getCard());
             return ResponseEntity.ok(updatedSubtask);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

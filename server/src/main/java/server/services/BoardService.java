@@ -5,6 +5,7 @@ import commons.Card;
 import commons.CardList;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -40,6 +41,9 @@ public class BoardService {
     }
 
     public Optional<Board> getOne(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
         return boardRepository.findById(id);
     }
 
@@ -47,34 +51,52 @@ public class BoardService {
         return boardRepository.findByCode(code);
     }
 
+    /**
+     * Ignores codes, lists and tags
+     *
+     * @param board
+     * @return
+     */
     public Board createOne(Board board) {
+        board.setTags(new ArrayList<>());
+        board.setLists(new ArrayList<>());
         updateBoardCodes(board);
-        Board newBoard = boardRepository.save(board);
-        return newBoard;
+        return boardRepository.save(board);
     }
 
     public void deleteOne(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
         if (boardRepository.existsById(id)) {
             boardRepository.deleteById(id);
         }
     }
 
+    /**
+     * Ignores lists and tags
+     *
+     * @param id
+     * @param board
+     * @return
+     * @throws EntityNotFoundException
+     */
     public Board updateOne(Long id, Board board) throws EntityNotFoundException {
         Board existingBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
-        //        if (isCodeAlreadyUsed(board.getCode())) {
-        //            throw new IllegalArgumentException("This code is already used by a board");
-        //        }
-        //        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
-        //            throw new IllegalArgumentException("This read only code is already used by a board");
-        //        }
-        //        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
-        //            throw new IllegalArgumentException("Code and readOnlyCode must be different");
-        //        }
+        /* (isCodeAlreadyUsed(board.getCode())) {
+            throw new IllegalArgumentException("This code is already used by a board");
+        }
+        if (isCodeAlreadyUsed(board.getReadOnlyCode())) {
+            throw new IllegalArgumentException("This read only code is already used by a board");
+        }
+        if (board.getCode().contentEquals(board.getReadOnlyCode())) {
+            throw new IllegalArgumentException("Code and readOnlyCode must be different");
+        }*/
         if (!existingBoard.getDefaultPresetNum().equals(board.getDefaultPresetNum())) {
             for (CardList cardList : board.getLists()) {
                 for (Card card : cardList.getCards()) {
-                    if (card.getColorPresetNumber() == existingBoard.getDefaultPresetNum()) {
+                    if (card.getColorPresetNumber().equals(existingBoard.getDefaultPresetNum())) {
                         Card newCard = cardRepository.findById(card.getId()).get();
                         newCard.setColorPresetNumber(board.getDefaultPresetNum());
                         cardRepository.saveAndFlush(newCard);
@@ -100,12 +122,12 @@ public class BoardService {
     }
 
     public void updateBoardCodes(Board board) {
-        String code = null;
+        String code;
         do {
             code = getNewRandomCode(5);
         } while (isCodeAlreadyUsed(code));
 
-        String readOnlyCode = null;
+        String readOnlyCode;
         do {
             readOnlyCode = getNewRandomCode(5);
         } while (isCodeAlreadyUsed(readOnlyCode) || readOnlyCode.contentEquals(code));
@@ -115,7 +137,7 @@ public class BoardService {
     }
 
     public String getNewRandomCode(int length) {
-        String randomNumberStr = random.nextInt() + "";
+        String randomNumberStr = "%d".formatted(random.nextInt());
         messageDigest.update(randomNumberStr.getBytes());
 
         String hash = DatatypeConverter.printHexBinary(messageDigest.digest());

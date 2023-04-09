@@ -29,7 +29,12 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -49,6 +54,11 @@ public class ServerUtils {
     private StompSession session;
     private Map<Object, UpdateEvent> updateEvents = new HashMap<>();
     private WebTarget webTarget;
+    private Map<Long, Board> cachedBoards = new HashMap<>();
+    private Map<Long, CardList> cachedLists = new HashMap<>();
+    private Map<Long, Card> cachedCards = new HashMap<>();
+    private Map<Long, Subtask> cachedSubtasks = new HashMap<>();
+    private Map<Long, Tag> cachedTags = new HashMap<>();
 
     private class UpdateEvent<T> implements Consumer<T> {
         public final Class<T> type;
@@ -99,12 +109,12 @@ public class ServerUtils {
             }
             return false;
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return false;
         }
     }
 
-    public Long getSubscribedBoard() {
+    public Long getSubscribedBoardId() {
         return subscribedBoard;
     }
 
@@ -124,6 +134,7 @@ public class ServerUtils {
         }
         try {
             unsubscribeFromBoard();
+            subscribedBoard = id;
             connectToServerUsingSTOMPWebSockets();
         } catch (Exception e) {
             throw new ConnectException("Exception while trying to subscribe to board: " + id + "\n"
@@ -218,13 +229,61 @@ public class ServerUtils {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
+                crawlCurrentBoardAndRecache();
                 consumer.accept((T) payload);
             }
         });
 
     }
 
+    private synchronized void invalidateAllCaches() {
+        cachedBoards.clear();
+        cachedCards.clear();
+        cachedLists.clear();
+        cachedSubtasks.clear();
+        cachedTags.clear();
+    }
+
+    /**
+     * Invalidates all caches, gets the subscribed board from the server and populates all of the
+     * caches with objects from just the board
+     */
+    private synchronized void crawlCurrentBoardAndRecache() {
+        if (!isSubscribedToBoard()) {
+            return;
+            /*throw new RuntimeException("You need to be subscribed to a board, to crawl the "
+                    + "current board");*/
+        }
+        invalidateAllCaches();
+        Board board = webTarget.path("api").path("boards").path(getSubscribedBoardId().toString())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Board>() {
+                });
+        cachedBoards.put(board.getId(), board);
+        for (CardList list : board.getLists()) {
+            cachedLists.put(list.getId(), list);
+            for (Card card : list.getCards()) {
+                cachedCards.put(card.getId(), card);
+                for (Subtask subtask : card.getSubtasks()) {
+                    cachedSubtasks.put(subtask.getId(), subtask);
+                }
+            }
+        }
+        for (Tag tag : board.getTags()) {
+            cachedTags.put(tag.getId(), tag);
+        }
+    }
+
     public Tag getTag(Long tagId) {
+        if (cachedTags.containsKey(tagId)) {
+            return cachedTags.get(tagId);
+        }
+        crawlCurrentBoardAndRecache();
+        if (cachedTags.containsKey(tagId)) {
+            return cachedTags.get(tagId);
+        }
+        System.out.println("Uncached tag access");
         return webTarget.path("api/tags/" + tagId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -232,28 +291,61 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Ignores list of cards
+     *
+     * @param tag
+     * @return
+     */
     public Tag createTag(Tag tag) {
+        Tag newTag = new Tag();
+        Board board = new Board();
+        board.setId(tag.getBoard().getId());
+        newTag.setBoard(board);
+        newTag.setCards(new ArrayList<>());
+        newTag.setTitle(tag.getTitle());
+        newTag.setColor(tag.getColor());
         return webTarget.path("api/tags")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+                .post(Entity.entity(newTag, APPLICATION_JSON), Tag.class);
     }
 
+    /**
+     * Ignores list of cards and board
+     *
+     * @param tag
+     * @return
+     */
     public Tag updateTag(Tag tag) {
-        return webTarget.path("api/tags/" + tag.getId())
+        Tag newTag = new Tag();
+        newTag.setBoard(null);
+        newTag.setCards(new ArrayList<>());
+        newTag.setTitle(tag.getTitle());
+        newTag.setColor(tag.getColor());
+        newTag.setId(tag.getId());
+        return webTarget.path("api").path("tags").path(newTag.getId().toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+                .put(Entity.entity(newTag, APPLICATION_JSON), Tag.class);
     }
 
     public void deleteTag(Long tagId) {
-        webTarget.path("/api/tags/" + tagId)
+        webTarget.path("api").path("tags").path(tagId.toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
     }
 
     public Subtask getSubtask(Long subtaskId) {
+        if (cachedSubtasks.containsKey(subtaskId)) {
+            return cachedSubtasks.get(subtaskId);
+        }
+        crawlCurrentBoardAndRecache();
+        if (cachedSubtasks.containsKey(subtaskId)) {
+            return cachedSubtasks.get(subtaskId);
+        }
+        System.out.println("Uncached subtask access");
         return webTarget.path("api/subtasks/" + subtaskId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -261,30 +353,55 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Ignores the position of a subtask in a card, it's always added last
+     *
+     * @param subtask
+     */
     public Subtask createSubtask(Subtask subtask) {
-        return webTarget.path("api/subtasks")
+        Card card = new Card();
+        card.setId(subtask.getCard().getId());
+        Subtask newSubtask = new Subtask(subtask.getTitle(), card, subtask.getCompleted());
+        newSubtask.setPositionInCard(null);
+        return webTarget.path("api").path("subtasks")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+                .post(Entity.entity(newSubtask, APPLICATION_JSON), Subtask.class);
     }
 
+    /**
+     * Ignores a subtask's card
+     *
+     * @param subtask
+     * @return
+     */
     public Subtask updateSubtask(Subtask subtask) {
-        return webTarget.path("api/subtasks/" + subtask.getId())
+        Subtask newSubtask = new Subtask(subtask.getTitle(), null, subtask.getCompleted());
+        newSubtask.setPositionInCard(subtask.getPositionInCard());
+        newSubtask.setId(subtask.getId());
+        return webTarget.path("api").path("subtasks").path(newSubtask.getId().toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+                .put(Entity.entity(newSubtask, APPLICATION_JSON), Subtask.class);
     }
 
-    public Card deleteSubtask(Long subtaskId) {
-        return webTarget.path("/api/subtasks/" + subtaskId)
+    public void deleteSubtask(Long subtaskId) {
+        webTarget.path("api").path("subtasks").path(subtaskId.toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .delete(new GenericType<Card>() {
-                });
+                .delete();
     }
 
     public CardList getCardList(Long listId) {
         try {
+            if (cachedLists.containsKey(listId)) {
+                return cachedLists.get(listId);
+            }
+            crawlCurrentBoardAndRecache();
+            if (cachedLists.containsKey(listId)) {
+                return cachedLists.get(listId);
+            }
+            System.out.println("Uncached list access");
             return webTarget.path("api/lists/" + listId)
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
@@ -297,22 +414,42 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Ignores a list's list of cards
+     *
+     * @param list
+     * @return
+     */
     public CardList createCardList(CardList list) {
-        return webTarget.path("api/lists")
+        Board board = new Board();
+        board.setId(list.getBoard().getId());
+        list.setBoard(board);
+        CardList newList = new CardList(list.getTitle(), board);
+        newList.setCards(null);
+        return webTarget.path("api").path("lists")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(list, APPLICATION_JSON), CardList.class);
+                .post(Entity.entity(newList, APPLICATION_JSON), CardList.class);
     }
 
+    /**
+     * Ignores board and list of cards
+     *
+     * @param list
+     * @return
+     */
     public CardList updateCardList(CardList list) {
-        return webTarget.path("api/lists/" + list.getId())
+        CardList newList = new CardList(list.getTitle(), null);
+        newList.setCards(null);
+        newList.setId(list.getId());
+        return webTarget.path("api").path("lists").path(newList.getId().toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(list, APPLICATION_JSON), CardList.class);
+                .put(Entity.entity(newList, APPLICATION_JSON), CardList.class);
     }
 
     public Board deleteCardList(Long listId) {
-        return webTarget.path("/api/lists/" + listId)
+        return webTarget.path("api").path("lists").path(listId.toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(new GenericType<Board>() {
@@ -320,33 +457,58 @@ public class ServerUtils {
     }
 
     public Board getBoard(Long boardId) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(restServerUrl + "/api/boards/" + boardId, Board.class);
-        /*
-        return webTarget.path("api/boards/" + boardId)
+        if (cachedBoards.containsKey(boardId)) {
+            return cachedBoards.get(boardId);
+        }
+        crawlCurrentBoardAndRecache();
+        if (cachedBoards.containsKey(boardId)) {
+            return cachedBoards.get(boardId);
+        }
+        System.out.println("Uncached board access");
+        //RestTemplate restTemplate = new RestTemplate();
+        //return restTemplate.getForObject(restServerUrl + "/api/boards/" + boardId, Board.class);
+        return webTarget.path("api").path("boards").path(boardId.toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<Board>() {
                 });
-                */
     }
 
+    /**
+     * Ignores codes, lists and tags
+     *
+     * @param board
+     * @return
+     */
     public Board createBoard(Board board) {
-        return webTarget.path("api/boards")
+        Board newBoard = new Board(board.getName(), board.getCode(), board.getReadOnlyCode(),
+                board.getBoardColor(), board.getListsColor(), null, null,
+                board.getCardColorPresets(), board.getDefaultPresetNum());
+        return webTarget.path("api").path("boards")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+                .post(Entity.entity(newBoard, APPLICATION_JSON), Board.class);
     }
 
+    /**
+     * Ignores lists and tags
+     *
+     * @param board
+     * @return
+     */
     public Board updateBoard(Board board) {
-        return webTarget.path("api/boards/" + board.getId())
+        Board newBoard = new Board(board.getName(), board.getCode(), board.getReadOnlyCode(),
+                board.getBoardColor(), board.getListsColor(), null, null,
+                board.getCardColorPresets(), board.getDefaultPresetNum());
+        newBoard.setId(board.getId());
+        return webTarget.path("api").path("boards").path(newBoard.getId().toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+                .put(Entity.entity(newBoard, APPLICATION_JSON), Board.class);
     }
 
     public void deleteBoard(Long boardId) {
-        webTarget.path("api/boards/" + boardId)
+        webTarget.path("api").path("boards").path(boardId.toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -355,14 +517,23 @@ public class ServerUtils {
     public Board joinBoard(String code) {
         RestTemplate restTemplate = new RestTemplate();
         try {
-            return restTemplate.getForObject(restServerUrl + "/api/boards/by-code/" + code, Board.class);
+            return restTemplate.getForObject(restServerUrl + "/api/boards/by-code/" + code,
+                    Board.class);
         } catch (RuntimeException e) {
             return new Board("NotFoundInSystem", "", "", "", "", null, 0);
         }
-          
+
     }
 
     public Card getCard(Long cardId) {
+        if (cachedCards.containsKey(cardId)) {
+            return cachedCards.get(cardId);
+        }
+        crawlCurrentBoardAndRecache();
+        if (cachedCards.containsKey(cardId)) {
+            return cachedCards.get(cardId);
+        }
+        System.out.println("Uncached card access");
         return webTarget.path("api/cards/" + cardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -371,35 +542,41 @@ public class ServerUtils {
     }
 
     /**
-     * Ignores list and tags
+     * Ignores tags
+     *
      * @param card
-     * @return
      */
-    public Card createCard(Card card) {
-        return webTarget.path("api/cards")
+    public void createCard(Card card) {
+        CardList list = new CardList();
+        list.setId(card.getList().getId());
+        Card newCard = new Card(card.getTitle(), card.getDescription(),
+                card.getColorPresetNumber(), list, null, null);
+        webTarget.path("api").path("cards")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+                .post(Entity.entity(newCard, APPLICATION_JSON));
     }
 
     /**
      * Ignores list and tags
+     *
      * @param card
-     * @return
      */
-    public Card updateCard(Card card) {
-        return webTarget.path("api/cards/" + card.getId())
+    public void updateCard(Card card) {
+        Card newCard = new Card(card.getTitle(), card.getDescription(),
+                card.getColorPresetNumber(), null, null, null);
+        newCard.setId(card.getId());
+        webTarget.path("api").path("cards").path(newCard.getId().toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(newCard, APPLICATION_JSON));
     }
 
-    public CardList deleteCard(Long cardId) {
-        return webTarget.path("/api/cards/" + cardId)
+    public void deleteCard(Long cardId) {
+        webTarget.path("api").path("cards").path(cardId.toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .delete(new GenericType<CardList>() {
-                });
+                .delete();
     }
 
     public void moveCardToListLast(Long cardId, Long newListId) {
@@ -414,14 +591,16 @@ public class ServerUtils {
         }
         webTarget.path("/api/lists/refresh-list/" + oldListId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<CardList>() {});
+                .get(new GenericType<CardList>() {
+                });
         try {
             webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .get(new GenericType<CardList>() {
                     });
         } catch (Exception e) {
-            System.out.println("Error on moveCardToListLast(" + cardId + ", " + newListId + "):\n" + e);
+            System.out.println(
+                    "Error on moveCardToListLast(" + cardId + ", " + newListId + "):\n" + e);
         }
     }
 
@@ -438,7 +617,8 @@ public class ServerUtils {
         }
         webTarget.path("/api/lists/refresh-list/" + oldListId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<CardList>() {});
+                .get(new GenericType<CardList>() {
+                });
         try {
             webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
                             + "/" + cardAfterId)
@@ -451,18 +631,16 @@ public class ServerUtils {
         }
     }
 
-    public Card addTagToCard(Long cardId, Long tagId) {
-        return webTarget.path("/api/cards/add-tag-to-card/" + cardId + "/" + tagId)
+    public void addTagToCard(Long cardId, Long tagId) {
+        webTarget.path("/api/cards/add-tag-to-card/" + cardId + "/" + tagId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<Card>() {
-                });
+                .get();
     }
 
-    public Card removeTagFromCard(Long cardId, Long tagId) {
-        return webTarget.path("/api/cards/remove-tag-from-card/" + cardId + "/" + tagId)
+    public void removeTagFromCard(Long cardId, Long tagId) {
+        webTarget.path("/api/cards/remove-tag-from-card/" + cardId + "/" + tagId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<Card>() {
-                });
+                .get();
     }
 
     public void moveUp(Subtask subtask) {
@@ -470,16 +648,7 @@ public class ServerUtils {
                 .filter(s -> (s.getPositionInCard() < subtask.getPositionInCard()))
                 .max(Comparator.comparing(Subtask::getPositionInCard));
 
-        if (oneUp.isPresent()) {
-            Subtask anotherSubtask = oneUp.get();
-
-            Long temp = anotherSubtask.getPositionInCard();
-            anotherSubtask.setPositionInCard(subtask.getPositionInCard());
-            subtask.setPositionInCard(temp);
-
-            updateSubtask(subtask);
-            updateSubtask(anotherSubtask);
-        }
+        swapSubtasks(subtask, oneUp);
     }
 
     public void moveDown(Subtask subtask) {
@@ -487,15 +656,27 @@ public class ServerUtils {
                 .filter(s -> (s.getPositionInCard() > subtask.getPositionInCard()))
                 .min(Comparator.comparing(Subtask::getPositionInCard));
 
-        if (oneDown.isPresent()) {
-            Subtask anotherSubtask = oneDown.get();
+        swapSubtasks(subtask, oneDown);
+    }
+
+    private void swapSubtasks(Subtask subtask, Optional<Subtask> otherSubtask) {
+        if (otherSubtask.isPresent()) {
+            Subtask anotherSubtask = otherSubtask.get();
 
             Long temp = anotherSubtask.getPositionInCard();
-            anotherSubtask.setPositionInCard(subtask.getPositionInCard());
-            subtask.setPositionInCard(temp);
 
-            updateSubtask(subtask);
-            updateSubtask(anotherSubtask);
+            Subtask newOtherSubtask = new Subtask(anotherSubtask.getTitle(),
+                    anotherSubtask.getCard(), anotherSubtask.getCompleted());
+            newOtherSubtask.setId(anotherSubtask.getId());
+            newOtherSubtask.setPositionInCard(subtask.getPositionInCard());
+
+            Subtask newSubtask = new Subtask(subtask.getTitle(), subtask.getCard(),
+                    subtask.getCompleted());
+            newSubtask.setId(subtask.getId());
+            newSubtask.setPositionInCard(temp);
+
+            updateSubtask(newSubtask);
+            updateSubtask(newOtherSubtask);
         }
     }
 }
