@@ -234,7 +234,6 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             deleteSubtask.getStyleClass().add("remove-subtask-button");
             deleteSubtask.setOnAction(a -> {
                 Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?", ButtonType.YES);
-                confirmationDialogue.setContentText("Delete color preset ?");
                 confirmationDialogue.showAndWait();
                 if (confirmationDialogue.getResult() == ButtonType.YES) {
                     deleteSubtask(subtask);
@@ -277,8 +276,10 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
             Button deleteTagButton = new Button("x");
             deleteTagButton.setOnAction(a -> {
+
                 cardTags.remove(tag);
                 refreshCardData();
+
             });
             deleteTagButton.getStyleClass().add("remove-tag-button");
 

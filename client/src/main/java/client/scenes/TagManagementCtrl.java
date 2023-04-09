@@ -20,9 +20,6 @@ public class TagManagementCtrl {
     private Board board;
     private List<Tag> allTags;
 
-
-
-
     @FXML
     private TextField fieldTagTitle;
     @FXML

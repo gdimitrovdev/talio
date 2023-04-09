@@ -105,7 +105,7 @@ public class CardComponentCtrl extends AnchorPane {
                     event.consume();
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("You have unsaved changes. Do you want to discard them?");
+                    alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
                     alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
                     alert.showAndWait().ifPresent(result -> {
