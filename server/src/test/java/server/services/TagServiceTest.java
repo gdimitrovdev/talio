@@ -125,7 +125,7 @@ class TagServiceTest {
 
         when(tagRepositoryMock.findAll()).thenReturn(tags);
 
-        tagServiceMock.deleteMany();
+        tagService.deleteMany();
 
         verify(tagRepositoryMock).deleteAll();
 

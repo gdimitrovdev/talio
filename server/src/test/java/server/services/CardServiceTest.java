@@ -37,7 +37,7 @@ class CardServiceTest {
     private TagRepository tagRepositoryMock;
 
     @InjectMocks
-    private CardService cardServiceMock;
+    private CardService cardService;
 
     @BeforeEach
     public void setup() {
@@ -54,7 +54,7 @@ class CardServiceTest {
 
         when(cardRepositoryMock.findAll()).thenReturn(cards);
 
-        List<Card> returnedCards = cardServiceMock.getMany();
+        List<Card> returnedCards = cardService.getMany();
         assertEquals(card1, returnedCards.get(0));
         assertEquals(card2, returnedCards.get(1));
 
@@ -67,7 +67,7 @@ class CardServiceTest {
         card.setId(cardId);
         when(cardRepositoryMock.findById(cardId)).thenReturn(Optional.of(card));
 
-        Optional<Card> returnedCard = cardServiceMock.getOne(cardId);
+        Optional<Card> returnedCard = cardService.getOne(cardId);
         assertEquals(card, returnedCard.get());
     }
 
@@ -81,14 +81,13 @@ class CardServiceTest {
         card.setList(list);
 
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(list));
+        when(cardRepositoryMock.saveAndFlush(card)).thenReturn(card);
         when(cardRepositoryMock.save(card)).thenReturn(card);
 
-        Card returnedCard = cardServiceMock.createOne(card);
+        Card returnedCard = cardService.createOne(card);
 
         assertEquals(card, returnedCard);
     }
-
-    //this test should work after the priority is fixed
 
     @Test
     void testCreateOneElse() {
@@ -101,21 +100,16 @@ class CardServiceTest {
         existingCard.setListPriority(0L);
         existingCard.setList(list);
 
-        //System.out.println(existingCard.getListPriority());
-
         list.addCard(existingCard);
 
         Card newCard = new Card();
         newCard.setList(list);
         list.addCard(newCard);
 
-        //System.out.println(existingCard.getListPriority());
-        //System.out.println(newCard.getListPriority());
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(list));
+        when(cardRepositoryMock.saveAndFlush(any(Card.class))).thenReturn(newCard);
         when(cardRepositoryMock.save(any(Card.class))).thenReturn(newCard);
-
-        Card createdCard = cardServiceMock.createOne(newCard);
-        //System.out.println(newCard.getListPriority());
+        Card createdCard = cardService.createOne(newCard);
         assertEquals(createdCard.getListPriority(), 1L);
     }
 
@@ -128,7 +122,7 @@ class CardServiceTest {
         when(cardRepositoryMock.existsById(id)).thenReturn(true);
         when(cardRepositoryMock.findById(id)).thenReturn(Optional.of(card));
 
-        cardServiceMock.deleteOne(id);
+        cardService.deleteOne(id);
 
         verify(cardRepositoryMock).deleteById(id);
         verify(cardRepositoryMock).findById(id);
@@ -137,7 +131,8 @@ class CardServiceTest {
     @Test
     void updateOne() {
         Card card = new Card();
-        card.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
+        card.setId(
+                1L); //setting the id and title manually because otherwise all constructors require a Board
         card.setTitle("title1");
 
         when(cardRepositoryMock.findById(1L)).thenReturn(Optional.of(card));
@@ -145,7 +140,7 @@ class CardServiceTest {
 
         Card updatedCard = new Card();
         updatedCard.setTitle("title2");
-        Card returnedCard = cardServiceMock.updateOne(1L, updatedCard);
+        Card returnedCard = cardService.updateOne(1L, updatedCard);
         assertEquals(updatedCard.getTitle(), returnedCard.getTitle());
     }
 
@@ -216,7 +211,7 @@ class CardServiceTest {
         when(cardRepositoryMock.getReferenceById(cardId)).thenThrow(EntityNotFoundException.class);
 
         assertThrows(EntityNotFoundException.class, () -> {
-            cardServiceMock.moveToListLast(cardId, listId);
+            cardService.moveToListLast(cardId, listId);
         });
     }
 
@@ -234,7 +229,7 @@ class CardServiceTest {
         when(cardRepositoryMock.findById(cardId)).thenReturn(Optional.of(card));
         when(cardRepositoryMock.save(any(Card.class))).thenReturn(card);
 
-        Card result = cardServiceMock.addTagToCard(tagId, cardId);
+        Card result = cardService.addTagToCard(tagId, cardId);
 
         assertEquals(1, result.getTags().size());
         assertEquals(tag, result.getTags().get(0));
@@ -259,7 +254,7 @@ class CardServiceTest {
         when(cardRepositoryMock.save(any(Card.class))).thenThrow(new RuntimeException());
 
         assertThrows(EntityNotFoundException.class, () -> {
-            cardServiceMock.addTagToCard(tagId, cardId);
+            cardService.addTagToCard(tagId, cardId);
         });
 
         verify(tagRepositoryMock, times(1)).findById(tagId);
@@ -277,14 +272,15 @@ class CardServiceTest {
         tag.setId(tagId);
         Card card = new Card();
         card.setId(cardId);
-        card.getTags().add(tag);;
+        card.getTags().add(tag);
+        ;
 
         when(tagRepositoryMock.findById(tagId)).thenReturn(Optional.of(tag));
         when(cardRepositoryMock.findById(cardId)).thenReturn(Optional.of(card));
         when(cardRepositoryMock.save(card)).thenReturn(card);
 
 
-        Card result = cardServiceMock.removeTagFromCard(tagId, cardId);
+        Card result = cardService.removeTagFromCard(tagId, cardId);
 
         assertEquals(0, result.getTags().size());
         verify(cardRepositoryMock, times(2)).findById(cardId);
@@ -308,7 +304,7 @@ class CardServiceTest {
         when(cardRepositoryMock.save(any(Card.class))).thenThrow(new RuntimeException());
 
         assertThrows(EntityNotFoundException.class, () -> {
-            cardServiceMock.removeTagFromCard(tagId, cardId);
+            cardService.removeTagFromCard(tagId, cardId);
         });
 
         verify(tagRepositoryMock, times(1)).findById(tagId);
@@ -328,7 +324,7 @@ class CardServiceTest {
 
         when(cardRepositoryMock.findAll()).thenReturn(cards);
 
-        cardServiceMock.deleteMany();
+        cardService.deleteMany();
 
         verify(cardRepositoryMock).deleteAll();
 

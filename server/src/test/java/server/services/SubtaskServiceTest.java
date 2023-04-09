@@ -29,7 +29,7 @@ class SubtaskServiceTest {
 
     @Mock
     private CardRepository cardRepositoryMock;
-    
+
     @InjectMocks
     private SubtaskService subtaskService;
 
@@ -104,7 +104,7 @@ class SubtaskServiceTest {
         when(subtaskRepositoryMock.save(subtask)).thenReturn(subtask);
         when(cardRepositoryMock.findById(card.getId())).thenReturn(Optional.of(card));
 
-        Subtask returnedSubtask = subtaskServiceMock.createOne(subtask);
+        Subtask returnedSubtask = subtaskService.createOne(subtask);
 
         assertEquals(subtask, returnedSubtask);
     }
@@ -178,7 +178,7 @@ class SubtaskServiceTest {
 
         when(subtaskRepositoryMock.findAll()).thenReturn(subtasks);
 
-        subtaskServiceMock.deleteMany();
+        subtaskService.deleteMany();
 
         verify(subtaskRepositoryMock).deleteAll();
 

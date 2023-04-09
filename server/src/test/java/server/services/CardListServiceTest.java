@@ -1,6 +1,5 @@
 package server.services;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,7 +62,7 @@ class CardListServiceTest {
         when(cardListRepositoryMock.existsById(listId)).thenReturn(true);
         when(cardListRepositoryMock.findById(listId)).thenReturn(Optional.of(cardList));
 
-        Optional<CardList> returnedCardList = cardListServiceMock.getOne(1L);
+        Optional<CardList> returnedCardList = cardListService.getOne(1L);
         assertTrue(returnedCardList.isPresent());
         assertEquals(cardList, returnedCardList.get());
     }
@@ -73,7 +72,7 @@ class CardListServiceTest {
         Long listId = 99999L;
         when(cardListRepositoryMock.existsById(listId)).thenReturn(false);
 
-        Optional<CardList> returnedCardList = cardListServiceMock.getOne(listId);
+        Optional<CardList> returnedCardList = cardListService.getOne(listId);
 
         assertTrue(returnedCardList.isEmpty());
     }
@@ -155,7 +154,7 @@ class CardListServiceTest {
 
     @Test
     void deleteManyEmpty() {
-        cardListServiceMock.deleteMany();
+        cardListService.deleteMany();
 
         verify(cardListRepositoryMock).deleteAll();
     }
@@ -170,18 +169,19 @@ class CardListServiceTest {
 
         when(cardListRepositoryMock.findAll()).thenReturn(cardLists);
 
-        cardListServiceMock.deleteMany();
+        cardListService.deleteMany();
 
         verify(cardListRepositoryMock).deleteAll();
     }
 
     @Test
     void deleteManyThrowsException() {
-        doThrow(new RuntimeException("Unable to delete card lists")).when(cardListRepositoryMock).deleteAll();
+        doThrow(new RuntimeException("Unable to delete card lists")).when(cardListRepositoryMock)
+                .deleteAll();
 
         //when(cardListRepositoryMock.deleteAll()).thenThrow(new RuntimeException("Unable to delete card lists"));
 
-        assertThrows(RuntimeException.class, () -> cardListServiceMock.deleteMany());
+        assertThrows(RuntimeException.class, () -> cardListService.deleteMany());
 
         verify(cardListRepositoryMock).deleteAll();
     }
