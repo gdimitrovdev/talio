@@ -545,33 +545,31 @@ public class ServerUtils {
      * Ignores tags
      *
      * @param card
-     * @return
      */
-    public Card createCard(Card card) {
+    public void createCard(Card card) {
         CardList list = new CardList();
         list.setId(card.getList().getId());
         Card newCard = new Card(card.getTitle(), card.getDescription(),
                 card.getColorPresetNumber(), list, null, null);
-        return webTarget.path("api").path("cards")
+        webTarget.path("api").path("cards")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(newCard, APPLICATION_JSON), Card.class);
+                .post(Entity.entity(newCard, APPLICATION_JSON));
     }
 
     /**
      * Ignores list and tags
      *
      * @param card
-     * @return
      */
-    public Card updateCard(Card card) {
+    public void updateCard(Card card) {
         Card newCard = new Card(card.getTitle(), card.getDescription(),
                 card.getColorPresetNumber(), null, null, null);
         newCard.setId(card.getId());
-        return webTarget.path("api").path("cards").path(newCard.getId().toString())
+        webTarget.path("api").path("cards").path(newCard.getId().toString())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(newCard, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(newCard, APPLICATION_JSON));
     }
 
     public void deleteCard(Long cardId) {
@@ -633,11 +631,10 @@ public class ServerUtils {
         }
     }
 
-    public Card addTagToCard(Long cardId, Long tagId) {
-        return webTarget.path("/api/cards/add-tag-to-card/" + cardId + "/" + tagId)
+    public void addTagToCard(Long cardId, Long tagId) {
+        webTarget.path("/api/cards/add-tag-to-card/" + cardId + "/" + tagId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .get(new GenericType<Card>() {
-                });
+                .get();
     }
 
     public void removeTagFromCard(Long cardId, Long tagId) {
