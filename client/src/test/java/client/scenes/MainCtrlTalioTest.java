@@ -68,6 +68,7 @@ public class MainCtrlTalioTest {
 
         assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
     }
+
     @Test
     void testWriteReadLocalData() {
         // Prepare test data

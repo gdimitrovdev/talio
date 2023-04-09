@@ -29,7 +29,6 @@ public class BoardSettingsCtrl {
     private Board board;
     private boolean hasUnsavedChanges;
 
-
     public boolean isHasUnsavedChanges() {
         return hasUnsavedChanges;
     }
@@ -282,7 +281,7 @@ public class BoardSettingsCtrl {
     }
 
     @FXML
-    public void madeChange(){
+    public void madeChange() {
         this.setHasUnsavedChanges(true);
     }
 

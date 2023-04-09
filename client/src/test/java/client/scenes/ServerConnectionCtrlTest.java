@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import client.utils.ServerUtils;
 import org.junit.jupiter.api.Test;
 
-
 class ServerConnectionCtrlTest {
 
 
@@ -17,10 +16,10 @@ class ServerConnectionCtrlTest {
      */
     @Test
     public void testSetIsConnected() {
-        ServerConnectionCtrl ctrl = new ServerConnectionCtrl(new ServerUtils(), new MainCtrlTalio( new ServerUtils()));
-        assertTrue(ctrl.isIsConnected()==false);
+        ServerConnectionCtrl ctrl = new ServerConnectionCtrl(new ServerUtils(), new MainCtrlTalio(new ServerUtils()));
+        assertTrue(ctrl.isIsConnected() == false);
         ctrl.setIsConnected(true);
-        assertTrue(ctrl.isIsConnected()==true);
+        assertTrue(ctrl.isIsConnected() == true);
     }
 
     /**

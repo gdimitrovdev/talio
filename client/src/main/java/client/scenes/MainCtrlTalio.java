@@ -187,21 +187,21 @@ public class MainCtrlTalio {
         stage.show();
 
         stage.setOnCloseRequest(event -> {
-            if(boardSettingsCtrl.isHasUnsavedChanges()==true) {
+            if (boardSettingsCtrl.isHasUnsavedChanges() == true) {
 
-            event.consume();
+                event.consume();
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
+                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
-            alert.showAndWait().ifPresent(result -> {
-                if (result == ButtonType.YES) {
-                    stage.close();
-                }
-            });
+                alert.showAndWait().ifPresent(result -> {
+                    if (result == ButtonType.YES) {
+                        stage.close();
+                    }
+                });
 
-        }
+            }
 
         });
 
@@ -236,19 +236,17 @@ public class MainCtrlTalio {
         stage.show();
         stage.setOnCloseRequest(event -> {
 
-                event.consume();
+            event.consume();
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Any unsaved changes will be lost.");
-                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Any unsaved changes will be lost.");
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
-                alert.showAndWait().ifPresent(result -> {
-                    if (result == ButtonType.YES) {
-                        stage.close();
-                    }
-                });
-
-
+            alert.showAndWait().ifPresent(result -> {
+                if (result == ButtonType.YES) {
+                    stage.close();
+                }
+            });
 
         });
     }

@@ -16,90 +16,82 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 class HomeCtrlTest {
-        @Mock
-        private MainCtrlTalio mainCtrlTalio;
+    @Mock
+    private MainCtrlTalio mainCtrlTalio;
 
-        HomeCtrl homeCtrl;
+    HomeCtrl homeCtrl;
 
-        @Mock
-        ServerUtils serverUtils;
+    @Mock
+    ServerUtils serverUtils;
 
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        serverUtils = new ServerUtils();
+        homeCtrl = new HomeCtrl(serverUtils, mainCtrlTalio);
 
-        @BeforeEach
-        public void setUp() {
-            MockitoAnnotations.openMocks(this);
-            serverUtils = new ServerUtils();
-            homeCtrl = new HomeCtrl(serverUtils, mainCtrlTalio);
+    }
 
-        }
+    /**
+     * testing the constructor of the HomeCtrl class
+     */
+    @Test
+    public void testHomeCtrlConstructor() {
+        // Create mock objects for ServerUtils and MainCtrlTalio
 
-        /**
-         * testing the constructor of the HomeCtrl class
-         */
-        @Test
-        public void testHomeCtrlConstructor() {
-            // Create mock objects for ServerUtils and MainCtrlTalio
+        // Instantiate HomeCtrl with the mock objects
+        HomeCtrl homeCtrl = new HomeCtrl(serverUtils, mainCtrlTalio);
 
-            // Instantiate HomeCtrl with the mock objects
-            HomeCtrl homeCtrl = new HomeCtrl(serverUtils, mainCtrlTalio);
+        // Verify that the server and mainCtrlTalio fields are set correctly
+        assertEquals(serverUtils, homeCtrl.getServer());
+        assertEquals(mainCtrlTalio, homeCtrl.getMainCtrlTalio());
+    }
 
-            // Verify that the server and mainCtrlTalio fields are set correctly
-            assertEquals(serverUtils, homeCtrl.getServer());
-            assertEquals(mainCtrlTalio, homeCtrl.getMainCtrlTalio());
-        }
-
-        /**
-         * test checks if when openServerScene is called,
-         * showServerConnection from the MainCtrlTalio is called
-         */
-        @Test
-        public void testOpenServerScene() {
-            // Call the method
-            homeCtrl.openServerScene();
-            // Verify that showServerConnection() method is called on mainCtrlTalio
-            verify(mainCtrlTalio).showServerConnection();
-        }
-
-        @Test
-        public void testDisplayCreatePopUp() {
-            // Call the method
-            homeCtrl.displayCreatePopUp();
-            // Verify that showServerConnection() method is called on mainCtrlTalio
-            verify(mainCtrlTalio).showCreateBoard();
-        }
-
-        @Test
-        public void testDisplayJoinPopUp() {
-            // Call the method
-            homeCtrl.displayJoinPopUp();
-            // Verify that showServerConnection() method is called on mainCtrlTalio
-            verify(mainCtrlTalio).showJoinBoardCode();
-        }
+    /**
+     * test checks if when openServerScene is called,
+     * showServerConnection from the MainCtrlTalio is called
+     */
+    @Test
+    public void testOpenServerScene() {
+        homeCtrl.openServerScene();
+        // Verify that showServerConnection() method is called on mainCtrlTalio
+        verify(mainCtrlTalio).showServerConnection();
+    }
 
     @Test
-        public void testDisplayBoard() throws IOException {
-            Board board = new Board();
-            board.setId(1L);
+    public void testDisplayCreatePopUp() {
+        homeCtrl.displayCreatePopUp();
+        // Verify that showServerConnection() method is called on mainCtrlTalio
+        verify(mainCtrlTalio).showCreateBoard();
+    }
 
-            homeCtrl.displayBoard(board);
+    @Test
+    public void testDisplayJoinPopUp() {
+        homeCtrl.displayJoinPopUp();
+        // Verify that showServerConnection() method is called on mainCtrlTalio
+        verify(mainCtrlTalio).showJoinBoardCode();
+    }
 
-            //the void methods can be tested with the 'verify' method
-            //that checks whether a method is called with a specific input
-            verify(mainCtrlTalio, times(1)).showBoard(board);
-        }
-        @Test
-        public void  testOpenBoardSetting() {
-            Board board = new Board();
-            board.setId(1L);
+    @Test
+    public void testDisplayBoard() throws IOException {
+        Board board = new Board();
+        board.setId(1L);
 
-            homeCtrl.openBoardSetting(board);
+        homeCtrl.displayBoard(board);
 
-            verify(mainCtrlTalio).showBoardSettings(board);
-        }
+        //the void methods can be tested with the 'verify' method
+        //that checks whether a method is called with a specific input
+        verify(mainCtrlTalio, times(1)).showBoard(board);
+    }
 
+    @Test
+    public void  testOpenBoardSetting() {
+        Board board = new Board();
+        board.setId(1L);
 
-
-
+        homeCtrl.openBoardSetting(board);
+        verify(mainCtrlTalio).showBoardSettings(board);
+    }
 
 }
 

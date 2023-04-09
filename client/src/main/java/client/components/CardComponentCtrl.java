@@ -82,7 +82,8 @@ public class CardComponentCtrl extends AnchorPane {
         addClickedEventHandler();
 
         setOnMouseDoubleClicked((me) -> {
-            FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));
+            FXMLLoader cardPopupLoader =
+                    new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));
             try {
                 cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
                         server.getCard(cardId), server));
@@ -101,20 +102,18 @@ public class CardComponentCtrl extends AnchorPane {
 
             stage.setOnCloseRequest(event -> {
 
+                event.consume();
 
-                    event.consume();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText(
+                        "Any unsaved changes will be lost. Do you want to discard them?");
+                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
-                    alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
-                    alert.showAndWait().ifPresent(result -> {
-                        if (result == ButtonType.YES) {
-                            stage.close();
-                        }
-                    });
-
-
+                alert.showAndWait().ifPresent(result -> {
+                    if (result == ButtonType.YES) {
+                        stage.close();
+                    }
+                });
 
             });
 
@@ -166,7 +165,7 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server,
-            ListComponentCtrl list) {
+                             ListComponentCtrl list) {
         this.list = list;
         init(mainCtrlTalio, server);
 
@@ -193,7 +192,7 @@ public class CardComponentCtrl extends AnchorPane {
         });
         CardList cardList = server.getCardList((list).getListId());
         setCard(new Card("", "", cardList,
-                        server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
+                server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
     }
 
     public Long getCardId() {
