@@ -24,7 +24,6 @@ public class JoinBoardCtrl {
         this.mainCtrlTalio = mainCtrlTalio;
     }
 
-    @FXML
     public void initialize() {
         fieldBoardCode.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
