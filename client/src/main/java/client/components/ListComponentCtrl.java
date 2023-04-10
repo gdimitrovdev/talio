@@ -13,7 +13,9 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
@@ -196,7 +198,13 @@ public class ListComponentCtrl extends VBox {
 
     @FXML
     private void deleteList() {
-        server.deleteCardList(listId);
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete this list ?", ButtonType.YES, ButtonType.NO);
+        confirmationDialogue.showAndWait();
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            server.deleteCardList(listId);
+        }
+
     }
 
     @FXML
