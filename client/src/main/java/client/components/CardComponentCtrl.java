@@ -281,9 +281,9 @@ public class CardComponentCtrl extends AnchorPane {
 
         });
 
-            /*stage.setOnCloseRequest(event -> {
-                setCard(server.getCard(cardId));
-            });*/
+        /*stage.setOnCloseRequest(event -> {
+            setCard(server.getCard(cardId));
+        });*/
     }
 
     public void close() {
