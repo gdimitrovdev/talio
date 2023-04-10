@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -18,6 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 
 public class MainCtrlTalioTest {
+    @InjectMocks
     private MainCtrlTalio mainCtrlTalio;
     @Mock private ServerUtils serverUtils;
     private Map<String, Set<Long>> joinedBoards;

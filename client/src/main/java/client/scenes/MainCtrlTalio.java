@@ -234,20 +234,6 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Manage Your Tags");
         stage.setScene(tagManagement);
         stage.show();
-        stage.setOnCloseRequest(event -> {
 
-            event.consume();
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Any unsaved changes will be lost.");
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
-            alert.showAndWait().ifPresent(result -> {
-                if (result == ButtonType.YES) {
-                    stage.close();
-                }
-            });
-
-        });
     }
 }

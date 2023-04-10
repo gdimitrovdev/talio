@@ -1,5 +1,6 @@
 package client.scenes;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -17,9 +18,9 @@ class ServerConnectionCtrlTest {
     @Test
     public void testSetIsConnected() {
         ServerConnectionCtrl ctrl = new ServerConnectionCtrl(new ServerUtils(), new MainCtrlTalio(new ServerUtils()));
-        assertTrue(ctrl.isIsConnected() == false);
+        assertFalse(ctrl.isIsConnected());
         ctrl.setIsConnected(true);
-        assertTrue(ctrl.isIsConnected() == true);
+        assertTrue(ctrl.isIsConnected());
     }
 
     /**
