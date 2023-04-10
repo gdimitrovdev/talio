@@ -238,7 +238,7 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     public void loadPopup() {
-        FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
+        FXMLLoader cardPopupLoader = new FXMLLoader(getClass().getResource("/client/scenes/CardPopup.fxml"));
         try {
             cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
                     server.getCard(cardId), server));

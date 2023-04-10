@@ -7,6 +7,7 @@ import commons.Card;
 import commons.CardList;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -35,7 +36,7 @@ public class ListComponentCtrl extends VBox {
     private HBox titleHolder;
 
     @FXML
-    private TitleField titleField;
+    public TitleField titleField;
 
     @FXML
     public Button deleteListBtn;
@@ -153,7 +154,7 @@ public class ListComponentCtrl extends VBox {
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
         List<Card> cardsOfList = server.getCardList(listId).getCards();
-        for (Card card : cardsOfList) {
+        for (Card card : cardsOfList.stream().sorted(Comparator.comparing(Card::getListPriority)).toList()) {
             var child = new CardComponentCtrl(mainCtrlTalio, server, card.getId());
 
             child.setOnMousePressed(event -> boardCtrl.setCurrentSelectedCard(child));

@@ -11,9 +11,11 @@ import commons.CardList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -315,10 +317,13 @@ public class BoardCtrl implements Initializable {
                 server.moveCardToListAfterCard(cardComponentCtrls.get(position[1] - 1).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1]).getCardId());
             }
             listComponentCtrls = this.getCardListsFromBoard();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlight();
+            List<ListComponentCtrl> finalListComponentCtrls = listComponentCtrls;
+            Platform.runLater(() -> {
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlight();
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlight();
+            });
         }
 
     }
@@ -394,6 +399,9 @@ public class BoardCtrl implements Initializable {
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
             ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            if (listComponentCtrl.titleField.getChildren().get(0).isFocused()) {
+                run = false;
+            }
             listComponentCtrls.add(listComponentCtrl);
             for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
                 CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
@@ -419,5 +427,13 @@ public class BoardCtrl implements Initializable {
             listComponentCtrls.add(listComponentCtrl);
         }
         return listComponentCtrls;
+    }
+
+    public HBox getInnerHBox() {
+        return innerHBox;
+    }
+
+    public void setInnerHBox(HBox hBox) {
+        this.innerHBox = hBox;
     }
 }

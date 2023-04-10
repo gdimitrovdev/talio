@@ -89,50 +89,71 @@ public class CardService {
         }
     }
 
-    public Card moveToListLast(Long cardId, Long listId) {
+    public CardList moveToListLast(Long cardId, Long listId) {
         try {
             var card = cardRepository.getReferenceById(cardId);
-            var list = cardListRepository.getReferenceById(listId);
-            if (list.getCards().size() >= 1) {
-                Card lastCard =
-                        list.getCards().stream().max(Comparator.comparing(Card::getListPriority))
-                                .get();
-                return moveToListAfterCard(cardId, listId, lastCard.getId());
-            } else {
+            var list = cardListRepository.findById(listId).get();
+
+            List<Card> cardsInList = list.getCards();
+
+            if (card.getList().getId() == list.getId()) {
+                Card lastCard = cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
+                card.setListPriority(lastCard.getListPriority() + 1L);
+                cardRepository.save(card);
+                return card.getList();
+            }
+
+            if (cardsInList.size() == 0) {
                 card = removeCardFromItsList(card.getId());
                 card.setListPriority(0L);
                 list.addCard(card);
+
                 cardRepository.saveAndFlush(card);
-                return card;
+                return card.getList();
             }
+
+            card = removeCardFromItsList(card.getId());
+            Card lastCard = cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
+            card.setListPriority(lastCard.getListPriority() + 1L);
+            list.addCard(card);
+
+            cardRepository.save(card);
+
+            return card.getList();
         } catch (Exception e) {
             throw new EntityNotFoundException(
                     "Card or list not found while moving a card to the last place in a list");
         }
+
     }
 
-    public Card moveToListAfterCard(Long cardId, Long listId, Long afterCardId) {
+    public CardList moveToListAfterCard(Long cardId, Long listId, Long afterCardId) {
         try {
-            var card = removeCardFromItsList(cardId);
+            var card = cardRepository.findById(cardId).get();
             var list = cardListRepository.findById(listId).get();
             var afterCard = cardRepository.findById(afterCardId).get();
-            card.setListPriority(afterCard.getListPriority() + 1);
-            list.getCards().stream().filter(c -> c.getListPriority() > afterCard.getListPriority())
-                    .forEach(c -> {
-                        c.setListPriority(c.getListPriority() + 1);
-                        cardRepository.saveAndFlush(c);
-                    });
-            list.addCard(card);
+
             card.setListPriority(afterCard.getListPriority() + 1L);
-            /*for (Card cardOfList : list.getCards()) {
-                if (cardOfList.getListPriority() > afterCard.getListPriority()
-                        && !cardOfList.getId().equals(card.getId())) {
+
+            if (card.getList().getId() != listId) {
+                card = removeCardFromItsList(card.getId());
+                list.addCard(card);
+                cardListRepository.save(list);
+            }
+
+            cardRepository.save(card);
+            list = cardListRepository.findById(listId).get();
+
+            for (Card cardOfList : list.getCards()) {
+                System.out.println("checking: " + cardOfList.getTitle());
+                if (cardOfList.getListPriority() >= card.getListPriority() && card.getId() != cardOfList.getId()) {
+                    System.out.println(cardOfList.getTitle());
                     cardOfList.setListPriority(cardOfList.getListPriority() + 1L);
                     cardRepository.save(cardOfList);
                 }
-            }*/
-            cardRepository.saveAndFlush(card);
-            return card;
+            }
+
+            return card.getList();
         } catch (Exception e) {
             throw new EntityNotFoundException(
                     "Card or list not found while moving a card to a list after another card");

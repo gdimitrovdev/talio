@@ -581,18 +581,11 @@ public class ServerUtils {
 
     public void moveCardToListLast(Long cardId, Long newListId) {
         Long oldListId = this.getCard(cardId).getList().getId();
-        try {
-            webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
-                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                    .get(new GenericType<CardList>() {
-                    });
-        } catch (Exception e) {
-            System.out.println("The expected error");
-        }
         webTarget.path("/api/lists/refresh-list/" + oldListId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                 .get(new GenericType<CardList>() {
                 });
+
         try {
             webTarget.path("/api/cards/move-to-list-last/" + cardId + "/" + newListId)
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
@@ -606,19 +599,11 @@ public class ServerUtils {
 
     public void moveCardToListAfterCard(Long cardId, Long newListId, Long cardAfterId) {
         Long oldListId = this.getCard(cardId).getList().getId();
-        try {
-            webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
-                            + "/" + cardAfterId)
-                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                    .get(new GenericType<CardList>() {
-                    });
-        } catch (Exception e) {
-            System.out.println("The expected error");
-        }
         webTarget.path("/api/lists/refresh-list/" + oldListId)
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                 .get(new GenericType<CardList>() {
                 });
+
         try {
             webTarget.path("/api/cards/move-to-list-after-card/" + cardId + "/" + newListId
                             + "/" + cardAfterId)
