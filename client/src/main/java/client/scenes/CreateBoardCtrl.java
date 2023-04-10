@@ -49,9 +49,9 @@ public class CreateBoardCtrl {
             box.showAndWait();
         } else {
             List<String> defaultPresets = new ArrayList<>();
-            defaultPresets.add("#ffffff/#000000");
-            defaultPresets.add("#ff0008/#000000");
-            defaultPresets.add("#abffc3/#004714");
+            defaultPresets.add("#ffffff/#000000/Basic");
+            defaultPresets.add("#ff0008/#000000/High Contrast");
+            defaultPresets.add("#abffc3/#004714/Mint");
             Board board = server.createBoard(
                     new Board(name, "", "", "#bababa/#000000", "#dedede/#000000", defaultPresets,
                             1));
