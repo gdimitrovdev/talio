@@ -252,7 +252,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             deleteSubtask.setOnAction(a -> {
                 Alert confirmationDialogue =
                         new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?",
-                                ButtonType.YES);
+                                ButtonType.YES, ButtonType.NO);
                 confirmationDialogue.showAndWait();
                 if (confirmationDialogue.getResult() == ButtonType.YES) {
                     deleteSubtask(subtask);
