@@ -58,7 +58,7 @@ public class BoardTest {
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
         var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", cardlists, tags, null, 0);
-        var newBoard=new Board(b);
+        var newBoard = new Board(b);
 
         b.setLists(cardlists);
         b.setTags(tags);
@@ -70,6 +70,7 @@ public class BoardTest {
         assertEquals(newBoard.getLists(), b.getLists());
         assertEquals(newBoard.getTags(), b.getTags());
     }
+
     @Test
     void testAddCardList() {
         Board board = new Board();
@@ -79,6 +80,7 @@ public class BoardTest {
 
         assertEquals(board, list.getBoard());
     }
+
     @Test
     public void equalsHashcode() {
         var b1 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
