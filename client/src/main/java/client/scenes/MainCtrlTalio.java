@@ -100,7 +100,7 @@ public class MainCtrlTalio {
 
     }
 
-    public Set<Long> getJoinedBoardForServer(String serverUrl) {
+    public Set<Long> getJoinedBoardsForServer(String serverUrl) {
         return joinedBoards.getOrDefault(serverUrl, new HashSet<Long>());
     }
 

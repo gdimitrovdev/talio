@@ -41,7 +41,7 @@ public class MainCtrlTalioTest {
 
         Set<Long> expectedBoardIds = new HashSet<>();
         expectedBoardIds.add(boardId);
-        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardsForServer(serverUrl));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class MainCtrlTalioTest {
         mainCtrlTalio.removeJoinedBoard(serverUrl, boardId);
 
         Set<Long> expectedBoardIds = new HashSet<>();
-        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardsForServer(serverUrl));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class MainCtrlTalioTest {
         expectedBoardIds.add(boardId1);
         expectedBoardIds.add(boardId2);
 
-        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardsForServer(serverUrl));
     }
 
     @Test

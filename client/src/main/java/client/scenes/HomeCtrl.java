@@ -6,7 +6,6 @@ import commons.Board;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -58,6 +57,7 @@ public class HomeCtrl {
      * if there are no boards: display 'no boards' message
      */
     public void displayBoardLabels(Set<Board> boards) {
+        //removes all children from the FlowPane and then
         recentBoardsPane.getChildren().clear();
 
         if (boards == null) {
@@ -115,16 +115,10 @@ public class HomeCtrl {
                 AnchorPane.setTopAnchor(boardNameLbl, 16d);
                 AnchorPane.setLeftAnchor(boardNameLbl, 10d);
 
-                nestedButtonPressed = true;
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> {
-                    Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Disconnect from this board?", ButtonType.YES, ButtonType.NO);
-                    confirmationDialogue.showAndWait();
-                    if (confirmationDialogue.getResult() == ButtonType.YES) {
-                        removeRecentBoard(item);
-                    }
-
-
+                    nestedButtonPressed = true;
+                    handleBoardDelete(item);
                 });
                 boardSettingBtn.setOnAction(e -> {
                     nestedButtonPressed = true;
@@ -145,6 +139,28 @@ public class HomeCtrl {
                     i = 0;
                     ++j;
                 }
+            }
+        }
+    }
+
+    private void handleBoardDelete(Board item) {
+        String text = adminMode ? "Delete this board permanently?" : "Disconnect from this board?";
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
+        confirmationDialogue.showAndWait();
+
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            //remove board from hashset and call displayBoardLabels method again
+            System.out.println("Removed: " + item.getId());
+            mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), item.getId());
+
+            if (adminMode) {
+                //Delete board permanently from server
+                System.out.println("Deleted: " + item.getId());
+                server.deleteBoard(item.getId());
+                displayBoardLabels(server.getAllBoards());
+
+            } else {
+                displayBoardLabels(getRecentBoards());
             }
         }
     }
@@ -176,12 +192,6 @@ public class HomeCtrl {
      * @param board - the board that should be removed
      *              This method is called as the event of the button deleteBoardBtn
      */
-    public void removeRecentBoard(Board board) {
-        //removes all children from the FlowPane and then
-        //remove board from hashset and call displayBoardLabels method again// server.deleteBoard(board.getId());
-        mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
-        displayBoardLabels(getRecentBoards());
-    }
 
     /**
      * @param board - the board for which a pop-up should be opened
@@ -207,9 +217,12 @@ public class HomeCtrl {
     }
 
     public Set<Board> getRecentBoards() {
-        return mainCtrlTalio.getJoinedBoardForServer(server.getServerUrl())
-                .stream().map(id -> server.getBoard(id))
-                .collect(Collectors.toSet());
+        Set<Board> set = new HashSet<>();
+        for (long id : mainCtrlTalio.getJoinedBoardsForServer(server.getServerUrl())) {
+            Board board = server.getBoard(id);
+            set.add(board);
+        }
+        return set;
     }
 
     @FXML
