@@ -35,6 +35,8 @@ public class HomeCtrl {
     private ScrollPane outerContainer;
     @FXML
     private GridPane recentBoardsPane;
+    @FXML
+    private Button buttonAdmin;
     private boolean nestedButtonPressed = false;
     private boolean adminMode;
 
@@ -187,16 +189,23 @@ public class HomeCtrl {
         if (adminMode) {
             adminMode = false;
             displayBoardLabels(getRecentBoards());
+            removeStyleAdmin();
         } else {
-
+            mainCtrlTalio.showAdminAuthentication();
         }
     }
 
-    public void setAdminMode(boolean adminMode) {
-        this.adminMode = adminMode;
+    public void enableAdminMode() {
+        adminMode = true;
+        displayBoardLabels(server.getAllBoards());
+        addStyleAdmin();
     }
 
-    public boolean getAdminMode() {
-        return adminMode;
+    private void removeStyleAdmin() {
+
+    }
+
+    private void addStyleAdmin() {
+
     }
 }
