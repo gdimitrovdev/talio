@@ -18,10 +18,10 @@
    <Button fx:id="changeServerBtn" layoutX="703.0" layoutY="21.0" mnemonicParsing="false" onAction="#openServerScene" prefHeight="40.0" prefWidth="40.0">
       <graphic>
           <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@/images/cogwheel.png" />
+                <Image url="@/client/images/cogwheel.png" />
           </ImageView>
       </graphic>
       <tooltip><Tooltip text="Return to ServerConnection page" /></tooltip>
    </Button>
-   <Button fx:id="buttonAdmin" layoutX="58.0" layoutY="27.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="237.0" onAction="#adminClick" text="Enable Admin Mode" />
+   <Button style="-fx-background-color: #bababa" fx:id="buttonAdmin" layoutX="58.0" layoutY="27.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="237.0" onAction="#adminClick" text="Enable Admin Mode" />
 </AnchorPane>

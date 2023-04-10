@@ -3,6 +3,7 @@ package client.scenes;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
 
 public class AdminAuthenticationCtrl {
     private final MainCtrlTalio mainCtrlTalio;
@@ -14,9 +15,18 @@ public class AdminAuthenticationCtrl {
         this.mainCtrlTalio = mainCtrlTalio;
     }
 
+    public void initialize() {
+        fieldAdminPwd.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                clickLogin();
+            }
+        });
+    }
+
     public void clickLogin() {
-        // This is not secure and would be changed for a professional app
-        if (fieldAdminPwd.getText().contentEquals("oop23")) {
+        // This is not secure and would be changed in a professional app
+        if (fieldAdminPwd.getText().contentEquals("oopp23")) {
+            fieldAdminPwd.clear();
             mainCtrlTalio.enableAdminMode();
         } else {
             mainCtrlTalio.alert("Authentication was unsuccessful",

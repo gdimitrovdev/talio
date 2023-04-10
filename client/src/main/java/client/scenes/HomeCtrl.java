@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
@@ -53,6 +55,8 @@ public class HomeCtrl {
      * if there are no boards: display 'no boards' message
      */
     public void displayBoardLabels(Set<Board> boards) {
+        recentBoardsPane.getChildren().clear();
+
         if (boards == null) {
             boards = new HashSet<>();
         }
@@ -80,7 +84,24 @@ public class HomeCtrl {
                 //formatting the button and its content
                 boardSettingBtn.setStyle("-fx-pref-width: 30; -fx-pref-height: 30");
                 deleteBoardBtn.setStyle("-fx-pref-width: 30; -fx-pref-height: 30");
-                boardButton.setStyle("-fx-pref-width: 300; -fx-pref-height: 50 ");
+
+                String boardBtnStyle = "-fx-pref-width: 300; -fx-pref-height: 50";
+                if (adminMode) {
+                    boardBtnStyle += "; -fx-border-color: yellow";
+                    Image img = new Image(getClass().getResource("../images/bin.png").toString());
+                    ImageView imgView = new ImageView(img);
+                    imgView.setFitWidth(15);
+                    imgView.setFitHeight(15);
+                    imgView.setPickOnBounds(true);
+                    imgView.setPreserveRatio(true);
+                    imgView.setSmooth(true);
+                    deleteBoardBtn.setText("");
+                    deleteBoardBtn.setGraphic(imgView);
+                } else {
+                    deleteBoardBtn.setText("x");
+                }
+                boardButton.setStyle(boardBtnStyle);
+
                 innerPane.setStyle("-fx-min-width: 219; -fx-min-height: 50");
                 boardNameLbl.setAlignment(Pos.CENTER);
 
@@ -151,8 +172,7 @@ public class HomeCtrl {
         //removes all children from the FlowPane and then
         //remove board from hashset and call displayBoardLabels method again// server.deleteBoard(board.getId());
         mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
-        recentBoardsPane.getChildren().clear();
-        displayBoardLabels(server.getAllBoards());
+        displayBoardLabels(getRecentBoards());
     }
 
     /**
@@ -201,11 +221,20 @@ public class HomeCtrl {
         addStyleAdmin();
     }
 
+    //Sets it back to the original state
     private void removeStyleAdmin() {
-
+        buttonAdmin.setText("Enable Admin Mode");
+        buttonAdmin.setStyle("-fx-background-color: #bababa");
     }
 
+    //Adds some styling to indicate admin mode
     private void addStyleAdmin() {
+        buttonAdmin.setText("Disable Admin Mode");
+        buttonAdmin.setStyle("-fx-background-color: yellow");
+    }
 
+    public void refreshBoards() {
+        Set<Board> boards = adminMode ? server.getAllBoards() : getRecentBoards();
+        displayBoardLabels(boards);
     }
 }

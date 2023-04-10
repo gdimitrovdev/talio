@@ -154,7 +154,7 @@ public class MainCtrlTalio {
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
-        homeCtrl.displayBoardLabels(homeCtrl.getRecentBoards());
+        homeCtrl.refreshBoards();
     }
 
     public void showJoinBoardCode() {
@@ -211,6 +211,7 @@ public class MainCtrlTalio {
     }
 
     public void showAdminAuthentication() {
+        adminAuthenticationCtrl.initialize();
         adminAuthenticationStage = new Stage();
         adminAuthenticationStage.setTitle("Talio: Admin Authentication");
         adminAuthenticationStage.setScene(adminAuthentication);
