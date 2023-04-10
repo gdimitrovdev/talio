@@ -27,7 +27,6 @@ import client.scenes.MainCtrlTalio;
 import client.scenes.ServerConnectionCtrl;
 import client.scenes.ShareBoardCtrl;
 import client.scenes.TagManagementCtrl;
-import client.utils.ServerUtils;
 import com.google.inject.Injector;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -65,6 +64,6 @@ public class Main extends Application {
 
         mainCtrl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
                 serverConnectionPair, boardComponentPair, shareBoardPair,
-                tagManagementPair, adminPair, INJECTOR.getInstance(ServerUtils.class));
+                tagManagementPair, adminPair);
     }
 }

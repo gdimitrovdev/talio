@@ -203,8 +203,8 @@ public class BoardSettingsCtrl extends AnchorPane {
         colorPickerForeground.setMaxSize(38, 26);
 
         if (preset.equals("NEW_SCHEME")) {
-            colorPickerBackground.setValue(Color.web("FFFFFF"));
-            colorPickerForeground.setValue(Color.web("000000"));
+            colorPickerBackground.setValue(Color.WHITE);
+            colorPickerForeground.setValue(Color.BLACK);
             name.init(s -> {
                     }, s -> {
                         board.getCardColorPresets().add("");

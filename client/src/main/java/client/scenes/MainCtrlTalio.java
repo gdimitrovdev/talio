@@ -60,9 +60,7 @@ public class MainCtrlTalio {
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
             Pair<TagManagementCtrl, Parent> tagManagementPair,
-            Pair<AdminAuthenticationCtrl, Parent> adminPair,
-            ServerUtils server
-    ) {
+            Pair<AdminAuthenticationCtrl, Parent> adminPair) {
 
         readFromLocalData();
 
@@ -91,8 +89,6 @@ public class MainCtrlTalio {
 
         this.adminAuthenticationCtrl = adminPair.getKey();
         this.adminAuthentication = new Scene(adminPair.getValue());
-
-        this.server = server;
 
         this.showServerConnection();
 
@@ -241,7 +237,6 @@ public class MainCtrlTalio {
     }
 
     public void showBoard(Board board) {
-        System.out.println("SHOWING BOARD");
         try {
             server.subscribeToBoard(board.getId());
         } catch (Exception e) {

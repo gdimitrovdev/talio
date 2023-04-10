@@ -41,7 +41,6 @@ public class BoardController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Board> getOne(@PathVariable("id") Long id) {
-        System.out.println("GETTING BOARDS FFS");
         Optional<Board> optionalBoard = boardService.getOne(id);
         return optionalBoard.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
@@ -102,9 +101,7 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Board> updateOne(@PathVariable Long id,
             @RequestBody Board board) {
-        System.out.println("PUTPUTPUT");
         try {
-            System.out.println("updating board from controller");
             Board updatedBoard = boardService.updateOne(id, board);
             template.convertAndSend(Topics.BOARDS.toString(), updatedBoard);
             return ResponseEntity.ok(updatedBoard);
