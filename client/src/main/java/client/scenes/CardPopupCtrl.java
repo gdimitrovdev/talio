@@ -9,6 +9,7 @@ import commons.Subtask;
 import commons.Tag;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -278,7 +279,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     }
 
     public void initializeTags() {
-        for (Tag tag : cardTags) {
+        for (Tag tag : card.getTags()) {
             // TODO the colors for the tags
             tagElement = new HBox();
             tagElement.getStyleClass().add("tag");
@@ -294,10 +295,8 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
 
             Button deleteTagButton = new Button("x");
             deleteTagButton.setOnAction(a -> {
-
-                cardTags.remove(tag);
+                card.getTags().remove(tag);
                 refreshCardData();
-
             });
             deleteTagButton.getStyleClass().add("remove-tag-button");
 
@@ -313,10 +312,10 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         List<Tag> tagsOfBoard = card.getList().getBoard().getTags();
 
         for (Tag tag : tagsOfBoard) {
-            if (!cardTags.contains(tag)) {
+            if (!card.getTags().contains(tag)) {
                 MenuItem menuItem = new MenuItem(tag.getTitle());
                 menuItem.setOnAction(event -> {
-                    cardTags.add(tag);
+                    card.getTags().add(tag);
                     refreshCardData();
                 });
 
@@ -347,27 +346,37 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         // TODO take care of the color as well
         card.setTitle(cardTitle.getText());
         card.setDescription(cardDescription.getText());
-
+        System.out.println("Card gonna be updated now");
         server.updateCard(card);
+        System.out.println("Card updated");
 
-        Set<Tag> originalTags = new HashSet<Tag>(server.getCard(card.getId()).getTags());
+        List<Tag> tagsOnServer = server.getCard(card.getId()).getTags();
+        List<Tag> tagsToAdd = new ArrayList<Tag>();
+        List<Tag> tagsToRemove = new ArrayList<Tag>();
 
-        //Tags to add is Set difference cardTags - originalTags
-        Set<Tag> tagsToAdd = new HashSet<Tag>(cardTags);
-        tagsToAdd.removeAll(originalTags);
+        for (Tag tag : card.getTags()) {
+            if (tagsOnServer.stream()
+                    .noneMatch(tagOnServer -> tagOnServer.getId().equals(tag.getId()))) {
+                tagsToAdd.add(tag);
+            }
+        }
+        for (Tag tagOnServer : tagsOnServer) {
+            if (card.getTags().stream().noneMatch(tag -> tag.getId().equals(tagOnServer.getId()))) {
+                tagsToRemove.add(tagOnServer);
+            }
+        }
 
-        //Tags to remove is Set difference originalTags - cardTags
-        Set<Tag> tagsToRemove = new HashSet<Tag>(originalTags);
-        tagsToRemove.removeAll(cardTags);
-
+        System.out.println("tags calculated");
         for (Tag tag : tagsToAdd) {
+            System.out.println("adding tag");
             server.addTagToCard(card.getId(), tag.getId());
+
         }
         for (Tag tag : tagsToRemove) {
+            System.out.println("removing tag");
             server.removeTagFromCard(card.getId(), tag.getId());
         }
-        //card.
-        //mainCtrlTalio.showBoard(card.getList().getBoard());
+        System.out.println("done");
     }
 
     private void assignEmptyBoardWithId(Tag tag) {
@@ -375,5 +384,4 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         empty.setId(tag.getBoard().getId());
         tag.setBoard(empty);
     }
-
 }

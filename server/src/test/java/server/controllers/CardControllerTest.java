@@ -30,7 +30,7 @@ class CardControllerTest {
     private CardListService cardListServiceMock;
 
     @Mock
-    private SimpMessagingTemplate templateMock; 
+    private SimpMessagingTemplate templateMock;
 
     @InjectMocks
     private CardController cardControllerMock;
@@ -97,7 +97,8 @@ class CardControllerTest {
     @Test
     void updateOne() {
         Card card = new Card();
-        card.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
+        card.setId(
+                1L); //setting the id and title manually because otherwise all constructors require a Board
         card.setTitle("title1");
 
         Card updatedCard = new Card();
@@ -110,21 +111,15 @@ class CardControllerTest {
     }
 
     @Test
-    void sendList() {
-        CardList list = new CardList("My list", null);
-        assertEquals(list, cardControllerMock.sendList(list));
-    }
-
-    @Test
     void moveToListAfterCard() {
-        Card    card = new Card("My card", "Bla", null, 1),
+        Card card = new Card("My card", "Bla", null, 1),
                 after = new Card("Another card", "Bli", null, 1);
 
         card.setId(1L);
         after.setId(2L);
 
-        CardList    list1 = new CardList("First list", null),
-                    list2 = new CardList("Second list", null);
+        CardList list1 = new CardList("First list", null),
+                list2 = new CardList("Second list", null);
 
         list1.setId(1L);
         list2.setId(2L);
@@ -132,38 +127,33 @@ class CardControllerTest {
         list1.addCard(card);
         list2.addCard(after);
 
-        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(card));
-        when(cardServiceMock.getOne(2L)).thenReturn(Optional.of(after));
-        when(cardListServiceMock.getOne(1L)).thenReturn((Optional.of(list1)));
-        when(cardListServiceMock.getOne(2L)).thenReturn((Optional.of(list2)));
+        when(cardServiceMock.moveToListAfterCard(1L, 2L, 2L)).thenReturn(list2);
 
         assertEquals(list2, cardControllerMock.moveToListAfterCard(1L, 2L, 2L).getBody());
     }
 
     @Test
     void moveToListLast() {
-        Card    card = new Card("My card", "Bla", null, 1);
+        Card card = new Card("My card", "Bla", null, 1);
 
         card.setId(1L);
 
-        CardList    list1 = new CardList("First list", null),
-                    list2 = new CardList("Second list", null);
+        CardList list1 = new CardList("First list", null),
+                list2 = new CardList("Second list", null);
 
         list1.setId(1L);
         list2.setId(2L);
 
         list1.addCard(card);
 
-        when(cardServiceMock.getOne(1L)).thenReturn(Optional.of(card));
-        when(cardListServiceMock.getOne(1L)).thenReturn((Optional.of(list1)));
-        when(cardListServiceMock.getOne(2L)).thenReturn((Optional.of(list2)));
+        when(cardServiceMock.moveToListLast(1L, 2L)).thenReturn(list2);
 
         assertEquals(list2, cardControllerMock.moveToListLast(1L, 2L).getBody());
     }
 
     @Test
     void addTagToCard() {
-        Card    withoutTag = new Card("My card", "Bla",  null, 1),
+        Card withoutTag = new Card("My card", "Bla", null, 1),
                 withTag = new Card("My card 2", "Bla 2", null, 1);
 
         withTag.setId(1L);
@@ -180,7 +170,7 @@ class CardControllerTest {
 
     @Test
     void removeTagFromCard() {
-        Card    withoutTag = new Card("My card", "Bla", null, 1),
+        Card withoutTag = new Card("My card", "Bla", null, 1),
                 withTag = new Card("My card 2", "Bla 2", null, 1);
 
         withTag.setId(1L);

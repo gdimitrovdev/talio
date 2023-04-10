@@ -1,6 +1,7 @@
 package server.controllers;
 
 import commons.Board;
+import commons.Topics;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -41,11 +42,9 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Board> getOne(@PathVariable("id") Long id) {
         Optional<Board> optionalBoard = boardService.getOne(id);
-        if (!optionalBoard.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
+        return optionalBoard.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
 
-        return ResponseEntity.ok(optionalBoard.get());
     }
 
     @GetMapping("/by-code/{code}")
@@ -55,20 +54,26 @@ public class BoardController {
             Board board = boardService.getOneByCode(code).get();
             return ResponseEntity.ok(board);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    /**
+     * Also sends update to Topics.BOARDS
+     *
+     * @param board
+     * @return
+     */
     @PostMapping(path = {"", "/"})
     @ResponseBody
     public ResponseEntity<Board> createOne(@RequestBody Board board) {
         try {
             var newBoard = boardService.createOne(board);
-            template.convertAndSend("/topic/boards", new Board(newBoard));
-            return ResponseEntity.ok(new Board(newBoard));
+            template.convertAndSend(Topics.BOARDS.toString(), newBoard);
+            return ResponseEntity.ok(newBoard);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -80,21 +85,28 @@ public class BoardController {
             boardService.deleteOne(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
+    /**
+     * Also sends update to Topic.BOARDS
+     *
+     * @param id
+     * @param board
+     * @return
+     */
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Board> updateOne(@PathVariable Long id,
             @RequestBody Board board) {
         try {
             Board updatedBoard = boardService.updateOne(id, board);
-            template.convertAndSend("/topic/boards", new Board(updatedBoard));
-            return ResponseEntity.ok(new Board(updatedBoard));
+            template.convertAndSend(Topics.BOARDS.toString(), updatedBoard);
+            return ResponseEntity.ok(updatedBoard);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

@@ -31,29 +31,34 @@ public class TagService {
     }
 
     /**
-     * Ignores cards
+     * Ignores list of cards
      *
      * @param tag
      * @return
      */
     public Tag createOne(Tag tag) {
         tag.getCards().clear();
+        tag.setBoard(boardRepository.findById(tag.getBoard().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Tag not found")));
         return tagRepository.save(tag);
     }
 
+    /**
+     * Removes the tag from it's board and deletes it
+     *
+     * @param id
+     */
     public void deleteOne(Long id) {
-        Optional<Tag> optTag = tagRepository.findById(id);
-        if (optTag.isPresent()) {
-            Tag t = optTag.get();
-            Board b = t.getBoard();
-            b.removeTag(t);
-            boardRepository.save(b);
-            tagRepository.deleteById(id);
-        }
+        Tag tag = tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                "Tag not found"));
+        Board b = tag.getBoard();
+        b.removeTag(tag);
+        boardRepository.save(b);
+        tagRepository.deleteById(id);
     }
 
     /**
-     * Ignores cards
+     * Ignores list of cards and board
      *
      * @param id
      * @param tag
@@ -63,12 +68,8 @@ public class TagService {
     public Tag updateOne(Long id, Tag tag) throws EntityNotFoundException {
         Tag existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tag not found"));
-
         existingTag.setTitle(tag.getTitle());
         existingTag.setColor(tag.getColor());
-        existingTag.setBoard(tag.getBoard());
-        existingTag.setCards(tag.getCards());
-
         return tagRepository.save(existingTag);
     }
 

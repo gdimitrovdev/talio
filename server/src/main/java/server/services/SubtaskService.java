@@ -29,27 +29,34 @@ public class SubtaskService {
         return subtaskRepository.findById(id);
     }
 
+    /**
+     * Ignores the subtask's position in the card and places it at the end
+     *
+     * @param subtask
+     * @return
+     */
     public Subtask createOne(Subtask subtask) {
         subtask.setPositionInCard(0L);
-        Subtask newSubtask = subtaskRepository.save(subtask);
 
         if (subtask.getCard() != null) {
             Card card = cardRepository.findById(subtask.getCard().getId()).get();
 
-            if (card.getSubtasks().size() == 1) {
-                newSubtask.setPositionInCard(0L);
+            if (card.getSubtasks().size() == 0) {
+                subtask.setPositionInCard(0L);
             } else {
-                newSubtask.setPositionInCard(
+                subtask.setPositionInCard(
                         card.getSubtasks().stream().max(Comparator.comparing(
                                 Subtask::getPositionInCard
                         )).get().getPositionInCard() + 1L
                 );
             }
 
-            newSubtask = subtaskRepository.save(newSubtask);
+            card.addSubtask(subtask);
+
+            subtask = subtaskRepository.save(subtask);
         }
 
-        return newSubtask;
+        return subtask;
     }
 
     public void deleteOne(Long id) {
@@ -58,14 +65,20 @@ public class SubtaskService {
         }
     }
 
+    /**
+     * Ignores a subtask's card
+     *
+     * @param id
+     * @param subtask
+     * @return
+     * @throws EntityNotFoundException
+     */
     public Subtask updateOne(Long id, Subtask subtask) throws EntityNotFoundException {
         Subtask existingSubtask = subtaskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Subtask not found"));
-
         existingSubtask.setTitle(subtask.getTitle());
         existingSubtask.setCompleted(subtask.getCompleted());
         existingSubtask.setPositionInCard(subtask.getPositionInCard());
-
         return subtaskRepository.save(existingSubtask);
     }
 
