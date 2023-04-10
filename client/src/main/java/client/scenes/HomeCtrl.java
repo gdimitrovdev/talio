@@ -66,7 +66,7 @@ public class HomeCtrl {
             boards = new HashSet<>();
         }
         if (boards.isEmpty()) {
-            String noBoards = adminMode ? "No boards in server" :"No recent boards";
+            String noBoards = adminMode ? "No boards in server" : "No recent boards";
             Label noBoardsLabel = new Label(noBoards);
             noBoardsLabel.setStyle(
                     "-fx-pref-width: 690; -fx-pref-height: 50; -fx-alignment: center;");
