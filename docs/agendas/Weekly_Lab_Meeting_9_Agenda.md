@@ -1,4 +1,4 @@
-# Weekly Lab Meeting 8 - Agenda
+# Weekly Lab Meeting 9 - Agenda
 
 *Notes on formatting:
 Proposed places for the minute-taker to record the minutes during the meeting are noted as a quote ("> Response").
