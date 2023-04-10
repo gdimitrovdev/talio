@@ -3,17 +3,28 @@ package client.scenes;
 import client.components.TitleField;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.*;
+import commons.Board;
+import commons.Card;
+import commons.Subtask;
+import commons.Tag;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -30,6 +41,12 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
     private final ServerUtils server;
 
     private Card card;
+
+    public Set<Tag> getCardTags() {
+        return cardTags;
+    }
+
+    private Set<Tag> cardTags;
     @FXML
     private AnchorPane anchorPane = new AnchorPane();
 
@@ -87,6 +104,7 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
         this.mainCtrlTalio = mainCtrlTalio;
         this.card = card;
         this.server = server;
+        cardTags = new HashSet<>(card.getTags());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CardPopup.fxml"));
         loader.setRoot(this);
@@ -232,7 +250,13 @@ public class CardPopupCtrl extends AnchorPane implements Initializable {
             deleteSubtask = new Button("x");
             deleteSubtask.getStyleClass().add("remove-subtask-button");
             deleteSubtask.setOnAction(a -> {
-                deleteSubtask(subtask);
+                Alert confirmationDialogue =
+                        new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?",
+                                ButtonType.YES, ButtonType.NO);
+                confirmationDialogue.showAndWait();
+                if (confirmationDialogue.getResult() == ButtonType.YES) {
+                    deleteSubtask(subtask);
+                }
             });
             subtaskElement.getChildren().add(deleteSubtask);
 
