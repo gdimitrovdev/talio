@@ -4,8 +4,10 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 
 public class HomeCtrl {
 
@@ -55,6 +58,20 @@ public class HomeCtrl {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
         adminMode = false;
+
+        server.registerForBoardDeletion(board -> {
+            Platform.runLater(() -> {
+                server.unsubscribeIfDeleted(board.getId());
+
+                mainCtrlTalio.readFromLocalData();
+                Map<String, Set<Pair<Long, String>>> joinedBoards = mainCtrlTalio.getJoinedBoards();
+
+                joinedBoards.get(server.getServerUrl()).removeIf(b -> b.getKey().equals(board.getId()));
+
+                mainCtrlTalio.writeToLocalDataRefresh(joinedBoards);
+                refreshBoards();
+            });
+        });
     }
 
     /**
@@ -224,8 +241,11 @@ public class HomeCtrl {
 
     public Set<Board> getRecentBoards() {
         Set<Board> set = new HashSet<>();
-        for (long id : mainCtrlTalio.getJoinedBoardsForServer(server.getServerUrl())) {
-            Board board = server.getBoard(id);
+        for (Pair<Long, String> pair :
+                mainCtrlTalio.getJoinedBoards().getOrDefault(
+                        server.getServerUrl(), new HashSet<Pair<Long, String>>())
+        ) {
+            Board board = server.getBoard(pair.getKey());
             set.add(board);
         }
         return set;
@@ -273,5 +293,9 @@ public class HomeCtrl {
 
     public MainCtrlTalio getMainCtrlTalio() {
         return mainCtrlTalio;
+    }
+
+    public void stop() {
+        server.stop();
     }
 }

@@ -25,6 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class BoardSettingsCtrl extends AnchorPane {
     private final MainCtrlTalio mainCtrlTalio;
@@ -40,6 +41,8 @@ public class BoardSettingsCtrl extends AnchorPane {
         this.hasUnsavedChanges = hasUnsavedChanges;
     }
 
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private TextField fieldBoardName;
     @FXML
@@ -296,9 +299,13 @@ public class BoardSettingsCtrl extends AnchorPane {
                         ButtonType.YES, ButtonType.NO);
         confirmationDialogue.showAndWait();
         if (confirmationDialogue.getResult() == ButtonType.YES) {
-            mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
             server.deleteBoard(board.getId());
-            mainCtrlTalio.showHome();
+
+            Window window = anchorPane.getScene().getWindow();
+
+            if (window instanceof Stage) {
+                ((Stage) window).close();
+            }
             //not sure if it is actually deleted from db
             //since for deleteBoard() we will use long polling
 

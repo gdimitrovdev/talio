@@ -65,5 +65,10 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
                 serverConnectionPair, boardComponentPair, shareBoardPair,
                 tagManagementPair, adminPair);
+
+        primaryStageTalio.setOnCloseRequest(e -> {
+            homePair.getKey().stop();
+        });
+
     }
 }
