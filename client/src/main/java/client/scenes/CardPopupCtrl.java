@@ -8,20 +8,23 @@ import commons.Board;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -189,9 +192,13 @@ public class CardPopupCtrl extends AnchorPane {
             });
 
             deleteSubtask.setOnAction(a -> {
-                card.removeSubtask(subtask);
-                subtasksContainer.getChildren().remove(subtaskElement);
-                subtasksToDelete.add(subtask);
+                Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?", ButtonType.YES, ButtonType.NO);
+                confirmationDialogue.showAndWait();
+                if (confirmationDialogue.getResult() == ButtonType.YES) {
+                    card.removeSubtask(subtask);
+                    subtasksContainer.getChildren().remove(subtaskElement);
+                    subtasksToDelete.add(subtask);
+                }
             });
         } else {
             checkBox.setSelected(false);
@@ -224,8 +231,12 @@ public class CardPopupCtrl extends AnchorPane {
                         });
 
                         deleteSubtask.setOnAction(a -> {
-                            card.removeSubtask(s);
-                            subtasksContainer.getChildren().remove(subtaskElement);
+                            Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?", ButtonType.YES, ButtonType.NO);
+                            confirmationDialogue.showAndWait();
+                            if (confirmationDialogue.getResult() == ButtonType.YES) {
+                                card.removeSubtask(s);
+                                subtasksContainer.getChildren().remove(subtaskElement);
+                            }
                         });
 
                     }, () -> {

@@ -27,7 +27,7 @@
                 <graphic>
                     <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
                                preserveRatio="true">
-                        <Image url="@/images/home.png"/>
+                        <Image url="@/client/images/home.png"/>
                     </ImageView>
                 </graphic>
                 <tooltip>
@@ -46,7 +46,7 @@
                 <graphic>
                     <ImageView fx:id="myImage2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
                                preserveRatio="true">
-                        <Image url="@/images/sharefinal.png">
+                        <Image url="@/client/images/sharefinal.png">
                         </Image>
                     </ImageView>
                 </graphic>
@@ -58,7 +58,7 @@
                 <graphic>
                     <ImageView fx:id="myImage3" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
                                preserveRatio="true">
-                        <Image url="@/images/ellipsis.png">
+                        <Image url="@/client/images/ellipsis.png">
                         </Image>
                     </ImageView>
                 </graphic>

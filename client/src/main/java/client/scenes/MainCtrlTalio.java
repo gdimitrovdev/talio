@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import javax.inject.Inject;
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
     private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard,
-            boardSettings, tagManagement;
+            boardSettings, tagManagement, adminAuthentication;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
@@ -31,9 +32,19 @@ public class MainCtrlTalio {
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
     private TagManagementCtrl tagManagementCtrl;
-    private final ServerUtils server;
+    private AdminAuthenticationCtrl adminAuthenticationCtrl;
+    private ServerUtils serverUtils;
+
+    public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
+        this.joinedBoards = joinedBoards;
+    }
+
+    public Map<String, Set<Long>> getJoinedBoards() {
+        return joinedBoards;
+    }
+
     private Map<String, Set<Long>> joinedBoards;
-    //private MyFXML fxml;
+    private Stage adminAuthenticationStage;
 
     @Inject
     public MainCtrlTalio(ServerUtils server) {
@@ -48,7 +59,8 @@ public class MainCtrlTalio {
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
-            Pair<TagManagementCtrl, Parent> tagManagementPair
+            Pair<TagManagementCtrl, Parent> tagManagementPair,
+            Pair<AdminAuthenticationCtrl, Parent> adminPair
     ) {
 
         readFromLocalData();
@@ -75,6 +87,9 @@ public class MainCtrlTalio {
 
         this.tagManagementCtrl = tagManagementPair.getKey();
         this.tagManagement = new Scene(tagManagementPair.getValue());
+
+        this.adminAuthenticationCtrl = adminPair.getKey();
+        this.adminAuthentication = new Scene(adminPair.getValue());
 
         this.showServerConnection();
 
@@ -125,7 +140,7 @@ public class MainCtrlTalio {
     }
 
     @SuppressWarnings("unchecked")
-    private void readFromLocalData() {
+    public void readFromLocalData() {
         File toRead = new File(".local_data");
 
         try (
@@ -138,7 +153,7 @@ public class MainCtrlTalio {
         }
     }
 
-    private void writeToLocalData() {
+    public void writeToLocalData() {
         File localData = new File(".local_data");
 
         try (
@@ -161,7 +176,7 @@ public class MainCtrlTalio {
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
-        homeCtrl.displayBoardLabels();
+        homeCtrl.refreshBoards();
     }
 
     public void showJoinBoardCode() {
@@ -189,6 +204,27 @@ public class MainCtrlTalio {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(boardSettingsCtrl));
         stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            if (boardSettingsCtrl.isHasUnsavedChanges() == true) {
+
+                event.consume();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
+                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+                alert.showAndWait().ifPresent(result -> {
+                    if (result == ButtonType.YES) {
+                        stage.close();
+                    }
+                });
+
+            }
+
+        });
+
+
     }
 
     public void showShareBoard(Board board) {
@@ -197,6 +233,7 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Share a board");
         stage.setScene(shareBoard);
         stage.show();
+
     }
 
     public void showBoard(Board board) {
@@ -216,5 +253,21 @@ public class MainCtrlTalio {
         stage.setTitle("Talio: Manage Your Tags");
         stage.setScene(tagManagement);
         stage.show();
+
+    }
+
+    public void showAdminAuthentication() {
+        adminAuthenticationCtrl.initialize();
+        adminAuthenticationStage = new Stage();
+        adminAuthenticationStage.setTitle("Talio: Admin Authentication");
+        adminAuthenticationStage.setScene(adminAuthentication);
+        adminAuthenticationStage.show();
+    }
+
+    public void enableAdminMode() {
+        if (adminAuthenticationStage != null) {
+            adminAuthenticationStage.close();
+        }
+        homeCtrl.enableAdminMode();
     }
 }

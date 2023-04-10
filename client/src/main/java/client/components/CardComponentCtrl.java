@@ -18,7 +18,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -95,6 +97,18 @@ public class CardComponentCtrl extends AnchorPane {
                     server, stage)));
             stage.setTitle("Talio: Card Settings");
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setOnCloseRequest(event -> {
+                event.consume();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText(
+                        "Any unsaved changes will be lost. Do you want to discard them?");
+                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+                alert.showAndWait().ifPresent(result -> {
+                    if (result == ButtonType.YES) {
+                        stage.close();
+                    }
+                });
+            });
             stage.show();
         });
 
@@ -150,7 +164,7 @@ public class CardComponentCtrl extends AnchorPane {
      * @param list
      */
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server,
-            ListComponentCtrl list) {
+                             ListComponentCtrl list) {
         this.list = list;
         init(mainCtrlTalio, server);
 
@@ -329,7 +343,13 @@ public class CardComponentCtrl extends AnchorPane {
 
     @FXML
     private void delete() {
-        server.deleteCard(cardId);
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete this card ?", ButtonType.YES, ButtonType.NO);
+        confirmationDialogue.showAndWait();
+
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            server.deleteCard(cardId);
+        }
     }
 
     public void close() {

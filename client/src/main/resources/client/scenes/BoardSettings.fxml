@@ -45,13 +45,13 @@
                     <Label minWidth="30"/>
                     <Label>Background</Label>
                     <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                    <ColorPicker fx:id="cpBackgroundBoard" prefHeight="26.0" prefWidth="38.0"/>
+                    <ColorPicker fx:id="cpBackgroundBoard" prefHeight="26.0" prefWidth="38.0" onAction="#madeChange"/>
                 </HBox>
                 <HBox styleClass="hbox">
                     <Label minWidth="30"/>
                     <Label>Foreground</Label>
                     <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                    <ColorPicker fx:id="cpFontBoard" prefHeight="26.0" prefWidth="38.0"/>
+                    <ColorPicker fx:id="cpFontBoard" prefHeight="26.0" prefWidth="38.0" onAction="#madeChange"/>
                 </HBox>
             </VBox>
             <VBox HBox.hgrow="ALWAYS" styleClass="vbox">
@@ -64,13 +64,13 @@
                     <Label minWidth="30"/>
                     <Label>Background</Label>
                     <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                    <ColorPicker fx:id="cpBackgroundLists" prefHeight="26.0" prefWidth="38.0"/>
+                    <ColorPicker fx:id="cpBackgroundLists" prefHeight="26.0" prefWidth="38.0" onAction="#madeChange"/>
                 </HBox>
                 <HBox styleClass="hbox">
                     <Label minWidth="30"/>
                     <Label>Foreground</Label>
                     <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                    <ColorPicker fx:id="cpFontLists" prefHeight="26.0" prefWidth="38.0"/>
+                    <ColorPicker fx:id="cpFontLists" prefHeight="26.0" prefWidth="38.0" onAction="#madeChange"/>
                 </HBox>
             </VBox>
         </HBox>

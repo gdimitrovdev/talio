@@ -27,7 +27,7 @@
                 <graphic>
                     <ImageView fx:id="myImage" fitHeight="18.0" fitWidth="18.0"
                                pickOnBounds="true" preserveRatio="true" smooth="true">
-                        <Image url="@/images/bin.png"/>
+                        <Image url="@/client/images/bin.png"/>
                     </ImageView>
                 </graphic>
                 <tooltip>
@@ -38,12 +38,12 @@
         <HBox fx:id="detailsContainer" maxWidth="Infinity" styleClass="hbox">
             <ImageView fx:id="descriptionIcon" fitHeight="18.0" fitWidth="18.0"
                        preserveRatio="true">
-                <Image url="@/images/description.png"/>
+                <Image url="@/client/images/description.png"/>
             </ImageView>
 
             <ImageView fx:id="checkboxIcon" fitHeight="18.0" fitWidth="18.0"
                        preserveRatio="true">
-                <Image url="@/images/checkbox.png"/>
+                <Image url="@/client/images/checkbox.png"/>
             </ImageView>
             <!-- TODO fix the alignment of this label - it appears too low, compared to the
                   progress bar -->
