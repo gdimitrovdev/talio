@@ -50,6 +50,36 @@ public class BoardTest {
     }
 
     @Test
+    public void checkConstructorBoard() {
+        var tags = new ArrayList<Tag>();
+        tags.add(new Tag());
+        var cardList = new CardList("cardListTitle", new Board());
+        cardList.getCards().add(new Card("cardTitle", "desc", null, 0));
+        var cardlists = new ArrayList<CardList>();
+        cardlists.add(cardList);
+        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", cardlists, tags, null, 0);
+        var newBoard=new Board(b);
+
+        b.setLists(cardlists);
+        b.setTags(tags);
+        assertEquals(newBoard.getName(), b.getName());
+        assertEquals(newBoard.getCode(), b.getCode());
+        assertEquals(newBoard.getReadOnlyCode(), b.getReadOnlyCode());
+        assertEquals(newBoard.getBoardColor(), b.getBoardColor());
+        assertEquals(newBoard.getListsColor(), b.getListsColor());
+        assertEquals(newBoard.getLists(), b.getLists());
+        assertEquals(newBoard.getTags(), b.getTags());
+    }
+    @Test
+    void testAddCardList() {
+        Board board = new Board();
+        CardList list = new CardList();
+
+        board.addCardList(list);
+
+        assertEquals(board, list.getBoard());
+    }
+    @Test
     public void equalsHashcode() {
         var b1 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
         var b2 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
