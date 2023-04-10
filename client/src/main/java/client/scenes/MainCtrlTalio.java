@@ -22,7 +22,7 @@ import javax.inject.Inject;
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
     private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard,
-            boardSettings, tagManagement;
+            boardSettings, tagManagement, adminAuthentication;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
@@ -31,6 +31,7 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private BoardSettingsCtrl boardSettingsCtrl;
     private TagManagementCtrl tagManagementCtrl;
+    private AdminAuthenticationCtrl adminAuthenticationCtrl;
     private ServerUtils serverUtils;
 
     public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
@@ -42,6 +43,7 @@ public class MainCtrlTalio {
     }
 
     private Map<String, Set<Long>> joinedBoards;
+    private Stage adminAuthenticationStage;
 
     @Inject
     public MainCtrlTalio(ServerUtils serverUtils) {
@@ -57,7 +59,8 @@ public class MainCtrlTalio {
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
             Pair<BoardSettingsCtrl, Parent> boardSettingsPair,
-            Pair<TagManagementCtrl, Parent> tagManagementPair) {
+            Pair<TagManagementCtrl, Parent> tagManagementPair,
+            Pair<AdminAuthenticationCtrl, Parent> adminPair) {
 
         readFromLocalData();
 
@@ -87,6 +90,9 @@ public class MainCtrlTalio {
         this.tagManagementCtrl = tagManagementPair.getKey();
         this.tagManagement = new Scene(tagManagementPair.getValue());
 
+        this.adminAuthenticationCtrl = adminPair.getKey();
+        this.adminAuthentication = new Scene(adminPair.getValue());
+
         // showHome();
         this.showServerConnection();
 
@@ -94,8 +100,8 @@ public class MainCtrlTalio {
 
     }
 
-    public Set<Long> getJoinedBoardForServer(String serverUrl) {
-        return joinedBoards.get(serverUrl);
+    public Set<Long> getJoinedBoardsForServer(String serverUrl) {
+        return joinedBoards.getOrDefault(serverUrl, new HashSet<Long>());
     }
 
     public void addJoinedBoard(String serverUrl, Long boardId) {
@@ -158,7 +164,7 @@ public class MainCtrlTalio {
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
-        homeCtrl.displayBoardLabels();
+        homeCtrl.refreshBoards();
     }
 
     public void showJoinBoardCode() {
@@ -235,5 +241,20 @@ public class MainCtrlTalio {
         stage.setScene(tagManagement);
         stage.show();
 
+    }
+
+    public void showAdminAuthentication() {
+        adminAuthenticationCtrl.initialize();
+        adminAuthenticationStage = new Stage();
+        adminAuthenticationStage.setTitle("Talio: Admin Authentication");
+        adminAuthenticationStage.setScene(adminAuthentication);
+        adminAuthenticationStage.show();
+    }
+
+    public void enableAdminMode() {
+        if (adminAuthenticationStage != null) {
+            adminAuthenticationStage.close();
+        }
+        homeCtrl.enableAdminMode();
     }
 }

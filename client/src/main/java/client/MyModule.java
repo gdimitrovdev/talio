@@ -16,6 +16,7 @@
 
 package client;
 
+import client.scenes.AdminAuthenticationCtrl;
 import client.scenes.BoardCtrl;
 import client.scenes.CardPopupCtrl;
 import client.scenes.CreateBoardCtrl;
@@ -42,5 +43,6 @@ public class MyModule implements Module {
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
         binder.bind(TagManagementCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AdminAuthenticationCtrl.class).in(Scopes.SINGLETON);
     }
 }

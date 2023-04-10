@@ -1,6 +1,7 @@
 package server.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +11,7 @@ import commons.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.services.CardListService;
 import server.services.CardService;
@@ -77,6 +81,16 @@ class CardControllerTest {
 
     }
 
+    @Test
+    public void createOneException() {
+        Card card = new Card();
+        doThrow(new RuntimeException()).when(cardServiceMock).createOne(card);
+
+        ResponseEntity<Card> response = cardControllerMock.createOne(card);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
     //Test whether deleteById() method of the repository was called for the correct card
     @Test
     void deleteOne() {
@@ -111,6 +125,17 @@ class CardControllerTest {
     }
 
     @Test
+    public void updateOneException() {
+        Long invalidId = 123L;
+        Card card = new Card();
+        when(cardServiceMock.updateOne(invalidId, card)).thenThrow(new EntityNotFoundException());
+
+        ResponseEntity<Card> result = cardControllerMock.updateOne(invalidId, card);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
     void moveToListAfterCard() {
         Card card = new Card("My card", "Bla", null, 1),
                 after = new Card("Another card", "Bli", null, 1);
@@ -133,6 +158,19 @@ class CardControllerTest {
     }
 
     @Test
+    public void moveToListAfterCardException() {
+        Long invalidId = 123L;
+        Long invalidListId = 124L;
+        Long invalidAfterCardId = 125L;
+        Card card = new Card();
+        when(cardServiceMock.moveToListAfterCard(invalidId, invalidListId, invalidAfterCardId)).thenThrow(new RuntimeException());
+
+        ResponseEntity<CardList> result = cardControllerMock.moveToListAfterCard(invalidId, invalidListId, invalidAfterCardId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
     void moveToListLast() {
         Card card = new Card("My card", "Bla", null, 1);
 
@@ -149,6 +187,18 @@ class CardControllerTest {
         when(cardServiceMock.moveToListLast(1L, 2L)).thenReturn(list2);
 
         assertEquals(list2, cardControllerMock.moveToListLast(1L, 2L).getBody());
+    }
+
+    @Test
+    public void moveToListLastException() {
+        Long invalidId = 123L;
+        Long invalidListId = 124L;
+        Card card = new Card();
+        when(cardServiceMock.moveToListLast(invalidId, invalidListId)).thenThrow(new RuntimeException());
+
+        ResponseEntity<CardList> result = cardControllerMock.moveToListLast(invalidId, invalidListId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 
     @Test
@@ -169,6 +219,18 @@ class CardControllerTest {
     }
 
     @Test
+    public void addTagToCardException() {
+        Long invalidId = 123L;
+        Long invalidTagId = 124L;
+
+        when(cardServiceMock.addTagToCard(invalidTagId, invalidId)).thenThrow(new EntityNotFoundException());
+
+        ResponseEntity<Card> result = cardControllerMock.addTagToCard(invalidId, invalidTagId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
     void removeTagFromCard() {
         Card withoutTag = new Card("My card", "Bla", null, 1),
                 withTag = new Card("My card 2", "Bla 2", null, 1);
@@ -183,5 +245,17 @@ class CardControllerTest {
 
         when(cardServiceMock.removeTagFromCard(1L, 1L)).thenReturn(withoutTag);
         assertEquals(withoutTag, cardControllerMock.removeTagFromCard(1L, 1L).getBody());
+    }
+
+    @Test
+    public void removeTagFromCardException() {
+        Long invalidId = 123L;
+        Long invalidTagId = 124L;
+
+        when(cardServiceMock.removeTagFromCard(invalidTagId, invalidId)).thenThrow(new EntityNotFoundException());
+
+        ResponseEntity<Card> result = cardControllerMock.removeTagFromCard(invalidId, invalidTagId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 }

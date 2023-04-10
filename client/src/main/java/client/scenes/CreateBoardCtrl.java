@@ -28,7 +28,6 @@ public class CreateBoardCtrl {
         this.server = server;
     }
 
-    @FXML
     public void initialize() {
         fieldBoardName.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {

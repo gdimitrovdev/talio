@@ -2,6 +2,7 @@ package server.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +10,7 @@ import commons.Board;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.services.BoardService;
 
@@ -101,6 +105,14 @@ public class BoardControllerTest {
         assertEquals(board, createdBoard);
     }
 
+    @Test
+    void createOneException() {
+        Board invalidBoard = new Board();
+        when(boardServiceMock.createOne(invalidBoard)).thenThrow(new IllegalArgumentException());
+        var result = boardControllerMock.createOne(invalidBoard);
+        assertTrue(result.getStatusCode().isError());
+    }
+
     // Test whether deleteById() method of the repository was called for the correct board
     @Test
     public void deleteOne() {
@@ -109,6 +121,14 @@ public class BoardControllerTest {
 
         verify(boardServiceMock).deleteOne(1L);
 
+    }
+
+    @Test
+    public void deleteOneException() {
+        Long invalidId = 12345L;
+        doThrow(EntityNotFoundException.class).when(boardServiceMock).deleteOne(invalidId);
+        var result = boardControllerMock.deleteOne(invalidId);
+        assertTrue(result.getStatusCode().isError());
     }
 
     @Test
@@ -141,5 +161,16 @@ public class BoardControllerTest {
 
         assertEquals(updatedBoard, result);
 
+    }
+
+    @Test
+    public void updateOneException() {
+        Long invalidId = 123L;
+        Board board = new Board();
+        when(boardServiceMock.updateOne(invalidId, board)).thenThrow(new EntityNotFoundException());
+
+        ResponseEntity<Board> result = boardControllerMock.updateOne(invalidId, board);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 }
