@@ -2,8 +2,15 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -78,7 +85,7 @@ public class MainCtrlTalio {
     }
 
     public Set<Long> getJoinedBoardForServer(String serverUrl) {
-        return joinedBoards.get(serverUrl);
+        return joinedBoards.getOrDefault(serverUrl, new HashSet<Long>());
     }
 
     public void addJoinedBoard(String serverUrl, Long boardId) {
@@ -141,7 +148,7 @@ public class MainCtrlTalio {
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
-        homeCtrl.displayBoardLabels();
+        homeCtrl.displayBoardLabels(homeCtrl.getRecentBoards());
     }
 
     public void showJoinBoardCode() {

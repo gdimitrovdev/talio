@@ -3,13 +3,10 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,43 +36,13 @@ public class HomeCtrl {
     @FXML
     private GridPane recentBoardsPane;
     private boolean nestedButtonPressed = false;
+    private boolean adminMode;
 
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
-        /*for (int i = 0; i < 15; i++) {
-            this.generateExampleBoard((long) i);
-        }*/
-    }
-
-    private void generateExampleBoard(Long id) {
-        //"Long boardID = Long.parseLong(boardField.getText());
-        //Board current = serverUtils.getBoardById(boardID)" can be used
-        // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
-
-        List<String> defaultPresets = new ArrayList<>();
-        defaultPresets.add("#ffffff/#000000");
-        defaultPresets.add("#ff0008/#000000");
-        defaultPresets.add("#abffc3/#004714");
-        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1);
-
-        CardList list1 = new CardList("example list 1", null);
-        CardList list2 = new CardList("example list 2", null);
-
-        Card c1 = new Card("Title1", "Card1", null, 1);
-        Card c2 = new Card("Title2", "Card2", null, 1);
-
-        list1.addCard(c1);
-        list1.addCard(c2);
-
-        board.addCardList(list1);
-        board.addCardList(list2);
-
-
-        //adding the board to the hashset, so it will be displayed
-        //in 'your boards' on the home scene
-        board.setId(id);
+        adminMode = false;
     }
 
     /**
@@ -83,12 +50,11 @@ public class HomeCtrl {
      * the method displays all the boards that the user has connected to
      * if there are no boards: display 'no boards' message
      */
-    public void displayBoardLabels() {
-        Set<Long> recentBoards = mainCtrlTalio.getJoinedBoardForServer(server.getServerUrl());
-        if (recentBoards == null) {
-            recentBoards = new HashSet<>();
+    public void displayBoardLabels(Set<Board> boards) {
+        if (boards == null) {
+            boards = new HashSet<>();
         }
-        if (recentBoards.isEmpty()) {
+        if (boards.isEmpty()) {
             Label noBoardsLabel = new Label("No recent boards");
             noBoardsLabel.setStyle(
                     "-fx-pref-width: 690; -fx-pref-height: 50; -fx-alignment: center;");
@@ -99,8 +65,7 @@ public class HomeCtrl {
             recentBoardsPane.setHgap(70);
             int i = 0;
             int j = 0;
-            for (Long itemId : recentBoards) {
-                Board item = server.getBoard(itemId);
+            for (Board item : boards) {
                 //initializing the button and its content
                 Button boardButton = new Button();
                 AnchorPane innerPane = new AnchorPane();
@@ -158,7 +123,6 @@ public class HomeCtrl {
      * it uses a method from the Main Controller
      */
 
-    // TODO: FIX THESE THREE METHODS.
     public void openServerScene() {
         mainCtrlTalio.showServerConnection();
     }
@@ -186,10 +150,8 @@ public class HomeCtrl {
         //remove board from hashset and call displayBoardLabels method again// server.deleteBoard(board.getId());
         mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
         recentBoardsPane.getChildren().clear();
-        displayBoardLabels();
+        displayBoardLabels(server.getAllBoards());
     }
-
-    //TODO: integrate pop up once it is ready
 
     /**
      * @param board - the board for which a pop-up should be opened
@@ -212,5 +174,29 @@ public class HomeCtrl {
         mainCtrlTalio.showBoard(board);
 
 
+    }
+
+    public Set<Board> getRecentBoards() {
+        return mainCtrlTalio.getJoinedBoardForServer(server.getServerUrl())
+                .stream().map(id -> server.getBoard(id))
+                .collect(Collectors.toSet());
+    }
+
+    @FXML
+    protected void adminClick() {
+        if (adminMode) {
+            adminMode = false;
+            displayBoardLabels(getRecentBoards());
+        } else {
+
+        }
+    }
+
+    public void setAdminMode(boolean adminMode) {
+        this.adminMode = adminMode;
+    }
+
+    public boolean getAdminMode() {
+        return adminMode;
     }
 }
