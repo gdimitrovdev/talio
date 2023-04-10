@@ -127,13 +127,12 @@ public class HomeCtrl {
                 AnchorPane.setTopAnchor(boardNameLbl, 16d);
                 AnchorPane.setLeftAnchor(boardNameLbl, 10d);
 
-
+                nestedButtonPressed = true;
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> {
                     Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Disconnect from this board?", ButtonType.YES, ButtonType.NO);
                     confirmationDialogue.showAndWait();
                     if (confirmationDialogue.getResult() == ButtonType.YES) {
-                        nestedButtonPressed = true;
                         removeRecentBoard(item);
                     }
 
