@@ -23,8 +23,17 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @SpringBootApplication
 @EntityScan(basePackages = {"commons", "server"})
 public class Main {
+    public static String adminPassword;
 
     public static void main(String[] args) {
+        if (args.length > 0) {
+            // First arg is admin password
+            adminPassword = args[0];
+        } else {
+            // If no arg, default password
+            adminPassword = "oopp23";
+        }
+
         SpringApplication.run(Main.class, args);
     }
 }
