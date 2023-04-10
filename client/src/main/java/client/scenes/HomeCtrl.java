@@ -41,6 +41,8 @@ public class HomeCtrl {
     private GridPane recentBoardsPane;
     @FXML
     private Button buttonAdmin;
+    @FXML
+    private Label labelBoards;
     private boolean nestedButtonPressed = false;
     private boolean adminMode;
 
@@ -64,7 +66,8 @@ public class HomeCtrl {
             boards = new HashSet<>();
         }
         if (boards.isEmpty()) {
-            Label noBoardsLabel = new Label("No recent boards");
+            String noBoards = adminMode ? "No boards in server" :"No recent boards";
+            Label noBoardsLabel = new Label(noBoards);
             noBoardsLabel.setStyle(
                     "-fx-pref-width: 690; -fx-pref-height: 50; -fx-alignment: center;");
             recentBoardsPane.getChildren().add(noBoardsLabel);
@@ -246,12 +249,14 @@ public class HomeCtrl {
     private void removeStyleAdmin() {
         buttonAdmin.setText("Enable Admin Mode");
         buttonAdmin.setStyle("-fx-background-color: #bababa");
+        labelBoards.setText("Your Boards:");
     }
 
     //Adds some styling to indicate admin mode
     private void addStyleAdmin() {
         buttonAdmin.setText("Disable Admin Mode");
         buttonAdmin.setStyle("-fx-background-color: yellow");
+        labelBoards.setText("All Server Boards:");
     }
 
     public void refreshBoards() {

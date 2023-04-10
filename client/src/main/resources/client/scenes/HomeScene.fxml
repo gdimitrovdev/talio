@@ -9,7 +9,7 @@
    <Button fx:id="createBoardBtn" layoutX="444.0" layoutY="86.0" mnemonicParsing="false" onAction="#displayCreatePopUp" prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #90dea5;" text="Create board" />
    <Separator layoutX="58.0" layoutY="171.0" prefHeight="2.0" prefWidth="219.0" />
    <Separator layoutX="524.0" layoutY="172.0" prefHeight="2.0" prefWidth="219.0" />
-   <Label layoutX="290.0" layoutY="163.0" prefHeight="18.0" prefWidth="219.0" style="-fx-alignment: center;" text="Your Boards:" />
+   <Label fx:id="labelBoards" layoutX="290.0" layoutY="163.0" prefHeight="18.0" prefWidth="219.0" style="-fx-alignment: center;" text="Your Boards:" />
    <ScrollPane fx:id="outerContainer" layoutX="57.0" layoutY="207.0" prefHeight="346.0" prefWidth="695.0">
       <content>
          <GridPane fx:id="recentBoardsPane" prefHeight="346.0" prefWidth="680.0" />
