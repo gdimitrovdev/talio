@@ -16,7 +16,8 @@ public class BoardTest {
     public void checkConstructorWithoutLists() {
         List<String> defaultPresets = new ArrayList<>();
         defaultPresets.add("#ffffff/#000000");
-        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#222222", defaultPresets, 0);
+        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#222222", defaultPresets, 0);
         assertEquals("boardName", b.getName());
         assertEquals("boardPassword", b.getCode());
         assertEquals("asdfgh", b.getReadOnlyCode());
@@ -36,7 +37,8 @@ public class BoardTest {
         cardList.getCards().add(new Card("cardTitle", "desc", null, 0));
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
-        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", cardlists, tags, null, 0);
+        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", cardlists, tags, null, 0);
 
         b.setLists(cardlists);
         b.setTags(tags);
@@ -57,7 +59,8 @@ public class BoardTest {
         cardList.getCards().add(new Card("cardTitle", "desc", null, 0));
         var cardlists = new ArrayList<CardList>();
         cardlists.add(cardList);
-        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", cardlists, tags, null, 0);
+        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", cardlists, tags, null, 0);
         var newBoard = new Board(b);
 
         b.setLists(cardlists);
@@ -83,8 +86,10 @@ public class BoardTest {
 
     @Test
     public void equalsHashcode() {
-        var b1 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
-        var b2 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
+        var b1 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", null, 0);
+        var b2 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", null, 0);
         assertEquals(b1, b2);
         assertEquals(b1.hashCode(), b2.hashCode());
     }
@@ -94,7 +99,8 @@ public class BoardTest {
         var cardList = new CardList("cardListTitle", new Board());
         cardList.getCards().add(new Card("cardTitle", "desc", cardList, 1));
         var cardlists = new ArrayList<CardList>();
-        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", cardlists, null, null, 1);
+        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", cardlists, null, null, 1);
         b.addCardList(cardList);
         assertEquals(cardList.getBoard(), b);
         assertTrue(b.getLists().contains(cardList));
@@ -107,7 +113,8 @@ public class BoardTest {
     public void testTagOperations() {
         Tag tag = new Tag("tagTitle", "red", null);
         var tags = new ArrayList<Tag>();
-        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",  "#000000/#111111", null, tags, null, 0);
+        var b = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", null, tags, null, 0);
         b.addTag(tag);
         assertEquals(b, tag.getBoard());
         assertTrue(b.getTags().contains(tag));
@@ -118,15 +125,18 @@ public class BoardTest {
 
     @Test
     public void notEqualsHashcode() {
-        var b1 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
-        var b2 = new Board("differentName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0);
+        var b1 = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", null, 0);
+        var b2 = new Board("differentName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", null, 0);
         assertNotEquals(b1, b2);
         assertNotEquals(b1.hashCode(), b2.hashCode());
     }
 
     @Test
     public void hasToString() {
-        var actual = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111", "#000000/#111111", null, 0).toString();
+        var actual = new Board("boardName", "boardPassword", "asdfgh", "#000000/#111111",
+                "#000000/#111111", null, 0).toString();
         assertTrue(actual.contains(Board.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
         assertTrue(actual.contains("name"));

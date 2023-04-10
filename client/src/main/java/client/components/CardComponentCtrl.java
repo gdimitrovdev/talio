@@ -164,7 +164,7 @@ public class CardComponentCtrl extends AnchorPane {
      * @param list
      */
     public CardComponentCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server,
-                             ListComponentCtrl list) {
+            ListComponentCtrl list) {
         this.list = list;
         init(mainCtrlTalio, server);
 

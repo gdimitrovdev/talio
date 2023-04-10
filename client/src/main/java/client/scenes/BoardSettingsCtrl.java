@@ -115,7 +115,7 @@ public class BoardSettingsCtrl extends AnchorPane {
                 }
         ));
 
-        init();
+        init(board);
     }
 
     public void init(Board board) {
@@ -159,12 +159,14 @@ public class BoardSettingsCtrl extends AnchorPane {
 
         Button deleteBtn = new Button();
         var trashIcon = new ImageView(new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/images/bin.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/client/images/bin.png"))));
         trashIcon.setFitHeight(18);
         trashIcon.setFitWidth(18);
         deleteBtn.setGraphic(trashIcon);
         deleteBtn.setOnAction((e) -> {
-            Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete color preset ?", ButtonType.YES, ButtonType.NO);
+            Alert confirmationDialogue =
+                    new Alert(Alert.AlertType.CONFIRMATION, "Delete color preset ?", ButtonType.YES,
+                            ButtonType.NO);
             confirmationDialogue.setContentText("Delete color preset ?");
             confirmationDialogue.showAndWait();
             if (confirmationDialogue.getResult() == ButtonType.YES) {
@@ -289,7 +291,9 @@ public class BoardSettingsCtrl extends AnchorPane {
     }
 
     public void deleteBoard() {
-        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this board permanently ?", ButtonType.YES, ButtonType.NO);
+        Alert confirmationDialogue =
+                new Alert(Alert.AlertType.CONFIRMATION, "Delete this board permanently ?",
+                        ButtonType.YES, ButtonType.NO);
         confirmationDialogue.showAndWait();
         if (confirmationDialogue.getResult() == ButtonType.YES) {
             mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());

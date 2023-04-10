@@ -27,6 +27,7 @@ import client.scenes.MainCtrlTalio;
 import client.scenes.ServerConnectionCtrl;
 import client.scenes.ShareBoardCtrl;
 import client.scenes.TagManagementCtrl;
+import client.utils.ServerUtils;
 import com.google.inject.Injector;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -56,13 +57,14 @@ public class Main extends Application {
         var tagManagementPair =
                 FXML.load(TagManagementCtrl.class, "client", "scenes", "TagManagement.fxml");
         var adminPair =
-                FXML.load(AdminAuthenticationCtrl.class, "client", "scenes", "AdminAuthentication.fxml");
+                FXML.load(AdminAuthenticationCtrl.class, "client", "scenes",
+                        "AdminAuthentication.fxml");
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrlTalio.class);
 
         mainCtrl.initialize(primaryStageTalio, homePair, joinBoardPair, createBoardPair,
                 serverConnectionPair, boardComponentPair, shareBoardPair,
-                tagManagementPair, adminPair);
+                tagManagementPair, adminPair, INJECTOR.getInstance(ServerUtils.class));
     }
 }

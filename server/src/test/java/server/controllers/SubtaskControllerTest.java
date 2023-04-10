@@ -149,7 +149,8 @@ class SubtaskControllerTest {
     public void updateOneException() {
         Long invalidId = 123L;
         Subtask subtask = new Subtask();
-        when(subtaskServiceMock.updateOne(invalidId, subtask)).thenThrow(new EntityNotFoundException());
+        when(subtaskServiceMock.updateOne(invalidId, subtask)).thenThrow(
+                new EntityNotFoundException());
 
         ResponseEntity<Subtask> result = subtaskControllerMock.updateOne(invalidId, subtask);
 

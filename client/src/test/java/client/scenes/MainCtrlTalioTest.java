@@ -21,7 +21,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class MainCtrlTalioTest {
     @InjectMocks
     private MainCtrlTalio mainCtrlTalio;
-    @Mock private ServerUtils serverUtils;
+    @Mock
+    private ServerUtils serverUtils;
     private Map<String, Set<Long>> joinedBoards;
 
     @BeforeEach

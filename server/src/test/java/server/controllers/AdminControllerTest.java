@@ -80,8 +80,10 @@ public class AdminControllerTest {
                 """;
 
         String data = "<tr><td style=\"border: 1px solid black\">"
-                + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName() + "</td><td style=\"border: 1px solid black\">"
-                + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode() + "</td></tr>"
+                + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName()
+                + "</td><td style=\"border: 1px solid black\">"
+                + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode()
+                + "</td></tr>"
                 + "</table>";
 
         assertEquals(header + data, adminControllerMock.getBoards());
@@ -100,6 +102,7 @@ public class AdminControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
     /*
     @Test
     void refill() {

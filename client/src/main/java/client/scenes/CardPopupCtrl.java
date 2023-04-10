@@ -8,23 +8,21 @@ import commons.Board;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -169,7 +167,7 @@ public class CardPopupCtrl extends AnchorPane {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         Button deleteSubtask = new Button();
         var trashIcon = new ImageView(new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/images/bin.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/client/images/bin.png"))));
         trashIcon.setFitHeight(18);
         trashIcon.setFitWidth(18);
         deleteSubtask.setGraphic(trashIcon);
@@ -192,7 +190,9 @@ public class CardPopupCtrl extends AnchorPane {
             });
 
             deleteSubtask.setOnAction(a -> {
-                Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?", ButtonType.YES, ButtonType.NO);
+                Alert confirmationDialogue =
+                        new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?",
+                                ButtonType.YES, ButtonType.NO);
                 confirmationDialogue.showAndWait();
                 if (confirmationDialogue.getResult() == ButtonType.YES) {
                     card.removeSubtask(subtask);
@@ -231,7 +231,9 @@ public class CardPopupCtrl extends AnchorPane {
                         });
 
                         deleteSubtask.setOnAction(a -> {
-                            Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?", ButtonType.YES, ButtonType.NO);
+                            Alert confirmationDialogue =
+                                    new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?",
+                                            ButtonType.YES, ButtonType.NO);
                             confirmationDialogue.showAndWait();
                             if (confirmationDialogue.getResult() == ButtonType.YES) {
                                 card.removeSubtask(s);

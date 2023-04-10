@@ -3,7 +3,6 @@ package server.controllers;
 import commons.Card;
 import commons.CardList;
 import commons.Topics;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -152,7 +151,7 @@ public class CardController {
 
     @GetMapping("/add-tag-to-card/{id}/{tagId}")
     @ResponseBody
-    public ResponseEntity<Card> addTagToCard(@PathVariable Long tagId, @PathVariable Long id) {
+    public ResponseEntity<Card> addTagToCard(@PathVariable Long id, @PathVariable Long tagId) {
         try {
             Card updatedCard = cardService.addTagToCard(tagId, id);
             template.convertAndSend(Topics.CARDS.toString(), updatedCard);

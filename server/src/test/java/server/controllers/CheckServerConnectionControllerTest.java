@@ -21,6 +21,7 @@ public class CheckServerConnectionControllerTest {
 
     @Test
     void testConnection() {
-        assertTrue(checkServerConnectionControllerMock.testConnection().getStatusCode().is2xxSuccessful());
+        assertTrue(checkServerConnectionControllerMock.testConnection().getStatusCode()
+                .is2xxSuccessful());
     }
 }

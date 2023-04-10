@@ -119,7 +119,8 @@ class CardListControllerTest {
     @Test
     void updateOne() {
         CardList cardList = new CardList();
-        cardList.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
+        cardList.setId(
+                1L); //setting the id and title manually because otherwise all constructors require a Board
         cardList.setTitle("title1");
 
         CardList updatedCardList = new CardList();
@@ -137,7 +138,8 @@ class CardListControllerTest {
     public void updateOneException() {
         Long invalidId = 123L;
         CardList cardList = new CardList();
-        when(cardListServiceMock.updateOne(invalidId, cardList)).thenThrow(new EntityNotFoundException());
+        when(cardListServiceMock.updateOne(invalidId, cardList)).thenThrow(
+                new EntityNotFoundException());
 
         ResponseEntity<CardList> result = cardListControllerMock.updateOne(invalidId, cardList);
 

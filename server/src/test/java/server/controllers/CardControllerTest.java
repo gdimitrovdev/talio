@@ -163,9 +163,12 @@ class CardControllerTest {
         Long invalidListId = 124L;
         Long invalidAfterCardId = 125L;
         Card card = new Card();
-        when(cardServiceMock.moveToListAfterCard(invalidId, invalidListId, invalidAfterCardId)).thenThrow(new RuntimeException());
+        when(cardServiceMock.moveToListAfterCard(invalidId, invalidListId,
+                invalidAfterCardId)).thenThrow(new RuntimeException());
 
-        ResponseEntity<CardList> result = cardControllerMock.moveToListAfterCard(invalidId, invalidListId, invalidAfterCardId);
+        ResponseEntity<CardList> result =
+                cardControllerMock.moveToListAfterCard(invalidId, invalidListId,
+                        invalidAfterCardId);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
@@ -194,9 +197,11 @@ class CardControllerTest {
         Long invalidId = 123L;
         Long invalidListId = 124L;
         Card card = new Card();
-        when(cardServiceMock.moveToListLast(invalidId, invalidListId)).thenThrow(new RuntimeException());
+        when(cardServiceMock.moveToListLast(invalidId, invalidListId)).thenThrow(
+                new RuntimeException());
 
-        ResponseEntity<CardList> result = cardControllerMock.moveToListLast(invalidId, invalidListId);
+        ResponseEntity<CardList> result =
+                cardControllerMock.moveToListLast(invalidId, invalidListId);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
@@ -223,7 +228,8 @@ class CardControllerTest {
         Long invalidId = 123L;
         Long invalidTagId = 124L;
 
-        when(cardServiceMock.addTagToCard(invalidTagId, invalidId)).thenThrow(new EntityNotFoundException());
+        when(cardServiceMock.addTagToCard(invalidTagId, invalidId)).thenThrow(
+                new EntityNotFoundException());
 
         ResponseEntity<Card> result = cardControllerMock.addTagToCard(invalidId, invalidTagId);
 
@@ -252,7 +258,8 @@ class CardControllerTest {
         Long invalidId = 123L;
         Long invalidTagId = 124L;
 
-        when(cardServiceMock.removeTagFromCard(invalidTagId, invalidId)).thenThrow(new EntityNotFoundException());
+        when(cardServiceMock.removeTagFromCard(invalidTagId, invalidId)).thenThrow(
+                new EntityNotFoundException());
 
         ResponseEntity<Card> result = cardControllerMock.removeTagFromCard(invalidId, invalidTagId);
 

@@ -55,7 +55,7 @@ public class Card implements Serializable {
     }
 
     public Card(String title, String description, CardList list,
-                Integer colorPresetNumber) {
+            Integer colorPresetNumber) {
         setColorPresetNumber(colorPresetNumber);
         setTitle(title);
         setDescription(description);
@@ -63,8 +63,9 @@ public class Card implements Serializable {
         setListPriority(-1L);
     }
 
-    public Card(String title, String description, Integer colorPresetNumber, CardList list, List<Tag> tags,
-                List<Subtask> subtasks) {
+    public Card(String title, String description, Integer colorPresetNumber, CardList list,
+            List<Tag> tags,
+            List<Subtask> subtasks) {
         this.title = title;
         this.description = description;
         this.colorPresetNumber = colorPresetNumber;

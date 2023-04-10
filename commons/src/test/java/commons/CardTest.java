@@ -87,7 +87,7 @@ public class CardTest {
 
     @Test
     public void hasToString() {
-        var actual = new Card("cardTitle", "desc",  null, 0).toString();
+        var actual = new Card("cardTitle", "desc", null, 0).toString();
         assertTrue(actual.contains(Card.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
         assertTrue(actual.contains("title"));

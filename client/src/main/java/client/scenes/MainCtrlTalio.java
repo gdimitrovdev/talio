@@ -15,8 +15,8 @@ import java.util.Set;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Modality;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -33,7 +33,7 @@ public class MainCtrlTalio {
     private ShareBoardCtrl shareBoardCtrl;
     private TagManagementCtrl tagManagementCtrl;
     private AdminAuthenticationCtrl adminAuthenticationCtrl;
-    private ServerUtils serverUtils;
+    private ServerUtils server;
 
     public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
         this.joinedBoards = joinedBoards;
@@ -60,7 +60,8 @@ public class MainCtrlTalio {
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
             Pair<TagManagementCtrl, Parent> tagManagementPair,
-            Pair<AdminAuthenticationCtrl, Parent> adminPair
+            Pair<AdminAuthenticationCtrl, Parent> adminPair,
+            ServerUtils server
     ) {
 
         readFromLocalData();
@@ -91,13 +92,15 @@ public class MainCtrlTalio {
         this.adminAuthenticationCtrl = adminPair.getKey();
         this.adminAuthentication = new Scene(adminPair.getValue());
 
+        this.server = server;
+
         this.showServerConnection();
 
         primaryStageTalio.show();
 
     }
 
-    public Set<Long> getJoinedBoardForServer(String serverUrl) {
+    public Set<Long> getJoinedBoardsForServer(String serverUrl) {
         var boardsToRemove = new ArrayList<Long>();
         if (!joinedBoards.containsKey(serverUrl)) {
             return new HashSet<>();
@@ -206,12 +209,13 @@ public class MainCtrlTalio {
         stage.show();
 
         stage.setOnCloseRequest(event -> {
-            if (boardSettingsCtrl.isHasUnsavedChanges() == true) {
+            if (boardSettingsCtrl.isHasUnsavedChanges()) {
 
                 event.consume();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
+                alert.setContentText(
+                        "Any unsaved changes will be lost. Do you want to discard them?");
                 alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
                 alert.showAndWait().ifPresent(result -> {
@@ -237,6 +241,7 @@ public class MainCtrlTalio {
     }
 
     public void showBoard(Board board) {
+        System.out.println("SHOWING BOARD");
         try {
             server.subscribeToBoard(board.getId());
         } catch (Exception e) {

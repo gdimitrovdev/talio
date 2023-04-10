@@ -148,7 +148,8 @@ public class HomeCtrl {
 
     private void handleBoardDelete(Board item) {
         String text = adminMode ? "Delete this board permanently?" : "Disconnect from this board?";
-        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
+        Alert confirmationDialogue =
+                new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
         confirmationDialogue.showAndWait();
 
         if (confirmationDialogue.getResult() == ButtonType.YES) {
