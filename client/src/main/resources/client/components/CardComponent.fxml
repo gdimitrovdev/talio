@@ -35,7 +35,6 @@
                 </tooltip>
             </Button>
         </HBox>
-        <!-- TODO perhaps add a description indicator somewhere around here -->
         <HBox fx:id="detailsContainer" maxWidth="Infinity" styleClass="hbox">
             <ImageView fx:id="descriptionIcon" fitHeight="18.0" fitWidth="18.0"
                        preserveRatio="true">

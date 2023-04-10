@@ -14,6 +14,7 @@
 .subtask-checkbox {
     -fx-translate-y: 3;
     -fx-translate-x: 3;
+    -fx-background-color: red;
 }
 
 .remove-tag-button {
@@ -38,19 +39,6 @@
     -fx-spacing: 5;
 }
 
-.vbox {
-    -fx-spacing: 5;
-    -webkit-flex-wrap: wrap;
-}
-
-.invalid-textField-input {
-    -fx-text-fill: red;
-}
-
-.valid-textField-input {
-    -fx-text-fill: black;
-}
-
 .button:hover {
     -fx-cursor: hand;
 }
@@ -59,10 +47,17 @@
     -fx-cursor: hand;
 }
 
+/* These two remove the arrow from the MenuButton for adding tags */
 .menu-button > .arrow-button {
     -fx-padding: 0;
 }
 
 .menu-button > .arrow-button > .arrow {
     -fx-padding: 0;
+}
+
+.flow-pane {
+    -fx-padding: 5;
+    -fx-hgap: 5;
+    -fx-vgap: 5;
 }

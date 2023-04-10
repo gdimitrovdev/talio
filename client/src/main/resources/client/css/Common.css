@@ -8,3 +8,25 @@
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13;
 }
+
+.hbox {
+    -fx-spacing: 5;
+}
+
+.vbox {
+    -fx-spacing: 10;
+}
+
+.deleteButton {
+    -fx-background-color: rgb(255, 97, 97);
+}
+
+.separator .line {
+    -fx-border-color: #626262;
+    -fx-border-width: 1;
+}
+
+.flow-pane {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}

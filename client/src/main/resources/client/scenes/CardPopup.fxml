@@ -1,30 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.MenuButton?>
 <fx:root type="AnchorPane"
          fx:id="anchorPane"
          xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          stylesheets="@/client/css/CardPopup.css"
          prefWidth="500"
-         prefHeight="400"
+         prefHeight="600"
+         style="-fx-padding: 20"
          maxHeight="Infinity">
-    <TextField fx:id="cardTitle" layoutX="10" layoutY="10"/>
-    <TextField fx:id="cardDescription" layoutX="10" layoutY="40" prefHeight="80" prefWidth="480"
-               alignment="TOP_LEFT"/>
-    <Text layoutX="10" layoutY="140">Tasks:</Text>
-    <ScrollPane layoutX="10" layoutY="151" prefHeight="130" prefWidth="480">
-        <VBox fx:id="subtaskVBox" styleClass="vbox"/>
-    </ScrollPane>
-    <HBox fx:id="subtaskHBox"/>
-    <ScrollPane layoutX="10" layoutY="320" prefHeight="45" prefWidth="480">
-        <HBox fx:id="tagHBox"/>
-    </ScrollPane>
-    <ChoiceBox fx:id="colorSchemeDropdown"/>
+    <VBox AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0"
+          styleClass="vbox"
+    >
+        <TextField fx:id="cardTitle"/>
+        <TextField fx:id="cardDescription"
+                   minHeight="80"
+                   maxWidth="Infinity"
+                   alignment="TOP_LEFT"/>
+        <Separator/>
+        <HBox styleClass="hbox">
+            <Label>Tasks</Label>
+            <Label maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button onAction="#newSubtask">Add a Task</Button>
+        </HBox>
+        <ScrollPane fx:id="subtasksScroll" VBox.vgrow="ALWAYS" vbarPolicy="ALWAYS"
+                    hbarPolicy="NEVER"
+                    minHeight="200" maxWidth="Infinity" style="-fx-padding: 10">
+            <VBox fx:id="subtasksContainer" styleClass="vbox" maxWidth="Infinity"/>
+        </ScrollPane>
+        <Separator/>
+        <Label>Tags</Label>
+        <ScrollPane VBox.vgrow="ALWAYS" minHeight="100" vbarPolicy="ALWAYS" fx:id="tagsScrollPane">
+            <FlowPane fx:id="tagsContainer" styleClass="flow-pane">
+                <MenuButton fx:id="addTagButton">+</MenuButton>
+            </FlowPane>
+        </ScrollPane>
+        <Separator/>
+        <HBox styleClass="hbox">
+            <Label>Chose a Color Scheme</Label>
+            <ChoiceBox fx:id="colorSchemeDropdown"/>
+        </HBox>
+        <Separator/>
+        <HBox styleClass="hbox" style="-fx-spacing: 60" alignment="BASELINE_CENTER">
+            <Button fx:id="saveButton" onAction="#save">Save</Button>
+            <Button fx:id="deleteCardButton" styleClass="deleteButton" onAction="#delete">Delete
+                Card
+            </Button>
+        </HBox>
+    </VBox>
 </fx:root>

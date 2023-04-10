@@ -2,91 +2,76 @@ package client.scenes;
 
 import client.components.TitleField;
 import client.utils.ServerUtils;
+import client.utils.Utils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 public class CardPopupCtrl extends AnchorPane {
     private final MainCtrlTalio mainCtrlTalio;
-
     private final ServerUtils server;
-
     private Card card;
 
     @FXML
-    private AnchorPane anchorPane = new AnchorPane();
+    private TextField cardTitle;
 
     @FXML
-    private TextField cardTitle = new TextField();
+    private TextField cardDescription;
 
     @FXML
-    private TextField cardDescription = new TextField();
+    private VBox subtasksContainer;
 
     @FXML
-    private VBox subtaskVBox = new VBox();
+    private MenuButton addTagButton;
 
     @FXML
-    private HBox subtaskHBox;
+    private ScrollPane subtasksScroll;
 
     @FXML
-    private HBox tagHBox = new HBox();
+    private FlowPane tagsContainer;
 
     @FXML
-    private HBox tagElement;
+    private ScrollPane tagsScrollPane;
 
     @FXML
-    private MenuButton tagMenu;
+    private ChoiceBox<String> colorSchemeDropdown;
 
-    @FXML
-    private TextField newSubtaskEntry;
+    private Stage stage;
+    private Set<Tag> tagsToDelete = new HashSet<>();
+    private Set<Subtask> subtasksToDelete = new HashSet<>();
 
-    @FXML
-    private Button addNewSubtask;
-
-    @FXML
-    private Button deleteSubtask;
-
-    @FXML
-    private Button moveUpSubtask;
-
-    @FXML
-    private Button moveDownSubtask;
-
-    @FXML
-    private TextField newTagTextfield;
-
-    @FXML
-    private ColorPicker tagColorPicker;
-
-    @FXML
-    private Button save;
-
-    @FXML
-    private Button close;
-
-    Stage stage;
+    private final Predicate<String> subtaskTitleValidator = title ->
+            !title.equals("")
+                    && card.getSubtasks().stream().noneMatch(s -> s.getTitle().equals(title));
 
     @Inject
     public CardPopupCtrl(MainCtrlTalio mainCtrlTalio, Card card, ServerUtils server, Stage stage) {
@@ -105,223 +90,239 @@ public class CardPopupCtrl extends AnchorPane {
             throw new RuntimeException(e);
         }
 
-        /*server.registerForMessages(Topics.SUBTASKS.toString(), Subtask.class, subtask -> {
-            if (subtask.getCard().getId().equals(card.getId())) {
-                Platform.runLater(this::refresh);
-            }
-        });
+        cardTitle.setText(this.card.getTitle());
+        cardDescription.setText(card.getDescription());
 
-        server.registerForMessages(Topics.SUBTASKS.toString(), Card.class, cardReceived -> {
-            if (cardReceived.getId().equals(card.getId())) {
-                Platform.runLater(this::refresh);
+        for (Subtask subtask : Utils.getSubtasksSorted(card)) {
+            subtasksContainer.getChildren().add(generateSubtaskComponent(subtask));
+        }
+
+        initTagMenuButton();
+
+        for (Tag tag : card.getTags()) {
+            tagsContainer.getChildren().add(tagsContainer.getChildren().size() - 1,
+                    generateTagComponent(tag));
+        }
+
+        colorSchemeDropdown.getItems().add("(default)");
+        for (String scheme : card.getList().getBoard().getCardColorPresets()) {
+            if (!scheme.equals("")) {
+                colorSchemeDropdown.getItems().add(Utils.getColorSchemeName(scheme));
             }
-        });*/
-        this.refreshCardData();
+        }
+        if (card.getColorPresetNumber().equals(-1)) {
+            colorSchemeDropdown.setValue("(default)");
+        } else {
+            colorSchemeDropdown.setValue(Utils.getColorSchemeName(
+                    card.getList().getBoard().getCardColorPresets()
+                            .get(card.getColorPresetNumber())));
+        }
 
         server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
             if (cardReceived.getId().equals(card.getId())) {
                 Platform.runLater(() -> {
-                    Window window = anchorPane.getScene().getWindow();
-
-                    if (window instanceof Stage) {
-                        ((Stage) window).close();
-                    }
-
                     Alert box = new Alert(Alert.AlertType.ERROR);
                     box.setTitle("Card deleted");
                     box.setContentText("The card that you are editing has been deleted!");
+                    box.setOnCloseRequest(e -> stage.close());
                     box.showAndWait();
                 });
             }
         });
-    }
-
-    public void init() {
 
     }
 
-    public void refreshCardData() {
-        if (cardTitle.getText().isEmpty()) {
-            cardTitle.setText(this.card.getTitle());
-        }
-        if (cardDescription.getText().isEmpty()) {
-            cardDescription.setText(card.getDescription());
-        }
-
-        subtaskVBox.getChildren().clear();
-        tagHBox.getChildren().clear();
-
-        initializeSubtasks();
-
-        subtaskHBox = new HBox();
-
-        newSubtaskEntry = new TextField();
-        newSubtaskEntry.setPromptText("Add new subtask");
-        newSubtaskEntry.setOnAction(a -> {
-            addNewSubtask(newSubtaskEntry.getText());
-        });
-
-        addNewSubtask = new Button("Add new subtask");
-        addNewSubtask.setOnAction(a -> {
-            addNewSubtask(newSubtaskEntry.getText());
-        });
-
-        subtaskHBox.getChildren().add(newSubtaskEntry);
-        subtaskHBox.getChildren().add(addNewSubtask);
-        subtaskHBox.setLayoutX(10);
-        subtaskHBox.setLayoutY(290);
-
-        anchorPane.getChildren().add(subtaskHBox);
-
-        initializeTags();
-
-        tagMenu = new MenuButton("+");
-        tagMenu.getItems().clear();
-        initializeTagDropdownMenu();
-        tagMenu.setLayoutX(10);
-        tagMenu.setLayoutY(370);
-        anchorPane.getChildren().add(tagMenu);
-
-        save = new Button("Save");
-        anchorPane.getChildren().add(save);
-        save.setLayoutX(450);
-        save.setLayoutY(10);
-        save.setOnAction(a -> {
-            save();
+    public void newSubtask() {
+        subtasksContainer.getChildren().add(generateSubtaskComponent(null));
+        // TODO fix this, as sometimes it doesn't scroll properly
+        // Scroll to bottom
+        Platform.runLater(() -> {
+            subtasksScroll.setVvalue(1);
         });
     }
 
-    public void deleteSubtask(Subtask subtask) {
-        System.out.println(subtask.getId());
-        server.deleteSubtask(subtask.getId());
-    }
+    /**
+     * Generate an HBox that can be placed in the subtaskContainer
+     *
+     * @param subtask If the given subtask is null it will generate a component with a
+     *                TitleField that requires a name for the subtask to be entered, and once it
+     *                is a new subtask will be added to the card (the local one, that will only
+     *                be saved on the server once Save is pressed).
+     */
+    public HBox generateSubtaskComponent(Subtask subtask) {
+        HBox subtaskElement = new HBox();
+        subtaskElement.setMaxWidth(Double.POSITIVE_INFINITY);
+        subtaskElement.setSpacing(10);
 
-    public void moveUp(Subtask subtask) {
-        server.moveUp(subtask);
-    }
+        CheckBox checkBox = new CheckBox();
+        checkBox.getStyleClass().add("subtask-checkbox");
+        TitleField titleField = new TitleField();
+        titleField.setMaxWidth(200);
+        Button moveUpSubtask = new Button("^");
+        Button moveDownSubtask = new Button("v");
+        Pane spacer = new Pane();
+        spacer.setMaxWidth(Double.POSITIVE_INFINITY);
+        spacer.setMinWidth(100);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        Button deleteSubtask = new Button();
+        var trashIcon = new ImageView(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/bin.png"))));
+        trashIcon.setFitHeight(18);
+        trashIcon.setFitWidth(18);
+        deleteSubtask.setGraphic(trashIcon);
+        deleteSubtask.getStyleClass().add("remove-subtask-button");
 
-    public void moveDown(Subtask subtask) {
-        server.moveDown(subtask);
-    }
-
-    public void initializeSubtasks() {
-        subtaskVBox.getChildren().clear();
-        for (Subtask subtask : card.getSubtasks().stream().sorted(Comparator.comparing(
-                Subtask::getPositionInCard
-        )).toList()) {
-            HBox subtaskElement = new HBox();
-
-            CheckBox checkBox = new CheckBox("");
+        if (subtask != null) {
             checkBox.setSelected(subtask.getCompleted());
             checkBox.setOnAction(a -> {
                 subtask.setCompleted(!subtask.getCompleted());
-                server.updateSubtask(subtask);
-                //refreshCardData();
             });
-            checkBox.getStyleClass().add("subtask-checkbox");
-            subtaskElement.getChildren().add(checkBox);
 
-            TitleField titleField = new TitleField();
             titleField.init(subtask.getTitle(), newTitle -> {
-                Subtask serverSubtask = server.getSubtask(subtask.getId());
-                serverSubtask.setTitle(newTitle);
-                server.updateSubtask(serverSubtask);
-            });
-            subtaskElement.getChildren().add(titleField);
+            }, subtaskTitleValidator);
 
-            deleteSubtask = new Button("x");
-            deleteSubtask.getStyleClass().add("remove-subtask-button");
-            deleteSubtask.setOnAction(a -> {
-                deleteSubtask(subtask);
-            });
-            subtaskElement.getChildren().add(deleteSubtask);
-
-            moveUpSubtask = new Button("^");
-            // moveUpSubtask.getStyleClass().add("remove-subtask-button");
             moveUpSubtask.setOnAction(a -> {
-                moveUp(subtask);
+                Utils.subtaskComponentMoveUp(subtaskElement, subtask, subtasksContainer);
             });
-            subtaskElement.getChildren().add(moveUpSubtask);
-
-            moveDownSubtask = new Button("v");
-            // moveUpSubtask.getStyleClass().add("remove-subtask-button");
             moveDownSubtask.setOnAction(a -> {
-                moveDown(subtask);
+                Utils.subtaskComponentMoveDown(subtaskElement, subtask, subtasksContainer);
             });
-            subtaskElement.getChildren().add(moveDownSubtask);
 
-            subtaskVBox.getChildren().add(subtaskElement);
+            deleteSubtask.setOnAction(a -> {
+                card.removeSubtask(subtask);
+                subtasksContainer.getChildren().remove(subtaskElement);
+                subtasksToDelete.add(subtask);
+            });
+        } else {
+            checkBox.setSelected(false);
+            // This is purposely still managed, so that the TitleField aligns with the other
+            // subtasks
+            checkBox.setVisible(false);
+
+            moveUpSubtask.setVisible(false);
+            moveDownSubtask.setVisible(false);
+            deleteSubtask.setVisible(false);
+
+            titleField.init(updatedTitle -> {
+                    }, newTitle -> {
+                        Subtask s = Utils.createNewSubtask(card, newTitle);
+                        checkBox.setVisible(true);
+                        moveUpSubtask.setVisible(true);
+                        moveDownSubtask.setVisible(true);
+                        deleteSubtask.setVisible(true);
+
+                        checkBox.setOnAction(a -> {
+                            s.setCompleted(!s.getCompleted());
+                        });
+
+                        moveUpSubtask.setOnAction(a -> {
+                            Utils.subtaskComponentMoveUp(subtaskElement, s, subtasksContainer);
+                        });
+
+                        moveDownSubtask.setOnAction(a -> {
+                            Utils.subtaskComponentMoveDown(subtaskElement, s, subtasksContainer);
+                        });
+
+                        deleteSubtask.setOnAction(a -> {
+                            card.removeSubtask(s);
+                            subtasksContainer.getChildren().remove(subtaskElement);
+                        });
+
+                    }, () -> {
+                        subtasksContainer.getChildren().remove(subtaskElement);
+                    }, subtaskTitleValidator
+            );
         }
+
+        subtaskElement.getChildren().add(checkBox);
+        subtaskElement.getChildren().add(moveUpSubtask);
+        subtaskElement.getChildren().add(moveDownSubtask);
+        subtaskElement.getChildren().add(titleField);
+        subtaskElement.getChildren().add(spacer);
+        subtaskElement.getChildren().add(deleteSubtask);
+        return subtaskElement;
     }
 
-    public void initializeTags() {
-        for (Tag tag : card.getTags()) {
-            // TODO the colors for the tags
-            tagElement = new HBox();
-            tagElement.getStyleClass().add("tag");
-            // TODO fix this when we figure out the colors
+    public HBox generateTagComponent(Tag tag) {
+        HBox tagElement = new HBox();
+        tagElement.getStyleClass().add("tag");
+        tagElement.setStyle("-fx-background-color: " + Utils.getBackgroundColor(tag.getColor())
+                + "; -fx-border-width: 1; -fx-border-color: " + Utils.getForegroundColor(
+                tag.getColor())
+        );
 
-            String[] colors = tag.getColor().split("/");
-            tagElement.setStyle("-fx-background-color: " + colors[1]);
+        Label tagText = new Label(tag.getTitle());
+        tagText.getStyleClass().add("tag-text");
+        tagText.setStyle("-fx-text-fill: " + Utils.getForegroundColor(tag.getColor()));
 
-            Text tagText = new Text(tag.getTitle());
-            tagText.getStyleClass().add("tag-text");
-            tagText.setFill(Color.web(colors[0]));
-            //tagText.setStyle("-fx-fill: " + colors[0]);
+        Button deleteTagButton = new Button("X");
+        deleteTagButton.setOnAction(a -> {
+            card.getTags().remove(tag);
+            tagsToDelete.add(tag);
+            tagsContainer.getChildren().remove(tagElement);
+            addTagButton.getItems().add(generateMenuItemForTag(tag));
+            addTagButton.setVisible(true);
+            addTagButton.setManaged(true);
+        });
+        deleteTagButton.getStyleClass().add("remove-tag-button");
+        deleteTagButton.setStyle("-fx-text-fill: " + Utils.getForegroundColor(tag.getColor()));
 
-            Button deleteTagButton = new Button("x");
-            deleteTagButton.setOnAction(a -> {
-                card.getTags().remove(tag);
-                //refreshCardData();
-            });
-            deleteTagButton.getStyleClass().add("remove-tag-button");
-
-            tagElement.getChildren().add(tagText);
-            tagElement.getChildren().add(deleteTagButton);
-
-            tagHBox.getStyleClass().add("tag-HBox");
-            tagHBox.getChildren().add(tagElement);
-        }
+        tagElement.getChildren().add(tagText);
+        tagElement.getChildren().add(deleteTagButton);
+        return tagElement;
     }
 
-    public void initializeTagDropdownMenu() {
+    private MenuItem generateMenuItemForTag(Tag tag) {
+        MenuItem menuItem = new MenuItem(tag.getTitle());
+        menuItem.setOnAction(event -> {
+            tagsToDelete.remove(tag);
+            card.getTags().add(tag);
+            addTagButton.getItems().remove(menuItem);
+            tagsContainer.getChildren().add(tagsContainer.getChildren().size() - 1,
+                    generateTagComponent(tag));
+            if (addTagButton.getItems().size() == 0) {
+                addTagButton.setVisible(false);
+                addTagButton.setManaged(false);
+            }
+            // Scroll to bottom
+            Platform.runLater(() -> {
+                tagsScrollPane.setVvalue(1);
+            });
+        });
+        return menuItem;
+    }
+
+    private void initTagMenuButton() {
+        addTagButton.setVisible(false);
+        addTagButton.setManaged(false);
         List<Tag> tagsOfBoard = card.getList().getBoard().getTags();
-
+        addTagButton.getItems().clear();
         for (Tag tag : tagsOfBoard) {
             if (!card.getTags().contains(tag)) {
-                MenuItem menuItem = new MenuItem(tag.getTitle());
-                menuItem.setOnAction(event -> {
-                    card.getTags().add(tag);
-                    //refreshCardData();
-                });
-
-                tagMenu.getItems().add(menuItem);
+                addTagButton.setVisible(true);
+                addTagButton.setManaged(true);
+                addTagButton.getItems().add(generateMenuItemForTag(tag));
             }
         }
     }
 
-    public void addNewSubtask(String entry) {
-        if (!entry.isEmpty()) {
-            server.createSubtask(new Subtask(entry, card, false));
-        } else {
-            Alert box = new Alert(Alert.AlertType.ERROR);
-            box.setTitle("Empty title");
-            box.setContentText("The subtask needs a title!");
-            box.showAndWait();
-        }
-    }
-
-    public void refresh() {
-        card = server.getCard(card.getId());
-        initializeSubtasks();
-        initializeTags();
-    }
-
     public void save() {
-        // TODO get the results from the checkboxes
-        // TODO take care of the color as well
         card.setTitle(cardTitle.getText());
         card.setDescription(cardDescription.getText());
+
+        if (colorSchemeDropdown.getValue().equals("(default)")) {
+            card.setColorPresetNumber(-1);
+        } else {
+            for (int i = 0; i < card.getList().getBoard().getCardColorPresets().size(); ++i) {
+                String scheme = card.getList().getBoard().getCardColorPresets().get(i);
+                if (!scheme.equals("") && Utils.getColorSchemeName(scheme)
+                        .equals(colorSchemeDropdown.getValue())) {
+                    card.setColorPresetNumber(i);
+                    break;
+                }
+            }
+        }
+
         server.updateCard(card);
 
         List<Tag> tagsOnServer = server.getCard(card.getId()).getTags();
@@ -348,7 +349,23 @@ public class CardPopupCtrl extends AnchorPane {
             server.removeTagFromCard(card.getId(), tag.getId());
         }
 
+        for (Subtask subtask : subtasksToDelete) {
+            server.deleteSubtask(subtask.getId());
+        }
+
+        for (Subtask subtask : card.getSubtasks()) {
+            if (subtask.getId() == null) {
+                server.createSubtask(subtask);
+            } else {
+                server.updateSubtask(subtask);
+            }
+        }
+
         stage.close();
+    }
+
+    public void delete() {
+
     }
 
     private void assignEmptyBoardWithId(Tag tag) {

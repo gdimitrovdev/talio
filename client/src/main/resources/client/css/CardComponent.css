@@ -19,11 +19,6 @@
     -fx-spacing: 10;
 }
 
-.flow-pane {
-    -fx-hgap: 10;
-    -fx-vgap: 10;
-}
-
 .progress-bar:disabled {
     -fx-opacity: 1;
 }
@@ -35,4 +30,8 @@
 
 #subtaskProgress > .track {
     -fx-background-insets: 0;
+}
+
+.highlighted-card {
+    -fx-border-width: 0 0 2 0;
 }

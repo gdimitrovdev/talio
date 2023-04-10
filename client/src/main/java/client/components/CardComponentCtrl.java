@@ -10,6 +10,7 @@ import commons.Subtask;
 import commons.Topics;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -28,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class CardComponentCtrl extends AnchorPane {
@@ -67,6 +69,10 @@ public class CardComponentCtrl extends AnchorPane {
     @FXML
     private VBox vBox;
 
+    String colors;
+
+    private final Predicate<String> titleValidator = newTitle -> !newTitle.equals("");
+
     private void init(MainCtrlTalio mainCtrlTalio, ServerUtils server) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
@@ -84,23 +90,11 @@ public class CardComponentCtrl extends AnchorPane {
         addClickedEventHandler();
 
         setOnMouseDoubleClicked((me) -> {
-            /*FXMLLoader cardPopupLoader =
-                    new FXMLLoader(getClass().getResource("../scenes/CardPopup.fxml"));*/
             Stage stage = new Stage();
-            /*try {
-                cardPopupLoader.setController(new CardPopupCtrl(mainCtrlTalio,
-                        server.getCard(cardId), server, stage));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Parent root = null;
-            try {
-                root = cardPopupLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
             stage.setScene(new Scene(new CardPopupCtrl(mainCtrlTalio, server.getCard(cardId),
                     server, stage)));
+            stage.setTitle("Talio: Card Settings");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
         });
 
@@ -121,7 +115,7 @@ public class CardComponentCtrl extends AnchorPane {
             Card card = server.getCard(this.cardId);
             card.setTitle(newTitle);
             server.updateCard(card);
-        });
+        }, titleValidator);
         setCard(server.getCard(cardId));
 
         // Updates that this should handle
@@ -179,7 +173,7 @@ public class CardComponentCtrl extends AnchorPane {
                 ((VBox) getParent()).getChildren().remove(this);
             });
 
-        });
+        }, titleValidator);
         CardList cardList = server.getCardList((list).getListId());
         setCard(new Card("", "", cardList,
                 server.getBoard(cardList.getBoard().getId()).getDefaultPresetNum()));
@@ -190,11 +184,22 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     public void highlight() {
-        cardOverview.setStyle("-fx-border-color: blue;-fx-border-width: 0 0 2 0");
+        this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        var rect = new Rectangle();
+        rect.setHeight(5);
+        rect.setWidth(this.getWidth());
+        rect.setFill(Color.web("#9a9aff"));
+        rect.setStyle("-fx-border-style: dashed; -fx-border-width: 2; -fx-border-color: #9a9aff");
+        rect.setArcHeight(5);
+        rect.setArcWidth(5);
+        ((VBox) this.getParent()).getChildren()
+                .add(((VBox) this.getParent()).getChildren().indexOf(this) + 1, rect);
     }
 
     public void removeHighlight() {
-        cardOverview.setStyle("-fx-border-width: 0 0 0 0;");
+        this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        ((VBox) this.getParent()).getChildren()
+                .remove(((VBox) this.getParent()).getChildren().indexOf(this) + 1);
     }
 
     public void setCard(Card newCardData) {
@@ -208,6 +213,8 @@ public class CardComponentCtrl extends AnchorPane {
             colors = newCardData.getList().getBoard().getCardColorPresets()
                     .get(newCardData.getColorPresetNumber());
         }
+
+        this.colors = colors;
 
         String colorBackground = Utils.getBackgroundColor(colors);
         String colorForeground = Utils.getForegroundColor(colors);
@@ -303,7 +310,7 @@ public class CardComponentCtrl extends AnchorPane {
                 var rect = new Rectangle();
                 rect.setHeight(10);
                 rect.setWidth(70);
-                rect.setFill(Color.web(tag.getColor().substring(0, 7)));
+                rect.setFill(Color.web(Utils.getBackgroundColor(tag.getColor())));
                 rect.setArcHeight(5);
                 rect.setArcWidth(5);
                 tagsContainer.getChildren().add(rect);

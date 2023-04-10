@@ -6,6 +6,7 @@ import client.utils.Utils;
 import com.google.inject.Inject;
 import commons.Board;
 import java.util.Objects;
+import java.util.function.Predicate;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -68,6 +69,8 @@ public class BoardSettingsCtrl extends AnchorPane {
 
     private Stage stage;
 
+    private Predicate<String> colorSchemeValidator;
+
     @Inject
     public BoardSettingsCtrl(MainCtrlTalio mainCtrlTalio, ServerUtils server, Stage stage,
             Board board) {
@@ -86,6 +89,19 @@ public class BoardSettingsCtrl extends AnchorPane {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
+        colorSchemeValidator = title -> (!title.equals("")
+                && this.presetsBox.getChildren().stream().noneMatch(scheme -> {
+                    if (!scheme.isVisible()) {
+                        return false;
+                    }
+                    try {
+                        return ((TitleField) ((HBox) scheme).getChildren().get(0)).getTitle().equals(title);
+                    } catch (Exception ignored) {
+                        return false;
+                    }
+                }
+        ));
 
         init();
     }
@@ -168,10 +184,12 @@ public class BoardSettingsCtrl extends AnchorPane {
             colorPickerBackground.setValue(Color.web("FFFFFF"));
             colorPickerForeground.setValue(Color.web("000000"));
             name.init(s -> {
-            }, s -> {
-            }, () -> {
-                name.setTitle("Untitled color scheme");
-            });
+                    }, s -> {
+                        board.getCardColorPresets().add("");
+                    }, () -> {
+                        presetsBox.getChildren().remove(row);
+                    }, colorSchemeValidator
+            );
         } else if (!preset.equals("")) {
             String presetBg = Utils.getBackgroundColor(preset);
             String presetFont = Utils.getForegroundColor(preset);
@@ -180,10 +198,10 @@ public class BoardSettingsCtrl extends AnchorPane {
             try {
                 String colorSchemeName = Utils.getColorSchemeName(preset);
                 name.init(colorSchemeName, s -> {
-                });
+                }, colorSchemeValidator);
             } catch (Exception ignored) {
                 name.init("Untitled color scheme", s -> {
-                });
+                }, colorSchemeValidator);
             }
         }
 
@@ -254,9 +272,8 @@ public class BoardSettingsCtrl extends AnchorPane {
     }
 
     public void addColorPreset() {
-        board.getCardColorPresets().add("");
         presetsBox.getChildren().add(generateColorSchemeRow("NEW_SCHEME",
-                board.getCardColorPresets().size() + 1));
+                board.getCardColorPresets().size()));
     }
 }
 

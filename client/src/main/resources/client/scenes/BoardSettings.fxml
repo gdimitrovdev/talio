@@ -103,7 +103,7 @@
         </ScrollPane>
         <HBox alignment="BASELINE_CENTER" styleClass="hbox" style="-fx-spacing: 60">
             <Button onAction="#save" text="Save"/>
-            <Button fx:id="deleteBoardButton" onAction="#deleteBoard">
+            <Button fx:id="deleteBoardButton" styleClass="deleteButton" onAction="#deleteBoard">
                 Delete Board
             </Button>
         </HBox>

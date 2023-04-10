@@ -111,9 +111,9 @@ public class AdminController {
             // TODO fill this with proper example data
             // Colors in format #Background/#Foreground
             List<String> defaultPresets = new ArrayList<>();
-            defaultPresets.add("#ffffff/#000000");
-            defaultPresets.add("#ff0008/#00ff00");
-            defaultPresets.add("#abffc3/#004714");
+            defaultPresets.add("#ffffff/#000000/Basic");
+            defaultPresets.add("#ff0008/#00ff00/High Contrast");
+            defaultPresets.add("#abffc3/#004714/Mint");
             Board team69Board =
                     boardService.createOne(new Board("Team 69", "", "",
                             "#bababa/#000000", "#dedede/#000000", defaultPresets, 1));

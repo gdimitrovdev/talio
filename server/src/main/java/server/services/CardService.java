@@ -96,8 +96,9 @@ public class CardService {
 
             List<Card> cardsInList = list.getCards();
 
-            if (card.getList().getId() == list.getId()) {
-                Card lastCard = cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
+            if (card.getList().getId().equals(list.getId())) {
+                Card lastCard =
+                        cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
                 card.setListPriority(lastCard.getListPriority() + 1L);
                 cardRepository.save(card);
                 return card.getList();
@@ -113,7 +114,8 @@ public class CardService {
             }
 
             card = removeCardFromItsList(card.getId());
-            Card lastCard = cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
+            Card lastCard =
+                    cardsInList.stream().max(Comparator.comparing(Card::getListPriority)).get();
             card.setListPriority(lastCard.getListPriority() + 1L);
             list.addCard(card);
 
@@ -135,7 +137,7 @@ public class CardService {
 
             card.setListPriority(afterCard.getListPriority() + 1L);
 
-            if (card.getList().getId() != listId) {
+            if (!card.getList().getId().equals(listId)) {
                 card = removeCardFromItsList(card.getId());
                 list.addCard(card);
                 cardListRepository.save(list);
@@ -146,7 +148,8 @@ public class CardService {
 
             for (Card cardOfList : list.getCards()) {
                 System.out.println("checking: " + cardOfList.getTitle());
-                if (cardOfList.getListPriority() >= card.getListPriority() && card.getId() != cardOfList.getId()) {
+                if (cardOfList.getListPriority() >= card.getListPriority()
+                        && !card.getId().equals(cardOfList.getId())) {
                     System.out.println(cardOfList.getTitle());
                     cardOfList.setListPriority(cardOfList.getListPriority() + 1L);
                     cardRepository.save(cardOfList);
