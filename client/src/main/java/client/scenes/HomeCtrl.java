@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -19,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 public class HomeCtrl {
+
     private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
 
@@ -112,11 +115,16 @@ public class HomeCtrl {
                 AnchorPane.setTopAnchor(boardNameLbl, 16d);
                 AnchorPane.setLeftAnchor(boardNameLbl, 10d);
 
-
+                nestedButtonPressed = true;
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> {
-                    nestedButtonPressed = true;
-                    removeRecentBoard(item);
+                    Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Disconnect from this board?", ButtonType.YES, ButtonType.NO);
+                    confirmationDialogue.showAndWait();
+                    if (confirmationDialogue.getResult() == ButtonType.YES) {
+                        removeRecentBoard(item);
+                    }
+
+
                 });
                 boardSettingBtn.setOnAction(e -> {
                     nestedButtonPressed = true;
@@ -236,5 +244,13 @@ public class HomeCtrl {
     public void refreshBoards() {
         Set<Board> boards = adminMode ? server.getAllBoards() : getRecentBoards();
         displayBoardLabels(boards);
+    }
+
+    public ServerUtils getServer() {
+        return server;
+    }
+
+    public MainCtrlTalio getMainCtrlTalio() {
+        return mainCtrlTalio;
     }
 }

@@ -13,12 +13,25 @@ public class ServerConnectionCtrl {
     private final ServerUtils server;
     private final MainCtrlTalio mainCtrlTalio;
     @FXML
-    private TextField fieldServerAddress;
+    public TextField fieldServerAddress;
 
     @FXML
     private Button buttonConnect;
     @FXML
     private Button buttonBack;
+
+    public void setIsConnected(boolean isConnected) {
+        this.isConnected.set(isConnected);
+    }
+
+    public boolean isIsConnected() {
+        return isConnected.get();
+    }
+
+    public BooleanProperty isConnectedProperty() {
+        return isConnected;
+    }
+
     private BooleanProperty isConnected = new SimpleBooleanProperty(false);
 
     @Inject
