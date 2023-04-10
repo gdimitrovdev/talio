@@ -260,7 +260,7 @@ public class BoardSettingsCtrl {
     }
 
     public void deleteBoard() {
-        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this board permanently ?", ButtonType.YES);
+        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this board permanently ?", ButtonType.YES, ButtonType.NO);
         confirmationDialogue.showAndWait();
         if (confirmationDialogue.getResult() == ButtonType.YES) {
             mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
