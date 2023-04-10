@@ -1,9 +1,12 @@
 package client.scenes;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import client.components.CardComponentCtrl;
 import client.components.ListComponentCtrl;
 import client.components.TitleField;
 import client.utils.ServerUtils;
+import java.io.IOException;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -13,10 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BoardCtrlTest {
     @Mock
