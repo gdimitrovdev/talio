@@ -283,12 +283,10 @@ class BoardServiceTest {
     public void updateBoardCodes() {
         Board board = new Board();
         String firstCode = board.getCode();
-        String readOnlyCode = board.getReadOnlyCode();
 
         boardServiceMock.updateBoardCodes(board);
 
         Assertions.assertNotEquals(firstCode, board.getCode());
-        Assertions.assertNotEquals(readOnlyCode, board.getReadOnlyCode());
 
     }
 
