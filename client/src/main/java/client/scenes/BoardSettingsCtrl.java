@@ -126,7 +126,7 @@ public class BoardSettingsCtrl {
         //initialize the elements for the hbox
         Button deleteBtn = new Button();
         deleteBtn.setOnAction((e) -> {
-            Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete color preset ?", ButtonType.YES);
+            Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete color preset ?", ButtonType.YES, ButtonType.NO);
             confirmationDialogue.setContentText("Delete color preset ?");
             confirmationDialogue.showAndWait();
             if (confirmationDialogue.getResult() == ButtonType.YES) {
