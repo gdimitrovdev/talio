@@ -1,3 +1,5 @@
+@import url(./Common.css);
+
 #outerHBox {
     -fx-max-width: 800.0;
     -fx-pref-width: 800.0;
@@ -15,4 +17,10 @@
 #newListButton {
     -fx-pref-width: 30px;
     -fx-pref-height: 30px;
+}
+
+.button {
+    -fx-cursor: hand;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
 }

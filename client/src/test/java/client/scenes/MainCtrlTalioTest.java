@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ public class MainCtrlTalioTest {
     private MainCtrlTalio mainCtrlTalio;
     @Mock
     private ServerUtils serverUtils;
-    private Map<String, Set<Long>> joinedBoards;
+    private Map<String, Set<Pair<Long, String>>> joinedBoards;
 
     @BeforeEach
     public void setup() {
@@ -77,9 +76,12 @@ public class MainCtrlTalioTest {
     @Test
     void testWriteReadLocalData() {
         // Prepare test data
-        Map<String, Set<Long>> testData = new HashMap<>();
-        testData.put("http://localhost:8080", new HashSet<>(Arrays.asList(1L, 2L, 3L)));
-        testData.put("http://example.com", new HashSet<>(Arrays.asList(4L, 5L, 6L)));
+        Map<String, Set<Pair<Long, String>>> testData = new HashMap<>();
+        testData.put("http://localhost:8080", new HashSet<>(Arrays.asList(new Pair<>(1L, ""),
+                new Pair<>(2L, ""),
+                new Pair<>(3L, ""))));
+        testData.put("http://example.com", new HashSet<>(Arrays.asList(new Pair<>(4L, ""),
+                new Pair<>(5L, ""), new Pair<>(6L, ""))));
 
         // Write test data to file
         mainCtrlTalio.setJoinedBoards(testData);

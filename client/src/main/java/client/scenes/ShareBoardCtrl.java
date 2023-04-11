@@ -37,7 +37,7 @@ public class ShareBoardCtrl {
     }
 
     public void initialize(Board board) {
-        fieldReadOnlyCode.setText(board.getReadOnlyCode());
+        //fieldReadOnlyCode.setText(board.getReadOnlyCode());
         fieldCode.setText(board.getCode());
     }
 

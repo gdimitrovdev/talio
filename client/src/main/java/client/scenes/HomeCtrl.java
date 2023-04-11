@@ -50,7 +50,6 @@ public class HomeCtrl {
         return adminMode;
     }
 
-
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;

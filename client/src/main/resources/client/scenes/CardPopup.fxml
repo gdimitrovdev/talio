@@ -29,6 +29,8 @@
           AnchorPane.topAnchor="0.0"
           styleClass="vbox"
     >
+        <Label fx:id="warningLabel" style="-fx-text-fill: #ff0000">This board is password-protected.
+        </Label>
         <TextField fx:id="cardTitle"/>
         <TextField fx:id="cardDescription"
                    minHeight="80"

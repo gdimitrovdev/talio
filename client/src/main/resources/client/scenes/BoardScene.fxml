@@ -36,11 +36,26 @@
             </Button>
             <HBox fx:id="spacer" prefWidth="150.0"/>
             <Label fx:id="boardNameLabel"/>
-            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0"/>
-            <Button fx:id="tagsManagementBTN" text="Tags" onAction="#tags">
+            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="190"/>
+            <Button fx:id="tagsManagementBTN" onAction="#tags" prefHeight="36.5">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@/client/images/tag.png"/>
+                    </ImageView>
+                </graphic>
                 <tooltip>
-                    <Tooltip text="Manage your tags"/>
+                    <Tooltip text="Create, Edit and Delete Tags for this Board"/>
                 </tooltip>
+            </Button>
+            <Button fx:id="lockButton" onAction="#lock">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@/client/images/unlocked.png">
+                        </Image>
+                    </ImageView>
+                </graphic>
             </Button>
             <Button fx:id="shareBTN" onAction="#share">
                 <graphic>

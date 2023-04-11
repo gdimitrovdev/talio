@@ -61,6 +61,7 @@ public class BoardService {
         board.setTags(new ArrayList<>());
         board.setLists(new ArrayList<>());
         updateBoardCodes(board);
+        board.setReadOnlyCode("");
         return boardRepository.save(board);
     }
 
@@ -127,13 +128,13 @@ public class BoardService {
             code = getNewRandomCode(5);
         } while (isCodeAlreadyUsed(code));
 
-        String readOnlyCode;
+        /*String readOnlyCode;
         do {
             readOnlyCode = getNewRandomCode(5);
-        } while (isCodeAlreadyUsed(readOnlyCode) || readOnlyCode.contentEquals(code));
+        } while (isCodeAlreadyUsed(readOnlyCode) || readOnlyCode.contentEquals(code));*/
 
         board.setCode(code);
-        board.setReadOnlyCode(readOnlyCode);
+        //board.setReadOnlyCode(readOnlyCode);
     }
 
     public String getNewRandomCode(int length) {

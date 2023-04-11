@@ -143,6 +143,12 @@ public class CardComponentCtrl extends AnchorPane {
                 Platform.runLater(() -> setCard(cardReceived));
             }
         });
+
+        if (!mainCtrlTalio.hasAuthenticationForBoard(
+                server.getCard(cardId).getList().getBoard().getId())) {
+            deleteButton.setOnAction(e -> mainCtrlTalio.getBoardComponentCtrl().lock());
+            titleField.setDisable(true);
+        }
     }
 
     /**
@@ -338,8 +344,11 @@ public class CardComponentCtrl extends AnchorPane {
             // If we change the design, it will break. I could do the calculations so, it doesn't
             // use magic numbers, but it works well for now.
             // TODO remove the magic numbers from here
-            tagsContainer.setMinHeight((newCardData.getTags().size() / 3 * 20) + 10);
-
+            if (newCardData.getTags().size() >= 1 && newCardData.getTags().size() % 3 == 0) {
+                tagsContainer.setMinHeight(((newCardData.getTags().size()) / 3) * 20 - 10);
+            } else {
+                tagsContainer.setMinHeight(((newCardData.getTags().size()) / 3) * 20 + 10);
+            }
         } else {
             tagsContainer.setVisible(false);
             tagsContainer.setManaged(false);
