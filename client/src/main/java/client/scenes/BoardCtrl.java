@@ -156,7 +156,6 @@ public class BoardCtrl implements Initializable {
             newListButton.setOnAction(e -> addCardList());
             settingsBTN.setOnAction(e -> settings());
             tagsManagementBTN.setOnAction(e -> tags());
-
         } else {
             lockIcon.setImage(new Image("/client/images/locked.png"));
             newListButton.setOnAction(e -> lock());

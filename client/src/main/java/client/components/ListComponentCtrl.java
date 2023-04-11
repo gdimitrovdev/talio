@@ -86,7 +86,7 @@ public class ListComponentCtrl extends VBox {
 
         this.setOnDragExited(event -> removeHighlight());
 
-        if (mainCtrlTalio.hasAuthenticationForBoard(
+        if (!mainCtrlTalio.hasAuthenticationForBoard(
                 server.getCardList(listId).getBoard().getId())) {
             titleField.setDisable(true);
             deleteListBtn.setOnAction(e -> mainCtrlTalio.getBoardComponentCtrl().lock());
