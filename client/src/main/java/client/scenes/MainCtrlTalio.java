@@ -108,6 +108,8 @@ public class MainCtrlTalio {
     }
 
     public Set<Long> getJoinedBoardsForServer(String serverUrl) {
+        readFromLocalData();
+
         var boardsToRemove = new ArrayList<>();
         if (!joinedBoards.containsKey(serverUrl)) {
             return new HashSet<>();
@@ -207,6 +209,11 @@ public class MainCtrlTalio {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void writeToLocalDataRefresh(Map<String, Set<Pair<Long, String>>> newData) {
+        joinedBoards = newData;
+        writeToLocalData();
     }
 
     public void alert(String title, String message) {

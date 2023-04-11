@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 public class BoardCtrl implements Initializable {
     @FXML
@@ -45,6 +48,7 @@ public class BoardCtrl implements Initializable {
     private CardComponentCtrl currentSelectedCard;
     private boolean droppedOnCard = false;
     private Object updateBoard, updateList;
+    private StompSession.Subscription deleteSubscription;
 
     @FXML
     private AnchorPane pane;
@@ -117,6 +121,9 @@ public class BoardCtrl implements Initializable {
         // - list creation DONE
         // - list deletion DONE
         // - board deletion TODO
+    }
+
+    public void refresh() {
         server.registerForMessages(Topics.BOARDS.toString(), CardList.class, cardList -> {
             if (cardList.getBoard().getId().equals(boardId)) {
                 Platform.runLater(new Runnable() {
@@ -138,9 +145,23 @@ public class BoardCtrl implements Initializable {
                 });
             }
         });
-    }
 
-    public void refresh() {
+        server.registerForMessages("/topic/boards/deleted", Board.class, board -> {
+            Platform.runLater(() -> {
+                if (board.getId().equals(boardId)) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) { }
+                    mainCtrlTalio.showHome();
+
+                    Alert box = new Alert(Alert.AlertType.ERROR);
+                    box.setTitle("Board deleted");
+                    box.setContentText("A board has been deleted!");
+                    box.showAndWait();
+                }
+            });
+        });
+
         var board = server.getBoard(boardId);
 
         String bgColor = Utils.getBackgroundColor(board.getBoardColor());

@@ -38,11 +38,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class CardPopupCtrl extends AnchorPane {
     private final MainCtrlTalio mainCtrlTalio;
     private final ServerUtils server;
     private Card card;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private TextField cardTitle;
@@ -135,8 +139,8 @@ public class CardPopupCtrl extends AnchorPane {
                             .get(card.getColorPresetNumber())));
         }
 
-        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
-            if (cardReceived.getId().equals(card.getId())) {
+        server.registerForMessages("/topic/cards/deleted", Long.class, cardId -> {
+            if (cardId.equals(card.getId())) {
                 Platform.runLater(() -> {
                     Alert box = new Alert(Alert.AlertType.ERROR);
                     box.setTitle("Card deleted");

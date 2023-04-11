@@ -2,9 +2,13 @@ package server.controllers;
 
 import commons.Board;
 import commons.Topics;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.inject.Inject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.services.BoardService;
 
 @RestController
@@ -59,6 +64,23 @@ public class BoardController {
         }
     }
 
+    private Map<Object, Consumer<Board>> listeners = new HashMap<>();
+
+    @GetMapping("/deleted")
+    public DeferredResult<ResponseEntity<Board>> getDeletions() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Board>>(1000L, noContent);
+
+        var key = new Object();
+        listeners.put(key, board -> {
+            res.setResult(ResponseEntity.ok(board));
+        });
+
+        res.onCompletion(() -> listeners.remove(key));
+
+        return res;
+    }
+
     /**
      * Also sends update to Topics.BOARDS
      *
@@ -82,6 +104,8 @@ public class BoardController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOne(@PathVariable("id") Long id) {
         try {
+            template.convertAndSend("/topic/boards/deleted", boardService.getOne(id).get());
+            listeners.forEach((k, l) -> l.accept(boardService.getOne(id).get()));
             boardService.deleteOne(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {

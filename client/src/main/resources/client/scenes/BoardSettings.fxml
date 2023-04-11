@@ -20,6 +20,7 @@
          xmlns:fx="http://javafx.com/fxml/1"
          style="-fx-padding: 20"
          stylesheets="@/client/css/BoardCustomizationPopup.css"
+         fx:id="anchorPane"
 >
     <VBox AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0"

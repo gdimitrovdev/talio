@@ -27,15 +27,12 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -219,9 +216,33 @@ public class ServerUtils {
         updateEvents.remove(key);
     }
 
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    public void registerForBoardDeletion(Consumer<Board> consumer) {
+        EXEC.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = webTarget.path("api/boards/deleted")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+
+                if (res.getStatus() == 204) {
+                    continue;
+                }
+
+                var board = res.readEntity(Board.class);
+                consumer.accept(board);
+            }
+        });
+    }
+
+    public void stop() {
+        EXEC.shutdownNow();
+    }
+
     @SuppressWarnings("unchecked")
-    public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
-        session.subscribe(destination, new StompFrameHandler() {
+    public <T> StompSession.Subscription registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
+        return session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
@@ -508,6 +529,12 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(newBoard, APPLICATION_JSON), Board.class);
+    }
+
+    public void unsubscribeIfDeleted(Long boardId) {
+        if (subscribedBoard != null && getSubscribedBoardId().equals(boardId)) {
+            subscribedBoard = null;
+        }
     }
 
     public void deleteBoard(Long boardId) {
