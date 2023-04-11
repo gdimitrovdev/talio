@@ -45,11 +45,11 @@ Attendees:
         >Record response by the TA
 8. Product showcase
    1. Matei - fixed trying to join a board with an invalid code, did some minor optimizations to UI usability and wrote tests for the whole server(controllers and services)
-   2. Pedro -
-   3. Dimana -
-   4. George -
-   5. Agnese -
-   6. Vesko - 
+   2. Pedro - Created tag management and admin functionality
+   3. Dimana - Did client side testing, dialogues for confirmation
+   4. George - Did long-polling, fixed card priority
+   5. Agnese - Did shortcuts debugging
+   6. Vesko - Did card color presets, password protection, reformatting the code
 9. Additional Questions
     1. Does anyone have any other questions for the TA before the meeting closes?
         >Record any additional questions and responses here, even if they were asked earlier
