@@ -29,15 +29,7 @@ public class CreateBoardCtrl {
     }
 
     public void initialize() {
-        fieldBoardName.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    clickCreateBoard();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+
     }
 
     public void clickCreateBoard() throws IOException {

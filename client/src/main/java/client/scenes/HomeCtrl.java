@@ -253,8 +253,12 @@ public class HomeCtrl {
                 mainCtrlTalio.getJoinedBoards().getOrDefault(
                         server.getServerUrl(), new HashSet<Pair<Long, String>>())
         ) {
-            Board board = server.getBoard(pair.getKey());
-            set.add(board);
+            try {
+                Board board = server.getBoard(pair.getKey());
+                set.add(board);
+            } catch (Exception e) {
+
+            }
         }
         return set;
     }
