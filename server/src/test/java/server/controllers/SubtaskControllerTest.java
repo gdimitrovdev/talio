@@ -1,6 +1,9 @@
 package server.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +12,8 @@ import commons.Subtask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +21,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.services.CardService;
 import server.services.SubtaskService;
@@ -65,6 +72,18 @@ class SubtaskControllerTest {
     }
 
     @Test
+    public void getOneSubtaskNotPresent() {
+        when(subtaskServiceMock.getOne(1L)).thenReturn(Optional.empty());
+
+        ResponseEntity<Subtask> response = subtaskControllerMock.getOne(1L);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+
+        verify(subtaskServiceMock).getOne(1L);
+    }
+
+    @Test
     void createOne() {
         Subtask task = new Subtask();
 
@@ -72,6 +91,16 @@ class SubtaskControllerTest {
 
         Subtask returnedSubtask = subtaskControllerMock.createOne(task).getBody();
         assertEquals(task, returnedSubtask);
+    }
+
+    @Test
+    public void createOneException() {
+        Subtask subtask = new Subtask();
+        doThrow(new RuntimeException()).when(subtaskServiceMock).createOne(subtask);
+
+        ResponseEntity<Subtask> response = subtaskControllerMock.createOne(subtask);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
@@ -93,6 +122,14 @@ class SubtaskControllerTest {
     }
 
     @Test
+    public void deleteOneException() {
+        Long invalidId = 12345L;
+        doThrow(EntityNotFoundException.class).when(subtaskServiceMock).deleteOne(invalidId);
+        var result = subtaskControllerMock.deleteOne(invalidId);
+        assertTrue(result.getStatusCode().isError());
+    }
+
+    @Test
     void updateOne() {
         Subtask subtask = new Subtask();
         subtask.setId(1L);
@@ -106,5 +143,17 @@ class SubtaskControllerTest {
         Subtask returnedSubtask = subtaskControllerMock.updateOne(1L, subtask).getBody();
         assertEquals(updatedSubtask, returnedSubtask);
 
+    }
+
+    @Test
+    public void updateOneException() {
+        Long invalidId = 123L;
+        Subtask subtask = new Subtask();
+        when(subtaskServiceMock.updateOne(invalidId, subtask)).thenThrow(
+                new EntityNotFoundException());
+
+        ResponseEntity<Subtask> result = subtaskControllerMock.updateOne(invalidId, subtask);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 }

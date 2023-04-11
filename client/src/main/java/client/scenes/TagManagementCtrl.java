@@ -72,7 +72,7 @@ public class TagManagementCtrl {
     @FXML
     protected void createTag() {
 
-        String  tagTitle = fieldTagTitle.getText().trim(),
+        String tagTitle = fieldTagTitle.getText().trim(),
                 foreground = pickerForeground.getValue().toString(),
                 background = pickerBackground.getValue().toString();
 
@@ -102,7 +102,7 @@ public class TagManagementCtrl {
 
         for (Tag tag : allTags) {
             tagsBox.getChildren().add(
-                new TagComponentCtrl(server, this, tag));
+                    new TagComponentCtrl(server, this, tag));
         }
     }
 

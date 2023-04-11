@@ -50,7 +50,7 @@ public class TagComponentCtrl extends HBox {
     @FXML
     protected void saveTag() {
 
-        String  title = tagTitle.getText().trim(),
+        String title = tagTitle.getText().trim(),
                 foreground = tagForeground.getValue().toString(),
                 background = tagBackground.getValue().toString();
 
@@ -74,7 +74,9 @@ public class TagComponentCtrl extends HBox {
 
     @FXML
     protected void deleteTag() {
-        Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Delete this tag ?", ButtonType.YES, ButtonType.NO);
+        Alert confirmationDialogue =
+                new Alert(Alert.AlertType.CONFIRMATION, "Delete this tag ?", ButtonType.YES,
+                        ButtonType.NO);
         confirmationDialogue.showAndWait();
 
         if (confirmationDialogue.getResult() == ButtonType.YES) {

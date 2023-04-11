@@ -3,7 +3,6 @@ package server.controllers;
 import commons.Card;
 import commons.CardList;
 import commons.Topics;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;

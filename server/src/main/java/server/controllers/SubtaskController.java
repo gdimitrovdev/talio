@@ -46,11 +46,9 @@ public class SubtaskController {
     @ResponseBody
     public ResponseEntity<Subtask> getOne(@PathVariable("id") Long id) {
         Optional<Subtask> optionalSubtask = subtaskService.getOne(id);
-        if (!optionalSubtask.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
+        return optionalSubtask.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
 
-        return ResponseEntity.ok(optionalSubtask.get());
     }
 
     /**

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +23,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class MainCtrlTalioTest {
     @InjectMocks
     private MainCtrlTalio mainCtrlTalio;
-    @Mock private ServerUtils serverUtils;
+    @Mock
+    private ServerUtils serverUtils;
     private Map<String, Set<Long>> joinedBoards;
 
     @BeforeEach
@@ -41,7 +44,7 @@ public class MainCtrlTalioTest {
 
         Set<Long> expectedBoardIds = new HashSet<>();
         expectedBoardIds.add(boardId);
-        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardsForServer(serverUrl));
     }
 
     @Test
@@ -52,7 +55,7 @@ public class MainCtrlTalioTest {
         mainCtrlTalio.removeJoinedBoard(serverUrl, boardId);
 
         Set<Long> expectedBoardIds = new HashSet<>();
-        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardsForServer(serverUrl));
     }
 
     @Test
@@ -68,7 +71,7 @@ public class MainCtrlTalioTest {
         expectedBoardIds.add(boardId1);
         expectedBoardIds.add(boardId2);
 
-        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardForServer(serverUrl));
+        assertEquals(expectedBoardIds, mainCtrlTalio.getJoinedBoardsForServer(serverUrl));
     }
 
     @Test
@@ -84,7 +87,7 @@ public class MainCtrlTalioTest {
 
         // Read test data from file
         mainCtrlTalio.readFromLocalData();
-        Map<String, Set<Long>> result = mainCtrlTalio.getJoinedBoards();
+        Map<String, Set<Pair<Long, String>>> result = mainCtrlTalio.getJoinedBoards();
 
         // Assert that the test data was written and read successfully
         assertEquals(testData, result);

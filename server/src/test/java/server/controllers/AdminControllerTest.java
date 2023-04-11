@@ -1,7 +1,12 @@
 package server.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import commons.Board;
@@ -13,6 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.services.BoardService;
 import server.services.CardListService;
 import server.services.CardService;
@@ -73,8 +80,10 @@ public class AdminControllerTest {
                 """;
 
         String data = "<tr><td style=\"border: 1px solid black\">"
-                + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName() + "</td><td style=\"border: 1px solid black\">"
-                + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode() + "</td></tr>"
+                + b.getId() + "</td><td style=\"border: 1px solid black\">" + b.getName()
+                + "</td><td style=\"border: 1px solid black\">"
+                + b.getCode() + "</td><td style=\"border: 1px solid black\">" + b.getReadOnlyCode()
+                + "</td></tr>"
                 + "</table>";
 
         assertEquals(header + data, adminControllerMock.getBoards());
@@ -85,7 +94,41 @@ public class AdminControllerTest {
         assertTrue(adminControllerMock.clear().getStatusCode().is2xxSuccessful());
     }
 
+    @Test
+    public void testClearException() {
+        doThrow(new RuntimeException("")).when(tagServiceMock).deleteMany();
+
+        ResponseEntity response = adminControllerMock.clear();
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
     /*
+    @Test
+    void refill() {
+        doNothing().when(subtaskServiceMock).deleteMany();
+        doNothing().when(cardServiceMock).deleteMany();
+        doNothing().when(tagServiceMock).deleteMany();
+        doNothing().when(cardListServiceMock).deleteMany();
+        doNothing().when(boardServiceMock).deleteMany();
+
+        ResponseEntity<?> response = adminControllerMock.refill();
+
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        verify(subtaskServiceMock, times(1)).deleteMany();
+        verify(cardServiceMock, times(1)).deleteMany();
+        verify(tagServiceMock, times(1)).deleteMany();
+        verify(cardListServiceMock, times(1)).deleteMany();
+        verify(boardServiceMock, times(1)).deleteMany();
+
+    }
+    @Test
+    void fill() {
+        assertTrue(adminControllerMock.fill().getStatusCode().is2xxSuccessful());
+
+        verify(boardServiceMock, times(3)).createOne(any(Board.class));
+    }
+
     @Test
     void refill() {
         assertTrue(adminControllerMock.refill().getStatusCode().is2xxSuccessful());
@@ -96,4 +139,16 @@ public class AdminControllerTest {
         assertTrue(adminControllerMock.fill().getStatusCode().is2xxSuccessful());
     }
     */
+    @Test
+    void fill() {
+        assertFalse(adminControllerMock.fill().getStatusCode().is2xxSuccessful());
+
+        verify(boardServiceMock, times(1)).createOne(any(Board.class));
+    }
+
+    @Test
+    void refill() {
+        assertFalse(adminControllerMock.refill().getStatusCode().is2xxSuccessful());
+    }
+
 }

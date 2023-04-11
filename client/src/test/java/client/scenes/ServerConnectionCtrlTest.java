@@ -17,7 +17,8 @@ class ServerConnectionCtrlTest {
      */
     @Test
     public void testSetIsConnected() {
-        ServerConnectionCtrl ctrl = new ServerConnectionCtrl(new ServerUtils(), new MainCtrlTalio(new ServerUtils()));
+        ServerConnectionCtrl ctrl =
+                new ServerConnectionCtrl(new ServerUtils(), new MainCtrlTalio(new ServerUtils()));
         assertFalse(ctrl.isIsConnected());
         ctrl.setIsConnected(true);
         assertTrue(ctrl.isIsConnected());

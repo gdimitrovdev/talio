@@ -14,64 +14,79 @@
 <?import javafx.scene.image.ImageView?>
 
 
-
-
-<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/BoardComponent.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
+<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="800.0"
+            stylesheets="@/client/css/BoardComponent.css" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
 
     <ToolBar fx:id="toolbar" prefHeight="120.0" prefWidth="800.0" AnchorPane.topAnchor="0">
         <items>
             <Pane>
-                <Region prefWidth="7" />
+                <Region prefWidth="7"/>
             </Pane>
             <Button fx:id="backHomeBTN" onAction="#backToHome">
                 <graphic>
-                    <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@/images/home.png"/>
+                    <ImageView fx:id="myImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@/client/images/home.png"/>
                     </ImageView>
                 </graphic>
-                <tooltip><Tooltip text="Return to Homepage" /></tooltip>
+                <tooltip>
+                    <Tooltip text="Return to Homepage"/>
+                </tooltip>
             </Button>
-            <HBox fx:id="spacer" prefWidth="150.0" />
-            <Label fx:id="boardNameLabel"  />
-            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0" />
+            <HBox fx:id="spacer" prefWidth="150.0"/>
+            <Label fx:id="boardNameLabel"/>
+            <HBox fx:id="spacer1" prefHeight="107.0" prefWidth="219.0"/>
             <Button fx:id="tagsManagementBTN" text="Tags" onAction="#tags">
-                <tooltip><Tooltip text="Manage your tags" /></tooltip>
+                <tooltip>
+                    <Tooltip text="Manage your tags"/>
+                </tooltip>
             </Button>
             <Button fx:id="shareBTN" onAction="#share">
                 <graphic>
-                    <ImageView fx:id="myImage2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                            <Image url="@/images/sharefinal.png">
+                    <ImageView fx:id="myImage2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@/client/images/sharefinal.png">
                         </Image>
                     </ImageView>
                 </graphic>
-                <tooltip><Tooltip text="Share this board" /></tooltip>
+                <tooltip>
+                    <Tooltip text="Share this board"/>
+                </tooltip>
             </Button>
-            <Button fx:id="settingsBTN" onAction="#settings" >
+            <Button fx:id="settingsBTN" onAction="#settings">
                 <graphic>
-                    <ImageView fx:id="myImage3" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@/images/ellipsis.png">
+                    <ImageView fx:id="myImage3" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@/client/images/ellipsis.png">
                         </Image>
                     </ImageView>
                 </graphic>
-                <tooltip><Tooltip text="BoardSettings" /></tooltip>
+                <tooltip>
+                    <Tooltip text="BoardSettings"/>
+                </tooltip>
             </Button>
         </items>
     </ToolBar>
 
-    <HBox fx:id="outerHBox" layoutY="116.0" maxHeight="514.0" minHeight="514.0" minWidth="800.0" prefHeight="514.0" AnchorPane.topAnchor="116.0">
+    <HBox fx:id="outerHBox" layoutY="116.0" maxHeight="514.0" minHeight="514.0" minWidth="800.0"
+          prefHeight="514.0" AnchorPane.topAnchor="116.0">
         <Pane>
-            <Region prefWidth="10" />
+            <Region prefWidth="10"/>
         </Pane>
-        <ScrollPane fx:id="root" hbarPolicy="AS_NEEDED" maxHeight="485" maxWidth="725" vbarPolicy="NEVER">
+        <ScrollPane fx:id="root" hbarPolicy="AS_NEEDED" maxHeight="485" maxWidth="725"
+                    vbarPolicy="NEVER">
             <HBox fx:id="innerHBox" style="-fx-background-color: transparent;">
 
             </HBox>
         </ScrollPane>
         <Pane>
-            <Region prefWidth="10" />
+            <Region prefWidth="10"/>
         </Pane>
         <Button fx:id="newListButton" onAction="#addCardList" text="+">
-            <tooltip><Tooltip text="Add a new list" /></tooltip>
+            <tooltip>
+                <Tooltip text="Add a new list"/>
+            </tooltip>
         </Button>
     </HBox>
 </AnchorPane>

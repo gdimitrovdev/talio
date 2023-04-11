@@ -165,7 +165,6 @@ class BoardServiceTest {
         existingBoard.setDefaultPresetNum(1);
 
 
-
         when(boardRepositoryMock.findById(1L)).thenReturn(Optional.of(existingBoard));
         when(boardRepositoryMock.save(existingBoard)).thenReturn(existingBoard);
 
@@ -300,7 +299,7 @@ class BoardServiceTest {
         Assertions.assertNotEquals(code1, code2);
 
     }
-    
+
     @Test
     public void deleteMany() {
         Board board1 = new Board("board1", "code1", "readOnlyCode1", "", "", null, 0);

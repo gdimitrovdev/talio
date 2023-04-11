@@ -32,8 +32,6 @@ public class ListComponentCtrl extends VBox {
     private Object updateList;
     private Long listId;
 
-    private boolean scrollToBottom = false;
-
     @FXML
     private HBox titleHolder;
 
@@ -73,7 +71,7 @@ public class ListComponentCtrl extends VBox {
             CardList currentList = server.getCardList(listId);
             currentList.setTitle(newTitle);
             server.updateCardList(currentList);
-        });
+        }, title -> !title.equals(""));
 
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -99,11 +97,11 @@ public class ListComponentCtrl extends VBox {
         // - list: move card to or from DONE
         // - list: create list DONE
         // - list: update list DONE
-        server.registerForMessages("/topic/lists", Card.class, card -> {
+        /*server.registerForMessages("/topic/lists", Card.class, card -> {
             if (card.getList().getId().equals(listId)) {
                 Platform.runLater(this::refresh);
             }
-        });
+        });*/
 
         server.registerForMessages("/topic/lists", CardList.class, cardList -> {
             if (cardList.getId().equals(listId)) {
@@ -155,7 +153,8 @@ public class ListComponentCtrl extends VBox {
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
         List<Card> cardsOfList = server.getCardList(listId).getCards();
-        for (Card card : cardsOfList.stream().sorted(Comparator.comparing(Card::getListPriority)).toList()) {
+        for (Card card : cardsOfList.stream().sorted(Comparator.comparing(Card::getListPriority))
+                .toList()) {
             var child = new CardComponentCtrl(mainCtrlTalio, server, card.getId());
 
             child.setOnMousePressed(event -> boardCtrl.setCurrentSelectedCard(child));

@@ -146,37 +146,28 @@ class CardServiceTest {
 
     /*
     @Test
-    void moveToListLast() throws EntityNotFoundException {
+    void testMoveToListLast() {
+        Card card = new Card();
+        card.setId(1L);
+        card.setListPriority(0L);
+
         CardList list = new CardList();
         list.setId(1L);
-        Card card1 = new Card();
-        card1.setId(1L);
-        Card card2 = new Card();
-        Card card3 = new Card();
-        card1.setListPriority(0L);
-        card2.setListPriority(1L);
-        card3.setListPriority(2L);
-        list.addCard(card1);
-        list.addCard(card2);
-        list.addCard(card3);
+        list.setCards(new ArrayList<>());
+
+        when(cardRepositoryMock.getReferenceById(1L)).thenReturn(card);
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(list));
-        when(cardListRepositoryMock.save(list)).thenReturn(list);
-        when(cardRepositoryMock.save(card1)).thenReturn(card1);
-        when(cardRepositoryMock.save(card2)).thenReturn(card2);
-        when(cardRepositoryMock.save(card3)).thenReturn(card3);
-        cardListRepositoryMock.save(list);
-        Long cardId = card1.getId();
-        Long listId = list.getId();
+        when(cardRepositoryMock.saveAndFlush(any(Card.class))).thenReturn(card);
 
-        Card movedCard = cardServiceMock.moveToListLast(cardId, listId);
+        CardList result = cardService.moveToListLast(1L, 1L);
 
+        assertEquals(result.getId(), 1L);
+        assertEquals(result.getCards().size(), 1);
+        assertEquals(result.getCards().get(0).getId(), 1L);
 
-        assertEquals(movedCard.getId(), card1.getId());
-        assertEquals(movedCard.getListPriority(), 2L);
-        assertEquals(list.getCards().size(), 3);
-        assertEquals(list.getCards().get(2).getId(), card1.getId());
+        assertEquals(result.getCards().get(0).getListPriority(), 1L);
     }
-     */
+    */
     /*
     @Test
     void testMoveToListLastElse() throws EntityNotFoundException {

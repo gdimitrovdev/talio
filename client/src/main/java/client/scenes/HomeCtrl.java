@@ -3,12 +3,8 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -18,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
@@ -40,45 +38,24 @@ public class HomeCtrl {
     @FXML
     private ScrollPane outerContainer;
     @FXML
-    public GridPane recentBoardsPane;
+    private GridPane recentBoardsPane;
+    @FXML
+    private Button buttonAdmin;
+    @FXML
+    private Label labelBoards;
     private boolean nestedButtonPressed = false;
+    private boolean adminMode;
+
+    public boolean isAdmin() {
+        return adminMode;
+    }
+
 
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;
         this.mainCtrlTalio = mainCtrlTalio;
-        /*for (int i = 0; i < 15; i++) {
-            this.generateExampleBoard((long) i);
-        }*/
-    }
-
-    private void generateExampleBoard(Long id) {
-        //"Long boardID = Long.parseLong(boardField.getText());
-        //Board current = serverUtils.getBoardById(boardID)" can be used
-        // Note: server utils is in MainCtrlTalio now so that we have only one instance of it
-
-        List<String> defaultPresets = new ArrayList<>();
-        defaultPresets.add("#ffffff/#000000");
-        defaultPresets.add("#ff0008/#000000");
-        defaultPresets.add("#abffc3/#004714");
-        Board board = new Board("Example board", "pwd", "hash_893290840923904", "#bababa/#000000", "#dedede/#000000", defaultPresets, 1);
-
-        CardList list1 = new CardList("example list 1", null);
-        CardList list2 = new CardList("example list 2", null);
-
-        Card c1 = new Card("Title1", "Card1", null, 1);
-        Card c2 = new Card("Title2", "Card2", null, 1);
-
-        list1.addCard(c1);
-        list1.addCard(c2);
-
-        board.addCardList(list1);
-        board.addCardList(list2);
-
-
-        //adding the board to the hashset, so it will be displayed
-        //in 'your boards' on the home scene
-        board.setId(id);
+        adminMode = false;
     }
 
     /**
@@ -86,13 +63,16 @@ public class HomeCtrl {
      * the method displays all the boards that the user has connected to
      * if there are no boards: display 'no boards' message
      */
-    public void displayBoardLabels() {
-        Set<Long> recentBoards = mainCtrlTalio.getJoinedBoardForServer(server.getServerUrl());
-        if (recentBoards == null) {
-            recentBoards = new HashSet<>();
+    public void displayBoardLabels(Set<Board> boards) {
+        //removes all children from the FlowPane and then
+        recentBoardsPane.getChildren().clear();
+
+        if (boards == null) {
+            boards = new HashSet<>();
         }
-        if (recentBoards.isEmpty()) {
-            Label noBoardsLabel = new Label("No recent boards");
+        if (boards.isEmpty()) {
+            String noBoards = adminMode ? "No boards in server" : "No recent boards";
+            Label noBoardsLabel = new Label(noBoards);
             noBoardsLabel.setStyle(
                     "-fx-pref-width: 690; -fx-pref-height: 50; -fx-alignment: center;");
             recentBoardsPane.getChildren().add(noBoardsLabel);
@@ -102,8 +82,7 @@ public class HomeCtrl {
             recentBoardsPane.setHgap(70);
             int i = 0;
             int j = 0;
-            for (Long itemId : recentBoards) {
-                Board item = server.getBoard(itemId);
+            for (Board item : boards) {
                 //initializing the button and its content
                 Button boardButton = new Button();
                 AnchorPane innerPane = new AnchorPane();
@@ -116,7 +95,24 @@ public class HomeCtrl {
                 //formatting the button and its content
                 boardSettingBtn.setStyle("-fx-pref-width: 30; -fx-pref-height: 30");
                 deleteBoardBtn.setStyle("-fx-pref-width: 30; -fx-pref-height: 30");
-                boardButton.setStyle("-fx-pref-width: 300; -fx-pref-height: 50 ");
+
+                String boardBtnStyle = "-fx-pref-width: 300; -fx-pref-height: 50";
+                if (adminMode) {
+                    boardBtnStyle += "; -fx-border-color: yellow";
+                    Image img = new Image(getClass().getResource("../images/bin.png").toString());
+                    ImageView imgView = new ImageView(img);
+                    imgView.setFitWidth(15);
+                    imgView.setFitHeight(15);
+                    imgView.setPickOnBounds(true);
+                    imgView.setPreserveRatio(true);
+                    imgView.setSmooth(true);
+                    deleteBoardBtn.setText("");
+                    deleteBoardBtn.setGraphic(imgView);
+                } else {
+                    deleteBoardBtn.setText("x");
+                }
+                boardButton.setStyle(boardBtnStyle);
+
                 innerPane.setStyle("-fx-min-width: 219; -fx-min-height: 50");
                 boardNameLbl.setAlignment(Pos.CENTER);
 
@@ -127,16 +123,10 @@ public class HomeCtrl {
                 AnchorPane.setTopAnchor(boardNameLbl, 16d);
                 AnchorPane.setLeftAnchor(boardNameLbl, 10d);
 
-                nestedButtonPressed = true;
                 //setting the action of the buttons for removing and editing
                 deleteBoardBtn.setOnAction(e -> {
-                    Alert confirmationDialogue = new Alert(Alert.AlertType.CONFIRMATION, "Disconnect from this board?", ButtonType.YES, ButtonType.NO);
-                    confirmationDialogue.showAndWait();
-                    if (confirmationDialogue.getResult() == ButtonType.YES) {
-                        removeRecentBoard(item);
-                    }
-
-
+                    nestedButtonPressed = true;
+                    handleBoardDelete(item);
                 });
                 boardSettingBtn.setOnAction(e -> {
                     nestedButtonPressed = true;
@@ -161,12 +151,34 @@ public class HomeCtrl {
         }
     }
 
+    private void handleBoardDelete(Board item) {
+        String text = adminMode ? "Delete this board permanently?" : "Disconnect from this board?";
+        Alert confirmationDialogue =
+                new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
+        confirmationDialogue.showAndWait();
+
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            //remove board from hashset and call displayBoardLabels method again
+            System.out.println("Removed: " + item.getId());
+            mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), item.getId());
+
+            if (adminMode) {
+                //Delete board permanently from server
+                System.out.println("Deleted: " + item.getId());
+                server.deleteBoard(item.getId());
+                displayBoardLabels(server.getAllBoards());
+
+            } else {
+                displayBoardLabels(getRecentBoards());
+            }
+        }
+    }
+
     /**
      * method that is called by the changeServerBtn
      * it uses a method from the Main Controller
      */
 
-    // TODO: FIX THESE THREE METHODS.
     public void openServerScene() {
         mainCtrlTalio.showServerConnection();
     }
@@ -189,15 +201,6 @@ public class HomeCtrl {
      * @param board - the board that should be removed
      *              This method is called as the event of the button deleteBoardBtn
      */
-    public void removeRecentBoard(Board board) {
-        //removes all children from the FlowPane and then
-        //remove board from hashset and call displayBoardLabels method again// server.deleteBoard(board.getId());
-        mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), board.getId());
-        recentBoardsPane.getChildren().clear();
-        displayBoardLabels();
-    }
-
-    //TODO: integrate pop up once it is ready
 
     /**
      * @param board - the board for which a pop-up should be opened
@@ -220,6 +223,51 @@ public class HomeCtrl {
         mainCtrlTalio.showBoard(board);
 
 
+    }
+
+    public Set<Board> getRecentBoards() {
+        Set<Board> set = new HashSet<>();
+        for (long id : mainCtrlTalio.getJoinedBoardsForServer(server.getServerUrl())) {
+            Board board = server.getBoard(id);
+            set.add(board);
+        }
+        return set;
+    }
+
+    @FXML
+    protected void adminClick() {
+        if (adminMode) {
+            adminMode = false;
+            displayBoardLabels(getRecentBoards());
+            removeStyleAdmin();
+        } else {
+            mainCtrlTalio.showAdminAuthentication();
+        }
+    }
+
+    public void enableAdminMode() {
+        adminMode = true;
+        displayBoardLabels(server.getAllBoards());
+        addStyleAdmin();
+    }
+
+    //Sets it back to the original state
+    private void removeStyleAdmin() {
+        buttonAdmin.setText("Enable Admin Mode");
+        buttonAdmin.setStyle("-fx-background-color: #bababa");
+        labelBoards.setText("Your Boards:");
+    }
+
+    //Adds some styling to indicate admin mode
+    private void addStyleAdmin() {
+        buttonAdmin.setText("Disable Admin Mode");
+        buttonAdmin.setStyle("-fx-background-color: yellow");
+        labelBoards.setText("All Server Boards:");
+    }
+
+    public void refreshBoards() {
+        Set<Board> boards = adminMode ? server.getAllBoards() : getRecentBoards();
+        displayBoardLabels(boards);
     }
 
     public ServerUtils getServer() {

@@ -1,6 +1,9 @@
 package server.controllers;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +12,7 @@ import commons.CardList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.services.BoardService;
 import server.services.CardListService;
@@ -76,6 +82,16 @@ class CardListControllerTest {
         assertEquals(cardList, returnedCardList);
     }
 
+    @Test
+    public void createOneException() {
+        CardList cardList = new CardList();
+        doThrow(new RuntimeException()).when(cardListServiceMock).createOne(cardList);
+
+        ResponseEntity<CardList> response = cardListControllerMock.createOne(cardList);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
     // Test whether deleteById() method of the repository was called for the correct cardList
     @Test
     void deleteOne() {
@@ -93,9 +109,18 @@ class CardListControllerTest {
     }
 
     @Test
+    public void deleteOneException() {
+        Long invalidId = 12345L;
+        doThrow(EntityNotFoundException.class).when(cardListServiceMock).deleteOne(invalidId);
+        var result = cardListControllerMock.deleteOne(invalidId);
+        assertTrue(result.getStatusCode().isError());
+    }
+
+    @Test
     void updateOne() {
         CardList cardList = new CardList();
-        cardList.setId(1L); //setting the id and title manually because otherwise all constructors require a Board
+        cardList.setId(
+                1L); //setting the id and title manually because otherwise all constructors require a Board
         cardList.setTitle("title1");
 
         CardList updatedCardList = new CardList();
@@ -107,5 +132,34 @@ class CardListControllerTest {
 
         assertEquals(updatedCardList, returnedCardList);
 
+    }
+
+    @Test
+    public void updateOneException() {
+        Long invalidId = 123L;
+        CardList cardList = new CardList();
+        when(cardListServiceMock.updateOne(invalidId, cardList)).thenThrow(
+                new EntityNotFoundException());
+
+        ResponseEntity<CardList> result = cardListControllerMock.updateOne(invalidId, cardList);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
+    void testRefreshList() {
+
+        CardList cardList = new CardList();
+        cardList.setId(1L);
+
+        when(cardListServiceMock.getOne(1L)).thenReturn(Optional.of(cardList));
+
+        ResponseEntity<CardList> response = cardListControllerMock.refreshList(1L);
+
+        verify(cardListServiceMock, times(2)).getOne(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(cardList, response.getBody());
     }
 }

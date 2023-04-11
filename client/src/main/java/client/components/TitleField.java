@@ -1,12 +1,16 @@
 package client.components;
 
+import client.utils.Utils;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 
@@ -21,6 +25,8 @@ public class TitleField extends AnchorPane {
     private Consumer<String> onFirstSave;
     private Runnable onFirstCancel;
     private String savedTitle;
+    private Tooltip invalidTitleToolip;
+    private Predicate<String> isValid;
 
     @FXML
     private TextField textField;
@@ -36,23 +42,21 @@ public class TitleField extends AnchorPane {
      *
      * @param title
      */
-    public void init(String title, Consumer<String> onSave) {
-        init(onSave);
+    public void init(String title, Consumer<String> onSave, Predicate<String> isValid) {
+        init(onSave, isValid);
         setTitle(title);
         disable();
     }
 
     public void init(Consumer<String> onSave, Consumer<String> onFirstSave,
-            Runnable onFirstCancel) {
-        init(onSave);
-        //setTitle("");
-        this.onSave = onSave;
+            Runnable onFirstCancel, Predicate<String> isValid) {
+        init(onSave, isValid);
         this.onFirstSave = onFirstSave;
         this.onFirstCancel = onFirstCancel;
         Platform.runLater(this::onClick);
     }
 
-    private void init(Consumer<String> onSave) {
+    private void init(Consumer<String> onSave, Predicate<String> isValid) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("./TitleField.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -77,6 +81,7 @@ public class TitleField extends AnchorPane {
         });
 
         this.onSave = onSave;
+        this.isValid = isValid;
 
         textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal && !this.isDisabled()) {
@@ -90,11 +95,23 @@ public class TitleField extends AnchorPane {
         textField.setText(title);
     }
 
+    public String getTitle() {
+        return savedTitle;
+    }
+
     /**
      * This is called when a user presses enter while they are editing this title field
      */
     @FXML
     private void onAction() {
+        if (!isValid.test(textField.getText())) {
+            if (invalidTitleToolip != null) {
+                invalidTitleToolip.hide();
+            }
+            Toolkit.getDefaultToolkit().beep();
+            invalidTitleToolip = Utils.showTooltip(textField, "Enter a valid title");
+            return;
+        }
         disable();
         setTitle(textField.getText());
         // We are using onFirstSave == null as a flag for whether this is the first save or not

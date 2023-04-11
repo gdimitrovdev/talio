@@ -85,7 +85,7 @@ class HomeCtrlTest {
     }
 
     @Test
-    public void  testOpenBoardSetting() {
+    public void testOpenBoardSetting() {
         Board board = new Board();
         board.setId(1L);
 

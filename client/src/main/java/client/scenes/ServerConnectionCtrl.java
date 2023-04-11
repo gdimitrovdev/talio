@@ -51,8 +51,9 @@ public class ServerConnectionCtrl {
             mainCtrlTalio.showHome();
         } else {
             Alert box = new Alert(Alert.AlertType.ERROR);
-            box.setTitle("Wrong server");
-            box.setContentText("Wrong server address!");
+            box.setTitle("Server Error");
+            box.setContentText("Problem connecting with the server.\nPlease make sure that you "
+                    + "entered the URL correctly.");
             box.showAndWait();
         }
     }

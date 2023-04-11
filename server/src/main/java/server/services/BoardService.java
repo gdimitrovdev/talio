@@ -93,15 +93,15 @@ public class BoardService {
         if (board.getCode().contentEquals(board.getReadOnlyCode())) {
             throw new IllegalArgumentException("Code and readOnlyCode must be different");
         }*/
-        if (!existingBoard.getDefaultPresetNum().equals(board.getDefaultPresetNum())) {
-            for (CardList cardList : board.getLists()) {
-                for (Card card : cardList.getCards()) {
-                    if (card.getColorPresetNumber().equals(existingBoard.getDefaultPresetNum())) {
-                        Card newCard = cardRepository.findById(card.getId()).get();
-                        newCard.setColorPresetNumber(board.getDefaultPresetNum());
-                        cardRepository.saveAndFlush(newCard);
-
-                    }
+        for (CardList cardList : existingBoard.getLists()) {
+            for (Card card : cardList.getCards()) {
+                // If the card's color scheme has been deleted (and it's not the default one),
+                // set it to the default one
+                if (!card.getColorPresetNumber().equals(-1) && board.getCardColorPresets()
+                        .get(card.getColorPresetNumber()).equals("")) {
+                    Card newCard = cardRepository.findById(card.getId()).get();
+                    newCard.setColorPresetNumber(-1);
+                    cardRepository.saveAndFlush(newCard);
                 }
             }
         }

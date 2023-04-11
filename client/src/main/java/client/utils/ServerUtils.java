@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -109,7 +110,6 @@ public class ServerUtils {
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -209,7 +209,7 @@ public class ServerUtils {
 
     public <T> Object addUpdateEvent(Class<T> type, Consumer<T> consumer) {
         var key = new Object();
-        updateEvents.put(key, new UpdateEvent(type, consumer));
+        updateEvents.put(key, new UpdateEvent<T>(type, consumer));
         return key;
     }
 
@@ -220,6 +220,7 @@ public class ServerUtils {
         updateEvents.remove(key);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> void registerForMessages(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override
@@ -474,6 +475,14 @@ public class ServerUtils {
                 });
     }
 
+    public Set<Board> getAllBoards() {
+        return webTarget.path("api").path("boards")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Set<Board>>() {
+                });
+    }
+
     /**
      * Ignores codes, lists and tags
      *
@@ -663,5 +672,12 @@ public class ServerUtils {
             updateSubtask(newSubtask);
             updateSubtask(newOtherSubtask);
         }
+    }
+
+    public boolean adminAuthenticate(String pwd) {
+        return webTarget.path("admin").path("authenticate")
+                .request(APPLICATION_JSON)
+                .post(Entity.entity(pwd, APPLICATION_JSON))
+                .getStatus() == 200;
     }
 }

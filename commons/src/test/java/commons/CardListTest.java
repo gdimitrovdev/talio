@@ -25,7 +25,8 @@ public class CardListTest {
 
     @Test
     public void checkConstructorWithoutLists() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222",
+                null, 0);
         var cl = new CardList("listTitle", b);
         assertEquals("listTitle", cl.getTitle());
         assertEquals(b, cl.getBoard());
@@ -35,7 +36,8 @@ public class CardListTest {
 
     @Test
     public void equalsHashCode() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222",
+                null, 0);
         var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);
@@ -47,7 +49,8 @@ public class CardListTest {
 
     @Test
     public void testCardOperations() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222",
+                null, 0);
         var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         var cl = new CardList("listTitle", b, cards);
@@ -61,7 +64,8 @@ public class CardListTest {
 
     @Test
     public void notEqualsHashCode() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222",
+                null, 0);
         var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);
@@ -73,7 +77,8 @@ public class CardListTest {
 
     @Test
     public void hasToString() {
-        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222", null, 0);
+        var b = new Board("boardName", "password", "asdfgh", "#000000/#111111", "#000000/#222222",
+                null, 0);
         var c = new Card("cardTitle", "desc", null, 0);
         var cards = new ArrayList<Card>();
         cards.add(c);

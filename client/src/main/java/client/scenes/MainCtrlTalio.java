@@ -7,10 +7,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -20,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javax.inject.Inject;
@@ -27,30 +27,31 @@ import javax.inject.Inject;
 public class MainCtrlTalio {
     private Stage primaryStageTalio;
     private Scene home, joinBoard, createBoard, serverConnection, boardComponent, shareBoard,
-            boardSettings, tagManagement;
+            boardSettings, tagManagement, adminAuthentication;
     private HomeCtrl homeCtrl;
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
     private ServerConnectionCtrl serverConnectionCtrl;
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
-    private BoardSettingsCtrl boardSettingsCtrl;
     private TagManagementCtrl tagManagementCtrl;
-    private ServerUtils serverUtils;
+    private AdminAuthenticationCtrl adminAuthenticationCtrl;
+    private ServerUtils server;
 
-    public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
+    public void setJoinedBoards(Map<String, Set<Pair<Long, String>>> joinedBoards) {
         this.joinedBoards = joinedBoards;
     }
 
-    public Map<String, Set<Long>> getJoinedBoards() {
+    public Map<String, Set<Pair<Long, String>>> getJoinedBoards() {
         return joinedBoards;
     }
 
-    private Map<String, Set<Long>> joinedBoards;
+    private Map<String, Set<Pair<Long, String>>> joinedBoards;
+    private Stage adminAuthenticationStage;
 
     @Inject
-    public MainCtrlTalio(ServerUtils serverUtils) {
-        this.serverUtils = serverUtils;
+    public MainCtrlTalio(ServerUtils server) {
+        this.server = server;
     }
 
     public void initialize(
@@ -61,8 +62,8 @@ public class MainCtrlTalio {
             Pair<ServerConnectionCtrl, Parent> serverConnectionPair,
             Pair<BoardCtrl, Parent> boardComponentPair,
             Pair<ShareBoardCtrl, Parent> shareBoardPair,
-            Pair<BoardSettingsCtrl, Parent> boardSettingsPair,
-            Pair<TagManagementCtrl, Parent> tagManagementPair) {
+            Pair<TagManagementCtrl, Parent> tagManagementPair,
+            Pair<AdminAuthenticationCtrl, Parent> adminPair) {
 
         readFromLocalData();
 
@@ -86,57 +87,102 @@ public class MainCtrlTalio {
         this.shareBoardCtrl = shareBoardPair.getKey();
         this.shareBoard = new Scene(shareBoardPair.getValue());
 
-        this.boardSettingsCtrl = boardSettingsPair.getKey();
-        this.boardSettings = new Scene(boardSettingsPair.getValue());
-
         this.tagManagementCtrl = tagManagementPair.getKey();
         this.tagManagement = new Scene(tagManagementPair.getValue());
 
-        // showHome();
+        this.adminAuthenticationCtrl = adminPair.getKey();
+        this.adminAuthentication = new Scene(adminPair.getValue());
+
         this.showServerConnection();
 
         primaryStageTalio.show();
     }
 
-    public Set<Long> getJoinedBoardForServer(String serverUrl) {
-        return joinedBoards.get(serverUrl);
+    public Set<Long> getJoinedBoardsForServer(String serverUrl) {
+        var boardsToRemove = new ArrayList<>();
+        if (!joinedBoards.containsKey(serverUrl)) {
+            return new HashSet<>();
+        }
+        for (var board : joinedBoards.get(serverUrl)) {
+            Long boardId = board.getKey();
+            try {
+                server.getBoard(boardId);
+            } catch (Exception ignored) {
+                boardsToRemove.add(boardId);
+            }
+        }
+        joinedBoards.get(serverUrl).removeIf(b -> boardsToRemove.contains(b.getKey()));
+        if (!boardsToRemove.isEmpty()) {
+            writeToLocalData();
+        }
+        return joinedBoards.get(serverUrl).stream().map(Pair::getKey).collect(Collectors.toSet());
+    }
+
+    public boolean hasAuthenticationForBoard(Long boardId) {
+        if (homeCtrl.isAdmin()) {
+            return true;
+        }
+        var b = joinedBoards.get(server.getServerUrl()).stream()
+                .filter(p -> p.getKey().equals(boardId)).findFirst();
+        String pwd = server.getBoard(boardId).getReadOnlyCode();
+        if (pwd.equals("")) {
+            return true;
+        }
+        return b.isPresent() && b.get().getValue().equals(pwd);
+    }
+
+    public void savePasswordForBoard(Long boardId, String newPassword) {
+        Optional<Pair<Long, String>> b = joinedBoards.get(server.getServerUrl()).stream()
+                .filter(p -> p.getKey().equals(boardId)).findFirst();
+        if (b.isPresent()) {
+            joinedBoards.get(server.getServerUrl()).remove(b.get());
+            joinedBoards.get(server.getServerUrl()).add(new Pair<>(boardId, newPassword));
+            writeToLocalData();
+        }
     }
 
     public void addJoinedBoard(String serverUrl, Long boardId) {
-        if (!joinedBoards.keySet().contains(serverUrl)) {
-            joinedBoards.put(serverUrl, new HashSet<Long>());
+        if (!joinedBoards.containsKey(serverUrl)) {
+            joinedBoards.put(serverUrl, new HashSet<>());
         }
 
-        if (!joinedBoards.get(serverUrl).contains(boardId)) {
-            joinedBoards.get(serverUrl).add(boardId);
-        }
+        joinedBoards.get(serverUrl).add(new Pair<>(boardId, ""));
 
         writeToLocalData();
     }
 
     public void removeJoinedBoard(String serverUrl, Long boardId) {
-        if (!joinedBoards.keySet().contains(serverUrl)) {
+        if (!joinedBoards.containsKey(serverUrl)) {
             return;
         }
 
-        if (!joinedBoards.get(serverUrl).contains(boardId)) {
+        if (joinedBoards.get(serverUrl).stream().noneMatch(p -> p.getKey().equals(boardId))) {
             return;
         }
 
-        joinedBoards.get(serverUrl).remove(boardId);
+        joinedBoards.get(serverUrl).removeIf(p -> p.getKey().equals(boardId));
         writeToLocalData();
     }
 
+    @SuppressWarnings("unchecked")
     public void readFromLocalData() {
         File toRead = new File(".local_data");
 
         try (
                 FileInputStream fis = new FileInputStream(toRead);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                ) {
-            this.joinedBoards = (HashMap<String, Set<Long>>) ois.readObject();
+        ) {
+            this.joinedBoards = (HashMap<String, Set<Pair<Long, String>>>) ois.readObject();
+            for (var s : joinedBoards.keySet()) {
+                for (var b : joinedBoards.get(s)) {
+                    if (b == null) {
+                        throw new Exception();
+                    }
+                }
+            }
+
         } catch (Exception e) {
-            this.joinedBoards = new HashMap<String, Set<Long>>();
+            this.joinedBoards = new HashMap<>();
         }
     }
 
@@ -146,10 +192,12 @@ public class MainCtrlTalio {
         try (
                 FileOutputStream fos = new FileOutputStream(localData);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                ) {
+        ) {
             oos.writeObject(joinedBoards);
             oos.flush();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void alert(String title, String message) {
@@ -162,7 +210,7 @@ public class MainCtrlTalio {
     public void showHome() {
         primaryStageTalio.setTitle("Talio: Overview");
         primaryStageTalio.setScene(home);
-        homeCtrl.displayBoardLabels();
+        homeCtrl.refreshBoards();
         this.listenForQuestionMarkPressed();
     }
 
@@ -188,10 +236,11 @@ public class MainCtrlTalio {
     }
 
     public void showBoardSettings(Board board) {
-        boardSettingsCtrl.initialize(board);
         Stage stage = new Stage();
+        var boardSettingsCtrl = new BoardSettingsCtrl(this, server, stage, board);
         stage.setTitle("Talio: Board Settings");
-        stage.setScene(boardSettings);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(boardSettingsCtrl));
         stage.show();
         this.listenForQuestionMarkPressed();
         stage.getScene().setOnKeyPressed(e -> {
@@ -201,12 +250,13 @@ public class MainCtrlTalio {
         });
 
         stage.setOnCloseRequest(event -> {
-            if (boardSettingsCtrl.isHasUnsavedChanges() == true) {
+            if (boardSettingsCtrl.isHasUnsavedChanges()) {
 
                 event.consume();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setContentText("Any unsaved changes will be lost. Do you want to discard them?");
+                alert.setContentText(
+                        "Any unsaved changes will be lost. Do you want to discard them?");
                 alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
                 alert.showAndWait().ifPresent(result -> {
@@ -231,7 +281,7 @@ public class MainCtrlTalio {
 
     public void showBoard(Board board) {
         try {
-            serverUtils.subscribeToBoard(board.getId());
+            server.subscribeToBoard(board.getId());
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -336,5 +386,20 @@ public class MainCtrlTalio {
         stage.setScene(tagManagement);
         stage.show();
 
+    }
+
+    public void showAdminAuthentication() {
+        adminAuthenticationCtrl.initialize();
+        adminAuthenticationStage = new Stage();
+        adminAuthenticationStage.setTitle("Talio: Admin Authentication");
+        adminAuthenticationStage.setScene(adminAuthentication);
+        adminAuthenticationStage.show();
+    }
+
+    public void enableAdminMode() {
+        if (adminAuthenticationStage != null) {
+            adminAuthenticationStage.close();
+        }
+        homeCtrl.enableAdminMode();
     }
 }
