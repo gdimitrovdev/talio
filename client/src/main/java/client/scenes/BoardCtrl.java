@@ -384,6 +384,7 @@ public class BoardCtrl implements Initializable {
                     .get(0)).setSelected(true);
             ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren()
                     .get(0)).highlightShortcut();
+            operation = "";
         }
     }
 
@@ -406,6 +407,7 @@ public class BoardCtrl implements Initializable {
             ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren()
                     .get(0))
                     .highlightShortcut();
+            operation = "";
         }
     }
 
@@ -424,6 +426,7 @@ public class BoardCtrl implements Initializable {
                     .get(position[1] + 1)).setSelected(true);
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
                     .get(position[1] + 1)).highlightShortcut();
+            operation = "";
         }
     }
 
@@ -441,6 +444,7 @@ public class BoardCtrl implements Initializable {
                     .get(position[1] - 1)).setSelected(true);
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
                     .get(position[1] - 1)).highlightShortcut();
+            operation = "";
         }
     }
 
@@ -455,6 +459,7 @@ public class BoardCtrl implements Initializable {
                 > position[1]) {
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
                     .get(position[1])).loadPopup();
+            operation = "";
         }
     }
 
@@ -464,10 +469,12 @@ public class BoardCtrl implements Initializable {
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
         listComponentCtrls.get(position[0]).addCard();
+        operation = "";
     }
 
     public void pressedShiftL() {
         this.addCardList();
+        operation = "";
     }
 
     public void pressedE() {
@@ -500,6 +507,7 @@ public class BoardCtrl implements Initializable {
                 }
             });
         }
+        operation = "";
     }
 
     public void pressedDelete() {
@@ -535,19 +543,6 @@ public class BoardCtrl implements Initializable {
                         cardComponentCtrls.get(position[1]).getCardId());
             }
             operation = "su";
-            /*listComponentCtrls = this.getCardListsFromBoard();
-            List<ListComponentCtrl> finalListComponentCtrls = listComponentCtrls;
-            Platform.runLater(() -> {
-                //System.out.println(position[0] + " " + position[1]);
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
-                        .getChildren().get(position[1])).setSelected(false);
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
-                        .getChildren().get(position[1])).removeHighlightShortcut();
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
-                        .getChildren().get(position[1] - 1)).setSelected(true);
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
-                        .getChildren().get(position[1] - 1)).highlightShortcut();
-            });*/
         }
 
     }
@@ -586,6 +581,7 @@ public class BoardCtrl implements Initializable {
             ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
                     .get(position[1])).loadPopup();
         }
+        operation = "";
     }
 
     public void pressedC() {
@@ -593,6 +589,7 @@ public class BoardCtrl implements Initializable {
         if (position[0] != -1) {
             this.mainCtrlTalio.showBoardSettings(server.getBoard(this.boardId));
         }
+        operation = "";
     }
 
     public void mouseMovement(MouseEvent event) {

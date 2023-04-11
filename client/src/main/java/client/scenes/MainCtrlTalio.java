@@ -314,11 +314,14 @@ public class MainCtrlTalio {
                         + " - Task highlight can be moved with arrow keys (Up/Down/Left/Right) \n"
                         + " - Task can be moved up/down within a list by pressing Shift+Up/Down \n"
                         + " - Task name can be edited in the board overview by pressing E \n"
-                        + " - Task can be deleted from the board overview by fressing delete or backspace \n"
-                        + " - Task editing pop-up can be opened by pressing enter \n"
-                        + " - Task editing pop-up can be closed by pressing esc");
+                        + " - Task can be deleted from the board overview by pressing delete or backspace \n"
+                        + " - Task editing pop-up can be opened by pressing enter or ctrl+t\n"
+                        + " - Task editing pop-up can be closed by pressing esc\n"
+                        + " - Task can be created by pressing shift+c\n"
+                        + " - List can be created by pressing shift+l\n"
+                        + " - Board customisation can be opened by pressing c");
                 tilepane.getChildren().add(text);
-                Scene scene = new Scene(tilepane, 730, 170);
+                Scene scene = new Scene(tilepane, 730, 210);
                 stage.setScene(scene);
                 stage.show();
                 scene.setOnKeyPressed(e1 -> {
