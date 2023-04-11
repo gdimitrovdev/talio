@@ -325,7 +325,7 @@ public class BoardCtrl implements Initializable {
                         box.setContentText("You have entered a wrong password");
                         box.setOnCloseRequest(event -> {
                             box.close();
-                            lock();
+                            Platform.runLater(this::lock);
                         });
                         box.showAndWait();
                     }
