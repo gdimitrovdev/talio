@@ -88,7 +88,7 @@ public class CardController {
             cardService.deleteOne(id);
             var cardList = cardListService.getOne(cardListId).get();
             template.convertAndSend(Topics.LISTS.toString(), cardList);
-            template.convertAndSend("/topic/cards/deleted", card);
+            template.convertAndSend("/topic/cards/deleted", id);
             return ResponseEntity.ok(cardList);
         } catch (Exception e) {
             e.printStackTrace();

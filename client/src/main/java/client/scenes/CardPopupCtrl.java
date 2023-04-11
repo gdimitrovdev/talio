@@ -139,10 +139,8 @@ public class CardPopupCtrl extends AnchorPane {
                             .get(card.getColorPresetNumber())));
         }
 
-        server.registerForMessages("/topic/cards/deleted", Card.class, cardReceived -> {
-            System.out.println("here");
-            if (cardReceived.getId().equals(card.getId())) {
-                System.out.println("match");
+        server.registerForMessages("/topic/cards/deleted", Long.class, cardId -> {
+            if (cardId.equals(card.getId())) {
                 Platform.runLater(() -> {
                     Alert box = new Alert(Alert.AlertType.ERROR);
                     box.setTitle("Card deleted");
