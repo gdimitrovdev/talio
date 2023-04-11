@@ -102,7 +102,7 @@ public class BoardService {
                         .get(card.getColorPresetNumber()).equals("")) {
                     Card newCard = cardRepository.findById(card.getId()).get();
                     newCard.setColorPresetNumber(-1);
-                    cardRepository.saveAndFlush(newCard);
+                    cardRepository.save(newCard);
                 }
             }
         }

@@ -227,8 +227,10 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     public void setCard(Card newCardData) {
+        if (newCardData.getId() != null) {
+            newCardData = server.getCard(newCardData.getId());
+        }
         String colors;
-
         if (newCardData.getColorPresetNumber().equals(-1)) {
             // Board's default color preset
             colors = newCardData.getList().getBoard().getCardColorPresets()

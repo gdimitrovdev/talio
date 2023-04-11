@@ -44,7 +44,7 @@ public class CardService {
         card.setTags(new ArrayList<>());
         card.setList(cardListRepository.findById(card.getList().getId()).get());
         card.setListPriority(0L);
-        Card newCard = cardRepository.saveAndFlush(card);
+        Card newCard = cardRepository.save(card);
         CardList list = cardListRepository.findById(card.getList().getId()).get();
         if (list.getCards().size() != 0) {
             newCard.setListPriority(
@@ -80,7 +80,7 @@ public class CardService {
             list.getCards().stream().filter(c -> c.getListPriority() > card.getListPriority())
                     .forEach(c -> {
                         c.setListPriority(c.getListPriority() - 1);
-                        cardRepository.saveAndFlush(c);
+                        cardRepository.save(c);
                     });
             return card;
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class CardService {
                 card.setListPriority(0L);
                 list.addCard(card);
 
-                cardRepository.saveAndFlush(card);
+                cardRepository.save(card);
                 return card.getList();
             }
 
