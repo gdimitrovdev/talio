@@ -147,10 +147,8 @@ public class CardService {
             list = cardListRepository.findById(listId).get();
 
             for (Card cardOfList : list.getCards()) {
-                System.out.println("checking: " + cardOfList.getTitle());
                 if (cardOfList.getListPriority() >= card.getListPriority()
                         && !card.getId().equals(cardOfList.getId())) {
-                    System.out.println(cardOfList.getTitle());
                     cardOfList.setListPriority(cardOfList.getListPriority() + 1L);
                     cardRepository.save(cardOfList);
                 }

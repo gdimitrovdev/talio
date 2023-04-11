@@ -88,7 +88,7 @@ public class TagComponentCtrl extends HBox {
     private void refreshUI() {
         tagTitle.setText(tag.getTitle());
         String[] colors = tag.getColor().split("/");
-        tagForeground.setValue(Color.valueOf(colors[0]));
-        tagBackground.setValue(Color.valueOf(colors[1]));
+        tagBackground.setValue(Color.valueOf(colors[0]));
+        tagForeground.setValue(Color.valueOf(colors[1]));
     }
 }

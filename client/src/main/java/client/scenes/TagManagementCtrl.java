@@ -23,9 +23,9 @@ public class TagManagementCtrl {
     @FXML
     private TextField fieldTagTitle;
     @FXML
-    private ColorPicker pickerForeground;
-    @FXML
     private ColorPicker pickerBackground;
+    @FXML
+    private ColorPicker pickerForeground;
     @FXML
     private VBox tagsBox;
 
@@ -39,8 +39,8 @@ public class TagManagementCtrl {
         this.board = board;
         allTags = server.getBoard(board.getId()).getTags();
         fieldTagTitle.clear();
-        pickerForeground.setValue(Color.WHITE);
         pickerBackground.setValue(Color.WHITE);
+        pickerForeground.setValue(Color.BLACK);
 
         refreshTags();
     }
@@ -49,7 +49,7 @@ public class TagManagementCtrl {
             String background, Tag except) {
         foreground = "#" + foreground.substring(2, 8);
         background = "#" + background.substring(2, 8);
-        String tagColor = foreground + "/" + background;
+        String tagColor = background + "/" + foreground;
 
         if (title.contentEquals("")) {
             mainCtrlTalio.alert("Empty Title", "The tag must have a title.");

@@ -158,12 +158,10 @@ public class HomeCtrl {
 
         if (confirmationDialogue.getResult() == ButtonType.YES) {
             //remove board from hashset and call displayBoardLabels method again
-            System.out.println("Removed: " + item.getId());
             mainCtrlTalio.removeJoinedBoard(server.getServerUrl(), item.getId());
 
             if (adminMode) {
                 //Delete board permanently from server
-                System.out.println("Deleted: " + item.getId());
                 server.deleteBoard(item.getId());
                 displayBoardLabels(server.getAllBoards());
 
