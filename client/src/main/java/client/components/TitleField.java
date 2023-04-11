@@ -63,7 +63,6 @@ public class TitleField extends AnchorPane {
         try {
             loader.load();
         } catch (IOException e) {
-            System.out.println("Error while creating a title field");
             throw new RuntimeException(e);
         }
 

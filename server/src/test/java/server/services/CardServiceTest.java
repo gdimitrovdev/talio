@@ -81,7 +81,7 @@ class CardServiceTest {
         card.setList(list);
 
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(list));
-        when(cardRepositoryMock.saveAndFlush(card)).thenReturn(card);
+        when(cardRepositoryMock.save(card)).thenReturn(card);
         when(cardRepositoryMock.save(card)).thenReturn(card);
 
         Card returnedCard = cardService.createOne(card);
@@ -107,7 +107,7 @@ class CardServiceTest {
         list.addCard(newCard);
 
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(list));
-        when(cardRepositoryMock.saveAndFlush(any(Card.class))).thenReturn(newCard);
+        when(cardRepositoryMock.save(any(Card.class))).thenReturn(newCard);
         when(cardRepositoryMock.save(any(Card.class))).thenReturn(newCard);
         Card createdCard = cardService.createOne(newCard);
         assertEquals(createdCard.getListPriority(), 1L);
@@ -157,7 +157,7 @@ class CardServiceTest {
 
         when(cardRepositoryMock.getReferenceById(1L)).thenReturn(card);
         when(cardListRepositoryMock.findById(1L)).thenReturn(Optional.of(list));
-        when(cardRepositoryMock.saveAndFlush(any(Card.class))).thenReturn(card);
+        when(cardRepositoryMock.save(any(Card.class))).thenReturn(card);
 
         CardList result = cardService.moveToListLast(1L, 1L);
 

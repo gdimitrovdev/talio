@@ -75,6 +75,8 @@ public class CardPopupCtrl extends AnchorPane {
     private Set<Tag> tagsToDelete = new HashSet<>();
     private Set<Subtask> subtasksToDelete = new HashSet<>();
 
+    private Set<Tag> cardTagsToAdd = new HashSet<Tag>();
+
     private final Predicate<String> subtaskTitleValidator = title ->
             !title.equals("")
                     && card.getSubtasks().stream().noneMatch(s -> s.getTitle().equals(title));
@@ -111,6 +113,8 @@ public class CardPopupCtrl extends AnchorPane {
         }
 
         initTagMenuButton();
+
+        cardTagsToAdd.addAll(card.getTags());
 
         for (Tag tag : card.getTags()) {
             tagsContainer.getChildren().add(tagsContainer.getChildren().size() - 1,
@@ -283,7 +287,8 @@ public class CardPopupCtrl extends AnchorPane {
 
         Button deleteTagButton = new Button("X");
         deleteTagButton.setOnAction(a -> {
-            card.getTags().remove(tag);
+            //card.getTags().remove(tag);
+            cardTagsToAdd.remove(tag);
             tagsToDelete.add(tag);
             tagsContainer.getChildren().remove(tagElement);
             addTagButton.getItems().add(generateMenuItemForTag(tag));
@@ -302,7 +307,9 @@ public class CardPopupCtrl extends AnchorPane {
         MenuItem menuItem = new MenuItem(tag.getTitle());
         menuItem.setOnAction(event -> {
             tagsToDelete.remove(tag);
-            card.getTags().add(tag);
+
+            //card.getTags().add(tag);
+            cardTagsToAdd.add(tag);
             addTagButton.getItems().remove(menuItem);
             tagsContainer.getChildren().add(tagsContainer.getChildren().size() - 1,
                     generateTagComponent(tag));
@@ -355,14 +362,14 @@ public class CardPopupCtrl extends AnchorPane {
         List<Tag> tagsToAdd = new ArrayList<Tag>();
         List<Tag> tagsToRemove = new ArrayList<Tag>();
 
-        for (Tag tag : card.getTags()) {
+        for (Tag tag : cardTagsToAdd) {
             if (tagsOnServer.stream()
                     .noneMatch(tagOnServer -> tagOnServer.getId().equals(tag.getId()))) {
                 tagsToAdd.add(tag);
             }
         }
         for (Tag tagOnServer : tagsOnServer) {
-            if (card.getTags().stream().noneMatch(tag -> tag.getId().equals(tagOnServer.getId()))) {
+            if (cardTagsToAdd.stream().noneMatch(tag -> tag.getId().equals(tagOnServer.getId()))) {
                 tagsToRemove.add(tagOnServer);
             }
         }

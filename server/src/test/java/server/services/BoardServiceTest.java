@@ -242,7 +242,7 @@ class BoardServiceTest {
         BoardService boardService = new BoardService(boardRepositoryMock, cardRepositoryMock);
 
         Board result = boardService.updateOne(1L, updatedBoard);
-        System.out.println(result);
+        (result);
 
         assertEquals(result, existingBoard);
         assertEquals(existingBoard.getName(), updatedBoard.getName());

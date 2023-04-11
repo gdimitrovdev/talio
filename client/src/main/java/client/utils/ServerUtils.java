@@ -171,7 +171,6 @@ public class ServerUtils {
                     }
             ).get();
             this.session = session;
-            System.out.println("created session");
             /*
             var classToTopic = Map.of(
                     commons.Board.class, "boards",
@@ -183,17 +182,17 @@ public class ServerUtils {
 
             for (var type : classToTopic.keySet()) {
                 registerForMessages("/topic/" + classToTopic.get(type), type, (o) -> {
-                    System.out.println(
+                    (
                             "received websocket from: " + "/topic/" + classToTopic.get(type));
-                    System.out.println(updateEvents);
-                    System.out.println(updateEvents.keySet());
+                    (updateEvents);
+                    (updateEvents.keySet());
                     for (var key : updateEvents.keySet()) {
                         var updateEvent = updateEvents.get(key);
-                        System.out.println(updateEvent.type + " " + type);
+                        (updateEvent.type + " " + type);
                         if (updateEvent.type.equals(type)) {
-                            System.out.println();
+                            ();
                             updateEvent.accept(o);
-                            System.out.println("After consumer accept");
+                            ("After consumer accept");
                         }
                     }
                 });
@@ -284,7 +283,6 @@ public class ServerUtils {
         if (cachedTags.containsKey(tagId)) {
             return cachedTags.get(tagId);
         }
-        System.out.println("Uncached tag access");
         return webTarget.path("api/tags/" + tagId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -346,7 +344,6 @@ public class ServerUtils {
         if (cachedSubtasks.containsKey(subtaskId)) {
             return cachedSubtasks.get(subtaskId);
         }
-        System.out.println("Uncached subtask access");
         return webTarget.path("api/subtasks/" + subtaskId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -402,14 +399,12 @@ public class ServerUtils {
             if (cachedLists.containsKey(listId)) {
                 return cachedLists.get(listId);
             }
-            System.out.println("Uncached list access");
             return webTarget.path("api/lists/" + listId)
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get(new GenericType<CardList>() {
                     });
         } catch (Exception e) {
-            System.out.println("Error in getCardList(" + listId + "):\n" + e);
             throw new RuntimeException();
         }
 
@@ -465,7 +460,6 @@ public class ServerUtils {
         if (cachedBoards.containsKey(boardId)) {
             return cachedBoards.get(boardId);
         }
-        System.out.println("Uncached board access");
         //RestTemplate restTemplate = new RestTemplate();
         //return restTemplate.getForObject(restServerUrl + "/api/boards/" + boardId, Board.class);
         return webTarget.path("api").path("boards").path(boardId.toString())
@@ -542,7 +536,6 @@ public class ServerUtils {
         if (cachedCards.containsKey(cardId)) {
             return cachedCards.get(cardId);
         }
-        System.out.println("Uncached card access");
         return webTarget.path("api/cards/" + cardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -601,8 +594,7 @@ public class ServerUtils {
                     .get(new GenericType<CardList>() {
                     });
         } catch (Exception e) {
-            System.out.println(
-                    "Error on moveCardToListLast(" + cardId + ", " + newListId + "):\n" + e);
+            System.out.println("Error on moveCardToListLast(" + cardId + ", " + newListId + "):\n" + e);
         }
     }
 

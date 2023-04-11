@@ -16,11 +16,11 @@
     <TextField fx:id="tagTitle" minWidth="105" minHeight="26">
         <tooltip><Tooltip text="Change the tag's title" /></tooltip>
     </TextField>
-    <ColorPicker fx:id="tagForeground" maxWidth="38" minWidth="26" >
-        <tooltip><Tooltip text="Foreground color" /></tooltip>
-    </ColorPicker>
     <ColorPicker fx:id="tagBackground" maxWidth="38" minWidth="26" >
         <tooltip><Tooltip text="Background color" /></tooltip>
+    </ColorPicker>
+    <ColorPicker fx:id="tagForeground" maxWidth="38" minWidth="26" >
+        <tooltip><Tooltip text="Foreground color" /></tooltip>
     </ColorPicker>
     <Button fx:id="buttonSave" onAction="#saveTag" text="Save" minWidth="60">
         <tooltip><Tooltip text="Save this tag" /></tooltip>
