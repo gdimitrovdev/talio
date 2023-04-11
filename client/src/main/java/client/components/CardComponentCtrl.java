@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
@@ -263,6 +264,12 @@ public class CardComponentCtrl extends AnchorPane {
         Stage stage = new Stage();
         stage.setScene(new Scene(root1));
         stage.show();
+
+        stage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.ESCAPE) {
+                stage.close();
+            }
+        });
 
         stage.setOnCloseRequest(event -> {
 
