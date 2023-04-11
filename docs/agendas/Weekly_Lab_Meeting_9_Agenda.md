@@ -40,15 +40,18 @@ Attendees:
 6. Admin mode
     1. We decided to have a password, and that this password will be passed as a program argument. Is this ok?
         >Record response by the TA
-7. Product showcase
+7. ReadMe file
+    1. What exactly are we supposed to write in the readMe file?
+        >Record response by the TA
+8. Product showcase
    1. Matei - fixed trying to join a board with an invalid code, did some minor optimizations to UI usability and wrote tests for the whole server(controllers and services)
    2. Pedro -
    3. Dimana -
    4. George -
    5. Agnese -
    6. Vesko - 
-8. Additional Questions
+9. Additional Questions
     1. Does anyone have any other questions for the TA before the meeting closes?
         >Record any additional questions and responses here, even if they were asked earlier
-9. Closure
+10. Closure
     >Record end time of meeting
