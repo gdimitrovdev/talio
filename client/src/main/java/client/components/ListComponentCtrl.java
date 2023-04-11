@@ -6,19 +6,15 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.input.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -159,6 +155,7 @@ public class ListComponentCtrl extends VBox {
         titleField.setTitle(server.getCardList(listId).getTitle());
         cards.getChildren().forEach(c -> ((CardComponentCtrl) c).close());
         cards.getChildren().clear();
+        int counter = 0;
         List<Card> cardsOfList = server.getCardList(listId).getCards();
         for (Card card : cardsOfList.stream().sorted(Comparator.comparing(Card::getListPriority))
                 .toList()) {
@@ -199,6 +196,11 @@ public class ListComponentCtrl extends VBox {
 
                 child.setOnDragExited(event -> child.removeHighlight());
             }
+
+            if (boardCtrl.getPosition()[1] == counter) {
+                child.highlightShortcut();
+            }
+            ++counter;
 
             cards.getChildren().add(child);
         }

@@ -1,5 +1,11 @@
 @import url(./Common.css);
 
+/*root {
+    -fx-border-width: 3;
+    -fx-border-color: red;
+    -fx-padding: 5;
+}*/
+
 #cardOverview {
     -fx-padding: 10;
     -fx-border-radius: 5;

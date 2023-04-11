@@ -13,11 +13,9 @@ import commons.Topics;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -78,7 +76,7 @@ public class BoardCtrl implements Initializable {
     @FXML
     private Label boardNameLabel;
 
-    private int[] position = new int[]{-1, -1};
+    private int[] position = new int[] {-1, -1};
 
     private String operation = "";
     @FXML
@@ -376,11 +374,16 @@ public class BoardCtrl implements Initializable {
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        if (position[0] != -1 && position[0] > 0 && listComponentCtrls.get(position[0] - 1).getCards().getChildren().size() > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlightShortcut();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren().get(0)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren().get(0)).highlightShortcut();
+        if (position[0] != -1 && position[0] > 0
+                && listComponentCtrls.get(position[0] - 1).getCards().getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).removeHighlightShortcut();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren()
+                    .get(0)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] - 1).getCards().getChildren()
+                    .get(0)).highlightShortcut();
         }
     }
 
@@ -389,14 +392,19 @@ public class BoardCtrl implements Initializable {
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        if (position[0] != -1 && position[0] < listComponentCtrls.size() - 1 && listComponentCtrls.get(position[0] + 1).getCards().getChildren().size() > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1]))
+        if (position[0] != -1 && position[0] < listComponentCtrls.size() - 1
+                && listComponentCtrls.get(position[0] + 1).getCards().getChildren().size() > 0) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1]))
                     .setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1]))
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1]))
                     .removeHighlightShortcut();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren().get(0))
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren()
+                    .get(0))
                     .setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren().get(0))
+            ((CardComponentCtrl) listComponentCtrls.get(position[0] + 1).getCards().getChildren()
+                    .get(0))
                     .highlightShortcut();
         }
     }
@@ -406,11 +414,16 @@ public class BoardCtrl implements Initializable {
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        if (position[0] != -1 && !listComponentCtrls.isEmpty() && position[1] < listComponentCtrls.get(position[0]).getCards().getChildren().size() - 1) {
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlightShortcut();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] + 1)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] + 1)).highlightShortcut();
+        if (position[0] != -1 && !listComponentCtrls.isEmpty() && position[1]
+                < listComponentCtrls.get(position[0]).getCards().getChildren().size() - 1) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).removeHighlightShortcut();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1] + 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1] + 1)).highlightShortcut();
         }
     }
 
@@ -420,10 +433,14 @@ public class BoardCtrl implements Initializable {
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
         if (position[0] != -1 && position[1] > 0) {
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlightShortcut();
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlightShortcut();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).setSelected(false);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).removeHighlightShortcut();
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1] - 1)).setSelected(true);
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1] - 1)).highlightShortcut();
         }
     }
 
@@ -433,8 +450,11 @@ public class BoardCtrl implements Initializable {
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        if (position[0] != -1 && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).loadPopup();
+        if (position[0] != -1 && listComponentCtrls.size() > position[0]
+                && listComponentCtrls.get(position[0]).getCards().getChildren().size()
+                > position[1]) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).loadPopup();
         }
     }
 
@@ -457,18 +477,24 @@ public class BoardCtrl implements Initializable {
 
         CardComponentCtrl cardComponentCtrl;
 
-        if (position[0] != -1 && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
-            cardComponentCtrl = (CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1]);
+        if (position[0] != -1 && listComponentCtrls.size() > position[0]
+                && listComponentCtrls.get(position[0]).getCards().getChildren().size()
+                > position[1]) {
+            cardComponentCtrl =
+                    (CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                            .get(position[1]);
 
             cardComponentCtrl.titleField.getChildren().clear();
-            cardComponentCtrl.titleField.getChildren().add(new TextField(server.getCard(cardComponentCtrl.getCardId()).getTitle()));
+            cardComponentCtrl.titleField.getChildren()
+                    .add(new TextField(server.getCard(cardComponentCtrl.getCardId()).getTitle()));
             cardComponentCtrl.titleField.getChildren().get(0).requestFocus();
 
             CardComponentCtrl finalCardComponentCtrl = cardComponentCtrl;
             cardComponentCtrl.titleField.setOnKeyPressed(e -> {
                 if (e.getCode() == KeyCode.ENTER) {
                     Card card = server.getCard(finalCardComponentCtrl.getCardId());
-                    card.setTitle(((TextField) finalCardComponentCtrl.titleField.getChildren().get(0)).getText());
+                    card.setTitle(((TextField) finalCardComponentCtrl.titleField.getChildren()
+                            .get(0)).getText());
                     server.updateCard(card);
                     cardComponentCtrl.requestFocus();
                 }
@@ -481,8 +507,11 @@ public class BoardCtrl implements Initializable {
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        if (position[0] != -1 && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
-            server.deleteCard(((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).getCardId());
+        if (position[0] != -1 && listComponentCtrls.size() > position[0]
+                && listComponentCtrls.get(position[0]).getCards().getChildren().size()
+                > position[1]) {
+            server.deleteCard(((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards()
+                    .getChildren().get(position[1])).getCardId());
         }
         operation = "d";
     }
@@ -492,23 +521,33 @@ public class BoardCtrl implements Initializable {
 
         if (position[0] != -1 && position[1] > 0) {
             List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
-            if (listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
+            if (listComponentCtrls.size() > position[0]
+                    && listComponentCtrls.get(position[0]).getCards().getChildren().size()
+                    > position[1]) {
                 ListComponentCtrl listComponentCtrl = listComponentCtrls.get(position[0]);
                 List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
                 for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
-                    cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
+                    cardComponentCtrls.add(
+                            (CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
                 }
-                server.moveCardToListAfterCard(cardComponentCtrls.get(position[1] - 1).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1]).getCardId());
+                server.moveCardToListAfterCard(cardComponentCtrls.get(position[1] - 1).getCardId(),
+                        listComponentCtrls.get(position[0]).getListId(),
+                        cardComponentCtrls.get(position[1]).getCardId());
             }
             operation = "su";
-            listComponentCtrls = this.getCardListsFromBoard();
+            /*listComponentCtrls = this.getCardListsFromBoard();
             List<ListComponentCtrl> finalListComponentCtrls = listComponentCtrls;
             Platform.runLater(() -> {
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).setSelected(false);
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).removeHighlightShortcut();
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).setSelected(true);
-                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards().getChildren().get(position[1] - 1)).highlightShortcut();
-            });
+                //System.out.println(position[0] + " " + position[1]);
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
+                        .getChildren().get(position[1])).setSelected(false);
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
+                        .getChildren().get(position[1])).removeHighlightShortcut();
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
+                        .getChildren().get(position[1] - 1)).setSelected(true);
+                ((CardComponentCtrl) finalListComponentCtrls.get(position[0]).getCards()
+                        .getChildren().get(position[1] - 1)).highlightShortcut();
+            });*/
         }
 
     }
@@ -521,12 +560,17 @@ public class BoardCtrl implements Initializable {
             List<CardComponentCtrl> cardComponentCtrls = new ArrayList<>();
 
             for (int n = 0; n < listComponentCtrl.getCards().getChildren().size(); n++) {
-                cardComponentCtrls.add((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
+                cardComponentCtrls.add(
+                        (CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(n));
             }
 
-            if (position[1] < listComponentCtrl.getCards().getChildren().size() - 1 && listComponentCtrls.size() > position[0]
-                    && listComponentCtrls.get(position[0]).getCards().getChildren().size() - 1 > position[1]) {
-                server.moveCardToListAfterCard(cardComponentCtrls.get(position[1]).getCardId(), listComponentCtrls.get(position[0]).getListId(), cardComponentCtrls.get(position[1] + 1).getCardId());
+            if (position[1] < listComponentCtrl.getCards().getChildren().size() - 1
+                    && listComponentCtrls.size() > position[0]
+                    && listComponentCtrls.get(position[0]).getCards().getChildren().size() - 1
+                    > position[1]) {
+                server.moveCardToListAfterCard(cardComponentCtrls.get(position[1]).getCardId(),
+                        listComponentCtrls.get(position[0]).getListId(),
+                        cardComponentCtrls.get(position[1] + 1).getCardId());
             }
             operation = "sd";
         }
@@ -536,8 +580,11 @@ public class BoardCtrl implements Initializable {
     public void pressedT() {
         position = this.findPositionOfCard();
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
-        if (position[0] != -1 && listComponentCtrls.size() > position[0] && listComponentCtrls.get(position[0]).getCards().getChildren().size() > position[1]) {
-            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren().get(position[1])).loadPopup();
+        if (position[0] != -1 && listComponentCtrls.size() > position[0]
+                && listComponentCtrls.get(position[0]).getCards().getChildren().size()
+                > position[1]) {
+            ((CardComponentCtrl) listComponentCtrls.get(position[0]).getCards().getChildren()
+                    .get(position[1])).loadPopup();
         }
     }
 
@@ -584,32 +631,36 @@ public class BoardCtrl implements Initializable {
         boolean run = true;
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
-            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            ListComponentCtrl listComponentCtrl =
+                    (ListComponentCtrl) innerHBox.getChildren().get(n);
             if (listComponentCtrl.titleField.getChildren().get(0).isFocused()) {
                 run = false;
             }
             listComponentCtrls.add(listComponentCtrl);
             for (int k = 0; k < listComponentCtrl.getCards().getChildren().size(); k++) {
-                CardComponentCtrl cardComponentCtrl = ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
+                CardComponentCtrl cardComponentCtrl =
+                        ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k));
                 if (run) {
                     run = this.checkTextField(cardComponentCtrl);
                 }
-                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(k)).getSelected()) {
-                    position = new int[]{n, k};
+                if (((CardComponentCtrl) listComponentCtrl.getCards().getChildren()
+                        .get(k)).getSelected()) {
+                    position = new int[] {n, k};
                 }
             }
         }
         if (run) {
             return position;
         } else {
-            return new int[]{-1, -1};
+            return new int[] {-1, -1};
         }
     }
 
     public List<ListComponentCtrl> getCardListsFromBoard() {
         List<ListComponentCtrl> listComponentCtrls = new ArrayList<>();
         for (int n = 0; n < this.innerHBox.getChildren().size(); n++) {
-            ListComponentCtrl listComponentCtrl = (ListComponentCtrl) innerHBox.getChildren().get(n);
+            ListComponentCtrl listComponentCtrl =
+                    (ListComponentCtrl) innerHBox.getChildren().get(n);
             listComponentCtrls.add(listComponentCtrl);
         }
         return listComponentCtrls;
@@ -635,14 +686,18 @@ public class BoardCtrl implements Initializable {
                 break;
             case "su":
                 if (position[1] > 0) {
-                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(position[1] - 1)).setSelected(true);
-                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(position[1] - 1)).highlightShortcut();
+                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren()
+                            .get(position[1] - 1)).setSelected(true);
+                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren()
+                            .get(position[1] - 1)).highlightShortcut();
                 }
                 break;
             case "sd":
                 if (position[1] < listComponentCtrl.getCards().getChildren().size() - 1) {
-                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(position[1] + 1)).setSelected(true);
-                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(position[1] + 1)).highlightShortcut();
+                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren()
+                            .get(position[1] + 1)).setSelected(true);
+                    ((CardComponentCtrl) listComponentCtrl.getCards().getChildren()
+                            .get(position[1] + 1)).highlightShortcut();
                 }
                 break;
             default:

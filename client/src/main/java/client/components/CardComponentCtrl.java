@@ -9,8 +9,6 @@ import commons.CardList;
 import commons.Subtask;
 import commons.Topics;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import javafx.application.Platform;
@@ -19,7 +17,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -32,6 +29,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -213,18 +214,26 @@ public class CardComponentCtrl extends AnchorPane {
     }
 
     public void highlightShortcut() {
-        this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        /*this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
         var rect = new Rectangle();
         rect.setHeight(5);
         rect.setWidth(this.getWidth());
         rect.setFill(Color.web("#9a9aff"));
         rect.setStyle("-fx-border-style: dashed; -fx-border-width: 2; -fx-border-color: #9a9aff");
         rect.setArcHeight(5);
-        rect.setArcWidth(5);
+        rect.setArcWidth(5);*/
+        //this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        //this.setStyle("-fx-border-width: 3; -fx-border-color: blue");
+        this.setBorder(new Border(new BorderStroke(Color.web("3388ee"),
+                BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(4))));
     }
 
     public void removeHighlightShortcut() {
-        this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        //this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        //this.setStyle("-fx-background-color: " + Utils.getBackgroundColor(colors));
+        //this.setStyle("-fx-border-width: 3; -fx-border-color: red");
+        this.setBorder(new Border(new BorderStroke(Color.BLUE,
+                BorderStrokeStyle.SOLID, new CornerRadii(3), BorderWidths.EMPTY)));
     }
 
     public void setCard(Card newCardData) {
