@@ -66,6 +66,9 @@ public class CardPopupCtrl extends AnchorPane {
     @FXML
     private ChoiceBox<String> colorSchemeDropdown;
 
+    @FXML
+    private Label warningLabel;
+
     private Stage stage;
     private Set<Tag> tagsToDelete = new HashSet<>();
     private Set<Subtask> subtasksToDelete = new HashSet<>();
@@ -89,6 +92,13 @@ public class CardPopupCtrl extends AnchorPane {
             loader.load();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+
+        if (!mainCtrlTalio.hasAuthenticationForBoard(card.getList().getBoard().getId())) {
+            setDisable(true);
+        } else {
+            warningLabel.setVisible(false);
+            warningLabel.setManaged(false);
         }
 
         cardTitle.setText(this.card.getTitle());
@@ -191,7 +201,8 @@ public class CardPopupCtrl extends AnchorPane {
 
             deleteSubtask.setOnAction(a -> {
                 Alert confirmationDialogue =
-                        new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?",
+                        new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete "
+                                + "this subtask?",
                                 ButtonType.YES, ButtonType.NO);
                 confirmationDialogue.showAndWait();
                 if (confirmationDialogue.getResult() == ButtonType.YES) {
@@ -232,7 +243,8 @@ public class CardPopupCtrl extends AnchorPane {
 
                         deleteSubtask.setOnAction(a -> {
                             Alert confirmationDialogue =
-                                    new Alert(Alert.AlertType.CONFIRMATION, "Delete this subtask ?",
+                                    new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you "
+                                            + "want to delete this subtask?",
                                             ButtonType.YES, ButtonType.NO);
                             confirmationDialogue.showAndWait();
                             if (confirmationDialogue.getResult() == ButtonType.YES) {
@@ -378,12 +390,24 @@ public class CardPopupCtrl extends AnchorPane {
     }
 
     public void delete() {
-
+        Alert confirmationDialogue =
+                new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete "
+                        + "this card?",
+                        ButtonType.YES, ButtonType.NO);
+        confirmationDialogue.showAndWait();
+        if (confirmationDialogue.getResult() == ButtonType.YES) {
+            server.deleteCard(card.getId());
+            stage.close();
+        }
     }
 
     private void assignEmptyBoardWithId(Tag tag) {
         Board empty = new Board();
         empty.setId(tag.getBoard().getId());
         tag.setBoard(empty);
+    }
+
+    public boolean hasUnsavedChanges() {
+        return false;
     }
 }

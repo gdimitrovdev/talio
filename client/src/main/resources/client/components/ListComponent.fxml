@@ -18,7 +18,7 @@
         </Button>
     </HBox>
     <!-- TODO figure out how to properly show/hide the scrollbar -->
-    <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+    <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" vbarPolicy="ALWAYS" pannable="true">
         <VBox fx:id="cards" prefWidth="280"/>
     </ScrollPane>
     <Button fx:id="addCardBtn" text="+" onAction="#addCard">

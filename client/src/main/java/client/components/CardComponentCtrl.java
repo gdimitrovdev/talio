@@ -93,21 +93,25 @@ public class CardComponentCtrl extends AnchorPane {
 
         setOnMouseDoubleClicked((me) -> {
             Stage stage = new Stage();
-            stage.setScene(new Scene(new CardPopupCtrl(mainCtrlTalio, server.getCard(cardId),
-                    server, stage)));
+            var popup = new CardPopupCtrl(mainCtrlTalio, server.getCard(cardId), server, stage);
+            stage.setScene(new Scene(popup));
             stage.setTitle("Talio: Card Settings");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setOnCloseRequest(event -> {
-                event.consume();
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setContentText(
-                        "Any unsaved changes will be lost. Do you want to discard them?");
-                alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-                alert.showAndWait().ifPresent(result -> {
-                    if (result == ButtonType.YES) {
-                        stage.close();
-                    }
-                });
+                if (popup.hasUnsavedChanges()) {
+                    event.consume();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setContentText(
+                            "Any unsaved changes will be lost. Are you sure you want to discard "
+                                    + "them?");
+                    alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait().ifPresent(result -> {
+                        if (result == ButtonType.YES) {
+                            stage.close();
+                        }
+                    });
+                }
+
             });
             stage.show();
         });
@@ -153,6 +157,12 @@ public class CardComponentCtrl extends AnchorPane {
                 Platform.runLater(() -> setCard(cardReceived));
             }
         });
+
+        if (!mainCtrlTalio.hasAuthenticationForBoard(
+                server.getCard(cardId).getList().getBoard().getId())) {
+            deleteButton.setOnAction(e -> mainCtrlTalio.getBoardComponentCtrl().lock());
+            titleField.setDisable(true);
+        }
     }
 
     /**
@@ -333,8 +343,11 @@ public class CardComponentCtrl extends AnchorPane {
             // If we change the design, it will break. I could do the calculations so, it doesn't
             // use magic numbers, but it works well for now.
             // TODO remove the magic numbers from here
-            tagsContainer.setMinHeight((newCardData.getTags().size() / 3 * 20) + 10);
-
+            if (newCardData.getTags().size() >= 1 && newCardData.getTags().size() % 3 == 0) {
+                tagsContainer.setMinHeight(((newCardData.getTags().size()) / 3) * 20 - 10);
+            } else {
+                tagsContainer.setMinHeight(((newCardData.getTags().size()) / 3) * 20 + 10);
+            }
         } else {
             tagsContainer.setVisible(false);
             tagsContainer.setManaged(false);

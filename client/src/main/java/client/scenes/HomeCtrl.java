@@ -46,6 +46,10 @@ public class HomeCtrl {
     private boolean nestedButtonPressed = false;
     private boolean adminMode;
 
+    public boolean isAdmin() {
+        return adminMode;
+    }
+
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrlTalio mainCtrlTalio) {
         this.server = server;

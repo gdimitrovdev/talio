@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -29,21 +31,26 @@ public class MainCtrlTalio {
     private JoinBoardCtrl joinBoardCodeCtrl;
     private CreateBoardCtrl createBoardCtrl;
     private ServerConnectionCtrl serverConnectionCtrl;
+
+    public BoardCtrl getBoardComponentCtrl() {
+        return boardComponentCtrl;
+    }
+
     private BoardCtrl boardComponentCtrl;
     private ShareBoardCtrl shareBoardCtrl;
     private TagManagementCtrl tagManagementCtrl;
     private AdminAuthenticationCtrl adminAuthenticationCtrl;
     private ServerUtils server;
 
-    public void setJoinedBoards(Map<String, Set<Long>> joinedBoards) {
+    public void setJoinedBoards(Map<String, Set<Pair<Long, String>>> joinedBoards) {
         this.joinedBoards = joinedBoards;
     }
 
-    public Map<String, Set<Long>> getJoinedBoards() {
+    public Map<String, Set<Pair<Long, String>>> getJoinedBoards() {
         return joinedBoards;
     }
 
-    private Map<String, Set<Long>> joinedBoards;
+    private Map<String, Set<Pair<Long, String>>> joinedBoards;
     private Stage adminAuthenticationStage;
 
     @Inject
@@ -97,30 +104,54 @@ public class MainCtrlTalio {
     }
 
     public Set<Long> getJoinedBoardsForServer(String serverUrl) {
-        var boardsToRemove = new ArrayList<Long>();
+        var boardsToRemove = new ArrayList<>();
         if (!joinedBoards.containsKey(serverUrl)) {
             return new HashSet<>();
         }
-        for (Long boardId : joinedBoards.get(serverUrl)) {
+        for (var board : joinedBoards.get(serverUrl)) {
+            Long boardId = board.getKey();
             try {
                 server.getBoard(boardId);
             } catch (Exception ignored) {
                 boardsToRemove.add(boardId);
             }
         }
-        boardsToRemove.forEach(joinedBoards.get(serverUrl)::remove);
+        joinedBoards.get(serverUrl).removeIf(b -> boardsToRemove.contains(b.getKey()));
         if (!boardsToRemove.isEmpty()) {
             writeToLocalData();
         }
-        return joinedBoards.get(serverUrl);
+        return joinedBoards.get(serverUrl).stream().map(Pair::getKey).collect(Collectors.toSet());
+    }
+
+    public boolean hasAuthenticationForBoard(Long boardId) {
+        if (homeCtrl.isAdmin()) {
+            return true;
+        }
+        var b = joinedBoards.get(server.getServerUrl()).stream()
+                .filter(p -> p.getKey().equals(boardId)).findFirst();
+        String pwd = server.getBoard(boardId).getReadOnlyCode();
+        if (pwd.equals("")) {
+            return true;
+        }
+        return b.isPresent() && b.get().getValue().equals(pwd);
+    }
+
+    public void savePasswordForBoard(Long boardId, String newPassword) {
+        Optional<Pair<Long, String>> b = joinedBoards.get(server.getServerUrl()).stream()
+                .filter(p -> p.getKey().equals(boardId)).findFirst();
+        if (b.isPresent()) {
+            joinedBoards.get(server.getServerUrl()).remove(b.get());
+            joinedBoards.get(server.getServerUrl()).add(new Pair<>(boardId, newPassword));
+            writeToLocalData();
+        }
     }
 
     public void addJoinedBoard(String serverUrl, Long boardId) {
         if (!joinedBoards.containsKey(serverUrl)) {
-            joinedBoards.put(serverUrl, new HashSet<Long>());
+            joinedBoards.put(serverUrl, new HashSet<>());
         }
 
-        joinedBoards.get(serverUrl).add(boardId);
+        joinedBoards.get(serverUrl).add(new Pair<>(boardId, ""));
 
         writeToLocalData();
     }
@@ -130,11 +161,11 @@ public class MainCtrlTalio {
             return;
         }
 
-        if (!joinedBoards.get(serverUrl).contains(boardId)) {
+        if (joinedBoards.get(serverUrl).stream().noneMatch(p -> p.getKey().equals(boardId))) {
             return;
         }
 
-        joinedBoards.get(serverUrl).remove(boardId);
+        joinedBoards.get(serverUrl).removeIf(p -> p.getKey().equals(boardId));
         writeToLocalData();
     }
 
@@ -146,9 +177,17 @@ public class MainCtrlTalio {
                 FileInputStream fis = new FileInputStream(toRead);
                 ObjectInputStream ois = new ObjectInputStream(fis);
         ) {
-            this.joinedBoards = (HashMap<String, Set<Long>>) ois.readObject();
+            this.joinedBoards = (HashMap<String, Set<Pair<Long, String>>>) ois.readObject();
+            for (var s : joinedBoards.keySet()) {
+                for (var b : joinedBoards.get(s)) {
+                    if (b == null) {
+                        throw new Exception();
+                    }
+                }
+            }
+
         } catch (Exception e) {
-            this.joinedBoards = new HashMap<String, Set<Long>>();
+            this.joinedBoards = new HashMap<>();
         }
     }
 
@@ -161,7 +200,8 @@ public class MainCtrlTalio {
         ) {
             oos.writeObject(joinedBoards);
             oos.flush();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

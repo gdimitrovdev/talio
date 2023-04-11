@@ -86,6 +86,13 @@ public class ListComponentCtrl extends VBox {
 
         this.setOnDragExited(event -> removeHighlight());
 
+        if (mainCtrlTalio.hasAuthenticationForBoard(
+                server.getCardList(listId).getBoard().getId())) {
+            titleField.setDisable(true);
+            deleteListBtn.setOnAction(e -> mainCtrlTalio.getBoardComponentCtrl().lock());
+            addCardBtn.setOnAction(e -> mainCtrlTalio.getBoardComponentCtrl().lock());
+        }
+
         refresh();
 
         // Updates that the list should handle
@@ -153,38 +160,41 @@ public class ListComponentCtrl extends VBox {
                 .toList()) {
             var child = new CardComponentCtrl(mainCtrlTalio, server, card.getId());
 
-            child.setOnMousePressed(event -> boardCtrl.setCurrentSelectedCard(child));
+            if (mainCtrlTalio.hasAuthenticationForBoard(
+                    server.getCardList(listId).getBoard().getId())) {
+                child.setOnMousePressed(event -> boardCtrl.setCurrentSelectedCard(child));
 
-            child.setOnDragDetected(event -> {
-                Dragboard db = child.startDragAndDrop(TransferMode.ANY);
-                db.setDragView(child.snapshot(null, null));
+                child.setOnDragDetected(event -> {
+                    Dragboard db = child.startDragAndDrop(TransferMode.ANY);
+                    db.setDragView(child.snapshot(null, null));
 
-                ClipboardContent content = new ClipboardContent();
-                content.putString("Drag worked");
-                db.setContent(content);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString("Drag worked");
+                    db.setContent(content);
 
-                child.startFullDrag();
+                    child.startFullDrag();
 
-                event.consume();
-            });
+                    event.consume();
+                });
 
-            child.setOnDragOver(event -> {
-                event.acceptTransferModes(TransferMode.ANY);
-                event.consume();
-            });
+                child.setOnDragOver(event -> {
+                    event.acceptTransferModes(TransferMode.ANY);
+                    event.consume();
+                });
 
-            child.setOnDragEntered(event -> child.highlight());
+                child.setOnDragEntered(event -> child.highlight());
 
-            child.setOnDragDropped(event -> {
-                boardCtrl.setDroppedOnCard(true);
-                server.moveCardToListAfterCard(
-                        boardCtrl.getCurrentSelectedCard().getCardId(),
-                        listId,
-                        child.getCardId()
-                );
-            });
+                child.setOnDragDropped(event -> {
+                    boardCtrl.setDroppedOnCard(true);
+                    server.moveCardToListAfterCard(
+                            boardCtrl.getCurrentSelectedCard().getCardId(),
+                            listId,
+                            child.getCardId()
+                    );
+                });
 
-            child.setOnDragExited(event -> child.removeHighlight());
+                child.setOnDragExited(event -> child.removeHighlight());
+            }
 
             cards.getChildren().add(child);
         }
