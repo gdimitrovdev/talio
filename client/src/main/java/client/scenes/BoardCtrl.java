@@ -466,11 +466,6 @@ public class BoardCtrl implements Initializable {
                     ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(position[1] + 1)).highlight();
                 }
                 break;
-            case "sc":
-                // TODO get the highlight right for this
-                ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(listComponentCtrl.getCards().getChildren().size() - 1)).setSelected(true);
-                ((CardComponentCtrl) listComponentCtrl.getCards().getChildren().get(listComponentCtrl.getCards().getChildren().size() - 1)).highlight();
-                break;
             default:
         }
     }
