@@ -84,9 +84,11 @@ public class CardController {
     public ResponseEntity<CardList> deleteOne(@PathVariable("id") Long id) {
         try {
             var cardListId = cardService.getOne(id).get().getList().getId();
+            var card = cardService.getOne(id).get();
             cardService.deleteOne(id);
             var cardList = cardListService.getOne(cardListId).get();
             template.convertAndSend(Topics.LISTS.toString(), cardList);
+            template.convertAndSend("/topic/cards/deleted", card);
             return ResponseEntity.ok(cardList);
         } catch (Exception e) {
             e.printStackTrace();

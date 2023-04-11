@@ -153,8 +153,6 @@ public class MainCtrlTalio {
     }
 
     public void addJoinedBoard(String serverUrl, Long boardId) {
-        readFromLocalData();
-
         if (!joinedBoards.containsKey(serverUrl)) {
             joinedBoards.put(serverUrl, new HashSet<>());
         }
@@ -165,8 +163,6 @@ public class MainCtrlTalio {
     }
 
     public void removeJoinedBoard(String serverUrl, Long boardId) {
-        readFromLocalData();
-
         if (!joinedBoards.containsKey(serverUrl)) {
             return;
         }

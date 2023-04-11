@@ -8,8 +8,10 @@ import static org.mockito.Mockito.when;
 
 import commons.Board;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.persistence.EntityNotFoundException;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +34,9 @@ public class BoardControllerTest {
 
     @Mock
     private SimpMessagingTemplate templateMock;
+
+    @Mock
+    private HashMap<Object, Consumer<Board>> listenersMock;
 
     @InjectMocks
     private BoardController boardControllerMock;
@@ -122,6 +127,10 @@ public class BoardControllerTest {
     // Test whether deleteById() method of the repository was called for the correct board
     @Test
     public void deleteOne() {
+
+        Board board = new Board();
+
+        when(boardServiceMock.getOne(1L)).thenReturn(Optional.of(board));
 
         boardControllerMock.deleteOne(1L);
 
