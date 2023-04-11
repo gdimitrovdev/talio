@@ -449,7 +449,6 @@ public class BoardCtrl implements Initializable {
     }
 
     public void pressedEnter() {
-        System.out.println("popup");
         position = this.findPositionOfCard();
 
         List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
@@ -465,16 +464,20 @@ public class BoardCtrl implements Initializable {
 
     public void pressedShiftC() {
         position = this.findPositionOfCard();
+        if (position[0] != -1) {
+            List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
 
-        List<ListComponentCtrl> listComponentCtrls = this.getCardListsFromBoard();
-
-        listComponentCtrls.get(position[0]).addCard();
-        operation = "";
+            listComponentCtrls.get(position[0]).addCard();
+            operation = "";
+        }
     }
 
     public void pressedShiftL() {
-        this.addCardList();
-        operation = "";
+        position = this.findPositionOfCard();
+        if (position[0] != -1) {
+            this.addCardList();
+            operation = "";
+        }
     }
 
     public void pressedE() {
@@ -698,6 +701,7 @@ public class BoardCtrl implements Initializable {
                 }
                 break;
             default:
+                break;
         }
     }
 
