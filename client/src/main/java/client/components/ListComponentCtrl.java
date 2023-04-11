@@ -198,14 +198,13 @@ public class ListComponentCtrl extends VBox {
             }
 
             if (boardCtrl.getPosition()[1] == counter) {
-                child.highlightShortcut();
+                Platform.runLater(() -> {
+                    this.boardCtrl.color(this);
+                });
             }
             ++counter;
 
             cards.getChildren().add(child);
-        }
-        if (boardCtrl.getPosition()[0] != -1) {
-            boardCtrl.color(this);
         }
     }
 
