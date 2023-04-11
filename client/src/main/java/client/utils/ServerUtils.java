@@ -673,4 +673,11 @@ public class ServerUtils {
             updateSubtask(newOtherSubtask);
         }
     }
+
+    public boolean adminAuthenticate(String pwd) {
+        return webTarget.path("admin").path("authenticate")
+                .request(APPLICATION_JSON)
+                .post(Entity.entity(pwd, APPLICATION_JSON))
+                .getStatus() == 200;
+    }
 }
