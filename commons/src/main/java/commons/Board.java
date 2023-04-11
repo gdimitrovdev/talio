@@ -34,8 +34,7 @@ public class Board implements Serializable {
 
     @Column(unique = true)
     private String code;
-
-    @Column(unique = true)
+    
     private String readOnlyCode;
 
     private String listsColor;
