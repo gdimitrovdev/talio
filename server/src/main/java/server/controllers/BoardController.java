@@ -104,8 +104,8 @@ public class BoardController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOne(@PathVariable("id") Long id) {
         try {
-            template.convertAndSend("/topic/boards/deleted", boardService.getOne(id).get());
             listeners.forEach((k, l) -> l.accept(boardService.getOne(id).get()));
+            template.convertAndSend("/topic/boards/deleted", boardService.getOne(id).get());
             boardService.deleteOne(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
