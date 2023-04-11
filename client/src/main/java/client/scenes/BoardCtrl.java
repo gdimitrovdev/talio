@@ -149,6 +149,9 @@ public class BoardCtrl implements Initializable {
         server.registerForMessages("/topic/boards/deleted", Board.class, board -> {
             Platform.runLater(() -> {
                 if (board.getId().equals(boardId)) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) { }
                     mainCtrlTalio.showHome();
 
                     Alert box = new Alert(Alert.AlertType.ERROR);

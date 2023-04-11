@@ -66,7 +66,9 @@ public class HomeCtrl {
                 mainCtrlTalio.readFromLocalData();
                 Map<String, Set<Pair<Long, String>>> joinedBoards = mainCtrlTalio.getJoinedBoards();
 
-                joinedBoards.get(server.getServerUrl()).removeIf(b -> b.getKey().equals(board.getId()));
+                if (joinedBoards.get(server.getServerUrl()) != null) {
+                    joinedBoards.get(server.getServerUrl()).removeIf(b -> b.getKey().equals(board.getId()));
+                }
 
                 mainCtrlTalio.writeToLocalDataRefresh(joinedBoards);
                 refreshBoards();
@@ -148,6 +150,12 @@ public class HomeCtrl {
                     nestedButtonPressed = true;
                     openBoardSetting(item);
                 });
+
+                if (!adminMode) {
+                    boardSettingBtn.setManaged(false);
+                    boardSettingBtn.setVisible(false);
+                }
+
                 boardButton.setOnAction(e -> {
                     try {
                         displayBoard(item);
