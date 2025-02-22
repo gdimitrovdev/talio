@@ -1,12 +1,7 @@
-TODO
-
-# Starting template
-
-This README will need to contain a description of your project, how to run it, how to set up the development environment, and who worked on it.
-This information can be added throughout the course, except for the names of the group members.
-Add your own name (do not add the names for others!) to the section below.
-
 ## Description of project
+This is a issue/task tracking project (similar to Jira or GitLab Issues) to be used within companies. It is written with JavaFX on the frontend, Spring on the backend and Hibernate as an ORM library. The project was developed by six students as a TU Delft project for the course Object Oriented Programming - Project.
+
+The app can be used in different servers (so a company can specify their server and then the employees can connect to it to use the application within the organization). After selecting a server, a person can access different boards in this server using an invite link or by accessing public ones. Furthermore, a board contains multiple lists (which are customizable - so lists like "TODO", "IN PROGRESS" and "DONE" can be created), each of which contains multiple cards/tasks. The user interface is also customizable per board, allowing selection of color schemes, positions of various elements on the screen etc. Finally, there are multiple convenience features such as keyboard shortcuts and a drag-and-drop feature.
 
 ## Group members
 
@@ -24,7 +19,7 @@ Add your own name (do not add the names for others!) to the section below.
 <!-- - (please make sure the photos have the same size) --> 
 
 ## How to run it
+Look at CONTRIBUTING.md
 
 ## How to contribute to it
-
-## Copyright / License (opt.)
+Look at CONTRIBUTING.md
